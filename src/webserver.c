@@ -7,6 +7,7 @@
 #include "config.h"
 #include "dhcpserver.h"
 #include "dnsserver.h"
+#include "http_request.h"
 #include "lwip/ip4_addr.h"
 #include "lwip/pbuf.h"
 #include "lwip/tcp.h"
@@ -22,6 +23,37 @@ static bool access_point_active;
 static bool dhcp_active;
 static bool dns_active;
 static char response[3072];
+
+#define HTTP_REQUEST_BUFFER_SIZE 1536u
+#define HTTP_CLIENT_COUNT 4u
+
+typedef struct {
+    char data[HTTP_REQUEST_BUFFER_SIZE];
+    size_t length;
+    bool in_use;
+} http_client_t;
+
+static http_client_t http_clients[HTTP_CLIENT_COUNT];
+
+static http_client_t *allocate_http_client(void) {
+    for (size_t i = 0; i < HTTP_CLIENT_COUNT; ++i) {
+        if (!http_clients[i].in_use) {
+            http_clients[i].in_use = true;
+            http_clients[i].length = 0u;
+            http_clients[i].data[0] = '\0';
+            return &http_clients[i];
+        }
+    }
+    return NULL;
+}
+
+static void release_http_client(http_client_t *context) {
+    if (context != NULL) {
+        context->length = 0u;
+        context->data[0] = '\0';
+        context->in_use = false;
+    }
+}
 
 static const char *error_description(error_code_t error) {
     switch (error) {
@@ -88,17 +120,6 @@ static err_t send_dashboard_redirect(struct tcp_pcb *client) {
     return result;
 }
 
-static bool request_targets_dashboard_host(const char *request) {
-    const char *host = strstr(request, "\r\nHost:");
-    if (host == NULL) host = strstr(request, "\r\nhost:");
-    if (host == NULL) return true; /* HTTP/1.0 request without Host header. */
-    host += 7;
-    while (*host == ' ' || *host == '\t') ++host;
-    const size_t ip_length = strlen(WIFI_AP_IP_ADDRESS);
-    return strncmp(host, WIFI_AP_IP_ADDRESS, ip_length) == 0 &&
-           (host[ip_length] == '\r' || host[ip_length] == ':' || host[ip_length] == '\0');
-}
-
 static void status_json(void) {
     const system_status_t *s = server_config.status;
     snprintf(response, sizeof(response),
@@ -126,21 +147,17 @@ static void status_json(void) {
         start_allowed() ? "true" : "false", start_block_reason());
 }
 
-static err_t receive(void *arg, struct tcp_pcb *client, struct pbuf *packet, err_t error) {
-    (void)arg;
-    if (packet == NULL) { tcp_close(client); return ERR_OK; }
-    if (error != ERR_OK) { pbuf_free(packet); tcp_abort(client); return error; }
-    char request[512];
-    const u16_t copied = pbuf_copy_partial(packet, request, sizeof(request) - 1u, 0u);
-    request[copied] = '\0';
-    tcp_recved(client, packet->tot_len);
-    pbuf_free(packet);
+static err_t process_http_request(struct tcp_pcb *client, const char *text) {
+    http_request_t request;
+    if (!http_request_parse(text, &request)) {
+        return send_response(client, "400 Bad Request", "text/plain", "Bad request");
+    }
 
-    if (strncmp(request, "GET /api/status ", 16) == 0) {
+    if (request.method == HTTP_METHOD_GET && http_request_path_equals(&request, "/api/status")) {
         status_json();
         return send_response(client, "200 OK", "application/json", response);
     }
-    if (strncmp(request, "POST /api/start ", 16) == 0) {
+    if (request.method == HTTP_METHOD_POST && http_request_path_equals(&request, "/api/start")) {
         if (start_allowed()) {
             server_config.start();
             return send_response(client, "200 OK", "application/json", "{\"ok\":true}");
@@ -149,35 +166,102 @@ static err_t receive(void *arg, struct tcp_pcb *client, struct pbuf *packet, err
                  start_block_reason());
         return send_response(client, "409 Conflict", "application/json", response);
     }
-    if (strncmp(request, "POST /api/stop ", 15) == 0) {
+    if (request.method == HTTP_METHOD_POST && http_request_path_equals(&request, "/api/stop")) {
         server_config.stop();
         return send_response(client, "200 OK", "application/json", "{\"ok\":true}");
     }
-    if (strncmp(request, "POST /api/setpoint?value=", 25) == 0) {
-        float value = strtof(request + 25, NULL);
+    static const char setpoint_prefix[] = "/api/setpoint?value=";
+    if (request.method == HTTP_METHOD_POST &&
+        strncmp(request.path, setpoint_prefix, sizeof(setpoint_prefix) - 1u) == 0) {
+        float value = strtof(request.path + sizeof(setpoint_prefix) - 1u, NULL);
         if (value >= SETPOINT_MIN_C && value <= SETPOINT_MAX_C) {
             server_config.set_setpoint(value);
             return send_response(client, "200 OK", "application/json", "{\"ok\":true}");
         }
         return send_response(client, "400 Bad Request", "application/json", "{\"ok\":false}");
     }
-    if (strncmp(request, "GET / ", 6) == 0 && request_targets_dashboard_host(request)) {
+
+    /* Android treats a non-204 response, especially a 302 with a login URL,
+       as a captive portal. This explicit route also covers absolute-form URLs
+       and OEM probes using clients3.google.com or gen_204. */
+    if (http_request_is_android_probe(&request)) return send_dashboard_redirect(client);
+
+    const bool dashboard_host = request.host[0] == '\0' ||
+                                http_request_host_equals(&request, WIFI_AP_IP_ADDRESS);
+    if (request.method == HTTP_METHOD_GET && http_request_path_equals(&request, "/") &&
+        dashboard_host) {
         return send_response(client, "200 OK", "text/html; charset=utf-8", dashboard_html);
     }
     /* Android (/generate_204), Apple (/hotspot-detect.html), Windows
        (/connecttest.txt, /ncsi.txt) and other HTTP probes all reach this
        fallback through wildcard DNS. A redirect deliberately indicates a
        captive network and opens the local dashboard where the OS permits it. */
-    if (strncmp(request, "GET /", 5) == 0 || strncmp(request, "HEAD /", 6) == 0) {
+    if (request.method == HTTP_METHOD_GET || request.method == HTTP_METHOD_HEAD) {
         return send_dashboard_redirect(client);
     }
     return send_response(client, "404 Not Found", "text/plain", "Not found");
 }
 
+static bool request_is_complete(const char *request) {
+    return strstr(request, "\r\n\r\n") != NULL || strstr(request, "\n\n") != NULL;
+}
+
+static void client_error(void *arg, err_t error) {
+    (void)error;
+    release_http_client(arg);
+}
+
+static err_t receive(void *arg, struct tcp_pcb *client, struct pbuf *packet, err_t error) {
+    http_client_t *context = arg;
+    if (packet == NULL) {
+        release_http_client(context);
+        tcp_arg(client, NULL);
+        tcp_close(client);
+        return ERR_OK;
+    }
+    if (error != ERR_OK || context == NULL) {
+        pbuf_free(packet);
+        release_http_client(context);
+        tcp_arg(client, NULL);
+        tcp_abort(client);
+        return ERR_ABRT;
+    }
+
+    const size_t available = sizeof(context->data) - 1u - context->length;
+    if (packet->tot_len > available) {
+        tcp_recved(client, packet->tot_len);
+        pbuf_free(packet);
+        release_http_client(context);
+        tcp_arg(client, NULL);
+        return send_response(client, "431 Request Header Fields Too Large", "text/plain",
+                             "Request headers too large");
+    }
+
+    const u16_t copied = pbuf_copy_partial(packet, context->data + context->length,
+                                           packet->tot_len, 0u);
+    context->length += copied;
+    context->data[context->length] = '\0';
+    tcp_recved(client, packet->tot_len);
+    pbuf_free(packet);
+    if (!request_is_complete(context->data)) return ERR_OK;
+
+    tcp_arg(client, NULL);
+    const err_t result = process_http_request(client, context->data);
+    release_http_client(context);
+    return result;
+}
+
 static err_t accept_client(void *arg, struct tcp_pcb *client, err_t error) {
     (void)arg;
     if (error != ERR_OK || client == NULL) return ERR_VAL;
+    http_client_t *context = allocate_http_client();
+    if (context == NULL) {
+        tcp_abort(client);
+        return ERR_ABRT;
+    }
+    tcp_arg(client, context);
     tcp_recv(client, receive);
+    tcp_err(client, client_error);
     return ERR_OK;
 }
 
@@ -185,6 +269,7 @@ bool webserver_init(const webserver_config_t *config) {
     if (config == NULL || config->status == NULL || config->start == NULL ||
         config->stop == NULL || config->set_setpoint == NULL) return false;
     server_config = *config;
+    memset(http_clients, 0, sizeof(http_clients));
     if (cyw43_arch_init() != 0) return false;
 
     /* Starting the radio never grants heating permission; that remains solely

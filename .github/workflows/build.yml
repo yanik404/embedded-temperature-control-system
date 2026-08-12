@@ -26,9 +26,10 @@ jobs:
         run: cmake --build build --parallel 2
       - name: Test PI controller on host
         run: cc -std=c11 -Wall -Wextra -Werror -Iinclude tests/test_controller.c src/controller.c -lm -o controller_tests && ./controller_tests
+      - name: Test captive portal HTTP parsing on host
+        run: cc -std=c11 -Wall -Wextra -Werror -Iinclude tests/test_http_request.c src/http_request.c -o http_request_tests && ./http_request_tests
       - name: Upload UF2
         uses: actions/upload-artifact@v4
         with:
           name: temperature-control-pico-w
           path: build/temperature_control.uf2
-
