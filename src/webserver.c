@@ -27,6 +27,8 @@ static struct tcp_pcb *listener;
 static http_client_t http_clients[HTTP_CLIENT_COUNT];
 static bool wifi_initialized;
 static bool connect_in_progress;
+static bool first_connection_attempt = true;
+static int previous_link_status = CYW43_LINK_DOWN;
 static uint32_t connection_started_ms;
 static uint32_t retry_due_ms;
 static char response[3072];
@@ -39,12 +41,32 @@ static bool deadline_reached(uint32_t now, uint32_t deadline) {
     return (int32_t)(now - deadline) >= 0;
 }
 
+static const char *wifi_status_name(int status) {
+    switch (status) {
+        case CYW43_LINK_UP: return "verbunden";
+        case CYW43_LINK_NOIP: return "verbunden, keine IP-Adresse";
+        case CYW43_LINK_JOIN: return "WLAN verbunden, DHCP ausstehend";
+        case CYW43_LINK_DOWN: return "getrennt";
+        case CYW43_LINK_FAIL: return "Verbindung fehlgeschlagen";
+        case CYW43_LINK_NONET: return "SSID nicht gefunden";
+        case CYW43_LINK_BADAUTH: return "Authentifizierung fehlgeschlagen";
+        default: return "unbekannt";
+    }
+}
+
 static void start_wifi_connection(uint32_t now) {
+    if (!first_connection_attempt) printf("[WLAN] Erneuter Verbindungsversuch\n");
+    printf("[WLAN] WLAN verbindet...\n");
+    printf("[WLAN] SSID: %s\n", WIFI_SSID);
     const int result = cyw43_arch_wifi_connect_async(
         WIFI_SSID, WIFI_PASSWORD, CYW43_AUTH_WPA2_MIXED_PSK);
+    first_connection_attempt = false;
     connect_in_progress = result == 0;
     connection_started_ms = now;
-    if (!connect_in_progress) retry_due_ms = now + WIFI_RETRY_DELAY_MS;
+    if (!connect_in_progress) {
+        printf("[WLAN] Verbindungsfehler (Fehlercode %d)\n", result);
+        retry_due_ms = now + WIFI_RETRY_DELAY_MS;
+    }
 }
 
 static http_client_t *allocate_http_client(void) {
@@ -243,8 +265,14 @@ bool webserver_init(const webserver_config_t *config) {
         config->stop == NULL || config->set_setpoint == NULL) return false;
     server_config = *config;
     memset(http_clients, 0, sizeof(http_clients));
-    if (cyw43_arch_init() != 0) return false;
+    const int init_result = cyw43_arch_init();
+    if (init_result != 0) {
+        printf("[WLAN] Verbindungsfehler bei Initialisierung (Fehlercode %d)\n", init_result);
+        return false;
+    }
     wifi_initialized = true;
+    first_connection_attempt = true;
+    previous_link_status = CYW43_LINK_DOWN;
 
     /* WLAN initialization never grants heating permission. That remains solely
        controlled by the application state machine and safety module. */
@@ -274,6 +302,25 @@ void webserver_update(void) {
     const uint32_t now = milliseconds();
     const int link_status = cyw43_tcpip_link_status(&cyw43_state, CYW43_ITF_STA);
 
+    if (link_status != previous_link_status) {
+        if (link_status == CYW43_LINK_UP) {
+            char ip[16];
+            (void)webserver_get_ip(ip, sizeof(ip));
+            printf("[WLAN] WLAN verbunden\n");
+            printf("[WLAN] SSID: %s\n", WIFI_SSID);
+            printf("[WLAN] IPv4-Adresse: %s\n", ip);
+        } else {
+            if (previous_link_status == CYW43_LINK_UP) {
+                printf("[WLAN] WLAN getrennt (Statuscode %d)\n", link_status);
+            }
+            if (link_status < CYW43_LINK_DOWN) {
+                printf("[WLAN] Verbindungsfehler: %s (Statuscode %d)\n",
+                       wifi_status_name(link_status), link_status);
+            }
+        }
+        previous_link_status = link_status;
+    }
+
     if (link_status == CYW43_LINK_UP) {
         connect_in_progress = false;
         return;
@@ -290,6 +337,10 @@ void webserver_update(void) {
     }
 
     if (connect_in_progress || link_status < CYW43_LINK_DOWN) {
+        if (link_status >= CYW43_LINK_DOWN) {
+            printf("[WLAN] Verbindungsfehler: Zeitueberschreitung (Statuscode %d)\n",
+                   link_status);
+        }
         cyw43_wifi_leave(&cyw43_state, CYW43_ITF_STA);
         connect_in_progress = false;
         retry_due_ms = now + WIFI_RETRY_DELAY_MS;
