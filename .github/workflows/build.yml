@@ -1,0 +1,34 @@
+name: Build firmware
+
+on:
+  push:
+    branches: [main, feature]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install ARM toolchain
+        run: sudo apt-get update && sudo apt-get install -y gcc-arm-none-eabi libnewlib-arm-none-eabi
+      - name: Fetch Pico SDK
+        uses: actions/checkout@v4
+        with:
+          repository: raspberrypi/pico-sdk
+          ref: 2.1.1
+          path: pico-sdk
+          submodules: recursive
+      - name: Configure
+        run: cmake -S . -B build -DPICO_SDK_PATH="$GITHUB_WORKSPACE/pico-sdk" -DPICO_BOARD=pico_w -DCMAKE_BUILD_TYPE=Release
+      - name: Build
+        run: cmake --build build --parallel 2
+      - name: Test PI controller on host
+        run: cc -std=c11 -Wall -Wextra -Werror -Iinclude tests/test_controller.c src/controller.c -lm -o controller_tests && ./controller_tests
+      - name: Upload UF2
+        uses: actions/upload-artifact@v4
+        with:
+          name: temperature-control-pico-w
+          path: build/temperature_control.uf2
+
