@@ -131,6 +131,10 @@ bool http_request_is_android_probe(const http_request_t *request) {
                             http_request_host_equals(request, "clients3.google.com") ||
                             http_request_host_equals(request, "www.google.com") ||
                             http_request_host_equals(request, "play.googleapis.com") ||
-                            http_request_host_equals(request, "connectivitycheck.android.com");
+                            http_request_host_equals(request, "connectivitycheck.android.com") ||
+                            http_request_host_equals(request, "connect.rom.miui.com") ||
+                            http_request_host_equals(request, "connectivitycheck.platform.hicloud.com") ||
+                            http_request_host_equals(request, "wifi.vivo.com.cn") ||
+                            http_request_host_equals(request, "conn1.oppomobile.com");
     return probe_path || probe_host;
 }

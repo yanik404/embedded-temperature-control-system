@@ -32,6 +32,17 @@ static void test_oem_probe_paths(void) {
     assert(http_request_is_android_probe(&request));
 }
 
+static void test_oem_probe_hosts(void) {
+    http_request_t request;
+    assert(http_request_parse("GET /status HTTP/1.1\r\nHost: connect.rom.miui.com\r\n\r\n",
+                              &request));
+    assert(http_request_is_android_probe(&request));
+    assert(http_request_parse("GET / HTTP/1.1\r\n"
+                              "Host: connectivitycheck.platform.hicloud.com\r\n\r\n",
+                              &request));
+    assert(http_request_is_android_probe(&request));
+}
+
 static void test_dashboard_and_api_are_not_probes(void) {
     http_request_t request;
     assert(http_request_parse("GET / HTTP/1.1\r\nHost: 192.168.4.1:80\r\n\r\n", &request));
@@ -48,6 +59,7 @@ int main(void) {
     test_standard_android_probe();
     test_absolute_android_url();
     test_oem_probe_paths();
+    test_oem_probe_hosts();
     test_dashboard_and_api_are_not_probes();
     puts("HTTP request tests passed");
     return 0;

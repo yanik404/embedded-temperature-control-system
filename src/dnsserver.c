@@ -68,7 +68,11 @@ static size_t build_response(const dns_server_t *server, const uint8_t *query,
     write_u16(reply + end + 4u, DNS_CLASS_IN);
     write_u32(reply + end + 6u, DNS_TTL_SECONDS);
     write_u16(reply + end + 10u, 4u);
-    memcpy(reply + end + 12u, &ip4_addr_get_u32(ip_2_ip4(&server->ip)), 4u);
+    const ip4_addr_t *address = ip_2_ip4(&server->ip);
+    reply[end + 12u] = ip4_addr1(address);
+    reply[end + 13u] = ip4_addr2(address);
+    reply[end + 14u] = ip4_addr3(address);
+    reply[end + 15u] = ip4_addr4(address);
     return end + 16u;
 }
 

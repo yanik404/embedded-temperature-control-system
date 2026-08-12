@@ -120,6 +120,22 @@ static err_t send_dashboard_redirect(struct tcp_pcb *client) {
     return result;
 }
 
+static err_t send_android_captive_page(struct tcp_pcb *client) {
+    /* A non-empty 200 response is deliberately not an Internet-validation
+       success. Android classifies it as captive, then its login WebView follows
+       the meta/JavaScript navigation to the actual dashboard. */
+    static const char body[] =
+        "<!doctype html><html><head><meta charset=\"utf-8\">"
+        "<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">"
+        "<meta http-equiv=\"refresh\" content=\"0;url=http://" WIFI_AP_IP_ADDRESS "/\">"
+        "<title>Becherhalter</title></head><body>"
+        "<h1>Becherhalter</h1><p>Lokales Dashboard wird geoeffnet.</p>"
+        "<a href=\"http://" WIFI_AP_IP_ADDRESS "/\">Dashboard oeffnen</a>"
+        "<script>location.replace('http://" WIFI_AP_IP_ADDRESS "/')</script>"
+        "</body></html>";
+    return send_response(client, "200 OK", "text/html; charset=utf-8", body);
+}
+
 static void status_json(void) {
     const system_status_t *s = server_config.status;
     snprintf(response, sizeof(response),
@@ -181,10 +197,10 @@ static err_t process_http_request(struct tcp_pcb *client, const char *text) {
         return send_response(client, "400 Bad Request", "application/json", "{\"ok\":false}");
     }
 
-    /* Android treats a non-204 response, especially a 302 with a login URL,
-       as a captive portal. This explicit route also covers absolute-form URLs
-       and OEM probes using clients3.google.com or gen_204. */
-    if (http_request_is_android_probe(&request)) return send_dashboard_redirect(client);
+    /* Android treats a non-empty 200 as captive (while an empty 200 may be
+       normalized to 204). The small page is more compatible with OEM network
+       monitors than relying solely on their redirect handling. */
+    if (http_request_is_android_probe(&request)) return send_android_captive_page(client);
 
     const bool dashboard_host = request.host[0] == '\0' ||
                                 http_request_host_equals(&request, WIFI_AP_IP_ADDRESS);
