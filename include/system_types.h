@@ -25,6 +25,7 @@ typedef enum {
 typedef struct {
     system_state_t state;
     error_code_t error;
+    float temperature_1_c;
     float temperature_c;
     float temperature_2_c;
     float setpoint_c;
@@ -35,8 +36,16 @@ typedef struct {
     uint16_t fan_rpm;
     uint8_t fan_percent;
     float light_level;
+    bool temperature_1_valid;
+    bool temperature_2_valid;
     bool temperature_valid;
+    bool current_1_valid;
+    bool current_2_valid;
     bool current_valid;
+    bool tla2024_available;
+    bool light_sensor_available;
+    bool display_initialized;
+    bool status_leds_initialized;
     bool cup_detected;
     bool power_5v_ok;
     bool wifi_connected;
@@ -45,4 +54,3 @@ typedef struct {
 
 const char *system_state_name(system_state_t state);
 const char *error_name(error_code_t error);
-

@@ -16,12 +16,13 @@ current_reading_t current_measurement_read(void) {
     const bool ok_2 = tla2024_read_voltage(TLA_CH_PEL2_CS, &voltage_2);
     reading.channel_1_a = (voltage_1 - CURRENT_ZERO_V) * CURRENT_AMPS_PER_VOLT;
     reading.channel_2_a = (voltage_2 - CURRENT_ZERO_V) * CURRENT_AMPS_PER_VOLT;
-    reading.valid = ok_1 && ok_2 && isfinite(reading.channel_1_a) && isfinite(reading.channel_2_a) &&
-                    reading.channel_1_a >= CURRENT_PLAUSIBLE_MIN_A &&
-                    reading.channel_2_a >= CURRENT_PLAUSIBLE_MIN_A &&
-                    reading.channel_1_a <= CURRENT_PLAUSIBLE_MAX_A &&
-                    reading.channel_2_a <= CURRENT_PLAUSIBLE_MAX_A;
+    reading.channel_1_valid = ok_1 && isfinite(reading.channel_1_a) &&
+                              reading.channel_1_a >= CURRENT_PLAUSIBLE_MIN_A &&
+                              reading.channel_1_a <= CURRENT_PLAUSIBLE_MAX_A;
+    reading.channel_2_valid = ok_2 && isfinite(reading.channel_2_a) &&
+                              reading.channel_2_a >= CURRENT_PLAUSIBLE_MIN_A &&
+                              reading.channel_2_a <= CURRENT_PLAUSIBLE_MAX_A;
+    reading.valid = reading.channel_1_valid && reading.channel_2_valid;
     reading.overcurrent = reading.channel_1_a > CURRENT_MAX_A || reading.channel_2_a > CURRENT_MAX_A;
     return reading;
 }
-

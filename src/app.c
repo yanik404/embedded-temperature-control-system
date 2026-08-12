@@ -134,17 +134,24 @@ static void process_buttons(void) {
 static void sample_sensors(void) {
     const temperature_reading_t temperatures = temperature_read();
     const current_reading_t currents = current_measurement_read();
+    status.temperature_1_c = temperatures.primary_c;
     status.temperature_c = temperatures.process_c;
     status.temperature_2_c = temperatures.secondary_c;
+    status.temperature_1_valid = temperatures.primary_valid;
+    status.temperature_2_valid = temperatures.secondary_valid;
     status.temperature_valid = temperatures.valid;
     status.peltier_1_current_a = currents.channel_1_a;
     status.peltier_2_current_a = currents.channel_2_a;
+    status.current_1_valid = currents.channel_1_valid;
+    status.current_2_valid = currents.channel_2_valid;
     status.current_valid = currents.valid;
     status.cup_detected = buttons_cup_detected();
     status.power_5v_ok = gpio_get(PIN_PG_5V0);
     float light;
-    if (light_sensor_read(&light)) status.light_level = light;
-    status.night_mode = status.light_level < LIGHT_DARK_THRESHOLD;
+    status.light_sensor_available = light_sensor_read(&light);
+    if (status.light_sensor_available) status.light_level = light;
+    status.tla2024_available = tla2024_is_available();
+    status.night_mode = status.light_sensor_available && status.light_level < LIGHT_DARK_THRESHOLD;
 }
 
 static void update_control(uint32_t now) {
@@ -215,13 +222,14 @@ void app_init(void) {
     gpio_set_function(PIN_I2C_CLOCK, GPIO_FUNC_I2C);
     gpio_pull_up(PIN_I2C_DATA);
     gpio_pull_up(PIN_I2C_CLOCK);
-    (void)tla2024_init();
+    status.tla2024_available = tla2024_init();
     temperature_init();
     current_measurement_init();
     light_sensor_init();
     buttons_init();
-    (void)display_init();
+    status.display_initialized = display_init();
     status_leds_init();
+    status.status_leds_initialized = true;
 
     const webserver_config_t web_config = {
         .status = &status,
