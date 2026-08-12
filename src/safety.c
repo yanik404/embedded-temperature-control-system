@@ -19,7 +19,10 @@ error_code_t safety_check(const system_status_t *status, uint32_t heating_elapse
     }
     if ((status->state == SYSTEM_HEATING || status->state == SYSTEM_HOLDING) &&
         !status->cup_detected) return ERROR_CUP_REMOVED;
-    if (!status->power_5v_ok) return ERROR_POWER_SUPPLY;
+    /* USB-only diagnostics are allowed. Power-good becomes mandatory at START
+       and remains monitored while a 12 V load is intentionally active. */
+    if ((status->state == SYSTEM_HEATING || status->state == SYSTEM_HOLDING) &&
+        !status->power_5v_ok) return ERROR_POWER_SUPPLY;
     if (status->peltier_power_percent >= FAN_FAULT_POWER_PERCENT &&
         heating_elapsed_ms >= FAN_FAULT_GRACE_MS && status->fan_rpm < FAN_MIN_VALID_RPM) {
         return ERROR_FAN;

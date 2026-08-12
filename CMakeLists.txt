@@ -31,7 +31,7 @@ target_include_directories(temperature_control PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}
 )
 
-target_compile_options(temperature_control PRIVATE -Wall -Wextra -Wpedantic)
+target_compile_options(temperature_control PRIVATE -Wall -Wextra)
 
 target_link_libraries(temperature_control
     pico_stdlib

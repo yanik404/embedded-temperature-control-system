@@ -29,6 +29,7 @@ static volatile bool setpoint_requested;
 static volatile float requested_setpoint;
 static uint32_t heating_started_ms;
 static uint32_t fan_run_on_until_ms;
+static bool manual_off;
 
 static uint32_t milliseconds(void) {
     return to_ms_since_boot(get_absolute_time());
@@ -99,6 +100,7 @@ static void process_commands(void) {
     if (start_requested) {
         start_requested = false;
         if ((status.state == SYSTEM_READY || status.state == SYSTEM_OFF) && safety_can_start(&status)) {
+            manual_off = false;
             controller_reset(&controller);
             heating_started_ms = milliseconds();
             peltier_set_enabled(true);
@@ -119,9 +121,11 @@ static void process_buttons(void) {
     if (button_was_pressed(BUTTON_MODE) &&
         (status.state == SYSTEM_OFF || status.state == SYSTEM_READY)) {
         if (status.state == SYSTEM_READY) {
+            manual_off = true;
             all_heating_off();
             status.state = SYSTEM_OFF;
         } else if (safety_can_start(&status)) {
+            manual_off = false;
             status.state = SYSTEM_READY;
         }
     }
@@ -155,7 +159,7 @@ static void update_control(uint32_t now) {
     }
     if (status.state == SYSTEM_ERROR) return; /* Latched until OK/STOP. */
     status.error = ERROR_NONE;
-    if (status.state == SYSTEM_OFF && status.temperature_valid && status.current_valid) {
+    if (status.state == SYSTEM_OFF && !manual_off && status.temperature_valid && status.current_valid) {
         status.state = SYSTEM_READY;
     }
     if (status.state != SYSTEM_HEATING && status.state != SYSTEM_HOLDING) return;
@@ -200,6 +204,7 @@ void app_init(void) {
     status.state = SYSTEM_OFF;
     status.error = ERROR_NONE;
     status.setpoint_c = SETPOINT_DEFAULT_C;
+    manual_off = false;
     controller_init(&controller, PI_KP, PI_KI);
     safety_init();
 

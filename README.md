@@ -50,7 +50,7 @@ Der Regler berechnet `e = Sollwert - Istwert` alle 250 ms. Der PI-Ausgang wird a
 
 | Zustand | Verhalten |
 |---|---|
-| `OFF` / AUS | Heizleistung 0 %, Lasten sicher aus |
+| `OFF` / AUS | Heizleistung 0 %, Lasten sicher aus; per MODE dauerhaft wählbar |
 | `READY` / BEREIT | Initialisiert und startbereit, noch keine Heizfreigabe |
 | `HEATING` / AUFHEIZEN | PI-Regelung aktiv, Sollwert noch nicht erreicht |
 | `HOLDING` / HALTEN | Sollwert im Halteband; PI liefert nur erforderliche Leistung |
@@ -64,7 +64,7 @@ UP/DOWN ändern den Sollwert in 0,5-°C-Schritten. OK startet oder stoppt; im Fe
 - Keine automatische Heizfreigabe und keine Kühlrichtung.
 - Sollwertbereich 20…60 °C; unabhängige Maximaltemperatur 65 °C.
 - ADC-, Temperatur- und Zwei-Sensor-Plausibilitätsprüfung mit Low-Pass-Filter.
-- Verriegeltes `ERROR` bei Sensorfehler, Übertemperatur, Überstrom, unplausibler Strommessung, fehlendem Becher, fehlendem 5-V-Power-Good oder Lüfterstillstand unter hoher Last.
+- Verriegeltes `ERROR` bei Sensorfehler, Übertemperatur, Überstrom, unplausibler Strommessung, fehlendem Becher, Ausfall von 5-V-Power-Good während des Heizens oder Lüfterstillstand unter hoher Last. Bei USB-only darf Power-Good fehlen; START bleibt dann gesperrt.
 - Lüfter-Mindestleistung bei aktiver Heizung, lastabhängige Drehzahl und 15 s Nachlauf.
 - Hardware-Watchdog mit 3 s Timeout.
 - Keine langen Delays im Hauptprogramm; alle Aufgaben werden per Zeitstempel geplant.
