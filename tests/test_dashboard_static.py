@@ -59,6 +59,7 @@ assert '<meta name="viewport"' in preview
 assert "prefers-reduced-motion" in preview
 assert "AbortController" in preview
 assert "setInterval(poll,500)" in preview
+assert "onclick=" not in preview
 assert embedded == preview, "include/web_assets.h is not synchronized with preview.html"
 
 style = re.search(r"<style>(.*?)</style>", preview, flags=re.DOTALL).group(1)
