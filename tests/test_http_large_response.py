@@ -38,7 +38,7 @@ while acked < len(response):
 assert b"".join(chunks) == response
 assert len(chunks) > 1
 assert queued == acked == len(response)
-assert len(dashboard) < send_buffer
+assert len(dashboard) > send_buffer
 
 print(
     f"large HTTP response test passed: dashboard={len(dashboard)}, "

@@ -32,6 +32,8 @@ jobs:
         run: python tests/test_lwip_pbuf_contract.py
       - name: Test large HTTP response chunking
         run: python tests/test_http_large_response.py
+      - name: Check embedded dashboard asset
+        run: python tests/test_dashboard_static.py
       - name: Upload UF2
         uses: actions/upload-artifact@v4
         with:
