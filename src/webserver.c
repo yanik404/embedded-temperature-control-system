@@ -129,9 +129,15 @@ static err_t send_response(struct tcp_pcb *client, const char *status, const cha
     err_t error = tcp_write(client, header, (u16_t)header_length, TCP_WRITE_FLAG_COPY);
     const u8_t body_flags = body == dashboard_html ? 0u : TCP_WRITE_FLAG_COPY;
     if (error == ERR_OK) error = tcp_write(client, body, (u16_t)body_length, body_flags);
-    tcp_output(client);
-    tcp_close(client);
-    return error;
+    if (error == ERR_OK) error = tcp_output(client);
+    if (error == ERR_OK) error = tcp_close(client);
+    if (error == ERR_OK) return ERR_OK;
+
+    /* A receive callback may return ERR_ABRT only after aborting the PCB. It
+       must never return ERR_MEM after consuming/freeing its input pbuf, since
+       lwIP would retain that already-freed pbuf as refused_data and retry it. */
+    tcp_abort(client);
+    return ERR_ABRT;
 }
 
 static void status_json(void) {
@@ -211,8 +217,9 @@ static err_t receive(void *arg, struct tcp_pcb *client, struct pbuf *packet, err
     if (packet == NULL) {
         release_http_client(context);
         tcp_arg(client, NULL);
-        tcp_close(client);
-        return ERR_OK;
+        if (tcp_close(client) == ERR_OK) return ERR_OK;
+        tcp_abort(client);
+        return ERR_ABRT;
     }
     if (error != ERR_OK || context == NULL) {
         pbuf_free(packet);
@@ -241,9 +248,11 @@ static err_t receive(void *arg, struct tcp_pcb *client, struct pbuf *packet, err
     if (!request_is_complete(context->data)) return ERR_OK;
 
     tcp_arg(client, NULL);
+    /* packet has been fully copied, acknowledged and freed. From this point
+       only ERR_OK or ERR_ABRT (after tcp_abort) may be returned to lwIP. */
     const err_t result = process_http_request(client, context->data);
     release_http_client(context);
-    return result;
+    return result == ERR_ABRT ? ERR_ABRT : ERR_OK;
 }
 
 static err_t accept_client(void *arg, struct tcp_pcb *client, err_t error) {
