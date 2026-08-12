@@ -6,6 +6,7 @@
 
 #include "config.h"
 #include "dhcpserver.h"
+#include "dnsserver.h"
 #include "lwip/ip4_addr.h"
 #include "lwip/pbuf.h"
 #include "lwip/tcp.h"
@@ -16,8 +17,10 @@
 static webserver_config_t server_config;
 static struct tcp_pcb *listener;
 static dhcp_server_t dhcp_server;
+static dns_server_t dns_server;
 static bool access_point_active;
 static bool dhcp_active;
+static bool dns_active;
 static char response[3072];
 
 static const char *error_description(error_code_t error) {
@@ -65,6 +68,35 @@ static err_t send_response(struct tcp_pcb *client, const char *status, const cha
     tcp_output(client);
     tcp_close(client);
     return error;
+}
+
+static err_t send_dashboard_redirect(struct tcp_pcb *client) {
+    static const char body[] =
+        "<!doctype html><html><head><meta charset=\"utf-8\">"
+        "<meta http-equiv=\"refresh\" content=\"0;url=http://" WIFI_AP_IP_ADDRESS "/\">"
+        "</head><body><a href=\"http://" WIFI_AP_IP_ADDRESS "/\">Dashboard oeffnen</a>"
+        "</body></html>";
+    char header[256];
+    const int header_length = snprintf(header, sizeof(header),
+        "HTTP/1.1 302 Found\r\nLocation: http://%s/\r\nContent-Type: text/html; charset=utf-8\r\n"
+        "Content-Length: %u\r\nConnection: close\r\nCache-Control: no-store\r\n\r\n",
+        WIFI_AP_IP_ADDRESS, (unsigned)strlen(body));
+    err_t result = tcp_write(client, header, (u16_t)header_length, TCP_WRITE_FLAG_COPY);
+    if (result == ERR_OK) result = tcp_write(client, body, sizeof(body) - 1u, 0u);
+    tcp_output(client);
+    tcp_close(client);
+    return result;
+}
+
+static bool request_targets_dashboard_host(const char *request) {
+    const char *host = strstr(request, "\r\nHost:");
+    if (host == NULL) host = strstr(request, "\r\nhost:");
+    if (host == NULL) return true; /* HTTP/1.0 request without Host header. */
+    host += 7;
+    while (*host == ' ' || *host == '\t') ++host;
+    const size_t ip_length = strlen(WIFI_AP_IP_ADDRESS);
+    return strncmp(host, WIFI_AP_IP_ADDRESS, ip_length) == 0 &&
+           (host[ip_length] == '\r' || host[ip_length] == ':' || host[ip_length] == '\0');
 }
 
 static void status_json(void) {
@@ -129,8 +161,15 @@ static err_t receive(void *arg, struct tcp_pcb *client, struct pbuf *packet, err
         }
         return send_response(client, "400 Bad Request", "application/json", "{\"ok\":false}");
     }
-    if (strncmp(request, "GET / ", 6) == 0) {
+    if (strncmp(request, "GET / ", 6) == 0 && request_targets_dashboard_host(request)) {
         return send_response(client, "200 OK", "text/html; charset=utf-8", dashboard_html);
+    }
+    /* Android (/generate_204), Apple (/hotspot-detect.html), Windows
+       (/connecttest.txt, /ncsi.txt) and other HTTP probes all reach this
+       fallback through wildcard DNS. A redirect deliberately indicates a
+       captive network and opens the local dashboard where the OS permits it. */
+    if (strncmp(request, "GET /", 5) == 0 || strncmp(request, "HEAD /", 6) == 0) {
+        return send_dashboard_redirect(client);
     }
     return send_response(client, "404 Not Found", "text/plain", "Not found");
 }
@@ -172,6 +211,12 @@ bool webserver_init(const webserver_config_t *config) {
         return false;
     }
 
+    dns_active = dns_server_init(&dns_server, &cyw43_state.netif[CYW43_ITF_AP], &gateway);
+    if (!dns_active) {
+        webserver_deinit();
+        return false;
+    }
+
     cyw43_arch_lwip_begin();
     listener = tcp_new_ip_type(IPADDR_TYPE_ANY);
     if (listener != NULL && tcp_bind(listener, IP_ANY_TYPE, 80u) == ERR_OK) {
@@ -196,6 +241,8 @@ void webserver_deinit(void) {
         cyw43_arch_lwip_end();
     }
     listener = NULL;
+    if (dns_active) dns_server_deinit(&dns_server);
+    dns_active = false;
     if (dhcp_active) dhcp_server_deinit(&dhcp_server);
     dhcp_active = false;
     if (access_point_active) cyw43_arch_disable_ap_mode();
@@ -204,5 +251,5 @@ void webserver_deinit(void) {
 }
 
 bool webserver_is_connected(void) {
-    return access_point_active && dhcp_active && listener != NULL;
+    return access_point_active && dhcp_active && dns_active && listener != NULL;
 }

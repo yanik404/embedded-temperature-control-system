@@ -11,6 +11,7 @@
 #define MEMP_NUM_TCP_PCB                8
 #define MEMP_NUM_TCP_PCB_LISTEN         4
 #define MEMP_NUM_TCP_SEG                96
+#define MEMP_NUM_UDP_PCB                6
 #define TCP_MSS                         1460
 #define TCP_SND_BUF                     (20 * TCP_MSS)
 #define TCP_WND                         (8 * TCP_MSS)

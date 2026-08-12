@@ -25,6 +25,7 @@ add_executable(temperature_control
     src/safety.c
     src/webserver.c
     src/dhcpserver.c
+    src/dnsserver.c
 )
 
 target_include_directories(temperature_control PRIVATE

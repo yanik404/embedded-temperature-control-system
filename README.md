@@ -16,6 +16,12 @@ Der Pico W erzeugt beim Start selbst ein WPA2-geschütztes WLAN und stellt per D
 
 Dieses WLAN hat kein Internet. Das ist beabsichtigt, weil der Pico selbst die Webseite bereitstellt. Smartphone und PC können gleichzeitig verbunden sein. Der Access Point funktioniert auch bei reiner USB-Versorgung; dies startet niemals die Heizung und ohne gültige Leistungsfreigabe bleibt START gesperrt.
 
+### Captive Portal
+
+Der DHCP-Server trägt `192.168.4.1` als DNS-Server ein. Ein lokaler Wildcard-DNS-Dienst beantwortet IPv4-Anfragen für beliebige Hostnamen mit dieser Adresse. HTTP-Erkennungsanfragen von Android, iOS/macOS und Windows – unter anderem `generate_204`, `hotspot-detect.html`, `connecttest.txt` und `ncsi.txt` – werden auf das Dashboard umgeleitet. Dadurch zeigen viele Geräte nach dem Verbinden automatisch eine Anmeldeseite an.
+
+Das automatische Öffnen wird vom jeweiligen Betriebssystem gesteuert und kann deshalb nicht auf jedem Gerät garantiert werden. Falls kein Fenster erscheint, im Browser manuell **http://192.168.4.1** öffnen. HTTPS-Seiten können ohne ein vom Endgerät akzeptiertes Zertifikat nicht transparent umgeleitet werden.
+
 ## Sicherer Erststart
 
 Nach jedem Reset werden beide Peltier-PWM-Ausgänge zuerst auf 0 % gesetzt, beide H-Brücken deaktiviert und der Lüfter in den AUS-Zustand gebracht. Die Initialisierung oder eine USB-Versorgung allein startet niemals die 12-V-Last. Heizen beginnt nur nach einem bewussten `START` über OK-Taster oder Weboberfläche und nur bei gültigen Sensoren, Strommessung, 5-V-Power-Good und erkannter Tasse.
@@ -107,7 +113,7 @@ Die Statusfarben bedeuten: Grün = bestätigt/aktiv, Blau = normal/bereit, Orang
 | `buttons` | nichtblockierende Entprellung und Bechererkennung |
 | `status_leds` | aktive-low LEDs und WS2812-Ring |
 | `safety` | zentrale Freigabe- und Fehlerprüfung |
-| `webserver`, `dhcpserver` | WPA2-Access-Point, DHCP, lwIP-HTTP-Server, JSON-API, Dashboard |
+| `webserver`, `dhcpserver`, `dnsserver` | WPA2-Access-Point, DHCP, Wildcard-DNS, Captive Portal, lwIP-HTTP-Server, JSON-API, Dashboard |
 
 Der DHCP-Server basiert auf dem offiziellen Raspberry-Pi-Beispiel [`pico_w/wifi/access_point`](https://github.com/raspberrypi/pico-examples/tree/master/pico_w/wifi/access_point). Der übernommene MicroPython-DHCP-Code steht unter der MIT-Lizenz; der Lizenztext liegt in `third_party/dhcpserver/LICENSE`.
 
