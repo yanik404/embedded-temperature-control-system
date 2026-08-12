@@ -1,0 +1,48 @@
+#pragma once
+
+#include <stdbool.h>
+#include <stdint.h>
+
+typedef enum {
+    SYSTEM_OFF = 0,
+    SYSTEM_READY,
+    SYSTEM_HEATING,
+    SYSTEM_HOLDING,
+    SYSTEM_ERROR
+} system_state_t;
+
+typedef enum {
+    ERROR_NONE = 0,
+    ERROR_TEMP_SENSOR,
+    ERROR_OVERTEMPERATURE,
+    ERROR_FAN,
+    ERROR_OVERCURRENT,
+    ERROR_CURRENT_SENSOR,
+    ERROR_CUP_REMOVED,
+    ERROR_POWER_SUPPLY
+} error_code_t;
+
+typedef struct {
+    system_state_t state;
+    error_code_t error;
+    float temperature_c;
+    float temperature_2_c;
+    float setpoint_c;
+    float control_error_c;
+    float peltier_power_percent;
+    float peltier_1_current_a;
+    float peltier_2_current_a;
+    uint16_t fan_rpm;
+    uint8_t fan_percent;
+    float light_level;
+    bool temperature_valid;
+    bool current_valid;
+    bool cup_detected;
+    bool power_5v_ok;
+    bool wifi_connected;
+    bool night_mode;
+} system_status_t;
+
+const char *system_state_name(system_state_t state);
+const char *error_name(error_code_t error);
+

@@ -1,0 +1,7 @@
+build/
+.vscode/
+secrets.h
+*.uf2
+*.elf
+*.map
+
