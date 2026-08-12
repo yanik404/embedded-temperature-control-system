@@ -21,6 +21,7 @@ add_executable(temperature_control
     src/buttons.c
     src/light_sensor.c
     src/display.c
+    src/status_led_logic.c
     src/status_leds.c
     src/safety.c
     src/webserver.c

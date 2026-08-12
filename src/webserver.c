@@ -490,8 +490,13 @@ void webserver_update(void) {
 }
 
 bool webserver_is_connected(void) {
-    return wifi_initialized && listener != NULL &&
+    return wifi_initialized &&
            cyw43_tcpip_link_status(&cyw43_state, CYW43_ITF_STA) == CYW43_LINK_UP;
+}
+
+bool webserver_is_ready(void) {
+    char ip[16];
+    return listener != NULL && webserver_get_ip(ip, sizeof(ip));
 }
 
 bool webserver_get_ip(char *buffer, size_t buffer_size) {

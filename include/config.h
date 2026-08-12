@@ -85,6 +85,7 @@
 #define BUTTON_DEBOUNCE_MS          30u
 #define LIGHT_DARK_THRESHOLD        0.18f
 #define DISPLAY_PERIOD_MS           350u
+#define STATUS_LED_PERIOD_MS         50u
 #define SENSOR_PERIOD_MS            200u
 #define WEB_STATUS_PERIOD_MS        500u
 

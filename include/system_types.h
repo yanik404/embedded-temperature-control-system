@@ -49,6 +49,7 @@ typedef struct {
     bool cup_detected;
     bool power_5v_ok;
     bool wifi_connected;
+    bool webserver_ready;
     char wifi_ip[16];
     bool night_mode;
 } system_status_t;

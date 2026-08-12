@@ -19,4 +19,5 @@ bool webserver_init(const webserver_config_t *config);
 void webserver_deinit(void);
 void webserver_update(void);
 bool webserver_is_connected(void);
+bool webserver_is_ready(void);
 bool webserver_get_ip(char *buffer, size_t buffer_size);

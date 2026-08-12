@@ -26,6 +26,8 @@ jobs:
         run: cmake --build build --parallel 2
       - name: Test PI controller on host
         run: cc -std=c11 -Wall -Wextra -Werror -Iinclude tests/test_controller.c src/controller.c -lm -o controller_tests && ./controller_tests
+      - name: Test status LED mapping on host
+        run: cc -std=c11 -Wall -Wextra -Werror -Iinclude tests/test_status_led_logic.c src/status_led_logic.c -o status_led_tests && ./status_led_tests
       - name: Test lwIP receive ownership contract
         run: python tests/test_lwip_pbuf_contract.py
       - name: Test large HTTP response chunking

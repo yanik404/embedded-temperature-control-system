@@ -242,7 +242,8 @@ void app_init(void) {
 }
 
 void app_run(void) {
-    uint32_t sensor_due = 0u, control_due = 0u, display_due = 0u, web_due = 0u;
+    uint32_t sensor_due = 0u, control_due = 0u, display_due = 0u;
+    uint32_t status_led_due = 0u, web_due = 0u;
     while (true) {
         const uint32_t now = milliseconds();
         process_buttons();
@@ -260,13 +261,17 @@ void app_run(void) {
             display_due = now + DISPLAY_PERIOD_MS;
             display_set_dimmed(status.night_mode);
             display_update(&status);
-            status_leds_update(status.state, status.night_mode);
         }
         if ((int32_t)(now - web_due) >= 0) {
             web_due = now + WEB_STATUS_PERIOD_MS;
             webserver_update();
             status.wifi_connected = webserver_is_connected();
+            status.webserver_ready = webserver_is_ready();
             (void)webserver_get_ip(status.wifi_ip, sizeof(status.wifi_ip));
+        }
+        if ((int32_t)(now - status_led_due) >= 0) {
+            status_led_due = now + STATUS_LED_PERIOD_MS;
+            status_leds_update(&status);
         }
         watchdog_update();
         sleep_ms(1u);
