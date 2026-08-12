@@ -89,7 +89,9 @@ UP/DOWN ändern den Sollwert in 0,5-°C-Schritten. OK startet oder stoppt; im Fe
 
 ## Weboberfläche
 
-Der Pico W liefert das Dashboard direkt aus dem Flash unter `http://<PICO-IP>` aus. Die Kopfzeile und der Hardwarestatus zeigen SSID und aktuelle DHCP-IP. Das Dashboard zeigt weiterhin Ist-/Solltemperatur, Regelabweichung, Leistung, Zustand, Lüfter-RPM, beide Ströme sowie Sensor- und Systemstatus. Das Live-Blockdiagramm enthält die aktuellen Werte in den Regelkreisblöcken und eine sichtbare Rückführung. Ein Canvas-Diagramm aktualisiert Istwert, Sollwert und Leistung alle 500 ms ohne Seitenreload. START, STOP und Sollwert sind am PC und Smartphone bedienbar.
+Der Pico W liefert das responsive Industrie-HMI-Dashboard direkt aus dem Flash unter `http://<PICO-IP>` aus. Die Kopfzeile zeigt Systemzustand, SSID, aktuelle DHCP-IP, Live-Verbindung und Uptime. Die Hauptansicht priorisiert Ist-/Solltemperatur, Regelabweichung, Stellgröße und Heizstatus. Das Live-Blockdiagramm enthält alle Glieder des geschlossenen Regelkreises mit aktuellen Werten und sichtbarer Rückführung. Ein Canvas-Diagramm aktualisiert Istwert, Sollwert, zweite Temperatur und Stellgröße alle 500 ms ohne Seitenreload; die Zeitfenster 1, 5 und 15 Minuten verwenden ausschließlich browserlokale Historie.
+
+Weitere Ansichten zeigen Read-only-PI-Diagnosewerte, browserlokale Regelungskennwerte, Sicherheitsfreigaben, den Hardwarestatus, technische API-Werte und ein aus API-Zustandsänderungen abgeleitetes Ereignisprotokoll. Der Präsentationsmodus reduziert die Oberfläche auf Temperatur, Bedienung, Regelkreis und großes Diagramm. Bei ausbleibenden API-Antworten kennzeichnet das Dashboard die Werte als veraltet und sperrt alle Bedienaktionen. START, STOP und Sollwert bleiben auf PC, Tablet und Smartphone bedienbar, solange die Live-Verbindung besteht.
 
 Der Hardwarestatus unterscheidet bewusst zwischen `OK`, `AKTIV`, `AUS`, `FEHLER`, `NICHT VERBUNDEN`, `NICHT VERFÜGBAR` und `UNBEKANNT`. Ein grüner Status wird nur angezeigt, wenn die Firmware die Initialisierung, einen plausiblen Messwert oder einen beobachtbaren Betriebswert bestätigen kann. Die Startfreigabe nennt bei einer Sperre den konkreten Grund, beispielsweise einen fehlenden Becher, eine ungültige Strommessung oder fehlendes Power-Good.
 
@@ -97,7 +99,7 @@ Die Statusfarben bedeuten: Grün = bestätigt/aktiv, Blau = normal/bereit, Orang
 
 ### Lokale Designvorschau
 
-`preview.html` direkt im Browser öffnen, um exakt dieselbe Oberfläche ohne Pico und WLAN mit animierten Demo-Daten anzusehen. Die Datei erkennt den lokalen `file:`-Aufruf automatisch. START, STOP und SETZEN verändern dann ausschließlich den lokalen Demo-Zustand und sprechen keine Hardware oder Netzwerk-API an.
+`preview.html` direkt im Browser öffnen, um exakt dieselbe Oberfläche ohne Pico und WLAN mit animierten Demo-Daten anzusehen. Die Datei erkennt den lokalen `file:`-Aufruf automatisch. START, STOP und SETZEN verändern dann ausschließlich den lokalen Demo-Zustand und sprechen keine Hardware oder Netzwerk-API an. Die nur in der lokalen Vorschau sichtbaren Schalter `READY`, `HEATING`, `HOLDING`, `ERROR` und `DISCONNECTED` ermöglichen eine gezielte Prüfung aller wesentlichen UI-Zustände.
 
 ## Softwarearchitektur
 
