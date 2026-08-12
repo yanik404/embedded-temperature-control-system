@@ -36,6 +36,11 @@
 #define TLA2024_ADDRESS     0x48u
 #define SSD1306_ADDRESS     0x3Cu
 
+/* Presentation access point. It is independent of the heating enable path. */
+#define WIFI_AP_SSID        "Becherhalter"
+#define WIFI_AP_PASSWORD    "12345678"
+#define WIFI_AP_IP_ADDRESS  "192.168.4.1"
+
 /* TLA2024 channels. */
 #define TLA_CH_PEL1_CS      0u
 #define TLA_CH_PEL2_CS      1u
@@ -86,4 +91,3 @@
 /* VNH7070 direction used exclusively for heating. Verify once on first 12 V test. */
 #define PELTIER_HEAT_INA_LEVEL      1
 #define PELTIER_HEAT_INB_LEVEL      0
-

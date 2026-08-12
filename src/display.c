@@ -87,10 +87,12 @@ void display_update(const system_status_t *status) {
     char line[24];
     memset(framebuffer, 0, sizeof(framebuffer));
     text_at(24, 0, "BECHERHALTER");
+    text_at(8, 1, "WIFI: " WIFI_AP_SSID);
     snprintf(line, sizeof(line), "IST:  %5.1F C", status->temperature_c);
     text_at(8, 2, line);
     snprintf(line, sizeof(line), "SOLL: %5.1F C", status->setpoint_c);
     text_at(8, 3, line);
+    text_at(8, 4, "IP: " WIFI_AP_IP_ADDRESS);
     text_at(8, 5, system_state_name(status->state));
     if (status->state == SYSTEM_ERROR) {
         text_at(8, 6, error_name(status->error));

@@ -5,21 +5,18 @@
 #include <string.h>
 
 #include "config.h"
+#include "dhcpserver.h"
+#include "lwip/ip4_addr.h"
 #include "lwip/pbuf.h"
 #include "lwip/tcp.h"
 #include "pico/cyw43_arch.h"
 #include "web_assets.h"
 
-#if __has_include("secrets.h")
-#include "secrets.h"
-#else
-#define WIFI_SSID ""
-#define WIFI_PASSWORD ""
-#endif
-
 static webserver_config_t server_config;
 static struct tcp_pcb *listener;
-static bool connected;
+static dhcp_server_t dhcp_server;
+static bool access_point_active;
+static bool dhcp_active;
 static char response[1024];
 
 static err_t send_response(struct tcp_pcb *client, const char *status, const char *type,
@@ -96,29 +93,62 @@ bool webserver_init(const webserver_config_t *config) {
         config->stop == NULL || config->set_setpoint == NULL) return false;
     server_config = *config;
     if (cyw43_arch_init() != 0) return false;
-    cyw43_arch_enable_sta_mode();
-    if (strlen(WIFI_SSID) == 0u || cyw43_arch_wifi_connect_async(
-            WIFI_SSID, WIFI_PASSWORD, CYW43_AUTH_WPA2_AES_PSK) != 0) {
-        connected = false;
+
+    /* Starting the radio never grants heating permission; that remains solely
+       controlled by the application state machine and safety module. */
+    cyw43_arch_enable_ap_mode(WIFI_AP_SSID, WIFI_AP_PASSWORD, CYW43_AUTH_WPA2_AES_PSK);
+    access_point_active = true;
+
+#if LWIP_IPV6
+#define IP4_FIELD(address) ((address).u_addr.ip4)
+#else
+#define IP4_FIELD(address) (address)
+#endif
+    ip4_addr_t gateway;
+    ip4_addr_t netmask;
+    IP4_FIELD(gateway).addr = PP_HTONL(CYW43_DEFAULT_IP_AP_ADDRESS);
+    IP4_FIELD(netmask).addr = PP_HTONL(CYW43_DEFAULT_IP_MASK);
+#undef IP4_FIELD
+
+    dhcp_server_init(&dhcp_server, &cyw43_state.netif[CYW43_ITF_AP],
+                     &gateway, &netmask);
+    dhcp_active = dhcp_server.udp != NULL;
+    if (!dhcp_active) {
+        webserver_deinit();
         return false;
     }
-    connected = true;
+
+    cyw43_arch_lwip_begin();
     listener = tcp_new_ip_type(IPADDR_TYPE_ANY);
-    if (listener == NULL || tcp_bind(listener, IP_ANY_TYPE, 80u) != ERR_OK) return false;
-    listener = tcp_listen_with_backlog(listener, 3u);
-    tcp_accept(listener, accept_client);
+    if (listener != NULL && tcp_bind(listener, IP_ANY_TYPE, 80u) == ERR_OK) {
+        listener = tcp_listen_with_backlog(listener, 4u);
+        if (listener != NULL) tcp_accept(listener, accept_client);
+    } else if (listener != NULL) {
+        tcp_close(listener);
+        listener = NULL;
+    }
+    cyw43_arch_lwip_end();
+    if (listener == NULL) {
+        webserver_deinit();
+        return false;
+    }
     return true;
 }
 
 void webserver_deinit(void) {
-    if (listener != NULL) tcp_close(listener);
+    if (listener != NULL) {
+        cyw43_arch_lwip_begin();
+        tcp_close(listener);
+        cyw43_arch_lwip_end();
+    }
     listener = NULL;
-    connected = false;
+    if (dhcp_active) dhcp_server_deinit(&dhcp_server);
+    dhcp_active = false;
+    if (access_point_active) cyw43_arch_disable_ap_mode();
+    access_point_active = false;
     cyw43_arch_deinit();
 }
 
 bool webserver_is_connected(void) {
-    if (!connected && strlen(WIFI_SSID) > 0u &&
-        cyw43_tcpip_link_status(&cyw43_state, CYW43_ITF_STA) == CYW43_LINK_UP) connected = true;
-    return connected && cyw43_tcpip_link_status(&cyw43_state, CYW43_ITF_STA) == CYW43_LINK_UP;
+    return access_point_active && dhcp_active && listener != NULL;
 }

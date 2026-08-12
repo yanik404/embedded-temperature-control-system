@@ -4,14 +4,26 @@ Firmware für die Praxisarbeit **Digitaltechnik & Regelungstechnik**. Ein Raspbe
 
 > Das System heizt ausschließlich. Es gibt keinen Kühlmodus und keine Richtungsumkehr der H-Brücken.
 
+## Präsentationsmodus ohne externes WLAN
+
+Der Pico W erzeugt beim Start selbst ein WPA2-geschütztes WLAN und stellt per DHCP automatisch Netzwerkadressen für mehrere verbundene Geräte bereit. Ein Internetzugang oder bestehender WLAN-Router ist nicht erforderlich.
+
+1. Pico einschalten.
+2. Auf Handy oder PC mit dem WLAN **Becherhalter** verbinden.
+3. Passwort **12345678** eingeben.
+4. Browser öffnen.
+5. **http://192.168.4.1** aufrufen.
+
+Dieses WLAN hat kein Internet. Das ist beabsichtigt, weil der Pico selbst die Webseite bereitstellt. Smartphone und PC können gleichzeitig verbunden sein. Der Access Point funktioniert auch bei reiner USB-Versorgung; dies startet niemals die Heizung und ohne gültige Leistungsfreigabe bleibt START gesperrt.
+
 ## Sicherer Erststart
 
 Nach jedem Reset werden beide Peltier-PWM-Ausgänge zuerst auf 0 % gesetzt, beide H-Brücken deaktiviert und der Lüfter in den AUS-Zustand gebracht. Die Initialisierung oder eine USB-Versorgung allein startet niemals die 12-V-Last. Heizen beginnt nur nach einem bewussten `START` über OK-Taster oder Weboberfläche und nur bei gültigen Sensoren, Strommessung, 5-V-Power-Good und erkannter Tasse.
 
 Für den ersten Test ohne 12 V:
 
-1. `secrets.example.h` nach `secrets.h` kopieren und WLAN eintragen (optional).
-2. Firmware flashen und zunächst nur USB anschließen.
+1. Firmware flashen und zunächst nur USB anschließen.
+2. Mit dem WLAN **Becherhalter** verbinden und `http://192.168.4.1` öffnen.
 3. OLED, Taster, beide Temperaturen, Lichtwert und Weboberfläche prüfen.
 4. Nicht `START` drücken. Peltier-PWM und beide Richtungsleitungen müssen 0 sein.
 5. Vor dem ersten 12-V-Test Heizrichtung und Stromskalierung gemäß Abschnitt „Kalibrierung“ prüfen.
@@ -71,9 +83,7 @@ UP/DOWN ändern den Sollwert in 0,5-°C-Schritten. OK startet oder stoppt; im Fe
 
 ## Weboberfläche
 
-Der Pico W liefert das Dashboard direkt aus dem Flash aus. Es zeigt Ist-/Solltemperatur, Regelabweichung, Leistung, Zustand, Lüfter-RPM, beide Ströme, Sensor-, System- und WLANstatus. Das Live-Blockdiagramm enthält die aktuellen Werte in den Regelkreisblöcken und eine sichtbare Rückführung. Ein Canvas-Diagramm aktualisiert Istwert, Sollwert und Leistung alle 500 ms ohne Seitenreload. START, STOP und Sollwert sind am PC und Smartphone bedienbar.
-
-Es werden keine Zugangsdaten committed. Ohne `secrets.h` läuft die Firmware vollständig weiter, das Dashboard bleibt jedoch offline.
+Der Pico W liefert das Dashboard direkt aus dem Flash unter `http://192.168.4.1` aus. Es zeigt Ist-/Solltemperatur, Regelabweichung, Leistung, Zustand, Lüfter-RPM, beide Ströme, Sensor-, System- und WLANstatus. Das Live-Blockdiagramm enthält die aktuellen Werte in den Regelkreisblöcken und eine sichtbare Rückführung. Ein Canvas-Diagramm aktualisiert Istwert, Sollwert und Leistung alle 500 ms ohne Seitenreload. START, STOP und Sollwert sind am PC und Smartphone bedienbar.
 
 ## Softwarearchitektur
 
@@ -89,7 +99,9 @@ Es werden keine Zugangsdaten committed. Ohne `secrets.h` läuft die Firmware vol
 | `buttons` | nichtblockierende Entprellung und Bechererkennung |
 | `status_leds` | aktive-low LEDs und WS2812-Ring |
 | `safety` | zentrale Freigabe- und Fehlerprüfung |
-| `webserver` | lwIP-HTTP-Server, JSON-API, Dashboard |
+| `webserver`, `dhcpserver` | WPA2-Access-Point, DHCP, lwIP-HTTP-Server, JSON-API, Dashboard |
+
+Der DHCP-Server basiert auf dem offiziellen Raspberry-Pi-Beispiel [`pico_w/wifi/access_point`](https://github.com/raspberrypi/pico-examples/tree/master/pico_w/wifi/access_point). Der übernommene MicroPython-DHCP-Code steht unter der MIT-Lizenz; der Lizenztext liegt in `third_party/dhcpserver/LICENSE`.
 
 ## Build und Flash
 

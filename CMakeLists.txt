@@ -24,6 +24,7 @@ add_executable(temperature_control
     src/status_leds.c
     src/safety.c
     src/webserver.c
+    src/dhcpserver.c
 )
 
 target_include_directories(temperature_control PRIVATE
@@ -45,6 +46,10 @@ target_link_libraries(temperature_control
 
 pico_generate_pio_header(temperature_control
     ${CMAKE_CURRENT_LIST_DIR}/src/ws2812.pio
+)
+
+pico_configure_ip4_address(temperature_control PRIVATE
+    CYW43_DEFAULT_IP_AP_ADDRESS 192.168.4.1
 )
 
 pico_enable_stdio_usb(temperature_control 1)
