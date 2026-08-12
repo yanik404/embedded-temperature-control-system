@@ -12,6 +12,8 @@
 
 static uint8_t framebuffer[OLED_BUFFER_SIZE];
 static bool available;
+static uint8_t display_cycle;
+static bool previous_wifi_connected;
 
 /* Compact 5x7 glyphs: digits, uppercase letters, punctuation used by the UI. */
 static const char glyph_chars[] = " 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ.:%-_/";
@@ -87,20 +89,36 @@ void display_update(const system_status_t *status) {
     char line[24];
     memset(framebuffer, 0, sizeof(framebuffer));
     text_at(24, 0, "BECHERHALTER");
-    text_at(8, 1, "WIFI: " WIFI_AP_SSID);
-    snprintf(line, sizeof(line), "IST:  %5.1F C", status->temperature_c);
-    text_at(8, 2, line);
-    snprintf(line, sizeof(line), "SOLL: %5.1F C", status->setpoint_c);
-    text_at(8, 3, line);
-    text_at(8, 4, "IP: " WIFI_AP_IP_ADDRESS);
-    text_at(8, 5, system_state_name(status->state));
-    if (status->state == SYSTEM_ERROR) {
-        text_at(8, 6, error_name(status->error));
+
+    if (status->wifi_connected != previous_wifi_connected) {
+        display_cycle = 0u;
+        previous_wifi_connected = status->wifi_connected;
+    }
+    const bool show_network = !status->wifi_connected || display_cycle < 12u;
+    display_cycle = (uint8_t)((display_cycle + 1u) % 40u);
+
+    if (show_network) {
+        text_at(8, 1, status->wifi_connected ? "WLAN: OK" : "WLAN: VERBINDE...");
+        text_at(8, 2, WIFI_SSID);
+        text_at(8, 4, "IP:");
+        text_at(8, 5, status->wifi_connected ? status->wifi_ip : "WARTE AUF DHCP");
+        text_at(8, 7, status->wifi_connected ? "HTTP:// + IP" : "HOTSPOT PRUEFEN");
     } else {
-        snprintf(line, sizeof(line), "LEISTUNG: %3.0F %%", status->peltier_power_percent);
-        text_at(8, 6, line);
-        snprintf(line, sizeof(line), "FAN: %4u RPM", (unsigned)status->fan_rpm);
-        text_at(8, 7, line);
+        snprintf(line, sizeof(line), "IST:  %5.1F C", status->temperature_c);
+        text_at(8, 1, line);
+        snprintf(line, sizeof(line), "SOLL: %5.1F C", status->setpoint_c);
+        text_at(8, 2, line);
+        text_at(8, 3, system_state_name(status->state));
+        if (status->state == SYSTEM_ERROR) {
+            text_at(8, 4, error_name(status->error));
+        } else {
+            snprintf(line, sizeof(line), "LEISTUNG: %3.0F %%", status->peltier_power_percent);
+            text_at(8, 4, line);
+            snprintf(line, sizeof(line), "FAN: %4u RPM", (unsigned)status->fan_rpm);
+            text_at(8, 5, line);
+        }
+        text_at(8, 6, "IP:");
+        text_at(8, 7, status->wifi_ip);
     }
     flush();
 }

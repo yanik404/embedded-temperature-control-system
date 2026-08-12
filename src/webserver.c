@@ -5,24 +5,13 @@
 #include <string.h>
 
 #include "config.h"
-#include "dhcpserver.h"
-#include "dnsserver.h"
-#include "http_request.h"
 #include "lwip/ip4_addr.h"
 #include "lwip/pbuf.h"
 #include "lwip/tcp.h"
 #include "pico/cyw43_arch.h"
+#include "pico/stdlib.h"
 #include "safety.h"
 #include "web_assets.h"
-
-static webserver_config_t server_config;
-static struct tcp_pcb *listener;
-static dhcp_server_t dhcp_server;
-static dns_server_t dns_server;
-static bool access_point_active;
-static bool dhcp_active;
-static bool dns_active;
-static char response[3072];
 
 #define HTTP_REQUEST_BUFFER_SIZE 1536u
 #define HTTP_CLIENT_COUNT 4u
@@ -33,7 +22,30 @@ typedef struct {
     bool in_use;
 } http_client_t;
 
+static webserver_config_t server_config;
+static struct tcp_pcb *listener;
 static http_client_t http_clients[HTTP_CLIENT_COUNT];
+static bool wifi_initialized;
+static bool connect_in_progress;
+static uint32_t connection_started_ms;
+static uint32_t retry_due_ms;
+static char response[3072];
+
+static uint32_t milliseconds(void) {
+    return to_ms_since_boot(get_absolute_time());
+}
+
+static bool deadline_reached(uint32_t now, uint32_t deadline) {
+    return (int32_t)(now - deadline) >= 0;
+}
+
+static void start_wifi_connection(uint32_t now) {
+    const int result = cyw43_arch_wifi_connect_async(
+        WIFI_SSID, WIFI_PASSWORD, CYW43_AUTH_WPA2_MIXED_PSK);
+    connect_in_progress = result == 0;
+    connection_started_ms = now;
+    if (!connect_in_progress) retry_due_ms = now + WIFI_RETRY_DELAY_MS;
+}
 
 static http_client_t *allocate_http_client(void) {
     for (size_t i = 0; i < HTTP_CLIENT_COUNT; ++i) {
@@ -93,8 +105,6 @@ static err_t send_response(struct tcp_pcb *client, const char *status, const cha
         "HTTP/1.1 %s\r\nContent-Type: %s\r\nContent-Length: %u\r\nConnection: close\r\nCache-Control: no-store\r\n\r\n",
         status, type, (unsigned)body_length);
     err_t error = tcp_write(client, header, (u16_t)header_length, TCP_WRITE_FLAG_COPY);
-    /* The dashboard lives permanently in flash, so lwIP can reference it without
-       copying the complete page into scarce RAM. Dynamic API bodies are copied. */
     const u8_t body_flags = body == dashboard_html ? 0u : TCP_WRITE_FLAG_COPY;
     if (error == ERR_OK) error = tcp_write(client, body, (u16_t)body_length, body_flags);
     tcp_output(client);
@@ -102,42 +112,10 @@ static err_t send_response(struct tcp_pcb *client, const char *status, const cha
     return error;
 }
 
-static err_t send_dashboard_redirect(struct tcp_pcb *client) {
-    static const char body[] =
-        "<!doctype html><html><head><meta charset=\"utf-8\">"
-        "<meta http-equiv=\"refresh\" content=\"0;url=http://" WIFI_AP_IP_ADDRESS "/\">"
-        "</head><body><a href=\"http://" WIFI_AP_IP_ADDRESS "/\">Dashboard oeffnen</a>"
-        "</body></html>";
-    char header[256];
-    const int header_length = snprintf(header, sizeof(header),
-        "HTTP/1.1 302 Found\r\nLocation: http://%s/\r\nContent-Type: text/html; charset=utf-8\r\n"
-        "Content-Length: %u\r\nConnection: close\r\nCache-Control: no-store\r\n\r\n",
-        WIFI_AP_IP_ADDRESS, (unsigned)strlen(body));
-    err_t result = tcp_write(client, header, (u16_t)header_length, TCP_WRITE_FLAG_COPY);
-    if (result == ERR_OK) result = tcp_write(client, body, sizeof(body) - 1u, 0u);
-    tcp_output(client);
-    tcp_close(client);
-    return result;
-}
-
-static err_t send_android_captive_page(struct tcp_pcb *client) {
-    /* A non-empty 200 response is deliberately not an Internet-validation
-       success. Android classifies it as captive, then its login WebView follows
-       the meta/JavaScript navigation to the actual dashboard. */
-    static const char body[] =
-        "<!doctype html><html><head><meta charset=\"utf-8\">"
-        "<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">"
-        "<meta http-equiv=\"refresh\" content=\"0;url=http://" WIFI_AP_IP_ADDRESS "/\">"
-        "<title>Becherhalter</title></head><body>"
-        "<h1>Becherhalter</h1><p>Lokales Dashboard wird geoeffnet.</p>"
-        "<a href=\"http://" WIFI_AP_IP_ADDRESS "/\">Dashboard oeffnen</a>"
-        "<script>location.replace('http://" WIFI_AP_IP_ADDRESS "/')</script>"
-        "</body></html>";
-    return send_response(client, "200 OK", "text/html; charset=utf-8", body);
-}
-
 static void status_json(void) {
     const system_status_t *s = server_config.status;
+    char ip[16];
+    (void)webserver_get_ip(ip, sizeof(ip));
     snprintf(response, sizeof(response),
         "{\"state\":\"%s\",\"fault\":\"%s\",\"fault_description\":\"%s\","
         "\"temperature\":%.2f,\"temperature1\":%.2f,\"temperature2\":%.2f,"
@@ -146,7 +124,7 @@ static void status_json(void) {
         "\"sensor_ok\":%s,\"temp1_ok\":%s,\"temp2_ok\":%s,"
         "\"current_ok\":%s,\"current1_ok\":%s,\"current2_ok\":%s,"
         "\"tla2024_ok\":%s,\"light_ok\":%s,\"display_initialized\":%s,\"leds_initialized\":%s,"
-        "\"cup\":%s,\"power_good\":%s,\"wifi\":%s,\"night\":%s,"
+        "\"cup\":%s,\"power_good\":%s,\"wifi\":%s,\"wifi_ssid\":\"%s\",\"wifi_ip\":\"%s\",\"night\":%s,"
         "\"start_allowed\":%s,\"start_block_reason\":\"%s\"}",
         system_state_name(s->state), error_name(s->error), error_description(s->error),
         s->temperature_c, s->temperature_1_c, s->temperature_2_c,
@@ -159,21 +137,17 @@ static void status_json(void) {
         s->tla2024_available ? "true" : "false", s->light_sensor_available ? "true" : "false",
         s->display_initialized ? "true" : "false", s->status_leds_initialized ? "true" : "false",
         s->cup_detected ? "true" : "false", s->power_5v_ok ? "true" : "false",
-        s->wifi_connected ? "true" : "false", s->night_mode ? "true" : "false",
-        start_allowed() ? "true" : "false", start_block_reason());
+        s->wifi_connected ? "true" : "false", WIFI_SSID, ip,
+        s->night_mode ? "true" : "false", start_allowed() ? "true" : "false",
+        start_block_reason());
 }
 
 static err_t process_http_request(struct tcp_pcb *client, const char *text) {
-    http_request_t request;
-    if (!http_request_parse(text, &request)) {
-        return send_response(client, "400 Bad Request", "text/plain", "Bad request");
-    }
-
-    if (request.method == HTTP_METHOD_GET && http_request_path_equals(&request, "/api/status")) {
+    if (strncmp(text, "GET /api/status ", 16u) == 0) {
         status_json();
         return send_response(client, "200 OK", "application/json", response);
     }
-    if (request.method == HTTP_METHOD_POST && http_request_path_equals(&request, "/api/start")) {
+    if (strncmp(text, "POST /api/start ", 16u) == 0) {
         if (start_allowed()) {
             server_config.start();
             return send_response(client, "200 OK", "application/json", "{\"ok\":true}");
@@ -182,38 +156,21 @@ static err_t process_http_request(struct tcp_pcb *client, const char *text) {
                  start_block_reason());
         return send_response(client, "409 Conflict", "application/json", response);
     }
-    if (request.method == HTTP_METHOD_POST && http_request_path_equals(&request, "/api/stop")) {
+    if (strncmp(text, "POST /api/stop ", 15u) == 0) {
         server_config.stop();
         return send_response(client, "200 OK", "application/json", "{\"ok\":true}");
     }
-    static const char setpoint_prefix[] = "/api/setpoint?value=";
-    if (request.method == HTTP_METHOD_POST &&
-        strncmp(request.path, setpoint_prefix, sizeof(setpoint_prefix) - 1u) == 0) {
-        float value = strtof(request.path + sizeof(setpoint_prefix) - 1u, NULL);
+    static const char setpoint_prefix[] = "POST /api/setpoint?value=";
+    if (strncmp(text, setpoint_prefix, sizeof(setpoint_prefix) - 1u) == 0) {
+        const float value = strtof(text + sizeof(setpoint_prefix) - 1u, NULL);
         if (value >= SETPOINT_MIN_C && value <= SETPOINT_MAX_C) {
             server_config.set_setpoint(value);
             return send_response(client, "200 OK", "application/json", "{\"ok\":true}");
         }
         return send_response(client, "400 Bad Request", "application/json", "{\"ok\":false}");
     }
-
-    /* Android treats a non-empty 200 as captive (while an empty 200 may be
-       normalized to 204). The small page is more compatible with OEM network
-       monitors than relying solely on their redirect handling. */
-    if (http_request_is_android_probe(&request)) return send_android_captive_page(client);
-
-    const bool dashboard_host = request.host[0] == '\0' ||
-                                http_request_host_equals(&request, WIFI_AP_IP_ADDRESS);
-    if (request.method == HTTP_METHOD_GET && http_request_path_equals(&request, "/") &&
-        dashboard_host) {
+    if (strncmp(text, "GET / ", 6u) == 0) {
         return send_response(client, "200 OK", "text/html; charset=utf-8", dashboard_html);
-    }
-    /* Android (/generate_204), Apple (/hotspot-detect.html), Windows
-       (/connecttest.txt, /ncsi.txt) and other HTTP probes all reach this
-       fallback through wildcard DNS. A redirect deliberately indicates a
-       captive network and opens the local dashboard where the OS permits it. */
-    if (request.method == HTTP_METHOD_GET || request.method == HTTP_METHOD_HEAD) {
-        return send_dashboard_redirect(client);
     }
     return send_response(client, "404 Not Found", "text/plain", "Not found");
 }
@@ -287,41 +244,16 @@ bool webserver_init(const webserver_config_t *config) {
     server_config = *config;
     memset(http_clients, 0, sizeof(http_clients));
     if (cyw43_arch_init() != 0) return false;
+    wifi_initialized = true;
 
-    /* Starting the radio never grants heating permission; that remains solely
+    /* WLAN initialization never grants heating permission. That remains solely
        controlled by the application state machine and safety module. */
-    cyw43_arch_enable_ap_mode(WIFI_AP_SSID, WIFI_AP_PASSWORD, CYW43_AUTH_WPA2_AES_PSK);
-    access_point_active = true;
-
-#if LWIP_IPV6
-#define IP4_FIELD(address) ((address).u_addr.ip4)
-#else
-#define IP4_FIELD(address) (address)
-#endif
-    ip4_addr_t gateway;
-    ip4_addr_t netmask;
-    IP4_FIELD(gateway).addr = PP_HTONL(CYW43_DEFAULT_IP_AP_ADDRESS);
-    IP4_FIELD(netmask).addr = PP_HTONL(CYW43_DEFAULT_IP_MASK);
-#undef IP4_FIELD
-
-    dhcp_server_init(&dhcp_server, &cyw43_state.netif[CYW43_ITF_AP],
-                     &gateway, &netmask);
-    dhcp_active = dhcp_server.udp != NULL;
-    if (!dhcp_active) {
-        webserver_deinit();
-        return false;
-    }
-
-    dns_active = dns_server_init(&dns_server, &cyw43_state.netif[CYW43_ITF_AP], &gateway);
-    if (!dns_active) {
-        webserver_deinit();
-        return false;
-    }
+    cyw43_arch_enable_sta_mode();
 
     cyw43_arch_lwip_begin();
     listener = tcp_new_ip_type(IPADDR_TYPE_ANY);
     if (listener != NULL && tcp_bind(listener, IP_ANY_TYPE, 80u) == ERR_OK) {
-        listener = tcp_listen_with_backlog(listener, 4u);
+        listener = tcp_listen_with_backlog(listener, HTTP_CLIENT_COUNT);
         if (listener != NULL) tcp_accept(listener, accept_client);
     } else if (listener != NULL) {
         tcp_close(listener);
@@ -332,7 +264,56 @@ bool webserver_init(const webserver_config_t *config) {
         webserver_deinit();
         return false;
     }
+
+    start_wifi_connection(milliseconds());
     return true;
+}
+
+void webserver_update(void) {
+    if (!wifi_initialized) return;
+    const uint32_t now = milliseconds();
+    const int link_status = cyw43_tcpip_link_status(&cyw43_state, CYW43_ITF_STA);
+
+    if (link_status == CYW43_LINK_UP) {
+        connect_in_progress = false;
+        return;
+    }
+    if (link_status == CYW43_LINK_JOIN || link_status == CYW43_LINK_NOIP) {
+        if (!connect_in_progress) {
+            connect_in_progress = true;
+            connection_started_ms = now;
+        }
+        if (!deadline_reached(now, connection_started_ms + WIFI_CONNECT_TIMEOUT_MS)) return;
+    } else if (connect_in_progress && link_status >= CYW43_LINK_DOWN &&
+               !deadline_reached(now, connection_started_ms + WIFI_CONNECT_TIMEOUT_MS)) {
+        return;
+    }
+
+    if (connect_in_progress || link_status < CYW43_LINK_DOWN) {
+        cyw43_wifi_leave(&cyw43_state, CYW43_ITF_STA);
+        connect_in_progress = false;
+        retry_due_ms = now + WIFI_RETRY_DELAY_MS;
+        return;
+    }
+    if (deadline_reached(now, retry_due_ms)) start_wifi_connection(now);
+}
+
+bool webserver_is_connected(void) {
+    return wifi_initialized && listener != NULL &&
+           cyw43_tcpip_link_status(&cyw43_state, CYW43_ITF_STA) == CYW43_LINK_UP;
+}
+
+bool webserver_get_ip(char *buffer, size_t buffer_size) {
+    if (buffer == NULL || buffer_size == 0u) return false;
+    snprintf(buffer, buffer_size, "--");
+    if (!webserver_is_connected()) return false;
+
+    ip4_addr_t address;
+    cyw43_arch_lwip_begin();
+    ip4_addr_copy(address, *netif_ip4_addr(&cyw43_state.netif[CYW43_ITF_STA]));
+    cyw43_arch_lwip_end();
+    if (ip4_addr_isany_val(address)) return false;
+    return ip4addr_ntoa_r(&address, buffer, (int)buffer_size) != NULL;
 }
 
 void webserver_deinit(void) {
@@ -342,15 +323,10 @@ void webserver_deinit(void) {
         cyw43_arch_lwip_end();
     }
     listener = NULL;
-    if (dns_active) dns_server_deinit(&dns_server);
-    dns_active = false;
-    if (dhcp_active) dhcp_server_deinit(&dhcp_server);
-    dhcp_active = false;
-    if (access_point_active) cyw43_arch_disable_ap_mode();
-    access_point_active = false;
-    cyw43_arch_deinit();
-}
-
-bool webserver_is_connected(void) {
-    return access_point_active && dhcp_active && dns_active && listener != NULL;
+    if (wifi_initialized) {
+        cyw43_wifi_leave(&cyw43_state, CYW43_ITF_STA);
+        cyw43_arch_deinit();
+    }
+    wifi_initialized = false;
+    connect_in_progress = false;
 }

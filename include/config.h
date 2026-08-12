@@ -1,6 +1,7 @@
 #pragma once
 
 #include "hardware/i2c.h"
+#include "secrets.h"
 
 /* Fixed PCB pin assignment - do not change without a PCB revision. */
 #define PIN_I2C_DATA       0u
@@ -36,10 +37,9 @@
 #define TLA2024_ADDRESS     0x48u
 #define SSD1306_ADDRESS     0x3Cu
 
-/* Presentation access point. It is independent of the heating enable path. */
-#define WIFI_AP_SSID        "Becherhalter"
-#define WIFI_AP_PASSWORD    "12345678"
-#define WIFI_AP_IP_ADDRESS  "192.168.4.1"
+/* WLAN client timing. Network availability never grants heating permission. */
+#define WIFI_CONNECT_TIMEOUT_MS 15000u
+#define WIFI_RETRY_DELAY_MS      5000u
 
 /* TLA2024 channels. */
 #define TLA_CH_PEL1_CS      0u

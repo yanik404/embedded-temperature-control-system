@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdbool.h>
+#include <stddef.h>
 
 #include "system_types.h"
 
@@ -16,5 +17,6 @@ typedef struct {
 
 bool webserver_init(const webserver_config_t *config);
 void webserver_deinit(void);
+void webserver_update(void);
 bool webserver_is_connected(void);
-
+bool webserver_get_ip(char *buffer, size_t buffer_size);

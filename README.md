@@ -4,25 +4,23 @@ Firmware für die Praxisarbeit **Digitaltechnik & Regelungstechnik**. Ein Raspbe
 
 > Das System heizt ausschließlich. Es gibt keinen Kühlmodus und keine Richtungsumkehr der H-Brücken.
 
-## Präsentationsmodus ohne externes WLAN
+## Präsentationsmodus mit Handy-Hotspot
 
-Der Pico W erzeugt beim Start selbst ein WPA2-geschütztes WLAN und stellt per DHCP automatisch Netzwerkadressen für mehrere verbundene Geräte bereit. Ein Internetzugang oder bestehender WLAN-Router ist nicht erforderlich.
+Der Pico W arbeitet als normaler WLAN-Client. Der Handy-Hotspot vergibt ihm automatisch per DHCP eine IPv4-Adresse; es gibt keine fest angenommene Pico-Adresse.
 
-1. Pico einschalten.
-2. Auf Handy oder PC mit dem WLAN **Becherhalter** verbinden.
-3. Passwort **12345678** eingeben.
-4. Browser öffnen.
-5. **http://192.168.4.1** aufrufen.
+1. Handy-Hotspot einschalten.
+2. SSID **Obi W-lan Kenobi** einstellen.
+3. Passwort **xxxxxxxx** einstellen.
+4. Hotspot auf **2,4 GHz** stellen.
+5. Pico einschalten.
+6. Der Pico verbindet sich automatisch mit dem Hotspot.
+7. Die vom Hotspot vergebene IP auf dem OLED ablesen.
+8. Laptop, Tablet oder weiteres Handy mit demselben Hotspot verbinden.
+9. Browser öffnen.
+10. **http://&lt;PICO-IP&gt;** eingeben, beispielsweise `http://192.168.43.117`.
+11. Das Dashboard öffnet sich direkt vom Flash des Pico.
 
-Dieses WLAN hat kein Internet. Das ist beabsichtigt, weil der Pico selbst die Webseite bereitstellt. Smartphone und PC können gleichzeitig verbunden sein. Der Access Point funktioniert auch bei reiner USB-Versorgung; dies startet niemals die Heizung und ohne gültige Leistungsfreigabe bleibt START gesperrt.
-
-### Captive Portal
-
-Der DHCP-Server trägt `192.168.4.1` als DNS-Server ein. Ein lokaler Wildcard-DNS-Dienst beantwortet IPv4-Anfragen für beliebige Hostnamen mit dieser Adresse. HTTP-Erkennungsanfragen von Android, iOS/macOS und Windows – unter anderem `generate_204`, `hotspot-detect.html`, `connecttest.txt` und `ncsi.txt` – werden auf das Dashboard umgeleitet. Dadurch zeigen viele Geräte nach dem Verbinden automatisch eine Anmeldeseite an.
-
-Für Android werden `/generate_204`, `/gen_204`, `connectivitycheck.gstatic.com`, `clients3.google.com` sowie weitere übliche Google-/Android- und OEM-Probehosts ausdrücklich erkannt. Der HTTP-Server verarbeitet sowohl normale Pfade als auch absolute Request-URLs und wartet bei segmentierten TCP-Paketen auf den vollständigen Header. Android-Probes erhalten niemals eine erfolgreiche `204`-Internetantwort, sondern eine bewusst nicht leere `200 OK`-Portalseite. Diese markiert das Netz als Captive Portal und navigiert im Anmeldefenster zu `http://192.168.4.1/`. Andere Plattform-Probes werden weiterhin mit `302 Found` umgeleitet.
-
-Das automatische Öffnen wird vom jeweiligen Betriebssystem gesteuert und kann deshalb nicht auf jedem Gerät garantiert werden. Falls kein Fenster erscheint, im Browser manuell **http://192.168.4.1** öffnen. HTTPS-Seiten können ohne ein vom Endgerät akzeptiertes Zertifikat nicht transparent umgeleitet werden.
+SSID und Passwort sind zentral in `include/secrets.h` hinterlegt. Ist der Hotspot vorübergehend nicht erreichbar, läuft die Firmware sicher weiter und versucht die Verbindung zeitgesteuert erneut. WLAN-Verbindung oder USB-Versorgung starten niemals die Heizung; ohne gültige Leistungsfreigabe bleibt START gesperrt.
 
 ## Sicherer Erststart
 
@@ -31,7 +29,7 @@ Nach jedem Reset werden beide Peltier-PWM-Ausgänge zuerst auf 0 % gesetzt, beid
 Für den ersten Test ohne 12 V:
 
 1. Firmware flashen und zunächst nur USB anschließen.
-2. Mit dem WLAN **Becherhalter** verbinden und `http://192.168.4.1` öffnen.
+2. Den Handy-Hotspot einschalten, die IP auf dem OLED ablesen und `http://<PICO-IP>` öffnen.
 3. OLED, Taster, beide Temperaturen, Lichtwert und Weboberfläche prüfen.
 4. Nicht `START` drücken. Peltier-PWM und beide Richtungsleitungen müssen 0 sein.
 5. Vor dem ersten 12-V-Test Heizrichtung und Stromskalierung gemäß Abschnitt „Kalibrierung“ prüfen.
@@ -91,7 +89,7 @@ UP/DOWN ändern den Sollwert in 0,5-°C-Schritten. OK startet oder stoppt; im Fe
 
 ## Weboberfläche
 
-Der Pico W liefert das Dashboard direkt aus dem Flash unter `http://192.168.4.1` aus. Es zeigt Ist-/Solltemperatur, Regelabweichung, Leistung, Zustand, Lüfter-RPM, beide Ströme, Sensor-, System- und WLANstatus. Das Live-Blockdiagramm enthält die aktuellen Werte in den Regelkreisblöcken und eine sichtbare Rückführung. Ein Canvas-Diagramm aktualisiert Istwert, Sollwert und Leistung alle 500 ms ohne Seitenreload. START, STOP und Sollwert sind am PC und Smartphone bedienbar.
+Der Pico W liefert das Dashboard direkt aus dem Flash unter `http://<PICO-IP>` aus. Die Kopfzeile und der Hardwarestatus zeigen SSID und aktuelle DHCP-IP. Das Dashboard zeigt weiterhin Ist-/Solltemperatur, Regelabweichung, Leistung, Zustand, Lüfter-RPM, beide Ströme sowie Sensor- und Systemstatus. Das Live-Blockdiagramm enthält die aktuellen Werte in den Regelkreisblöcken und eine sichtbare Rückführung. Ein Canvas-Diagramm aktualisiert Istwert, Sollwert und Leistung alle 500 ms ohne Seitenreload. START, STOP und Sollwert sind am PC und Smartphone bedienbar.
 
 Der Hardwarestatus unterscheidet bewusst zwischen `OK`, `AKTIV`, `AUS`, `FEHLER`, `NICHT VERBUNDEN`, `NICHT VERFÜGBAR` und `UNBEKANNT`. Ein grüner Status wird nur angezeigt, wenn die Firmware die Initialisierung, einen plausiblen Messwert oder einen beobachtbaren Betriebswert bestätigen kann. Die Startfreigabe nennt bei einer Sperre den konkreten Grund, beispielsweise einen fehlenden Becher, eine ungültige Strommessung oder fehlendes Power-Good.
 
@@ -115,9 +113,9 @@ Die Statusfarben bedeuten: Grün = bestätigt/aktiv, Blau = normal/bereit, Orang
 | `buttons` | nichtblockierende Entprellung und Bechererkennung |
 | `status_leds` | aktive-low LEDs und WS2812-Ring |
 | `safety` | zentrale Freigabe- und Fehlerprüfung |
-| `webserver`, `dhcpserver`, `dnsserver` | WPA2-Access-Point, DHCP, Wildcard-DNS, Captive Portal, lwIP-HTTP-Server, JSON-API, Dashboard |
+| `webserver` | WLAN-Client mit DHCP und Reconnect, lwIP-HTTP-Server, JSON-API, Dashboard |
 
-Der DHCP-Server basiert auf dem offiziellen Raspberry-Pi-Beispiel [`pico_w/wifi/access_point`](https://github.com/raspberrypi/pico-examples/tree/master/pico_w/wifi/access_point). Der übernommene MicroPython-DHCP-Code steht unter der MIT-Lizenz; der Lizenztext liegt in `third_party/dhcpserver/LICENSE`.
+Der Pico nutzt den DHCP-Client von lwIP. Sobald die Station vollständig verbunden ist, wird die tatsächlich zugewiesene IPv4-Adresse aus dem STA-Netzwerkinterface gelesen und an OLED sowie Dashboard weitergegeben.
 
 ## Build und Flash
 

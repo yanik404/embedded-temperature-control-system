@@ -264,7 +264,9 @@ void app_run(void) {
         }
         if ((int32_t)(now - web_due) >= 0) {
             web_due = now + WEB_STATUS_PERIOD_MS;
+            webserver_update();
             status.wifi_connected = webserver_is_connected();
+            (void)webserver_get_ip(status.wifi_ip, sizeof(status.wifi_ip));
         }
         watchdog_update();
         sleep_ms(1u);
