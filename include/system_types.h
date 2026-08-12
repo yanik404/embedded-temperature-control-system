@@ -31,6 +31,8 @@ typedef struct {
     float setpoint_c;
     float control_error_c;
     float peltier_power_percent;
+    float controller_proportional_percent;
+    float controller_integral_percent;
     float peltier_1_current_a;
     float peltier_2_current_a;
     uint16_t fan_rpm;
@@ -48,6 +50,8 @@ typedef struct {
     bool status_leds_initialized;
     bool cup_detected;
     bool power_5v_ok;
+    bool controller_output_limited;
+    bool controller_anti_windup_active;
     bool wifi_connected;
     bool webserver_ready;
     char wifi_ip[16];

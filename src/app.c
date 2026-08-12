@@ -76,6 +76,10 @@ static float clamp_setpoint(float value) {
 static void all_heating_off(void) {
     peltier_off();
     status.peltier_power_percent = 0.0f;
+    status.controller_proportional_percent = 0.0f;
+    status.controller_integral_percent = 0.0f;
+    status.controller_output_limited = false;
+    status.controller_anti_windup_active = false;
     controller_reset(&controller);
 }
 
@@ -173,6 +177,15 @@ static void update_control(uint32_t now) {
 
     const float output = controller_update(&controller, status.setpoint_c, status.temperature_c,
                                            CONTROL_PERIOD_MS / 1000.0f);
+    status.controller_proportional_percent = controller.kp * status.control_error_c;
+    status.controller_integral_percent = controller.integral;
+    const float unlimited_output = status.controller_proportional_percent +
+                                   status.controller_integral_percent;
+    status.controller_output_limited = unlimited_output <= controller.output_min ||
+                                       unlimited_output >= controller.output_max;
+    status.controller_anti_windup_active =
+        (unlimited_output >= controller.output_max && status.control_error_c > 0.0f) ||
+        (unlimited_output <= controller.output_min && status.control_error_c < 0.0f);
     status.peltier_power_percent = output;
     const uint8_t percent = (uint8_t)(output + 0.5f);
     peltier_set_power(PELTIER_CHANNEL_1, percent);

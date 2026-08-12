@@ -258,16 +258,25 @@ static void status_json(char *buffer, size_t buffer_size) {
         "{\"state\":\"%s\",\"fault\":\"%s\",\"fault_description\":\"%s\","
         "\"temperature\":%.2f,\"temperature1\":%.2f,\"temperature2\":%.2f,"
         "\"setpoint\":%.2f,\"error\":%.2f,\"power\":%.1f,\"fan_rpm\":%u,\"fan_percent\":%u,"
+        "\"kp\":%.3f,\"ki\":%.3f,\"p_term\":%.2f,\"i_term\":%.2f,"
+        "\"output_limited\":%s,\"anti_windup\":%s,\"control_period_ms\":%u,"
+        "\"max_safe_temperature\":%.1f,\"uptime_ms\":%llu,"
         "\"current1\":%.3f,\"current2\":%.3f,\"light_level\":%.3f,"
         "\"sensor_ok\":%s,\"temp1_ok\":%s,\"temp2_ok\":%s,"
         "\"current_ok\":%s,\"current1_ok\":%s,\"current2_ok\":%s,"
         "\"tla2024_ok\":%s,\"light_ok\":%s,\"display_initialized\":%s,\"leds_initialized\":%s,"
-        "\"cup\":%s,\"power_good\":%s,\"wifi\":%s,\"wifi_ssid\":\"%s\",\"wifi_ip\":\"%s\",\"night\":%s,"
+        "\"cup\":%s,\"power_good\":%s,\"wifi\":%s,\"webserver_ready\":%s,"
+        "\"wifi_ssid\":\"%s\",\"wifi_ip\":\"%s\",\"night\":%s,"
         "\"start_allowed\":%s,\"start_block_reason\":\"%s\"}",
         system_state_name(s->state), error_name(s->error), error_description(s->error),
         s->temperature_c, s->temperature_1_c, s->temperature_2_c,
         s->setpoint_c, s->control_error_c, s->peltier_power_percent, s->fan_rpm,
-        s->fan_percent, s->peltier_1_current_a, s->peltier_2_current_a, s->light_level,
+        s->fan_percent, PI_KP, PI_KI, s->controller_proportional_percent,
+        s->controller_integral_percent,
+        s->controller_output_limited ? "true" : "false",
+        s->controller_anti_windup_active ? "true" : "false", CONTROL_PERIOD_MS,
+        MAX_SAFE_TEMPERATURE_C, (unsigned long long)to_ms_since_boot(get_absolute_time()),
+        s->peltier_1_current_a, s->peltier_2_current_a, s->light_level,
         s->temperature_valid ? "true" : "false",
         s->temperature_1_valid ? "true" : "false", s->temperature_2_valid ? "true" : "false",
         s->current_valid ? "true" : "false",
@@ -275,7 +284,8 @@ static void status_json(char *buffer, size_t buffer_size) {
         s->tla2024_available ? "true" : "false", s->light_sensor_available ? "true" : "false",
         s->display_initialized ? "true" : "false", s->status_leds_initialized ? "true" : "false",
         s->cup_detected ? "true" : "false", s->power_5v_ok ? "true" : "false",
-        s->wifi_connected ? "true" : "false", WIFI_SSID, ip,
+        s->wifi_connected ? "true" : "false", s->webserver_ready ? "true" : "false",
+        WIFI_SSID, ip,
         s->night_mode ? "true" : "false", start_allowed() ? "true" : "false",
         start_block_reason());
 }
