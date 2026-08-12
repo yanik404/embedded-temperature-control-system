@@ -28,6 +28,8 @@ jobs:
         run: cc -std=c11 -Wall -Wextra -Werror -Iinclude tests/test_controller.c src/controller.c -lm -o controller_tests && ./controller_tests
       - name: Test lwIP receive ownership contract
         run: python tests/test_lwip_pbuf_contract.py
+      - name: Test large HTTP response chunking
+        run: python tests/test_http_large_response.py
       - name: Upload UF2
         uses: actions/upload-artifact@v4
         with:

@@ -15,11 +15,20 @@
 
 #define HTTP_REQUEST_BUFFER_SIZE 1536u
 #define HTTP_CLIENT_COUNT 4u
+#define HTTP_RESPONSE_HEADER_SIZE 192u
+#define HTTP_RESPONSE_CHUNK_SIZE TCP_MSS
 
 typedef struct {
     char data[HTTP_REQUEST_BUFFER_SIZE];
+    char response_header[HTTP_RESPONSE_HEADER_SIZE];
+    const char *response_body;
     size_t length;
+    size_t response_header_length;
+    size_t response_body_length;
+    size_t response_queued;
+    size_t response_acked;
     bool in_use;
+    bool response_active;
 } http_client_t;
 
 static webserver_config_t server_config;
@@ -31,7 +40,6 @@ static bool first_connection_attempt = true;
 static int previous_link_status = CYW43_LINK_DOWN;
 static uint32_t connection_started_ms;
 static uint32_t retry_due_ms;
-static char response[3072];
 
 static uint32_t milliseconds(void) {
     return to_ms_since_boot(get_absolute_time());
@@ -72,9 +80,8 @@ static void start_wifi_connection(uint32_t now) {
 static http_client_t *allocate_http_client(void) {
     for (size_t i = 0; i < HTTP_CLIENT_COUNT; ++i) {
         if (!http_clients[i].in_use) {
+            memset(&http_clients[i], 0, sizeof(http_clients[i]));
             http_clients[i].in_use = true;
-            http_clients[i].length = 0u;
-            http_clients[i].data[0] = '\0';
             return &http_clients[i];
         }
     }
@@ -82,11 +89,7 @@ static http_client_t *allocate_http_client(void) {
 }
 
 static void release_http_client(http_client_t *context) {
-    if (context != NULL) {
-        context->length = 0u;
-        context->data[0] = '\0';
-        context->in_use = false;
-    }
+    if (context != NULL) memset(context, 0, sizeof(*context));
 }
 
 static const char *error_description(error_code_t error) {
@@ -119,32 +122,139 @@ static const char *start_block_reason(void) {
     return "Start ist freigegeben";
 }
 
-static err_t send_response(struct tcp_pcb *client, const char *status, const char *type,
-                           const char *body) {
-    const size_t body_length = strlen(body);
-    char header[192];
-    const int header_length = snprintf(header, sizeof(header),
-        "HTTP/1.1 %s\r\nContent-Type: %s\r\nContent-Length: %u\r\nConnection: close\r\nCache-Control: no-store\r\n\r\n",
-        status, type, (unsigned)body_length);
-    err_t error = tcp_write(client, header, (u16_t)header_length, TCP_WRITE_FLAG_COPY);
-    const u8_t body_flags = body == dashboard_html ? 0u : TCP_WRITE_FLAG_COPY;
-    if (error == ERR_OK) error = tcp_write(client, body, (u16_t)body_length, body_flags);
-    if (error == ERR_OK) error = tcp_output(client);
-    if (error == ERR_OK) error = tcp_close(client);
-    if (error == ERR_OK) return ERR_OK;
+static err_t send_response_data(http_client_t *context, struct tcp_pcb *client);
+static err_t response_sent(void *arg, struct tcp_pcb *client, u16_t acknowledged);
+static err_t response_poll(void *arg, struct tcp_pcb *client);
 
-    /* A receive callback may return ERR_ABRT only after aborting the PCB. It
-       must never return ERR_MEM after consuming/freeing its input pbuf, since
-       lwIP would retain that already-freed pbuf as refused_data and retry it. */
+static err_t abort_http_client(http_client_t *context, struct tcp_pcb *client,
+                               err_t error, const char *reason) {
+    printf("[HTTP] TCP-Abbruch: %s (Fehlercode %d)\n", reason, error);
+    tcp_arg(client, NULL);
+    tcp_recv(client, NULL);
+    tcp_sent(client, NULL);
+    tcp_poll(client, NULL, 0u);
+    tcp_err(client, NULL);
+    release_http_client(context);
     tcp_abort(client);
     return ERR_ABRT;
 }
 
-static void status_json(void) {
+static err_t close_completed_response(http_client_t *context, struct tcp_pcb *client) {
+    const size_t total = context->response_header_length + context->response_body_length;
+    if (context->response_queued < total || context->response_acked < total) return ERR_OK;
+
+    printf("[HTTP] Response vollstaendig gesendet (%u Bytes)\n", (unsigned)total);
+    tcp_arg(client, NULL);
+    const err_t error = tcp_close(client);
+    if (error == ERR_OK) {
+        printf("[HTTP] Verbindung geschlossen\n");
+        release_http_client(context);
+        return ERR_OK;
+    }
+    tcp_arg(client, context);
+    if (error == ERR_MEM) {
+        printf("[HTTP] tcp_close ERR_MEM, spaeterer Versuch\n");
+        return ERR_OK;
+    }
+    return abort_http_client(context, client, error, "tcp_close fehlgeschlagen");
+}
+
+static err_t send_response_data(http_client_t *context, struct tcp_pcb *client) {
+    const size_t total = context->response_header_length + context->response_body_length;
+
+    while (context->response_queued < total) {
+        const u16_t available = tcp_sndbuf(client);
+        if (available == 0u) break;
+
+        const char *source;
+        size_t segment_remaining;
+        if (context->response_queued < context->response_header_length) {
+            source = context->response_header + context->response_queued;
+            segment_remaining = context->response_header_length - context->response_queued;
+        } else {
+            const size_t body_offset = context->response_queued - context->response_header_length;
+            source = context->response_body + body_offset;
+            segment_remaining = context->response_body_length - body_offset;
+        }
+
+        size_t chunk = segment_remaining;
+        if (chunk > HTTP_RESPONSE_CHUNK_SIZE) chunk = HTTP_RESPONSE_CHUNK_SIZE;
+        if (chunk > available) chunk = available;
+        const u8_t flags = context->response_queued + chunk < total ? TCP_WRITE_FLAG_MORE : 0u;
+        const err_t error = tcp_write(client, source, (u16_t)chunk, flags);
+        if (error == ERR_MEM) {
+            printf("[HTTP] tcp_write ERR_MEM, %u Bytes verbleiben\n",
+                   (unsigned)(total - context->response_queued));
+            break;
+        }
+        if (error != ERR_OK) {
+            return abort_http_client(context, client, error, "tcp_write fehlgeschlagen");
+        }
+        context->response_queued += chunk;
+        printf("[HTTP] Gesendet/eingereiht: %u/%u Bytes, verbleibend: %u\n",
+               (unsigned)context->response_queued, (unsigned)total,
+               (unsigned)(total - context->response_queued));
+    }
+
+    const err_t output_error = tcp_output(client);
+    if (output_error == ERR_MEM) {
+        printf("[HTTP] tcp_output ERR_MEM, ACK/Poll wird abgewartet\n");
+    }
+    if (output_error != ERR_OK && output_error != ERR_MEM) {
+        return abort_http_client(context, client, output_error, "tcp_output fehlgeschlagen");
+    }
+    return close_completed_response(context, client);
+}
+
+static err_t response_sent(void *arg, struct tcp_pcb *client, u16_t acknowledged) {
+    http_client_t *context = arg;
+    if (context == NULL || !context->response_active) {
+        return abort_http_client(context, client, ERR_VAL, "ungueltiger Sendestatus");
+    }
+    context->response_acked += acknowledged;
+    const size_t total = context->response_header_length + context->response_body_length;
+    if (context->response_acked > total) context->response_acked = total;
+    return send_response_data(context, client);
+}
+
+static err_t response_poll(void *arg, struct tcp_pcb *client) {
+    http_client_t *context = arg;
+    if (context == NULL || !context->response_active) {
+        return abort_http_client(context, client, ERR_VAL, "ungueltiger Poll-Status");
+    }
+    return send_response_data(context, client);
+}
+
+static err_t send_response(http_client_t *context, struct tcp_pcb *client,
+                           const char *status, const char *type, const char *body) {
+    context->response_body = body;
+    context->response_body_length = strlen(body);
+    const int header_length = snprintf(context->response_header,
+        sizeof(context->response_header),
+        "HTTP/1.1 %s\r\nContent-Type: %s\r\nContent-Length: %u\r\nConnection: close\r\nCache-Control: no-store\r\n\r\n",
+        status, type, (unsigned)context->response_body_length);
+    if (header_length < 0 || (size_t)header_length >= sizeof(context->response_header)) {
+        return abort_http_client(context, client, ERR_VAL, "HTTP-Header zu gross");
+    }
+
+    context->response_header_length = (size_t)header_length;
+    context->response_queued = 0u;
+    context->response_acked = 0u;
+    context->response_active = true;
+    tcp_sent(client, response_sent);
+    tcp_poll(client, response_poll, 2u);
+    printf("[HTTP] Response-Groesse: %u Bytes (%u Header + %u Body)\n",
+           (unsigned)(context->response_header_length + context->response_body_length),
+           (unsigned)context->response_header_length,
+           (unsigned)context->response_body_length);
+    return send_response_data(context, client);
+}
+
+static void status_json(char *buffer, size_t buffer_size) {
     const system_status_t *s = server_config.status;
     char ip[16];
     (void)webserver_get_ip(ip, sizeof(ip));
-    snprintf(response, sizeof(response),
+    snprintf(buffer, buffer_size,
         "{\"state\":\"%s\",\"fault\":\"%s\",\"fault_description\":\"%s\","
         "\"temperature\":%.2f,\"temperature1\":%.2f,\"temperature2\":%.2f,"
         "\"setpoint\":%.2f,\"error\":%.2f,\"power\":%.1f,\"fan_rpm\":%u,\"fan_percent\":%u,"
@@ -170,37 +280,49 @@ static void status_json(void) {
         start_block_reason());
 }
 
-static err_t process_http_request(struct tcp_pcb *client, const char *text) {
+static void log_request_path(const char *text) {
+    const char *start = strchr(text, ' ');
+    if (start == NULL) return;
+    ++start;
+    const char *end = strchr(start, ' ');
+    if (end == NULL) return;
+    const int length = (int)(end - start);
+    printf("[HTTP] Request-Pfad: %.*s\n", length, start);
+}
+
+static err_t process_http_request(http_client_t *context, struct tcp_pcb *client,
+                                  const char *text) {
+    log_request_path(text);
     if (strncmp(text, "GET /api/status ", 16u) == 0) {
-        status_json();
-        return send_response(client, "200 OK", "application/json", response);
+        status_json(context->data, sizeof(context->data));
+        return send_response(context, client, "200 OK", "application/json", context->data);
     }
     if (strncmp(text, "POST /api/start ", 16u) == 0) {
         if (start_allowed()) {
             server_config.start();
-            return send_response(client, "200 OK", "application/json", "{\"ok\":true}");
+            return send_response(context, client, "200 OK", "application/json", "{\"ok\":true}");
         }
-        snprintf(response, sizeof(response), "{\"ok\":false,\"reason\":\"%s\"}",
+        snprintf(context->data, sizeof(context->data), "{\"ok\":false,\"reason\":\"%s\"}",
                  start_block_reason());
-        return send_response(client, "409 Conflict", "application/json", response);
+        return send_response(context, client, "409 Conflict", "application/json", context->data);
     }
     if (strncmp(text, "POST /api/stop ", 15u) == 0) {
         server_config.stop();
-        return send_response(client, "200 OK", "application/json", "{\"ok\":true}");
+        return send_response(context, client, "200 OK", "application/json", "{\"ok\":true}");
     }
     static const char setpoint_prefix[] = "POST /api/setpoint?value=";
     if (strncmp(text, setpoint_prefix, sizeof(setpoint_prefix) - 1u) == 0) {
         const float value = strtof(text + sizeof(setpoint_prefix) - 1u, NULL);
         if (value >= SETPOINT_MIN_C && value <= SETPOINT_MAX_C) {
             server_config.set_setpoint(value);
-            return send_response(client, "200 OK", "application/json", "{\"ok\":true}");
+            return send_response(context, client, "200 OK", "application/json", "{\"ok\":true}");
         }
-        return send_response(client, "400 Bad Request", "application/json", "{\"ok\":false}");
+        return send_response(context, client, "400 Bad Request", "application/json", "{\"ok\":false}");
     }
     if (strncmp(text, "GET / ", 6u) == 0) {
-        return send_response(client, "200 OK", "text/html; charset=utf-8", dashboard_html);
+        return send_response(context, client, "200 OK", "text/html; charset=utf-8", dashboard_html);
     }
-    return send_response(client, "404 Not Found", "text/plain", "Not found");
+    return send_response(context, client, "404 Not Found", "text/plain", "Not found");
 }
 
 static bool request_is_complete(const char *request) {
@@ -208,12 +330,25 @@ static bool request_is_complete(const char *request) {
 }
 
 static void client_error(void *arg, err_t error) {
-    (void)error;
+    printf("[HTTP] TCP-Fehler/Abbruch (Fehlercode %d)\n", error);
     release_http_client(arg);
 }
 
 static err_t receive(void *arg, struct tcp_pcb *client, struct pbuf *packet, err_t error) {
     http_client_t *context = arg;
+    if (context != NULL && context->response_active) {
+        if (packet == NULL) {
+            tcp_recv(client, NULL);
+            return ERR_OK;
+        }
+        if (error != ERR_OK) {
+            pbuf_free(packet);
+            return abort_http_client(context, client, error, "Empfang waehrend Response");
+        }
+        tcp_recved(client, packet->tot_len);
+        pbuf_free(packet);
+        return ERR_OK;
+    }
     if (packet == NULL) {
         release_http_client(context);
         tcp_arg(client, NULL);
@@ -223,20 +358,15 @@ static err_t receive(void *arg, struct tcp_pcb *client, struct pbuf *packet, err
     }
     if (error != ERR_OK || context == NULL) {
         pbuf_free(packet);
-        release_http_client(context);
-        tcp_arg(client, NULL);
-        tcp_abort(client);
-        return ERR_ABRT;
+        return abort_http_client(context, client, error, "HTTP-Empfang fehlgeschlagen");
     }
 
     const size_t available = sizeof(context->data) - 1u - context->length;
     if (packet->tot_len > available) {
         tcp_recved(client, packet->tot_len);
         pbuf_free(packet);
-        release_http_client(context);
-        tcp_arg(client, NULL);
-        return send_response(client, "431 Request Header Fields Too Large", "text/plain",
-                             "Request headers too large");
+        return send_response(context, client, "431 Request Header Fields Too Large",
+                             "text/plain", "Request headers too large");
     }
 
     const u16_t copied = pbuf_copy_partial(packet, context->data + context->length,
@@ -247,11 +377,9 @@ static err_t receive(void *arg, struct tcp_pcb *client, struct pbuf *packet, err
     pbuf_free(packet);
     if (!request_is_complete(context->data)) return ERR_OK;
 
-    tcp_arg(client, NULL);
     /* packet has been fully copied, acknowledged and freed. From this point
        only ERR_OK or ERR_ABRT (after tcp_abort) may be returned to lwIP. */
-    const err_t result = process_http_request(client, context->data);
-    release_http_client(context);
+    const err_t result = process_http_request(context, client, context->data);
     return result == ERR_ABRT ? ERR_ABRT : ERR_OK;
 }
 
@@ -266,6 +394,7 @@ static err_t accept_client(void *arg, struct tcp_pcb *client, err_t error) {
     tcp_arg(client, context);
     tcp_recv(client, receive);
     tcp_err(client, client_error);
+    printf("[HTTP] Client verbunden\n");
     return ERR_OK;
 }
 
@@ -301,6 +430,8 @@ bool webserver_init(const webserver_config_t *config) {
         webserver_deinit();
         return false;
     }
+    printf("[HTTP] Dashboard: %u Bytes, TCP_SND_BUF: %u Bytes\n",
+           (unsigned)(sizeof(dashboard_html) - 1u), (unsigned)TCP_SND_BUF);
 
     start_wifi_connection(milliseconds());
     return true;
