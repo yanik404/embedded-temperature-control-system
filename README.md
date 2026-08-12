@@ -87,6 +87,8 @@ Der Pico W liefert das Dashboard direkt aus dem Flash unter `http://192.168.4.1`
 
 Der Hardwarestatus unterscheidet bewusst zwischen `OK`, `AKTIV`, `AUS`, `FEHLER`, `NICHT VERBUNDEN`, `NICHT VERFÜGBAR` und `UNBEKANNT`. Ein grüner Status wird nur angezeigt, wenn die Firmware die Initialisierung, einen plausiblen Messwert oder einen beobachtbaren Betriebswert bestätigen kann. Die Startfreigabe nennt bei einer Sperre den konkreten Grund, beispielsweise einen fehlenden Becher, eine ungültige Strommessung oder fehlendes Power-Good.
 
+Die Statusfarben bedeuten: Grün = bestätigt/aktiv, Blau = normal/bereit, Orange = Warnung oder unbekannt, Rot = Fehler und Grau = aus oder nicht verfügbar.
+
 ### Lokale Designvorschau
 
 `preview.html` direkt im Browser öffnen, um exakt dieselbe Oberfläche ohne Pico und WLAN mit animierten Demo-Daten anzusehen. Die Datei erkennt den lokalen `file:`-Aufruf automatisch. START, STOP und SETZEN verändern dann ausschließlich den lokalen Demo-Zustand und sprechen keine Hardware oder Netzwerk-API an.
