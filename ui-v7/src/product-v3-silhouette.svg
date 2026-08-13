@@ -1,0 +1,40 @@
+<svg id="product-v3" class="product-illustration product-v3-illustration" viewBox="110 58 420 540" role="img" aria-labelledby="productV3SilhouetteTitle productV3SilhouetteDesc" xmlns="http://www.w3.org/2000/svg">
+ <title id="productV3SilhouetteTitle">Kompakter intelligenter Becherhalter</title>
+ <desc id="productV3SilhouetteDesc">Ein normal proportionierter Trinkbecher steht in einem niedrigen Haltering mit kleinen seitlichen Kontaktflächen auf einer flachen ovalen Basis.</desc>
+
+ <ellipse cx="321" cy="566" rx="143" ry="12" fill="#080a08" opacity=".5"/>
+
+ <g id="product-v3-cup">
+  <path d="M215 91Q320 65 425 91L411 381Q407 417 320 422Q233 417 229 381Z" fill="#89918c" opacity=".54"/>
+  <path d="M231 140Q320 120 409 140L398 376Q394 402 320 407Q246 402 242 376Z" fill="#bd7044" opacity=".86"/>
+  <ellipse cx="320" cy="140" rx="89" ry="20" fill="#d88952"/>
+  <ellipse cx="320" cy="142" rx="72" ry="12" fill="#8b4e34" opacity=".52"/>
+  <ellipse cx="320" cy="91" rx="105" ry="26" fill="#cbd0cd" opacity=".22"/>
+  <ellipse cx="320" cy="91" rx="101" ry="22" fill="#353a37" opacity=".42"/>
+  <path d="M233 379Q320 406 407 379Q402 418 320 422Q238 418 233 379Z" fill="#707873" opacity=".34"/>
+ </g>
+
+ <g id="product-v3-holder">
+  <g id="product-v3-side-left">
+   <path d="M202 408Q207 391 228 384L239 390L237 450Q232 463 213 466Q201 458 199 445Z" fill="#343a36"/>
+   <path d="M210 411Q214 400 226 395L232 399L230 438Q227 449 217 452Q211 447 209 439Z" fill="#707873" opacity=".38"/>
+  </g>
+  <g id="product-v3-side-right">
+   <path d="M438 408Q433 391 412 384L401 390L403 450Q408 463 427 466Q439 458 441 445Z" fill="#2c312e"/>
+   <path d="M430 411Q426 400 414 395L408 399L410 438Q413 449 423 452Q429 447 431 439Z" fill="#646c67" opacity=".32"/>
+  </g>
+ </g>
+
+ <g id="product-v3-base">
+  <path d="M174 447Q187 430 227 425Q320 413 420 424Q458 429 468 446L465 497Q459 521 414 532Q321 555 222 531Q183 522 176 500Z" fill="#303632"/>
+  <path d="M320 420Q390 416 420 424Q458 429 468 446L465 497Q459 521 414 532Q367 544 320 544Z" fill="#252a27"/>
+  <path d="M177 491Q234 513 320 516Q406 513 465 491L465 508Q454 529 414 540Q321 563 222 540Q187 531 176 510Z" fill="#191d1a"/>
+  <path d="M196 518Q249 539 320 541Q395 538 446 520" fill="none" stroke="#4f5752" stroke-width="2" opacity=".3"/>
+ </g>
+
+ <g id="product-v3-holder-ring">
+  <path d="M197 395A123 33 0 1 0 443 395A123 33 0 1 0 197 395M219 395A101 22 0 1 1 421 395A101 22 0 1 1 219 395" fill="#69716c" fill-rule="evenodd"/>
+  <path d="M205 400Q320 434 435 400" fill="none" stroke="#252a27" stroke-width="8" opacity=".82"/>
+  <path d="M232 402Q320 421 408 402" fill="none" stroke="#0d100e" stroke-width="4" opacity=".58"/>
+ </g>
+</svg>
