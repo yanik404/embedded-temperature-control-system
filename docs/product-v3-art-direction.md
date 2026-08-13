@@ -57,3 +57,37 @@ Referenz: `build/ui-review/product-v3-phase1-silhouette/1920x1080.png`
 - flachen, breiteren und geometrisch klareren Fuß ergänzen.
 - asymmetrische Front-/Seitenflächen für eine glaubwürdige 3/4-Lesbarkeit setzen.
 - Phase 1 auf wenige ruhige Flächen ohne fertige Materialeffekte reduzieren.
+
+Die nachfolgende Fassung
+`build/ui-review/product-v3-phase1-approved/1920x1080.png` wurde als reine
+Formbasis für Phase 2 freigegeben.
+
+## Phase 2 – Materialreview
+
+Referenz: `build/ui-review/product-v3-phase2-material/1920x1080.png`
+
+1. Der Aluminiumring ist zu hell und zieht mehr Aufmerksamkeit als der Becher.
+2. Der Glasrand ist zu weiß und wirkt wie eine gezeichnete Kontur.
+3. Der Kontaktschatten unter dem Ring erzeugt einen zu breiten schwarzen Halo.
+4. Die Flüssigkeit wirkt trotz Verlauf noch zu flächig.
+5. Die mittige Materialteilung des Gehäuses ist zu hart und technisch.
+6. Die rechte Gehäuseseite fällt zu stark ins Schwarz ab.
+7. Die seitlichen Sockelüberstände wirken kantig statt weich integriert.
+8. Der untere Sockelabschluss ist gegen den Hintergrund kaum lesbar.
+9. Die beiden Schulterkanten erinnern an Konstruktionslinien.
+10. Das Ambientlicht ist zu groß und gleichmäßig verteilt.
+11. Dem matten Gehäuse fehlt eine weiche Flächenmodulation.
+12. Glas und Flüssigkeit besitzen noch zu ähnliche Helligkeitsverläufe.
+
+### Korrekturen vor Materialfreigabe
+
+- Metallkontrast und Glasrand reduzieren.
+- Kontakt- und Bodenschatten enger und weicher staffeln.
+- Flüssigkeit oben wärmer, unten dichter und seitlich minimal dunkler zeichnen.
+- harte Gehäuseteilung durch breite, transparente Lichtflächen ersetzen.
+- rechte Füllseite anheben und Sockel seitlich einziehen.
+- Schulterlinien entfernen und nur zwei sehr weiche Kantenlichter behalten.
+
+Die korrigierte Materialfassung
+`build/ui-review/product-v3-phase2-approved/1920x1080.png` wurde freigegeben.
+Sie bleibt auf Graphit, Glas, Aluminium und Amber beschränkt.

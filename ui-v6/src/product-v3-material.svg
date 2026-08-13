@@ -1,0 +1,51 @@
+<svg id="productV3Material" viewBox="205 75 500 680" role="img" aria-labelledby="v3MatTitle v3MatDesc" xmlns="http://www.w3.org/2000/svg">
+ <title id="v3MatTitle">Materialstudie des kompakten intelligenten Becherhalters</title>
+ <desc id="v3MatDesc">Ein breiter Glasbecher mit amberfarbenem Getränk sitzt tief in einem matten Graphitgehäuse mit Aluminiumaufnahme und flachem Produktfuß.</desc>
+ <defs>
+  <linearGradient id="matGlass" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#5d6863" stop-opacity=".48"/><stop offset=".16" stop-color="#eef2ef" stop-opacity=".64"/><stop offset=".36" stop-color="#a9b1ad" stop-opacity=".26"/><stop offset=".7" stop-color="#dce2de" stop-opacity=".5"/><stop offset="1" stop-color="#505a55" stop-opacity=".45"/></linearGradient>
+  <linearGradient id="matDrink" x1=".12" y1="0" x2=".78" y2="1"><stop stop-color="#df985c"/><stop offset=".34" stop-color="#bf7448"/><stop offset=".72" stop-color="#9b5639"/><stop offset="1" stop-color="#673728"/></linearGradient>
+  <linearGradient id="matBody" x1=".05" y1="0" x2=".94" y2="1"><stop stop-color="#5a625d"/><stop offset=".22" stop-color="#474e49"/><stop offset=".56" stop-color="#373d39"/><stop offset=".82" stop-color="#2d332f"/><stop offset="1" stop-color="#252a27"/></linearGradient>
+  <linearGradient id="matSide" x1="0" y1="0" x2="1" y2=".82"><stop stop-color="#3d443f"/><stop offset=".58" stop-color="#2b312d"/><stop offset="1" stop-color="#202521"/></linearGradient>
+  <linearGradient id="matBase" x1=".1" y1="0" x2=".8" y2="1"><stop stop-color="#343a36"/><stop offset=".65" stop-color="#202521"/><stop offset="1" stop-color="#151916"/></linearGradient>
+  <linearGradient id="matAluminium" x1="0" y1="0" x2="1" y2=".16"><stop stop-color="#626c66"/><stop offset=".2" stop-color="#969f99"/><stop offset=".4" stop-color="#737d77"/><stop offset=".64" stop-color="#a8b0ab"/><stop offset=".84" stop-color="#6d7771"/><stop offset="1" stop-color="#4f5853"/></linearGradient>
+  <radialGradient id="matAmbient"><stop stop-color="#667069" stop-opacity=".13"/><stop offset=".68" stop-color="#303631" stop-opacity=".045"/><stop offset="1" stop-color="#101310" stop-opacity="0"/></radialGradient>
+  <clipPath id="matCupClip"><path d="M338 139Q454 113 570 139L557 367Q553 405 454 411Q355 405 351 367Z"/></clipPath>
+  <filter id="matGroundBlur" x="-20%" y="-80%" width="140%" height="260%"><feGaussianBlur stdDeviation="8"/></filter>
+  <filter id="matContactBlur" x="-30%" y="-80%" width="160%" height="260%"><feGaussianBlur stdDeviation="4"/></filter>
+ </defs>
+
+ <ellipse cx="438" cy="398" rx="235" ry="282" fill="url(#matAmbient)"/>
+ <ellipse cx="454" cy="731" rx="187" ry="15" fill="#050706" opacity=".42" filter="url(#matGroundBlur)"/>
+
+ <g class="v3-material-cup">
+  <path d="M338 139Q454 113 570 139L557 367Q553 405 454 411Q355 405 351 367Z" fill="url(#matGlass)" opacity=".88"/>
+  <g clip-path="url(#matCupClip)"><path d="M353 187Q454 165 555 187L545 366Q541 391 454 397Q367 391 363 366Z" fill="url(#matDrink)" opacity=".88"/><ellipse cx="454" cy="187" rx="101" ry="22" fill="#d58b51"/><ellipse cx="454" cy="189" rx="83" ry="14" fill="#7a432e" opacity=".56"/></g>
+  <ellipse cx="454" cy="139" rx="116" ry="26" fill="#d8dfdb" fill-opacity=".055" stroke="#c5ccc8" stroke-width="2.4" opacity=".9"/>
+  <path d="M355 157Q356 258 367 357" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".13"/>
+  <path d="M366 372Q454 398 542 372Q538 405 454 411Q370 405 366 372Z" fill="#7d8882" opacity=".18"/>
+ </g>
+
+ <g class="v3-material-base">
+  <path d="M267 568Q306 550 354 557Q424 570 493 563Q566 557 619 553Q647 552 660 570L656 637Q647 673 582 696Q507 718 438 718Q354 715 294 692Q266 680 258 650Z" fill="url(#matBase)"/>
+  <path d="M438 564Q535 558 619 553Q647 552 660 570L656 637Q647 673 582 696Q507 718 438 718Z" fill="#181d1a" opacity=".46"/>
+  <path d="M263 643Q331 678 437 682Q543 679 653 639L652 657Q633 685 579 703Q506 724 438 724Q356 720 298 698Q271 688 262 669Z" fill="#141916" opacity=".82"/>
+  <path d="M292 690Q360 714 438 716Q518 713 584 694" fill="none" stroke="#707974" stroke-width="2" opacity=".08"/>
+ </g>
+
+ <g class="v3-material-housing">
+  <path d="M276 385Q294 348 346 332Q397 316 454 316Q527 316 587 337Q625 350 640 382L626 565Q620 606 565 629Q509 652 438 652Q367 649 316 627Q274 607 269 565Z" fill="url(#matBody)"/>
+  <path d="M438 339Q520 329 587 348Q625 360 640 392L626 565Q620 606 565 629Q509 652 438 652Z" fill="url(#matSide)" opacity=".7"/>
+  <path d="M276 385Q294 348 346 332Q389 319 438 317L438 651Q370 649 318 628Q276 608 269 565Z" fill="#dce1dd" opacity=".026"/>
+  <path d="M291 386Q314 360 354 347" fill="none" stroke="#e1e5e2" stroke-width="3" stroke-linecap="round" opacity=".055"/>
+  <path d="M626 403Q629 477 616 546" fill="none" stroke="#d9dfdb" stroke-width="2.5" stroke-linecap="round" opacity=".07"/>
+ </g>
+
+ <ellipse cx="454" cy="383" rx="140" ry="25" fill="#080b09" opacity=".36" filter="url(#matContactBlur)"/>
+ <g class="v3-material-collar">
+  <ellipse cx="454" cy="365" rx="157" ry="42" fill="#181d1a"/>
+  <ellipse cx="454" cy="359" rx="151" ry="39" fill="none" stroke="url(#matAluminium)" stroke-width="9" opacity=".88"/>
+  <ellipse cx="454" cy="359" rx="133" ry="31" fill="#171c19"/>
+  <ellipse cx="454" cy="370" rx="113" ry="22" fill="#424a45"/>
+  <path d="M350 372Q454 395 558 372" fill="none" stroke="#080b09" stroke-width="6" opacity=".72"/>
+ </g>
+</svg>
