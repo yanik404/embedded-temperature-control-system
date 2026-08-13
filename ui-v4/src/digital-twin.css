@@ -60,3 +60,4 @@ body.presentation{overflow:hidden}body.presentation .experience{height:100vh;min
 body[data-mode="control"] .safety-lock:not(.visible){opacity:0;visibility:hidden;pointer-events:none}body[data-mode="control"] .safety-lock.visible{opacity:1;visibility:visible;pointer-events:auto}body[data-story="analysis"] .story-chapter[data-story-step="analysis"]>div{top:13%}body[data-story="analysis"] .primary-reading{top:30%}
 .twin-signal-web path{stroke-width:.8;opacity:.22}.twin-signal-web path.active{stroke-width:1.5;opacity:.9}.guide-active .component-lens{opacity:0;visibility:hidden;pointer-events:none}
 @media(max-width:900px){.link-state .ip{display:block}.link-state time{display:none}}
+@media(max-width:600px){body[data-mode="product"][data-lens="product"] .twin-hotspot{display:none!important}body[data-mode="product"][data-lens="product"] .twin-hotspot[data-component="temp1"]{display:flex!important}}
