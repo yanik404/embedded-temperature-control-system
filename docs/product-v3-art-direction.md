@@ -136,3 +136,73 @@ Alle vier Darstellungen erhalten die Hierarchie Becher, Aufnahme, Halter und
 flacher Fuß. Der Fünf-Sekunden-Befund lautet „kompakter intelligenter
 Becherhalter“; Display, Lüftung und seitliche Thermikzonen bleiben als
 untergeordnete Produktdetails lesbar.
+
+## Integration und responsive Schlussabnahme
+
+Die freigegebene Außenansicht wird erst nach Abschluss der vier Formphasen aus
+`ui-v6/src/product-v3-exterior.svg` in die bestehende Seite eingebettet. Die
+V2-Außenansicht bleibt bytegenau als Fallback erhalten; die vorhandene
+technische Bestandsansicht bleibt funktional, wurde in diesem Lauf aber weder
+neu gezeichnet noch erweitert. Die neue Außenansicht enthält keine
+`data-part`-, `data-focus`- oder `data-callout-anchor`-Metadaten.
+
+Pflichtabnahmen:
+
+- Produkt allein 1920 × 1080:
+  `build/ui-review/product-v3-product-only-final/1920x1080.png`
+- Produkt allein 1440 × 900:
+  `build/ui-review/product-v3-product-only-final/1440x900.png`
+- Produkt im Aufbau-Screen 1920 × 1080:
+  `build/ui-review/product-v3-integrated-final/1920x1080.png`
+- Tablet 768 × 1024:
+  `build/ui-review/product-v3-responsive-final/768x1024.png`
+- Mobile 390 × 844:
+  `build/ui-review/product-v3-responsive-final/390x844.png`
+
+Visual Review Runde 1 umfasst die eigenständige Silhouetten- und
+Materialkritik mit 16 beziehungsweise 12 Befunden. Visual Review Runde 2
+umfasst Frontpanel, geschlossene Thermikmodule und die responsive Einbettung.
+Gegenüber dem Before-Screenshot ist die neue Form kürzer, breiter, geschlossener
+und deutlich produktartiger; die dominante technische Querstruktur, offene
+Seitenteile und freigestellten Baugruppen des Fallbacks sind entfallen.
+
+### Konsolidierte Verbesserungen
+
+1. Becherhöhe reduziert.
+2. Becherbreite erhöht.
+3. konische Glasform neu proportioniert.
+4. Becherboden eindeutig geschlossen.
+5. Glas tiefer in die Aufnahme gesetzt.
+6. leere Glaszone über der Flüssigkeit verkleinert.
+7. ruhige einzelne Flüssigkeitsform geschaffen.
+8. Flüssigkeitsoberfläche als klare Ellipse ausgebildet.
+9. Aufnahme enger um den Becher geführt.
+10. Aufnahme von einer Vertiefung zu einem räumlichen Haltering entwickelt.
+11. Haltering flacher gestaltet.
+12. Halteringbreite reduziert.
+13. Gehäusehöhe reduziert.
+14. Gehäusemitte sichtbar eingezogen.
+15. Front- und Seitenfacette getrennt lesbar gemacht.
+16. leichte 3/4-Perspektive verstärkt.
+17. Schulterübergang weicher an die Aufnahme angebunden.
+18. Basis verbreitert.
+19. Basis abgeflacht.
+20. Basisüberstände abgerundet und eingezogen.
+21. unteren Abschluss präziser und ruhiger gestaltet.
+22. Aluminiumkontrast des Rings reduziert.
+23. helle Glasoutline zurückgenommen.
+24. Kontakt- und Bodenschatten enger gestaffelt.
+25. Flüssigkeit oben wärmer und unten dichter modelliert.
+26. harte mittige Materialteilung durch Flächenlicht ersetzt.
+27. rechte Gehäuseseite mit weichem Fill aufgehellt.
+28. technische Schulterlinien entfernt.
+29. Ambientlicht verkleinert und fokussiert.
+30. matte Graphitfläche subtil moduliert.
+31. OLED und Taster in eine gemeinsame Vertiefung integriert.
+32. Tasterkontrast reduziert und physische Abstände vereinheitlicht.
+33. Seitenabdeckungen verkürzt und gehäusebündig gemacht.
+34. orange Akzente auf kurze matte Fugen begrenzt.
+35. Lüftungsfläche verkleinert und in die rechte Facette integriert.
+36. neue ViewBox eng auf Produkt und notwendigen Schatten zugeschnitten.
+37. Produkt in der Desktop-Bühne vergrößert und 24 px höher gesetzt.
+38. Tablet- und Mobile-Skalierung ohne Überlauf oder Beschnitt freigegeben.
