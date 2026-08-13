@@ -1,0 +1,12 @@
+{
+  "external_library_bytes": 0,
+  "history_max_seconds": 1800,
+  "preview_bytes": 99301,
+  "production_bytes": 87732,
+  "production_css_bytes": 36365,
+  "production_gzip_bytes_theoretical": 24059,
+  "production_javascript_bytes": 36606,
+  "runtime_http_requests_for_assets": 0,
+  "thermal_field_frame_cap_fps": 30,
+  "webgl_draw_calls_per_frame": 1
+}

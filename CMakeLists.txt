@@ -7,6 +7,37 @@ project(embedded_temperature_control C CXX ASM)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
 
+find_package(Python3 REQUIRED COMPONENTS Interpreter)
+
+set(DASHBOARD_SOURCES
+    ${CMAKE_CURRENT_LIST_DIR}/ui/src/index.html
+    ${CMAKE_CURRENT_LIST_DIR}/ui/src/dashboard.css
+    ${CMAKE_CURRENT_LIST_DIR}/ui/src/dashboard.js
+    ${CMAKE_CURRENT_LIST_DIR}/ui/src/thermal-field.js
+    ${CMAKE_CURRENT_LIST_DIR}/ui/src/preview.js
+    ${CMAKE_CURRENT_LIST_DIR}/tools/build_ui.py
+)
+
+add_custom_command(
+    OUTPUT
+        ${CMAKE_CURRENT_LIST_DIR}/include/web_assets.h
+        ${CMAKE_CURRENT_LIST_DIR}/preview.html
+        ${CMAKE_CURRENT_LIST_DIR}/ui/dist/dashboard.production.html
+        ${CMAKE_CURRENT_LIST_DIR}/ui/dist/build-stats.json
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_LIST_DIR}/tools/build_ui.py
+    DEPENDS ${DASHBOARD_SOURCES}
+    WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
+    COMMENT "Generating preview and embedded dashboard assets"
+    VERBATIM
+)
+
+add_custom_target(dashboard_assets ALL DEPENDS
+    ${CMAKE_CURRENT_LIST_DIR}/include/web_assets.h
+    ${CMAKE_CURRENT_LIST_DIR}/preview.html
+    ${CMAKE_CURRENT_LIST_DIR}/ui/dist/dashboard.production.html
+    ${CMAKE_CURRENT_LIST_DIR}/ui/dist/build-stats.json
+)
+
 pico_sdk_init()
 
 add_executable(temperature_control
@@ -26,6 +57,8 @@ add_executable(temperature_control
     src/safety.c
     src/webserver.c
 )
+
+add_dependencies(temperature_control dashboard_assets)
 
 target_include_directories(temperature_control PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/include

@@ -89,9 +89,11 @@ UP/DOWN ändern den Sollwert in 0,5-°C-Schritten. OK startet oder stoppt; im Fe
 
 ## Weboberfläche
 
-Der Pico W liefert das responsive Industrie-HMI-Dashboard direkt aus dem Flash unter `http://<PICO-IP>` aus. Die Kopfzeile zeigt Systemzustand, SSID, aktuelle DHCP-IP, Live-Verbindung und Uptime. Die Hauptansicht priorisiert Ist-/Solltemperatur, Regelabweichung, Stellgröße und Heizstatus. Das Live-Blockdiagramm enthält alle Glieder des geschlossenen Regelkreises mit aktuellen Werten und sichtbarer Rückführung. Ein Canvas-Diagramm aktualisiert Istwert, Sollwert, zweite Temperatur und Stellgröße alle 500 ms ohne Seitenreload; die Zeitfenster 1, 5 und 15 Minuten verwenden ausschließlich browserlokale Historie.
+Der Pico W liefert das responsive **Thermal Control Observatory** direkt aus dem Flash unter `http://<PICO-IP>` aus. Die Oberfläche ist keine Sammlung gleichartiger Dashboard-Karten: Becher, Sensor, Heizplatte, Peltier und Lüfter bilden eine technische Schnittszene, in die Ist-/Solltemperatur, Regelabweichung, Stellgröße und Heizstatus räumlich integriert sind. Ein eigener GPU-Thermal-Field-Shader (ein Draw Call, 30-FPS-Limit) reagiert subtil auf Zustand und Heizleistung; ohne WebGL übernimmt automatisch ein Canvas-Fallback.
 
-Weitere Ansichten zeigen Read-only-PI-Diagnosewerte, browserlokale Regelungskennwerte, Sicherheitsfreigaben, den Hardwarestatus, technische API-Werte und ein aus API-Zustandsänderungen abgeleitetes Ereignisprotokoll. Der Präsentationsmodus reduziert die Oberfläche auf Temperatur, Bedienung, Regelkreis und großes Diagramm. Bei ausbleibenden API-Antworten kennzeichnet das Dashboard die Werte als veraltet und sperrt alle Bedienaktionen. START, STOP und Sollwert bleiben auf PC, Tablet und Smartphone bedienbar, solange die Live-Verbindung besteht.
+Der geschlossene Regelkreis erscheint als große Signalstrecke mit getrenntem Rückführpfad und animiertem Signalfluss. Ein großflächiger Canvas-Verlauf aktualisiert Istwert, Sollwert, zweite Temperatur und Stellgröße alle 500 ms ohne Seitenreload; die Zeitfenster 1, 5 und 15 Minuten verwenden ausschließlich browserlokale Historie. Die Kopfzeile zeigt SSID, aktuelle DHCP-IP, Live/Offline und Zeit des letzten Signals.
+
+Weitere Ebenen zeigen Read-only-PI-Diagnosewerte, browserlokale Regelungskennwerte, eine verbundene Safety-Rail, die Hardware als Pico-zentrierte Systemkarte, technische API-Werte und eine aus echten Zustandsänderungen abgeleitete Ereignislinie. Engineering-Details bleiben bis zum bewussten Öffnen verborgen. Der Vollbild-Präsentationsmodus priorisiert Produktszene, Regelkreis und großes Diagramm. Bei ausbleibenden API-Antworten bleibt der letzte Verlauf sichtbar, die Szene wechselt eindeutig auf OFFLINE und alle Bedienaktionen werden gesperrt. START, STOP und Sollwert bleiben auf PC, Tablet und Smartphone bedienbar, solange die Live-Verbindung besteht. Die Safety-Entscheidung bleibt immer serverseitig.
 
 Der Hardwarestatus unterscheidet bewusst zwischen `OK`, `AKTIV`, `AUS`, `FEHLER`, `NICHT VERBUNDEN`, `NICHT VERFÜGBAR` und `UNBEKANNT`. Ein grüner Status wird nur angezeigt, wenn die Firmware die Initialisierung, einen plausiblen Messwert oder einen beobachtbaren Betriebswert bestätigen kann. Die Startfreigabe nennt bei einer Sperre den konkreten Grund, beispielsweise einen fehlenden Becher, eine ungültige Strommessung oder fehlendes Power-Good.
 
@@ -99,7 +101,24 @@ Die Statusfarben bedeuten: Grün = bestätigt/aktiv, Blau = normal/bereit, Orang
 
 ### Lokale Designvorschau
 
-`preview.html` direkt im Browser öffnen, um exakt dieselbe Oberfläche ohne Pico und WLAN mit animierten Demo-Daten anzusehen. Die Datei erkennt den lokalen `file:`-Aufruf automatisch. START, STOP und SETZEN verändern dann ausschließlich den lokalen Demo-Zustand und sprechen keine Hardware oder Netzwerk-API an. Die nur in der lokalen Vorschau sichtbaren Schalter `READY`, `HEATING`, `HOLDING`, `ERROR` und `DISCONNECTED` ermöglichen eine gezielte Prüfung aller wesentlichen UI-Zustände.
+`preview.html` direkt im Browser öffnen, um dieselbe Oberfläche ohne Pico und WLAN mit animierten Demo-Daten anzusehen. START, STOP und SETZEN verändern dort ausschließlich den lokalen Demo-Zustand. Die nur in der Vorschau vorhandenen Schalter `READY`, `HEATING`, `HOLDING`, `ERROR`, `DISCONNECT`, `RECOVERY` und `30 MIN DEMO` prüfen alle wesentlichen Zustände und einen beschleunigten vollständigen Aufheiz-/Halteverlauf.
+
+Die wartbaren Quellen liegen getrennt unter `ui/src/`:
+
+- `index.html` – semantische Oberfläche und SVG-Systemdarstellungen
+- `dashboard.css` – räumliches Layout, Zustände, Responsive- und Motion-System
+- `thermal-field.js` – kleiner WebGL-Shader mit Canvas-Fallback
+- `dashboard.js` – reale API, Bedienung, Chart und technische Ansichten
+- `preview.js` – ausschließlich lokale Simulation
+
+`tools/build_ui.py` erzeugt daraus `preview.html`, die minifizierte Single-File-Produktion unter `ui/dist/dashboard.production.html`, Größenstatistiken und `include/web_assets.h`. Die Produktion enthält keine Simulation, keine externen URLs, keine CDN-Abhängigkeit und benötigt für Assets keinen weiteren HTTP-Request. Die CMake-Firmware hängt vom Generator ab; manuell lässt er sich mit dem im CMake-Cache erkannten Python ausführen:
+
+```powershell
+python tools/build_ui.py
+python tools/build_ui.py --check
+```
+
+`tools/capture_ui_review.ps1 -Round manual` rendert die sieben Referenz-Viewports automatisiert mit lokal vorhandenem Chrome oder Edge nach `build/ui-review/manual/`. Konzeptentscheidung und visuelle Reviews sind unter `docs/` dokumentiert.
 
 ## Softwarearchitektur
 
@@ -128,6 +147,8 @@ $env:PICO_SDK_PATH = 'C:\path\to\pico-sdk'
 cmake -S . -B build -DPICO_BOARD=pico_w
 cmake --build build --parallel
 ```
+
+Beim CMake-Build werden die Preview- und Embedded-Webassets automatisch und deterministisch aktualisiert. `tests/test_ui_build.py` und der Workflow `.github/workflows/ui.yml` verhindern, dass lesbare Quellen, Produktions-HTML und C-Header auseinanderlaufen.
 
 Zum Flashen BOOTSEL gedrückt halten, Pico per USB verbinden und `build/temperature_control.uf2` auf das erscheinende Laufwerk kopieren. Der CI-Workflow baut dieselbe UF2-Datei und stellt sie als Artefakt bereit.
 
