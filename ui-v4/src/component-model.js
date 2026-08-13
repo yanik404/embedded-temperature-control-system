@@ -1,9 +1,9 @@
 (function(){
 "use strict";
 function unknown(){return{state:"NICHT VERFÜGBAR",tone:"unknown",value:"Nicht von der Live-API geliefert"};}
-function valid(key,value,unit,digits){return function(s){var supplied=s[key];if(supplied===null)return unknown();var number=Number(s[value]);return{state:supplied?"MESSUNG GÜLTIG":"NICHT ERKANNT",tone:supplied?"valid":"neutral",value:supplied&&Number.isFinite(number)?number.toFixed(digits===undefined?1:digits).replace(".",",")+" "+unit:"—"};};}
-function detected(key,value){return function(s){var supplied=s[key];if(supplied===null)return unknown();return{state:supplied?"ERKANNT":"NICHT ERKANNT",tone:supplied?"detected":"neutral",value:supplied&&value?value(s):"—"};};}
-function inferred(state,value,tone){return{state:state,tone:tone||"configured",value:value||"Kein separater Discovery-Kanal"};}
+function valid(key,value,unit,digits){return function(s){var supplied=s[key];if(supplied===null)return unknown();var number=Number(s[value]);return{state:supplied?"LIVE":"NICHT ANGESCHLOSSEN",tone:supplied?"valid":"neutral",value:supplied&&Number.isFinite(number)?number.toFixed(digits===undefined?1:digits).replace(".",",")+" "+unit:"—"};};}
+function detected(key,value){return function(s){var supplied=s[key];if(supplied===null)return unknown();return{state:supplied?"LIVE":"NICHT ANGESCHLOSSEN",tone:supplied?"detected":"neutral",value:supplied&&value?value(s):"—"};};}
+function inferred(state,value,tone){return{state:state,tone:tone||"configured",value:value||"Nicht direkt überwacht"};}
 window.V4_COMPONENTS=[
  {id:"cup",name:"Becher / Aufnahme",short:"Bechererkennung",group:"physical",position:[56,39],anchor:[.72,.05,.53],explode:[0,.08,0],role:"Thermische Regelstrecke mit mechanischer Bechererkennung",signal:"S_DETECT",connection:"GP13 · digitale Bechererkennung",pin:"GP13",configured:true,live:function(s){return detected("cup",function(){return"Becher vorhanden";})(s);}},
  {id:"temp1",name:"TMP36 Sensor 1",short:"Sensor 1",group:"sensors",position:[65,42],anchor:[1.00,.34,.12],explode:[.32,.28,0],role:"Erfasst den Istwert y(t) am Becherboden und an der Kontaktplatte",signal:"TEMP_1_ADC",connection:"Analoge Messung zum Pico W",pin:"GP26 / ADC0",configured:true,live:valid("temp1_ok","temperature1","°C",1)},

@@ -3,167 +3,66 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#02070b">
+<meta name="theme-color" content="#101210">
 <title>Becherhalter · Digital Twin</title>
 <style>/*__CSS__*/</style>
 </head>
-<body data-state="AUS" data-live="false" data-mode="product" data-lens="product" data-story="configure" class="is-loading">
-<a class="skip-link" href="#experience">Zur Produktsteuerung</a>
-
-<header class="edge-header">
- <a class="brand" href="#experience" aria-label="Zur Produktszene">
-  <svg viewBox="0 0 32 46" aria-hidden="true"><path d="M11 5a5 5 0 0 1 10 0v22a10 10 0 1 1-10 0V5Z"/><path d="M16 13v19"/><circle cx="16" cy="34" r="2.5"/></svg>
-  <span><strong>BECHERHALTER</strong><small>Digital Twin · Thermal Control</small></span>
- </a>
- <div class="link-state" role="status" aria-live="polite"><i></i><span><small id="connectionState">PICO W WIRD GESUCHT</small><strong id="networkName">—</strong></span><span class="ip"><small>IPv4</small><strong id="networkIp">—</strong></span><time id="lastSignal">—</time></div>
- <nav class="view-modes" aria-label="Produktansicht">
-  <button type="button" data-mode="product" class="active">PRODUKT</button>
-  <button type="button" data-mode="control">REGELUNG</button>
-  <button type="button" data-mode="thermal">THERMISCH</button>
-  <button type="button" data-mode="engineering">ENGINEERING</button>
-  <button type="button" id="presentationButton" aria-pressed="false">PRÄSENTATION</button>
- </nav>
+<body data-state="AUS" data-live="false" class="is-loading">
+<a class="skip-link" href="#aufbau">Zum Becherhalter</a>
+<header class="site-header">
+ <a class="brand" href="#aufbau"><svg viewBox="0 0 32 46" aria-hidden="true"><path d="M11 5a5 5 0 0 1 10 0v22a10 10 0 1 1-10 0V5Z"/><path d="M16 13v19"/><circle cx="16" cy="34" r="2.5"/></svg><strong>BECHERHALTER</strong></a>
+ <nav aria-label="Hauptnavigation"><a href="#aufbau">AUFBAU</a><a href="#regelkreis">REGELKREIS</a><a href="#live">LIVE</a></nav>
+ <div class="live-state" role="status"><i></i><span id="connectionState">OFFLINE</span></div>
 </header>
 
-<main id="experience" class="experience">
- <div class="visual-stage" id="visualStage">
- <div class="scene-viewport" id="sceneViewport">
-  <svg class="product-fallback" id="productFallback" viewBox="0 0 760 860" role="img" aria-label="Technisches Modell eines Becherhalters mit zwei Sensoren, Heizplatte, zwei Peltiers, Kühlkörper, Lüfter und Elektronik">
-   <defs><linearGradient id="cupGlassV3" x1="0" x2="1"><stop stop-color="#7eb0b6" stop-opacity=".12"/><stop offset=".48" stop-color="#e7ffff" stop-opacity=".34"/><stop offset="1" stop-color="#3d6e73" stop-opacity=".08"/></linearGradient><linearGradient id="liquidV3" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#d68b51" stop-opacity=".82"/><stop offset="1" stop-color="#6b2e20" stop-opacity=".65"/></linearGradient><linearGradient id="metalV4" x1="0" x2="1"><stop stop-color="#778184"/><stop offset=".5" stop-color="#d0d5d3"/><stop offset="1" stop-color="#4a5153"/></linearGradient></defs>
-   <g class="fallback-product"><path class="liquid" d="M270 239h220l-13 248c-5 65-48 89-97 89s-92-24-97-89Z" fill="url(#liquidV3)"/><ellipse class="liquid-top" cx="380" cy="239" rx="110" ry="25"/><path class="cup-body" d="M254 174h252l-16 319c-5 86-55 113-110 113s-105-27-110-113Z" fill="url(#cupGlassV3)"/><ellipse class="cup-rim" cx="380" cy="174" rx="126" ry="31"/><path class="holder-ring" d="M274 474c28 20 184 20 212 0M266 474v76m228-76v76"/><g class="sensor sensor-one"><rect x="493" y="443" width="19" height="31" rx="4"/><path d="M499 474v28m7-28v28"/></g><g class="sensor sensor-two"><rect x="270" y="311" width="18" height="30" rx="4"/><path d="M276 341v28m7-28v28"/></g><ellipse class="plate-top" cx="380" cy="619" rx="149" ry="30" fill="url(#metalV4)"/><path class="plate-side" d="M231 619v27c11 31 287 31 298 0v-27c-19 35-280 35-298 0Z"/><g class="peltiers"><path d="M287 658h89v49h-93Z"/><path d="M384 658h89l4 49h-93Z"/></g><g class="heatsink"><path d="M273 711h214v28H273Z"/><path d="M285 739v69m25-69v75m25-75v78m25-78v80m25-80v80m25-80v78m25-78v75m25-75v69"/></g><g class="fallback-fan"><circle cx="380" cy="781" r="44"/><circle cx="380" cy="781" r="10"/><path d="M380 772c17-29 40-15 23 9 29 17 15 40-9 23-17 29-40 15-23-9-29-17-15-40 9-23Z"/></g><g class="fallback-pcb"><path d="M116 567h111v135H116Z"/><rect x="133" y="586" width="36" height="66" rx="4"/><rect x="180" y="585" width="28" height="24"/><rect x="178" y="621" width="34" height="29"/><circle cx="132" cy="680" r="5"/><circle cx="211" cy="680" r="5"/><path d="M227 605h32v63h-32"/></g><g class="fallback-console"><path d="M533 566h109v129H533Z"/><rect x="550" y="583" width="75" height="37" rx="3"/><circle cx="560" cy="651" r="8"/><circle cx="588" cy="651" r="8"/><circle cx="616" cy="651" r="8"/></g></g>
-  </svg>
-  <canvas id="productCanvas" aria-hidden="true"></canvas>
- <canvas id="thermalCanvas" aria-hidden="true"></canvas>
- </div>
-
- <div class="twin-hotspots" id="twinHotspots" aria-label="Interaktive Systemkomponenten"></div>
- <nav class="twin-lenses" aria-label="Darstellung des Digital Twin">
-  <button type="button" data-lens="product" class="active">PRODUCT</button>
-  <button type="button" data-lens="xray">X-RAY</button>
-  <button type="button" data-lens="signals">SIGNALS</button>
- </nav>
- <div class="product-intro">
-  <small>PHYSICAL SYSTEM · DIGITAL TWIN</small>
-  <h1>Wärme wird<br>präzise geregelt.</h1>
-  <p>Ein realer Becherhalter, sichtbar als thermische Strecke.</p>
- </div>
- <div class="twin-entry">
-  <button type="button" id="configureButton"><i>+</i><span><small>SYSTEMAUFBAU</small><strong id="configuredCount">19 Komponenten vorgesehen</strong></span></button>
-  <button type="button" id="journeyButton"><i>◎</i><span><small>GEFÜHRTE ANSICHT</small><strong>System erklären</strong></span></button>
- </div>
-
- <aside class="component-lens" id="componentLens" aria-hidden="true" aria-live="polite">
-  <button type="button" id="componentClose" aria-label="Komponenteninformation schließen">×</button>
-  <small id="componentGroup">DIGITAL TWIN</small><h2 id="componentName">Komponente</h2>
-  <p id="componentRole">Funktion im System</p>
-  <dl><div><dt>Signal</dt><dd id="componentSignal">—</dd></div><div><dt>Verbindung</dt><dd id="componentConnection">—</dd></div><div><dt>Pin / Kanal</dt><dd id="componentPin">—</dd></div></dl>
-  <div class="component-state"><span><small>KONFIGURATION</small><strong id="componentConfigured">VORGESEHEN</strong></span><span><small>VERBINDUNG</small><strong id="componentConnectionState">NICHT VERFÜGBAR</strong></span><span><small>LIVE</small><strong id="componentLive">NICHT VERFÜGBAR</strong></span><span><small>MESSWERT</small><b id="componentMeasurement">—</b></span></div>
- </aside>
-
- <aside class="configuration-drawer" id="configurationDrawer" aria-hidden="true">
-  <header><span><small>DIGITAL TWIN</small><strong>System konfigurieren</strong></span><button type="button" id="configurationClose" aria-label="Konfiguration schließen">×</button></header>
-  <p>Vorgesehene Hardware und Live-Erkennung bleiben bewusst getrennt.</p>
-  <div class="configuration-list" id="configurationList"></div>
-  <footer><span id="configurationHint">In der Pico-Version ist die Konfiguration schreibgeschützt.</span></footer>
- </aside>
-
- <aside class="guided-journey" id="guidedJourney" aria-hidden="true">
-  <button type="button" id="guideClose" aria-label="Geführte Ansicht beenden">×</button><small id="guideCounter">01 / 06</small>
-  <strong id="guideTitle">Messung</strong><p id="guideCopy">Der Temperatursensor erfasst den Istwert y(t).</p>
-  <div><button type="button" id="guidePrevious" aria-label="Vorheriger Schritt">←</button><i id="guideProgress"></i><button type="button" id="guideNext" aria-label="Nächster Schritt">→</button></div>
- </aside>
-
- <section class="primary-reading" aria-label="Temperaturmessung">
-  <span>Isttemperatur <b>y(t)</b></span>
-  <div><strong class="live-value" id="actualTemperature">—</strong><em>°C</em></div>
-  <small id="sensorQuality">Messsignal wird erwartet</small>
- </section>
-
- <section class="state-reading" aria-label="Systemzustand">
-  <small>Systemzustand</small><strong id="systemState">VERBINDUNG</strong><span id="stateNarrative">Physikalisches System wird synchronisiert</span>
- </section>
-
- <section class="spatial-loop" id="spatialLoop" aria-labelledby="loopHeading">
-  <h1 id="loopHeading" class="sr-only">In die Produktszene integrierter PI-Regelkreis</h1>
-  <svg class="loop-routes desktop-routes" viewBox="0 0 1920 1080" preserveAspectRatio="none" aria-hidden="true">
-   <defs><marker id="forwardArrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 7 3.5 0 7Z"/></marker><marker id="feedbackArrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 7 3.5 0 7Z"/></marker></defs>
-   <path class="forward-rail" d="M340 292H438M512 292H612M726 292H834V526" marker-end="url(#forwardArrow)"/>
-   <path class="actuator-rail" d="M880 612V716H960" marker-end="url(#forwardArrow)"/>
-   <path class="sensor-rail" d="M1040 752H1270V474" marker-end="url(#feedbackArrow)"/>
-   <path class="feedback-rail" d="M1316 420H1470V870H474V344" marker-end="url(#feedbackArrow)"/>
-   <path class="signal-pulse forward" d="M340 292H438M512 292H612M726 292H834V526M880 612V716H960"/>
-   <path class="signal-pulse feedback" d="M1040 752H1270V474M1316 420H1470V870H474V344"/>
-  </svg>
-  <svg class="loop-routes mobile-routes" viewBox="0 0 390 844" preserveAspectRatio="none" aria-hidden="true">
-   <path class="forward-rail" d="M62 205V247M62 303V353M62 427V484M92 518H211V588" marker-end="url(#forwardArrow)"/>
-   <path class="sensor-rail" d="M264 620H306V413" marker-end="url(#feedbackArrow)"/>
-   <path class="feedback-rail" d="M338 380H366V274H93" marker-end="url(#feedbackArrow)"/>
-   <path class="signal-pulse forward" d="M62 205V247M62 303V353M62 427V484M92 518H211V588"/>
-   <path class="signal-pulse feedback" d="M264 620H306V413M338 380H366V274H93"/>
-  </svg>
-  <div class="signal-node setpoint-node"><span>w(t)</span><small>Sollwert</small><strong id="loopSetpoint">—</strong></div>
-  <div class="signal-node comparator-node"><span>Σ</span><small>Vergleich</small><strong id="loopDeviation">—</strong></div>
-  <button class="signal-node pi-node" id="piNode" type="button" aria-expanded="false" aria-controls="piDetails"><span>PI</span><small>Regler</small><strong id="piNodeState">INAKTIV</strong></button>
-  <div class="signal-node output-node"><span>u(t)</span><small>Stellgröße · Peltier</small><strong id="loopOutput">—</strong></div>
-  <div class="signal-node plant-node"><span>G(s)</span><small>Thermische Strecke</small><strong id="plantState">STILLSTAND</strong></div>
-  <div class="signal-node sensor-node"><span>y(t)</span><small>TMP36 · Sensor</small><strong id="loopSensor">—</strong></div>
-  <span class="feedback-copy">Istwert-Rückführung</span>
- </section>
-
- <section class="target-control" aria-label="Sollwertsteuerung">
-  <span>Sollwert <b>w(t)</b></span>
-  <div class="target-orbit" id="targetOrbit" style="--target-angle:216deg;--target-level:75">
-   <svg viewBox="0 0 260 260" aria-hidden="true"><circle cx="130" cy="130" r="109" pathLength="100"/><circle class="target-progress" cx="130" cy="130" r="109" pathLength="100"/><path class="target-marker" d="M130 5v17"/></svg>
-   <label><input id="targetInput" type="text" inputmode="decimal" value="45,0" aria-label="Solltemperatur in Grad Celsius" disabled><em>°C</em><small>20 — 60</small></label>
-   <button type="button" id="targetDown" aria-label="Sollwert um 0,5 Grad verringern" disabled>−</button><button type="button" id="targetUp" aria-label="Sollwert um 0,5 Grad erhöhen" disabled>+</button>
+<main>
+ <section class="page-section product-section" id="aufbau" aria-labelledby="aufbauTitle">
+  <header class="section-heading"><span>01</span><div><p>AUFBAU</p><h1 id="aufbauTitle">Das ist der Becherhalter.</h1><small>Alle Bauteile arbeiten als ein Gerät zusammen.</small></div></header>
+  <div class="product-layout">
+   <div class="product-stage" id="visualStage">
+    <div class="scene-viewport" id="sceneViewport">
+     <svg class="product-fallback" id="productFallback" viewBox="0 0 760 860" role="img" aria-label="Becherhalter mit Glas, zwei Sensoren, Heizplatte, zwei Peltiers, Kühlkörper, Lüfter, Platine und Bedienfeld">
+      <defs><linearGradient id="glass" x1="0" x2="1"><stop stop-color="#9fc1c2" stop-opacity=".12"/><stop offset=".5" stop-color="#eef8f5" stop-opacity=".42"/><stop offset="1" stop-color="#5d7775" stop-opacity=".1"/></linearGradient><linearGradient id="drink" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#b66a36"/><stop offset="1" stop-color="#5c281d"/></linearGradient><linearGradient id="metal" x1="0" x2="1"><stop stop-color="#68706d"/><stop offset=".5" stop-color="#d7d9d4"/><stop offset="1" stop-color="#4b504e"/></linearGradient></defs>
+      <g class="fallback-product"><path d="M273 245h214l-14 239c-4 61-47 86-93 86s-89-25-93-86Z" fill="url(#drink)"/><ellipse cx="380" cy="245" rx="107" ry="24" fill="#cb814b"/><path class="cup-body" d="M254 174h252l-16 319c-5 86-55 113-110 113s-105-27-110-113Z" fill="url(#glass)"/><ellipse class="cup-rim" cx="380" cy="174" rx="126" ry="31"/><path class="holder-ring" d="M274 474c28 20 184 20 212 0M266 474v76m228-76v76"/><g class="sensor"><rect x="493" y="443" width="19" height="31" rx="4"/><path d="M499 474v28m7-28v28"/></g><g class="sensor"><rect x="270" y="311" width="18" height="30" rx="4"/><path d="M276 341v28m7-28v28"/></g><ellipse cx="380" cy="619" rx="149" ry="30" fill="url(#metal)"/><path class="plate-side" d="M231 619v27c11 31 287 31 298 0v-27c-19 35-280 35-298 0Z"/><g class="peltiers"><path d="M287 658h89v49h-93Z"/><path d="M384 658h89l4 49h-93Z"/></g><g class="heatsink"><path d="M273 711h214v28H273Z"/><path d="M285 739v69m25-69v75m25-75v78m25-78v80m25-80v80m25-80v78m25-78v75m25-75v69"/></g><g class="fallback-fan"><circle cx="380" cy="781" r="44"/><circle cx="380" cy="781" r="10"/><path d="M380 772c17-29 40-15 23 9 29 17 15 40-9 23-17 29-40 15-23-9-29-17-15-40 9-23Z"/></g><g class="fallback-pcb"><path d="M116 567h111v135H116Z"/><rect x="133" y="586" width="36" height="66" rx="4"/><rect x="180" y="585" width="28" height="24"/><rect x="178" y="621" width="34" height="29"/><path d="M227 605h32v63h-32"/></g><g class="fallback-console"><path d="M533 566h109v129H533Z"/><rect x="550" y="583" width="75" height="37" rx="3"/><circle cx="552" cy="650" r="7"/><circle cx="576" cy="650" r="7"/><circle cx="600" cy="650" r="7"/><circle cx="624" cy="650" r="7"/></g></g>
+     </svg>
+     <canvas id="productCanvas" aria-hidden="true"></canvas><canvas id="thermalCanvas" aria-hidden="true"></canvas>
+    </div>
+    <div class="twin-hotspots" id="twinHotspots"></div>
+    <div class="product-actions"><button id="hotspotToggle" type="button" aria-pressed="false">Komponenten anzeigen</button><button id="explodeButton" type="button" aria-pressed="false">Aufbau zeigen</button><button id="configureButton" type="button">Komponenten verwalten</button></div>
+   </div>
+   <aside class="product-summary"><div class="state-mark"><i></i><span><small>Systemstatus</small><strong id="systemState">Wird geladen</strong></span></div><p id="stateNarrative">Das Gerät wird mit dem Pico synchronisiert.</p><dl><div><dt>Temperatur</dt><dd><b id="overviewTemperature">—</b> °C</dd></div><div><dt>Heizleistung</dt><dd id="overviewPower">—</dd></div></dl></aside>
   </div>
-  <button class="commit-target" id="setpointButton" type="button" disabled>Sollwert übertragen</button>
+  <aside class="component-lens" id="componentLens" aria-hidden="true"><button type="button" id="componentClose" aria-label="Schließen">×</button><small id="componentGroup">BAUTEIL</small><h2 id="componentName">Komponente</h2><p id="componentRole"></p><div class="simple-states"><span><small>GEPLANT</small><strong id="componentPlanned">✓</strong></span><span><small>ANGESCHLOSSEN</small><strong id="componentConnected">—</strong></span><span><small>LIVE</small><strong id="componentLive">—</strong><b id="componentMeasurement">—</b></span></div></aside>
+  <aside class="configuration-drawer" id="configurationDrawer" aria-hidden="true"><header><div><small>PREVIEW-KONFIGURATOR</small><strong>Komponenten</strong></div><button type="button" id="configurationClose" aria-label="Schließen">×</button></header><p>Bauteile lassen sich in der Vorschau hinzufügen oder entfernen. Am Pico ist diese Ansicht nur lesbar.</p><div id="configurationList"></div><footer id="configurationHint"></footer></aside>
  </section>
 
- <section class="process-output" aria-label="Heizleistung und Lüfter">
-  <span>Peltier · u(t)</span><strong id="powerOutput">—</strong><i><b id="outputFill"></b></i><small id="peltierDetail">P1 / P2 sicher aus</small>
-  <span class="fan-readout">Lüfter <b id="fanRpm">—</b></span>
+ <section class="page-section loop-section" id="regelkreis" aria-labelledby="loopTitle">
+  <header class="section-heading"><span>02</span><div><p>REGELKREIS</p><h2 id="loopTitle">So wird die Temperatur geregelt.</h2><small>Messen, vergleichen, heizen – immer wieder.</small></div></header>
+  <div class="simple-loop" id="simpleLoop">
+   <div class="loop-step setpoint-step"><small>Solltemperatur <b>w(t)</b></small><strong>SOLL</strong><em id="loopSetpoint">—</em></div><i class="flow-arrow"></i>
+   <div class="loop-step"><small>Regelabweichung <b>e(t)</b></small><strong>VERGLEICH</strong><em id="loopDeviation">—</em></div><i class="flow-arrow"></i>
+   <button class="loop-step" id="piNode" type="button"><small>Regler</small><strong>PI-REGLER</strong><em id="piNodeState">inaktiv</em></button><i class="flow-arrow"></i>
+   <div class="loop-step heat-step"><small>Stellgröße <b>u(t)</b></small><strong>HEIZLEISTUNG</strong><em id="loopOutput">—</em></div><i class="flow-arrow"></i>
+   <div class="loop-step peltier-step"><small>Aktor</small><strong>PELTIER 1 + 2</strong><em>nur Heizen</em></div><i class="flow-arrow"></i>
+   <div class="loop-product"><svg viewBox="0 0 110 130" aria-hidden="true"><path d="M28 9h54l-5 63c-2 18-42 18-44 0Z"/><path d="M20 76h70v12H20Z"/><path d="M29 91h52v9H29Z"/><path d="M25 103h60v9H25Z"/><circle cx="55" cy="119" r="9"/></svg><small>Regelstrecke</small><strong>BECHER</strong><em id="plantState">kalt</em></div><i class="flow-arrow"></i>
+   <div class="loop-step sensor-step"><small>Istwert <b>y(t)</b></small><strong>SENSOR</strong><em id="loopSensor">—</em></div>
+   <div class="feedback-route"><i></i><span>Rückführung zum Vergleich</span></div>
+  </div>
+  <aside class="pi-details" id="piDetails" aria-hidden="true"><button type="button" id="piClose">×</button><h3>PI-Regler</h3><p>Der P-Anteil reagiert sofort, der I-Anteil beseitigt die bleibende Abweichung. Anti-Windup begrenzt das Aufladen.</p><dl><div><dt>Kp</dt><dd id="piKp">—</dd></div><div><dt>Ki</dt><dd id="piKi">—</dd></div><div><dt>P-Anteil</dt><dd id="piP">—</dd></div><div><dt>I-Anteil</dt><dd id="piI">—</dd></div><div><dt>Anti-Windup</dt><dd id="piWindup">—</dd></div></dl></aside>
  </section>
 
- <section class="action-control" id="actionControl" aria-label="Heizprozess steuern">
-  <svg viewBox="0 0 180 180" aria-hidden="true"><circle cx="90" cy="90" r="78"/><path d="M90 12a78 78 0 0 1 67 118"/></svg>
-  <button id="startButton" type="button" disabled><span id="startActionLabel">START</span><small id="startActionHint">HEIZVORGANG</small></button>
-  <button id="stopButton" type="button" disabled>STOP</button>
-  <p id="actionReason">Live-Freigabe wird geprüft</p>
+ <section class="page-section live-section" id="live" aria-labelledby="liveTitle">
+  <header class="section-heading"><span>03</span><div><p>LIVE</p><h2 id="liveTitle">Das passiert gerade.</h2><small>Die wichtigsten Werte auf einen Blick.</small></div></header>
+  <div class="live-overview"><div class="temperature-hero"><small>Isttemperatur</small><div><strong id="actualTemperature">—</strong><em>°C</em></div><span id="sensorQuality">Messwert wird erwartet</span></div><dl class="live-facts"><div><dt>Soll</dt><dd><b id="liveSetpoint">—</b> °C</dd></div><div><dt>Heizleistung</dt><dd id="powerOutput">—</dd></div><div><dt>Lüfter</dt><dd id="fanRpm">—</dd></div><div><dt>Status</dt><dd id="liveSystemState">—</dd></div></dl></div>
+  <section class="timeline-layer" aria-labelledby="timelineTitle"><header><div><small>Temperaturverlauf</small><strong id="timelineTitle">LIVE-DIAGRAMM</strong></div><div class="primary-signals"><button class="active actual" data-signal="temperature" type="button">IST</button><button class="active target" data-signal="target" type="button">SOLL</button><button class="active power" data-signal="power" type="button">HEIZLEISTUNG</button></div><button id="moreSignalsButton" type="button" aria-expanded="false">Mehr anzeigen</button></header><div class="more-signals" id="moreSignals" hidden><button data-signal="temperature2" type="button">TEMP 2</button><button data-signal="current1" type="button">CURRENT 1</button><button data-signal="current2" type="button">CURRENT 2</button><button data-signal="fan" type="button">FAN</button><button data-signal="light" type="button">LIGHT</button><span class="time-range"><button type="button" class="active" data-range="60">1 min</button><button type="button" data-range="300">5 min</button><button type="button" data-range="900">15 min</button></span></div><canvas id="timelineCanvas" role="img" aria-label="Live-Verlauf von Isttemperatur, Solltemperatur und Heizleistung"></canvas></section>
+  <section class="control-panel" aria-labelledby="controlTitle"><div class="control-lock"><span id="lockIcon">🔒</span><div><small>BEDIENRECHTE</small><h3 id="controlTitle">Steuerung gesperrt</h3><p id="controlMessage">Live-Werte bleiben ohne PIN sichtbar.</p></div><button id="unlockButton" type="button">Mit PIN freigeben</button></div><div class="control-actions" id="controlActions" aria-hidden="true"><div class="setpoint-control"><button id="targetDown" type="button">−</button><label><small>Solltemperatur</small><input id="targetInput" type="text" inputmode="decimal" value="45,0"><span>°C</span></label><button id="targetUp" type="button">+</button><button id="setpointButton" type="button">Speichern</button></div><div class="heat-actions"><button id="startButton" type="button">Heizen starten</button><button id="stopButton" type="button">Stopp</button></div></div></section>
+  <section class="safety-summary" id="safetySummary"><i>✓</i><div><small>SICHERHEIT</small><strong id="safetyTitle">System wird geprüft</strong><p id="safetyReason">Safety-Freigaben kommen direkt vom Pico.</p></div><button id="safetyDetailsButton" type="button" aria-expanded="false">Details</button><div id="safetyDetails" hidden></div></section>
  </section>
 
- <section class="safety-lock" id="safetyLock" role="alert" aria-live="assertive"><i></i><span><small>START GESPERRT</small><strong id="safetyTitle">System nicht bereit</strong><b id="safetyReason">Sicherheitsfreigaben werden geprüft</b></span></section>
- <section class="safety-matrix" id="safetyMatrix" aria-label="Sicherheits- und Systemfreigaben"></section>
-
- <section class="timeline-layer" id="timeline" aria-labelledby="timelineTitle">
-  <header><span><small id="timelineTitle">Live-Analyse</small><strong id="timelineNow">LIVE</strong></span><div class="timeline-legend" role="group" aria-label="Signale ein- oder ausblenden"><button class="active actual" data-signal="temperature" type="button">TEMP 1</button><button class="active target" data-signal="target" type="button">SOLL</button><button class="active secondary" data-signal="temperature2" type="button">TEMP 2</button><button class="active power" data-signal="power" type="button">u(t)</button><button class="current" data-signal="current1" type="button">I1</button><button class="current" data-signal="current2" type="button">I2</button><button class="fan" data-signal="fan" type="button">FAN</button><button class="light" data-signal="light" type="button">LIGHT</button></div><div class="time-range" role="group" aria-label="Diagrammzeitraum"><button type="button" class="active" data-range="60">1m</button><button type="button" data-range="300">5m</button><button type="button" data-range="900">15m</button></div></header>
-  <canvas id="timelineCanvas" role="img" aria-label="Interaktiver Live-Verlauf der verfügbaren Temperatur-, Leistungs-, Strom-, Lüfter- und Lichtsignale"></canvas>
-  <span class="power-axis" aria-hidden="true"><b>100%</b><b>0%</b></span>
-  <div class="timeline-offline"><strong>SIGNAL EINGEFROREN</strong><span>Letzte Messung bleibt erhalten</span></div>
- </section>
-
- <aside class="pi-details" id="piDetails" aria-hidden="true">
-  <button type="button" id="piClose" aria-label="PI-Details schließen">×</button><small>PI-REGELUNG · READ ONLY</small><strong>u(t) = Kp · e(t) + Ki · ∫e(t)dt</strong>
-  <dl><div><dt>Kp</dt><dd id="piKp">—</dd></div><div><dt>Ki</dt><dd id="piKi">—</dd></div><div><dt>P</dt><dd id="piP">—</dd></div><div><dt>I</dt><dd id="piI">—</dd></div><div><dt>Anti-Windup</dt><dd id="piWindup">—</dd></div><div><dt>Zyklus</dt><dd id="piCycle">—</dd></div></dl>
- </aside>
-
- <section class="engineering-layer" id="engineeringLayer" aria-label="Explodierte Hardwareansicht">
-  <div class="engineering-rail"><button type="button" data-focus="system" class="active">SYSTEM</button><button type="button" data-focus="sensors">SENSOREN</button><button type="button" data-focus="power">POWER</button></div>
-  <div class="engineering-values" id="engineeringValues"></div>
- </section>
-
- <div class="offline-veil"><span>LIVE-VERBINDUNG UNTERBROCHEN</span><strong id="offlineLastValue">Letzte Systemaufnahme bleibt sichtbar</strong></div>
- </div>
-
- <div class="story-track" id="storyTrack" aria-label="Technische Systemreise">
-  <section class="story-chapter" data-story-step="configure"><div><small>01 · PHYSICAL SYSTEM</small><strong>Das Produkt zuerst.</strong><p>Hotspots öffnen die reale Hardwarestruktur. Scrollen verbindet Aufbau, Regelung und Analyse.</p></div></section>
-  <section class="story-chapter" data-story-step="loop"><div><small>02 · CONTROL LOOP</small><strong>Das Produkt wird zur Regelstrecke.</strong><p>Sollwert, PI-Regler, Aktor und Sensor schließen sich um den realen Becherhalter.</p></div></section>
-  <section class="story-chapter" data-story-step="control"><div><small>03 · LIVE CONTROL</small><strong>Stellgröße wird Wärmeeintrag.</strong><p>START bleibt sicherheitsgeführt; STOP bleibt jederzeit eindeutig erreichbar.</p></div></section>
-  <section class="story-chapter" data-story-step="analysis"><div><small>04 · LIVE ANALYSIS</small><strong>Signale im zeitlichen Zusammenhang.</strong><p>Nur verfügbare Messreihen werden angeboten. Temperatur bleibt visuell dominant.</p></div></section>
-  <section class="story-chapter" data-story-step="safety"><div><small>05 · SAFETY</small><strong>Freigabe bleibt serverseitig.</strong><p>Die Oberfläche erklärt Sperren, ohne fehlende optionale Hardware als Fehler zu erfinden.</p></div></section>
-  <section class="story-chapter" data-story-step="engineering"><div><small>06 · ENGINEERING</small><strong>Hardware und Signale werden sichtbar.</strong><p>Exploded View, Pins und Live-Discovery zeigen, was im System vorgesehen und erkannt ist.</p></div></section>
- </div>
+ <section class="page-section technology-section" id="technik"><details><summary><span>04</span><div><small>OPTIONAL</small><strong>Technische Details</strong><p>GPIO, Messkanäle, PI-Werte und Netzwerkstatus</p></div><b>+</b></summary><div class="technical-grid"><section><h3>Regelung</h3><dl><div><dt>Kp</dt><dd id="techKp">—</dd></div><div><dt>Ki</dt><dd id="techKi">—</dd></div><div><dt>Zyklus</dt><dd id="techCycle">—</dd></div><div><dt>Maximaltemperatur</dt><dd id="techMaxTemp">—</dd></div></dl></section><section><h3>Messwerte</h3><dl><div><dt>Temperatur 2</dt><dd id="techTemp2">—</dd></div><div><dt>Strom P1</dt><dd id="techCurrent1">—</dd></div><div><dt>Strom P2</dt><dd id="techCurrent2">—</dd></div><div><dt>Licht</dt><dd id="techLight">—</dd></div></dl></section><section><h3>Verbindung</h3><dl><div><dt>WLAN</dt><dd id="networkName">—</dd></div><div><dt>IP</dt><dd id="networkIp">—</dd></div><div><dt>Webserver</dt><dd id="techWebserver">—</dd></div><div><dt>Letztes Signal</dt><dd id="lastSignal">—</dd></div></dl></section><section><h3>Hardware</h3><p>GP0/1 I²C · GP14–16 Lüfter · GP17–22/27/28 Peltier · GP26 ADC0</p><p>TLA2024: Strom 1/2, Licht und Temperatur 2</p></section></div></details></section>
 </main>
+
+<dialog id="unlockDialog"><form method="dialog" id="unlockForm"><button class="dialog-close" id="unlockClose" type="button" aria-label="Schließen">×</button><small>BEDIENFREIGABE</small><h2>Steuerung entsperren</h2><p>Der Pico prüft die PIN. Die Freigabe endet automatisch nach fünf Minuten.</p><label>PIN<input id="pinInput" name="pin" type="password" inputmode="numeric" maxlength="8" autocomplete="off" required></label><strong id="pinError" role="alert"></strong><button class="unlock-submit" value="default">Freigeben</button></form></dialog>
 
 <!--__PREVIEW_CONTROLS__-->
 <script>/*__SCRIPT__*/</script>

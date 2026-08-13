@@ -60,6 +60,9 @@ def shorten_css_selectors(css: str, html: str, javascript: str) -> tuple[str, st
         "twin-hotspot": "th", "twin-hotspots": "ths", "signal-node": "sn",
         "product-fallback": "pf", "component-state": "cs", "component-lens": "cl",
         "engineering-values": "ev", "story-chapter": "sc", "scene-viewport": "sv",
+        "configuration-drawer": "cd", "configuration-item": "ci", "section-heading": "sh",
+        "product-section": "ps", "product-stage": "pg", "timeline-layer": "tl",
+        "technical-grid": "tg", "simple-loop": "sl", "loop-step": "ls",
     }
     for source, target in replacements.items():
         css = css.replace(source, target)
