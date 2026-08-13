@@ -66,6 +66,22 @@ Three.js remains a committed design/engineering benchmark, not production code. 
 prototype reference during exploration was Three.js 0.185.1. No external library is shipped
 to the Pico.
 
+### Postprocessing experiment
+
+`three-product.html` now contains a real `EffectComposer` comparison. Query `?fx=bloom`,
+`?fx=ssao`, `?fx=dof` or `?fx=all` selects Unreal Bloom, screen-space AO, depth of field or the
+combined restrained study. ACES filmic tone mapping and soft shadows are always active.
+
+- Subtle bloom improved the heating plate but higher strength clipped the material, so the test
+  strength was reduced to 0.16.
+- AO materially improved part contact and was retained as a cheaper two-distance calculation in
+  the custom production shader.
+- Depth of field reduced the engineering legibility and remains an opt-in prototype comparison.
+- Chromatic aberration was evaluated against the product goals and rejected: it adds no control
+  or physical meaning and degrades fine technical text.
+- ACES-like highlight compression, fog and vignette are retained in the custom shader without a
+  multi-pass framebuffer chain.
+
 ## Rendering architecture
 
 ```text

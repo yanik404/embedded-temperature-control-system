@@ -73,7 +73,7 @@ for token in (
 
 for token in (
     "MAX_STEPS 88", "explode", "thermal", "fan", "TMP36", "TLA2024",
-    "VNH7070", "ISTWERT-RÜCKFÜHRUNG", "ENGINEERING", "PRÄSENTATION",
+    "VNH7070", "Istwert-Rückführung", "ENGINEERING", "PRÄSENTATION",
 ):
     assert token in production, f"missing V3 product experience contract: {token}"
 

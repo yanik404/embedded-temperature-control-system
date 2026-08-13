@@ -40,13 +40,13 @@
  </div>
 
  <section class="primary-reading" aria-label="Temperaturmessung">
-  <span>ISTTEMPERATUR <b>y(t)</b></span>
+  <span>Isttemperatur <b>y(t)</b></span>
   <div><strong class="live-value" id="actualTemperature">—</strong><em>°C</em></div>
   <small id="sensorQuality">Messsignal wird erwartet</small>
  </section>
 
  <section class="state-reading" aria-label="Systemzustand">
-  <small>SYSTEMZUSTAND</small><strong id="systemState">VERBINDUNG</strong><span id="stateNarrative">Physikalisches System wird synchronisiert</span>
+  <small>Systemzustand</small><strong id="systemState">VERBINDUNG</strong><span id="stateNarrative">Physikalisches System wird synchronisiert</span>
  </section>
 
  <section class="spatial-loop" id="spatialLoop" aria-labelledby="loopHeading">
@@ -59,28 +59,28 @@
    <path class="signal-pulse forward" d="M250 296C405 296 405 370 522 370S650 517 780 617C858 704 885 780 960 822"/>
    <path class="signal-pulse feedback" d="M1268 502C1500 502 1542 650 1518 783C1490 935 1220 981 755 970C390 961 294 765 322 469"/>
   </svg>
-  <div class="signal-node setpoint-node"><span>w(t)</span><small>SOLLWERT</small><strong id="loopSetpoint">—</strong></div>
-  <div class="signal-node comparator-node"><span>Σ</span><small>VERGLEICH</small><strong id="loopDeviation">—</strong></div>
-  <button class="signal-node pi-node" id="piNode" type="button" aria-expanded="false" aria-controls="piDetails"><span>PI</span><small>REGLER</small><strong id="piNodeState">INAKTIV</strong></button>
-  <div class="signal-node output-node"><span>u(t)</span><small>STELLGRÖSSE</small><strong id="loopOutput">—</strong></div>
-  <div class="signal-node plant-node"><span>G(s)</span><small>THERMISCHE STRECKE</small><strong id="plantState">STILLSTAND</strong></div>
-  <div class="signal-node sensor-node"><span>y(t)</span><small>TMP36 · SENSOR</small><strong id="loopSensor">—</strong></div>
-  <span class="feedback-copy">ISTWERT-RÜCKFÜHRUNG</span>
+  <div class="signal-node setpoint-node"><span>w(t)</span><small>Sollwert</small><strong id="loopSetpoint">—</strong></div>
+  <div class="signal-node comparator-node"><span>Σ</span><small>Vergleich</small><strong id="loopDeviation">—</strong></div>
+  <button class="signal-node pi-node" id="piNode" type="button" aria-expanded="false" aria-controls="piDetails"><span>PI</span><small>Regler</small><strong id="piNodeState">INAKTIV</strong></button>
+  <div class="signal-node output-node"><span>u(t)</span><small>Stellgröße</small><strong id="loopOutput">—</strong></div>
+  <div class="signal-node plant-node"><span>G(s)</span><small>Thermische Strecke</small><strong id="plantState">STILLSTAND</strong></div>
+  <div class="signal-node sensor-node"><span>y(t)</span><small>TMP36 · Sensor</small><strong id="loopSensor">—</strong></div>
+  <span class="feedback-copy">Istwert-Rückführung</span>
  </section>
 
  <section class="target-control" aria-label="Sollwertsteuerung">
-  <span>SOLLWERT <b>w(t)</b></span>
+  <span>Sollwert <b>w(t)</b></span>
   <div class="target-orbit" id="targetOrbit" style="--target-angle:216deg;--target-level:75">
    <svg viewBox="0 0 260 260" aria-hidden="true"><circle cx="130" cy="130" r="109" pathLength="100"/><circle class="target-progress" cx="130" cy="130" r="109" pathLength="100"/><path class="target-marker" d="M130 5v17"/></svg>
    <label><input id="targetInput" type="text" inputmode="decimal" value="45,0" aria-label="Solltemperatur in Grad Celsius" disabled><em>°C</em><small>20 — 60</small></label>
    <button type="button" id="targetDown" aria-label="Sollwert um 0,5 Grad verringern" disabled>−</button><button type="button" id="targetUp" aria-label="Sollwert um 0,5 Grad erhöhen" disabled>+</button>
   </div>
-  <button class="commit-target" id="setpointButton" type="button" disabled>SOLLWERT ÜBERTRAGEN</button>
+  <button class="commit-target" id="setpointButton" type="button" disabled>Sollwert übertragen</button>
  </section>
 
  <section class="process-output" aria-label="Heizleistung und Lüfter">
-  <span>PELTIER · u(t)</span><strong id="powerOutput">—</strong><i><b id="outputFill"></b></i><small id="peltierDetail">P1 / P2 sicher aus</small>
-  <span class="fan-readout">LÜFTER <b id="fanRpm">—</b></span>
+  <span>Peltier · u(t)</span><strong id="powerOutput">—</strong><i><b id="outputFill"></b></i><small id="peltierDetail">P1 / P2 sicher aus</small>
+  <span class="fan-readout">Lüfter <b id="fanRpm">—</b></span>
  </section>
 
  <section class="action-control" id="actionControl" aria-label="Heizprozess steuern">
@@ -93,8 +93,9 @@
  <section class="safety-lock" id="safetyLock" role="alert" aria-live="assertive"><i></i><span><small>START GESPERRT</small><strong id="safetyTitle">System nicht bereit</strong><b id="safetyReason">Sicherheitsfreigaben werden geprüft</b></span></section>
 
  <section class="timeline-layer" id="timeline" aria-labelledby="timelineTitle">
-  <header><span><small id="timelineTitle">THERMISCHER VERLAUF</small><strong id="timelineNow">LIVE</strong></span><div class="timeline-legend"><i class="actual"></i>IST <i class="target"></i>SOLL <i class="secondary"></i>SENSOR 2 <i class="power"></i>u(t)</div><div class="time-range" role="group" aria-label="Diagrammzeitraum"><button type="button" class="active" data-range="60">1m</button><button type="button" data-range="300">5m</button><button type="button" data-range="900">15m</button></div></header>
+  <header><span><small id="timelineTitle">Thermischer Verlauf</small><strong id="timelineNow">LIVE</strong></span><div class="timeline-legend"><i class="actual"></i>IST <i class="target"></i>SOLL <i class="secondary"></i>SENSOR 2 <i class="power"></i>u(t)</div><div class="time-range" role="group" aria-label="Diagrammzeitraum"><button type="button" class="active" data-range="60">1m</button><button type="button" data-range="300">5m</button><button type="button" data-range="900">15m</button></div></header>
   <canvas id="timelineCanvas" role="img" aria-label="Live-Verlauf von Isttemperatur, Sollwert, Sensor 2 und Heizleistung"></canvas>
+  <span class="power-axis" aria-hidden="true"><b>100%</b><b>0%</b></span>
   <div class="timeline-offline"><strong>SIGNAL EINGEFROREN</strong><span>Letzte Messung bleibt erhalten</span></div>
  </section>
 

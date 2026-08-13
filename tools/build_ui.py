@@ -100,8 +100,10 @@ def build_stats(preview_html: str, production_html: str, css: str, javascript: s
         "external_library_bytes": 0,
         "runtime_http_requests_for_assets": 0,
         "webgl_draw_calls_per_frame": 1,
-        "product_scene_frame_cap_fps": 30,
-        "thermal_overlay_frame_cap_fps": 30,
+        "preview_product_scene_frame_cap_fps": 60,
+        "preview_thermal_overlay_frame_cap_fps": 60,
+        "embedded_product_scene_frame_cap_fps": 30,
+        "embedded_thermal_overlay_frame_cap_fps": 30,
         "history_max_seconds": 1800,
     }
 

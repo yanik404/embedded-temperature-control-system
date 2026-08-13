@@ -61,6 +61,13 @@ body[data-state="AUFHEIZEN"] #startButton,body[data-state="HALTEN"] #startButton
 body[data-state="AUFHEIZEN"] #startButton,body[data-state="HALTEN"] #startButton{visibility:hidden}body[data-state="AUFHEIZEN"] #stopButton,body[data-state="HALTEN"] #stopButton{font-size:11px}
 .display-tag{left:12%;top:34%}.light-tag{right:13%;top:34%}.hardware-network{position:absolute;inset:0;width:100%;height:100%;opacity:.32}.hardware-network path{fill:none;stroke:var(--cyan);stroke-width:1;stroke-dasharray:2 9;vector-effect:non-scaling-stroke;animation:signalFlow 5s linear infinite}.hardware-network text{fill:#5e8c98;font:7px ui-monospace,Consolas,monospace;letter-spacing:.1em}
 @media(max-width:600px){.link-state .ip{justify-self:end;min-width:102px;padding-left:7px}.display-tag{left:3%;top:29%}.light-tag{right:3%;top:33%}.hardware-network{display:none}}
+.primary-reading em{margin-left:14px}.state-reading span{font-size:9px}.feedback-rail{stroke:rgba(var(--cyan-rgb),.27)}.feedback-copy{opacity:.72}body[data-state="AUFHEIZEN"] .action-control p,body[data-state="HALTEN"] .action-control p{opacity:0}
+@media(max-width:600px){.edge-header{position:fixed}.link-state{position:absolute!important;left:14px;right:14px;top:61px;width:auto!important}.link-state .ip{position:absolute;right:0;top:0;width:116px;min-width:0}.view-modes{position:absolute!important;left:14px;right:14px;top:124px;width:auto;height:44px!important;grid-template-columns:repeat(4,minmax(0,1fr))!important}.view-modes button{min-width:0!important;overflow:hidden}.setpoint-node{top:55%}.comparator-node{top:58%}.pi-node{top:56%}.output-node{top:62%}.plant-node{top:71%}}
+@media(max-width:600px){.link-state{display:flex!important;align-items:center;min-width:0;overflow:hidden}.link-state>span:not(.ip){min-width:0}.link-state>span:not(.ip) strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.link-state .ip{position:static!important;margin-left:auto;width:auto!important;min-width:96px!important;flex:0 0 96px}.view-modes{display:grid!important;min-width:0!important;overflow:hidden}.view-modes button{width:auto!important}}
+.power-axis{position:absolute;z-index:3;right:1px;top:49px;bottom:15px;display:flex;flex-direction:column;justify-content:space-between;color:rgba(var(--green-rgb),.62);font:6px ui-monospace,Consolas,monospace}.power-axis b{font-weight:500}.preview-deck{opacity:.82;transition:opacity var(--fast)}.preview-deck:hover,.preview-deck:focus-within{opacity:1}@media(max-width:600px){.sensor-node{right:14px!important}.preview-deck{height:30px}.preview-deck button{height:30px}}
+@media(max-width:900px) and (min-width:601px){.view-modes button:not(#presentationButton){display:block}.view-modes{height:66px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}.view-modes button{padding:0 6px}}
+@media(max-width:600px){.view-modes{left:14px!important;right:auto!important;width:calc(100vw - 28px)!important;max-width:calc(100vw - 28px)!important}.view-modes button{font-size:5px!important;letter-spacing:.035em!important}}
+@media(max-width:600px){.edge-header{display:block!important}.brand{position:absolute;left:14px;top:8px;width:260px!important;max-width:calc(100vw - 28px)}.link-state{display:grid!important;grid-template-columns:9px minmax(0,1fr) 105px;column-gap:8px}.link-state>span:not(.ip){min-width:0}.link-state .ip{position:static!important;width:105px!important;min-width:105px!important;text-align:right;margin:0!important}.scene-viewport{left:4%!important;right:-10%!important}.primary-reading strong{font-size:62px}.primary-reading em{font-size:18px}}
 </style>
 </head>
 <body data-state="AUS" data-live="false" data-mode="overview" class="is-loading">
@@ -96,13 +103,13 @@ body[data-state="AUFHEIZEN"] #startButton,body[data-state="HALTEN"] #startButton
  </div>
 
  <section class="primary-reading" aria-label="Temperaturmessung">
-  <span>ISTTEMPERATUR <b>y(t)</b></span>
+  <span>Isttemperatur <b>y(t)</b></span>
   <div><strong class="live-value" id="actualTemperature">—</strong><em>°C</em></div>
   <small id="sensorQuality">Messsignal wird erwartet</small>
  </section>
 
  <section class="state-reading" aria-label="Systemzustand">
-  <small>SYSTEMZUSTAND</small><strong id="systemState">VERBINDUNG</strong><span id="stateNarrative">Physikalisches System wird synchronisiert</span>
+  <small>Systemzustand</small><strong id="systemState">VERBINDUNG</strong><span id="stateNarrative">Physikalisches System wird synchronisiert</span>
  </section>
 
  <section class="spatial-loop" id="spatialLoop" aria-labelledby="loopHeading">
@@ -115,28 +122,28 @@ body[data-state="AUFHEIZEN"] #startButton,body[data-state="HALTEN"] #startButton
    <path class="signal-pulse forward" d="M250 296C405 296 405 370 522 370S650 517 780 617C858 704 885 780 960 822"/>
    <path class="signal-pulse feedback" d="M1268 502C1500 502 1542 650 1518 783C1490 935 1220 981 755 970C390 961 294 765 322 469"/>
   </svg>
-  <div class="signal-node setpoint-node"><span>w(t)</span><small>SOLLWERT</small><strong id="loopSetpoint">—</strong></div>
-  <div class="signal-node comparator-node"><span>Σ</span><small>VERGLEICH</small><strong id="loopDeviation">—</strong></div>
-  <button class="signal-node pi-node" id="piNode" type="button" aria-expanded="false" aria-controls="piDetails"><span>PI</span><small>REGLER</small><strong id="piNodeState">INAKTIV</strong></button>
-  <div class="signal-node output-node"><span>u(t)</span><small>STELLGRÖSSE</small><strong id="loopOutput">—</strong></div>
-  <div class="signal-node plant-node"><span>G(s)</span><small>THERMISCHE STRECKE</small><strong id="plantState">STILLSTAND</strong></div>
-  <div class="signal-node sensor-node"><span>y(t)</span><small>TMP36 · SENSOR</small><strong id="loopSensor">—</strong></div>
-  <span class="feedback-copy">ISTWERT-RÜCKFÜHRUNG</span>
+  <div class="signal-node setpoint-node"><span>w(t)</span><small>Sollwert</small><strong id="loopSetpoint">—</strong></div>
+  <div class="signal-node comparator-node"><span>Σ</span><small>Vergleich</small><strong id="loopDeviation">—</strong></div>
+  <button class="signal-node pi-node" id="piNode" type="button" aria-expanded="false" aria-controls="piDetails"><span>PI</span><small>Regler</small><strong id="piNodeState">INAKTIV</strong></button>
+  <div class="signal-node output-node"><span>u(t)</span><small>Stellgröße</small><strong id="loopOutput">—</strong></div>
+  <div class="signal-node plant-node"><span>G(s)</span><small>Thermische Strecke</small><strong id="plantState">STILLSTAND</strong></div>
+  <div class="signal-node sensor-node"><span>y(t)</span><small>TMP36 · Sensor</small><strong id="loopSensor">—</strong></div>
+  <span class="feedback-copy">Istwert-Rückführung</span>
  </section>
 
  <section class="target-control" aria-label="Sollwertsteuerung">
-  <span>SOLLWERT <b>w(t)</b></span>
+  <span>Sollwert <b>w(t)</b></span>
   <div class="target-orbit" id="targetOrbit" style="--target-angle:216deg;--target-level:75">
    <svg viewBox="0 0 260 260" aria-hidden="true"><circle cx="130" cy="130" r="109" pathLength="100"/><circle class="target-progress" cx="130" cy="130" r="109" pathLength="100"/><path class="target-marker" d="M130 5v17"/></svg>
    <label><input id="targetInput" type="text" inputmode="decimal" value="45,0" aria-label="Solltemperatur in Grad Celsius" disabled><em>°C</em><small>20 — 60</small></label>
    <button type="button" id="targetDown" aria-label="Sollwert um 0,5 Grad verringern" disabled>−</button><button type="button" id="targetUp" aria-label="Sollwert um 0,5 Grad erhöhen" disabled>+</button>
   </div>
-  <button class="commit-target" id="setpointButton" type="button" disabled>SOLLWERT ÜBERTRAGEN</button>
+  <button class="commit-target" id="setpointButton" type="button" disabled>Sollwert übertragen</button>
  </section>
 
  <section class="process-output" aria-label="Heizleistung und Lüfter">
-  <span>PELTIER · u(t)</span><strong id="powerOutput">—</strong><i><b id="outputFill"></b></i><small id="peltierDetail">P1 / P2 sicher aus</small>
-  <span class="fan-readout">LÜFTER <b id="fanRpm">—</b></span>
+  <span>Peltier · u(t)</span><strong id="powerOutput">—</strong><i><b id="outputFill"></b></i><small id="peltierDetail">P1 / P2 sicher aus</small>
+  <span class="fan-readout">Lüfter <b id="fanRpm">—</b></span>
  </section>
 
  <section class="action-control" id="actionControl" aria-label="Heizprozess steuern">
@@ -149,8 +156,9 @@ body[data-state="AUFHEIZEN"] #startButton,body[data-state="HALTEN"] #startButton
  <section class="safety-lock" id="safetyLock" role="alert" aria-live="assertive"><i></i><span><small>START GESPERRT</small><strong id="safetyTitle">System nicht bereit</strong><b id="safetyReason">Sicherheitsfreigaben werden geprüft</b></span></section>
 
  <section class="timeline-layer" id="timeline" aria-labelledby="timelineTitle">
-  <header><span><small id="timelineTitle">THERMISCHER VERLAUF</small><strong id="timelineNow">LIVE</strong></span><div class="timeline-legend"><i class="actual"></i>IST <i class="target"></i>SOLL <i class="secondary"></i>SENSOR 2 <i class="power"></i>u(t)</div><div class="time-range" role="group" aria-label="Diagrammzeitraum"><button type="button" class="active" data-range="60">1m</button><button type="button" data-range="300">5m</button><button type="button" data-range="900">15m</button></div></header>
+  <header><span><small id="timelineTitle">Thermischer Verlauf</small><strong id="timelineNow">LIVE</strong></span><div class="timeline-legend"><i class="actual"></i>IST <i class="target"></i>SOLL <i class="secondary"></i>SENSOR 2 <i class="power"></i>u(t)</div><div class="time-range" role="group" aria-label="Diagrammzeitraum"><button type="button" class="active" data-range="60">1m</button><button type="button" data-range="300">5m</button><button type="button" data-range="900">15m</button></div></header>
   <canvas id="timelineCanvas" role="img" aria-label="Live-Verlauf von Isttemperatur, Sollwert, Sensor 2 und Heizleistung"></canvas>
+  <span class="power-axis" aria-hidden="true"><b>100%</b><b>0%</b></span>
   <div class="timeline-offline"><strong>SIGNAL EINGEFROREN</strong><span>Letzte Messung bleibt erhalten</span></div>
  </section>
 
@@ -192,7 +200,7 @@ body[data-state="AUFHEIZEN"] #startButton,body[data-state="HALTEN"] #startButton
 <script>(function(){
 "use strict";
 var canvas,gl,program,frame=0,last=0,observer=null;
-var model={state:"AUS",power:0,temperature:22,fan:0,mode:"overview",focus:"system",lowMotion:false,pointerX:0,pointerY:0,visible:true};
+var model={state:"AUS",power:0,temperature:22,fan:0,mode:"overview",focus:"system",explode:0,lowMotion:false,frameInterval:33,pointerX:0,pointerY:0,visible:true};
 var locations={};
 var vertex="attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}";
 var fragment=`precision highp float;
@@ -217,6 +225,10 @@ vec2 map(vec3 p){
  cup=max(cup,-(p.y-(2.57+ex*.68)));
  z=join(z,vec2(cup,1.));
  z=join(z,vec2(torus(q-vec3(0.,1.34,0.),vec2(1.1,.07)),2.));
+ z=join(z,vec2(torus(q-vec3(0.,.48,0.),vec2(1.12,.018)),15.));
+ z=join(z,vec2(torus(q-vec3(0.,-.62,0.),vec2(1.12,.018)),15.));
+ z=join(z,vec2(box(q-vec3(1.13,0.,0.),vec3(.018,1.28,.025)),15.));
+ z=join(z,vec2(box(q-vec3(-1.13,0.,0.),vec3(.018,1.28,.025)),15.));
  vec3 li=p-vec3(0.,.86+ex*.62,0.);
  z=join(z,vec2(cyl(li,.82,.99),3.));
  vec3 plate=p-vec3(0.,-.30-ex*.14,0.);
@@ -238,12 +250,13 @@ vec2 map(vec3 p){
  z=join(z,vec2(box(pcb-vec3(-.18,.10,.0),vec3(.18,.08,.26)),11.));
  z=join(z,vec2(box(pcb-vec3(.12,.07,.30),vec3(.27,.025,.18)),12.));
  z=join(z,vec2(torus(pcb-vec3(-.08,.12,-.32),vec2(.16,.025)),13.));
+ z=join(z,vec2(p.y+2.25,14.));
  return z;
 }
 vec3 normal(vec3 p){vec2 e=vec2(.002,0.);return normalize(vec3(map(p+e.xyy).x-map(p-e.xyy).x,map(p+e.yxy).x-map(p-e.yxy).x,map(p+e.yyx).x-map(p-e.yyx).x));}
 vec3 material(float m,vec3 p,vec3 n){
  vec3 c=vec3(.08,.13,.15);float rough=.7;
- if(m<1.5){c=vec3(.19,.34,.39)+pow(max(n.y,0.),4.)*.16;rough=.28;}
+ if(m<1.5){c=vec3(.24,.43,.48)+pow(max(n.y,0.),4.)*.19;rough=.24;}
  else if(m<2.5){c=vec3(.48,.70,.74);rough=.22;}
  else if(m<3.5){c=mix(vec3(.20,.10,.045),vec3(1.,.39,.09),thermal*.65+clamp((temp-20.)/45.,0.,1.)*.35);rough=.42;}
  else if(m<4.5){c=mix(vec3(.14,.20,.22),vec3(1.,.19,.035),thermal);rough=.28;}
@@ -254,7 +267,9 @@ vec3 material(float m,vec3 p,vec3 n){
  else if(m<9.5){c=state>3.5?vec3(1.,.08,.12):vec3(.12,.85,1.);rough=.18;}
  else if(m<10.5){c=vec3(.035,.27,.20);rough=.64;}
  else if(m<12.5){c=vec3(.035,.42,.52);rough=.21;}
- else{c=state>3.5?vec3(1.,.03,.06):vec3(.12,.8,.9);rough=.16;}
+ else if(m<13.5){c=state>3.5?vec3(1.,.03,.06):vec3(.12,.8,.9);rough=.16;}
+ else if(m<14.5){float grid=step(.975,fract(p.x*2.))+step(.975,fract(p.z*2.));c=vec3(.018,.038,.044)+grid*vec3(.025,.08,.09);rough=.86;}
+ else{c=vec3(.18,.52,.58);rough=.18;}
  if(explode>.2&&focus>1.5){float grid=step(.94,fract((p.x+p.z)*9.));c+=grid*vec3(.04,.24,.25);}
  return c*(.76+.24*(1.-rough));
 }
@@ -266,13 +281,13 @@ void main(){
  vec3 ro=vec3(4.7+explode*1.1,3.2+explode*.55,6.8+explode*1.5);
  ro.xz=rot(yaw)*ro.xz;ro.yz=rot(pitch)*ro.yz;
  vec3 ta=vec3(0.,.25,0.);vec3 ww=normalize(ta-ro),uu=normalize(cross(ww,vec3(0.,1.,0.))),vv=cross(uu,ww);
- vec3 rd=normalize(ww*2.25+uv.x*uu+uv.y*vv);
+ vec3 rd=normalize(ww*2.55+uv.x*uu+uv.y*vv);
  float m;float d=trace(ro,rd,m);vec3 bg=mix(vec3(.006,.018,.025),vec3(.025,.075,.09),max(0.,uv.y*.5+.3));
  float halo=exp(-length(uv-vec2(0.,-.23))*3.4)*thermal;bg+=vec3(.30,.055,.01)*halo;
  if(d>FAR){gl_FragColor=vec4(bg,1.);return;}
  vec3 pos=ro+rd*d,n=normal(pos);vec3 key=normalize(vec3(-.6,.8,.45)),rim=normalize(vec3(.8,.28,-.6));
  float diff=max(dot(n,key),0.),edge=pow(1.-max(dot(-rd,n),0.),3.),spec=pow(max(dot(reflect(-key,n),-rd),0.),24.);
- vec3 c=material(m,pos,n);c*=.34+diff*.96;c+=spec*.38+edge*vec3(.15,.36,.42);
+ vec3 c=material(m,pos,n);float ao=clamp(map(pos+n*.09).x/.09,0.,1.)*.55+clamp(map(pos+n*.22).x/.22,0.,1.)*.45;c*=(.32+diff*.98)*(.68+.32*ao);c+=spec*.38+edge*vec3(.15,.36,.42);
  float heat=max(0.,1.-abs(pos.y+.25)*.65)*thermal;c+=vec3(.55,.085,.01)*heat*.34;
  float red=state>3.5?.55:0.;c+=red*vec3(.65,.015,.02)*edge;
  float fog=1.-exp(-d*d*.009);c=mix(c,bg,fog);
@@ -295,22 +310,23 @@ function initialise(target){
  }catch(error){console.warn("V3 WebGL fallback:",error);gl=null;return false;}
 }
 function resize(){if(!gl||!canvas)return;var rect=canvas.getBoundingClientRect();var embedded=innerWidth<1000;var ratio=Math.min(devicePixelRatio||1,embedded?1:.82);var width=Math.max(1,Math.floor(rect.width*ratio)),height=Math.max(1,Math.floor(rect.height*ratio));if(canvas.width!==width||canvas.height!==height){canvas.width=width;canvas.height=height;gl.viewport(0,0,width,height);}}
-function render(now){frame=requestAnimationFrame(render);if(!gl||!model.visible)return;var cap=model.lowMotion?250:33;if(now-last<cap)return;last=now;resize();var states={AUS:0,BEREIT:1,AUFHEIZEN:2,HALTEN:3,FEHLER:4};var heat=model.state==="AUFHEIZEN"||model.state==="HALTEN"?Math.max(.06,model.power/100):0;gl.useProgram(program);gl.uniform2f(locations.r,canvas.width,canvas.height);gl.uniform1f(locations.t,model.lowMotion?0:now/1000);gl.uniform1f(locations.power,model.power/100);gl.uniform1f(locations.temp,model.temperature);gl.uniform1f(locations.state,states[model.state]||0);gl.uniform1f(locations.explode,model.mode==="engineering"?1:0);gl.uniform1f(locations.thermal,heat);gl.uniform1f(locations.fan,model.lowMotion?0:Math.min(2,model.fan/2400));gl.uniform1f(locations.focus,{system:1,sensors:2,power:3}[model.focus]||1);gl.uniform2f(locations.pointer,model.pointerX,model.pointerY);gl.drawArrays(gl.TRIANGLES,0,3);}
+function render(now){frame=requestAnimationFrame(render);if(!gl||!model.visible)return;var cap=model.lowMotion?250:model.frameInterval;if(now-last<cap)return;last=now;resize();var states={AUS:0,BEREIT:1,AUFHEIZEN:2,HALTEN:3,FEHLER:4},explodeTarget=model.mode==="engineering"?1:0;model.explode=model.lowMotion?explodeTarget:model.explode+(explodeTarget-model.explode)*.075;var heat=model.state==="AUFHEIZEN"||model.state==="HALTEN"?Math.max(.06,model.power/100):0;gl.useProgram(program);gl.uniform2f(locations.r,canvas.width,canvas.height);gl.uniform1f(locations.t,model.lowMotion?0:now/1000);gl.uniform1f(locations.power,model.power/100);gl.uniform1f(locations.temp,model.temperature);gl.uniform1f(locations.state,states[model.state]||0);gl.uniform1f(locations.explode,model.explode);gl.uniform1f(locations.thermal,heat);gl.uniform1f(locations.fan,model.lowMotion?0:Math.min(2,model.fan/2400));gl.uniform1f(locations.focus,{system:1,sensors:2,power:3}[model.focus]||1);gl.uniform2f(locations.pointer,model.pointerX,model.pointerY);gl.drawArrays(gl.TRIANGLES,0,3);}
 function update(status){model.state=status.state||"AUS";model.power=Number(status.power)||0;model.temperature=Number(status.temperature)||22;model.fan=Number(status.fan_rpm)||0;}
 function setMode(mode){model.mode=mode||"overview";}
 function setFocus(focus){model.focus=focus||"system";}
 function setLowMotion(value){model.lowMotion=!!value;}
-window.ProductScene={initialise:initialise,update:update,setMode:setMode,setFocus:setFocus,setLowMotion:setLowMotion,resize:resize};
+function setFrameRate(fps){model.frameInterval=1000/Math.max(1,Number(fps)||30);}
+window.ProductScene={initialise:initialise,update:update,setMode:setMode,setFocus:setFocus,setLowMotion:setLowMotion,setFrameRate:setFrameRate,resize:resize};
 })();
 
 
 (function(){
 "use strict";
-var canvas,ctx,frame=0,last=0,particles=[],status={state:"AUS",power:0,fan_rpm:0},mode="overview",lowMotion=false;
+var canvas,ctx,frame=0,last=0,particles=[],status={state:"AUS",power:0,fan_rpm:0},mode="overview",lowMotion=false,frameInterval=33;
 function initialise(target){canvas=target;if(!canvas)return;ctx=canvas.getContext("2d");if(!ctx)return;for(var i=0;i<34;i++)particles.push(seed(i/34));addEventListener("resize",resize,{passive:true});resize();frame=requestAnimationFrame(draw);}
 function seed(progress){return{x:(Math.random()-.5)*.33,y:progress||Math.random(),phase:Math.random()*6.28,speed:.0012+Math.random()*.0015};}
 function resize(){if(!ctx)return;var rect=canvas.getBoundingClientRect(),ratio=Math.min(devicePixelRatio||1,1.25),w=Math.max(1,Math.floor(rect.width*ratio)),h=Math.max(1,Math.floor(rect.height*ratio));if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;ctx.setTransform(ratio,0,0,ratio,0,0);}}
-function draw(now){frame=requestAnimationFrame(draw);if(!ctx||now-last<(lowMotion?250:33))return;last=now;resize();var rect=canvas.getBoundingClientRect(),w=rect.width,h=rect.height,active=status.state==="AUFHEIZEN"||status.state==="HALTEN",intensity=active?Math.max(.07,Number(status.power||0)/100):0;ctx.clearRect(0,0,w,h);if(!intensity)return;
+function draw(now){frame=requestAnimationFrame(draw);if(!ctx||now-last<(lowMotion?250:frameInterval))return;last=now;resize();var rect=canvas.getBoundingClientRect(),w=rect.width,h=rect.height,active=status.state==="AUFHEIZEN"||status.state==="HALTEN",intensity=active?Math.max(.07,Number(status.power||0)/100):0;ctx.clearRect(0,0,w,h);if(!intensity)return;
  var cx=w*.50,base=h*.81,top=h*.28;
  var field=ctx.createRadialGradient(cx,base,0,cx,base,h*.48);field.addColorStop(0,"rgba(255,102,35,"+(.22*intensity)+")");field.addColorStop(.32,"rgba(255,137,55,"+(.10*intensity)+")");field.addColorStop(1,"rgba(255,126,43,0)");ctx.fillStyle=field;ctx.fillRect(0,0,w,h);
  ctx.save();ctx.globalCompositeOperation="lighter";ctx.lineWidth=.7;
@@ -321,7 +337,8 @@ function draw(now){frame=requestAnimationFrame(draw);if(!ctx||now-last<(lowMotio
 function update(next){status=next||status;}
 function setMode(next){mode=next||"overview";}
 function setLowMotion(value){lowMotion=!!value;}
-window.ThermalOverlay={initialise:initialise,update:update,setMode:setMode,setLowMotion:setLowMotion};
+function setFrameRate(fps){frameInterval=1000/Math.max(1,Number(fps)||30);}
+window.ThermalOverlay={initialise:initialise,update:update,setMode:setMode,setLowMotion:setLowMotion,setFrameRate:setFrameRate};
 })();
 
 
@@ -340,7 +357,7 @@ function apply(name){scenario=name;automatic=false;nominal();if(name==="ready")O
  else if(name==="sensor-error")Object.assign(demo,{state:"FEHLER",fault:"TEMPERATURSENSOR",fault_description:"Temperatursignal fehlt oder ist unplausibel",temperature:NaN,temperature1:NaN,sensor_ok:false,temp1_ok:false,power:0,start_allowed:false,start_block_reason:"Temperatursensor prüfen"});
  else if(name==="fan-error")Object.assign(demo,{state:"FEHLER",fault:"LUEFTER",fault_description:"Kein plausibles Tachosignal bei aktiver Heizleistung",power:0,fan_rpm:0,fan_percent:0,start_allowed:false,start_block_reason:"Lüfter und Tachosignal prüfen"});
  else if(name==="power-error")Object.assign(demo,{state:"FEHLER",fault:"VERSORGUNG",fault_description:"12-V-Leistungsversorgung nicht freigegeben",power:0,power_good:false,start_allowed:false,start_block_reason:"Leistungsversorgung prüfen"});
- else if(name==="demo30"){Object.assign(demo,{state:"AUFHEIZEN",temperature:22,power:100,setpoint:50,start_allowed:false,start_block_reason:"Heizsimulation aktiv"});automatic=true;simMinutes=0;window.V3UI.history.splice(0);prefillThirtyMinutes();}
+ else if(name==="demo30"){Object.assign(demo,{state:"HALTEN",temperature:49.5,power:19,setpoint:50,start_allowed:false,start_block_reason:"Halteregelung aktiv"});automatic=true;simMinutes=30;window.V3UI.history.splice(0);prefillThirtyMinutes();}
  derived();document.querySelectorAll("[data-scenario]").forEach(function(button){button.classList.toggle("active",button.dataset.scenario===name);});window.V3UI.acceptStatus(demo,name!=="offline");}
 function prefill(){if(window.V3UI.history.length)return;var now=Date.now();for(var seconds=300;seconds>=0;seconds-=2){var progress=(300-seconds)/300,temperature=23.2+9.2*progress+Math.sin(progress*12)*.06,power=88-20*progress;window.V3UI.history.push({time:now-seconds*1000,temperature:temperature,temperature2:temperature-.6,target:45,power:power,valid:true,valid2:true});}window.V3UI.scheduleChart();}
 function prefillThirtyMinutes(){var now=Date.now();for(var seconds=1800;seconds>=0;seconds-=5){var minute=(1800-seconds)/60,temperature=22+28.15*(1-Math.exp(-minute/7.5)),error=50-temperature,power=minute<2?100:Math.max(19,Math.min(100,error*4.8+16));window.V3UI.history.push({time:now-seconds*1000,temperature:temperature,temperature2:temperature-.65+Math.sin(minute)*.05,target:50,power:power,valid:true,valid2:true});}window.V3UI.runtime.range=900;window.V3UI.scheduleChart();}
@@ -390,7 +407,7 @@ function setFocus(focus){runtime.focus=focus;byId("engineeringLayer").dataset.fo
 function togglePi(open){var panel=byId("piDetails"),show=open===undefined?!panel.classList.contains("open"):open;panel.classList.toggle("open",show);panel.setAttribute("aria-hidden",String(!show));byId("piNode").setAttribute("aria-expanded",String(show));if(show)byId("piClose").focus();}
 function togglePresentation(){var active=!document.body.classList.contains("presentation");document.body.classList.toggle("presentation",active);byId("presentationButton").setAttribute("aria-pressed",String(active));if(active&&document.documentElement.requestFullscreen)document.documentElement.requestFullscreen().catch(function(){});if(!active&&document.fullscreenElement)document.exitFullscreen().catch(function(){});scheduleChart();if(window.ProductScene)window.ProductScene.resize();}
 function interactions(){byId("startButton").addEventListener("click",function(){command("start");});byId("stopButton").addEventListener("click",function(){command("stop");});byId("setpointButton").addEventListener("click",setpoint);byId("targetDown").addEventListener("click",function(){adjustTarget(-.5);});byId("targetUp").addEventListener("click",function(){adjustTarget(.5);});byId("targetInput").addEventListener("change",function(){adjustTarget(0);});byId("targetInput").addEventListener("keydown",function(event){if(event.key==="Enter")setpoint();});all("[data-mode]").forEach(function(button){button.addEventListener("click",function(){setMode(button.dataset.mode);});});all("[data-focus]").forEach(function(button){button.addEventListener("click",function(){setFocus(button.dataset.focus);});});all("[data-range]").forEach(function(button){button.addEventListener("click",function(){runtime.range=number(button.dataset.range,60);all("[data-range]").forEach(function(item){item.classList.toggle("active",item===button);});scheduleChart();});});byId("piNode").addEventListener("click",function(){togglePi();});byId("piClose").addEventListener("click",function(){togglePi(false);});byId("presentationButton").addEventListener("click",togglePresentation);addEventListener("resize",scheduleChart,{passive:true});addEventListener("keydown",function(event){if(event.key==="Escape")togglePi(false);});document.addEventListener("fullscreenchange",function(){if(!document.fullscreenElement){document.body.classList.remove("presentation");byId("presentationButton").setAttribute("aria-pressed","false");}});}
-function boot(){interactions();document.body.classList.toggle("low-motion",runtime.lowMotion);if(window.ProductScene){window.ProductScene.initialise(byId("productCanvas"));window.ProductScene.setLowMotion(runtime.lowMotion);}if(window.ThermalOverlay){window.ThermalOverlay.initialise(byId("thermalCanvas"));window.ThermalOverlay.setLowMotion(runtime.lowMotion);}var query=new URLSearchParams(location.search),skip=runtime.lowMotion||query.has("review")||query.has("scenario")||query.has("presentation")||query.has("engineering");if(query.has("presentation"))document.body.classList.add("presentation");if(query.has("engineering"))setMode("engineering");if(skip){byId("intro").classList.add("done");byId("intro").hidden=true;}else setTimeout(function(){byId("intro").classList.add("done");byId("intro").hidden=true;},1450);if(PREVIEW&&window.PreviewDriver){document.body.classList.add("preview-mode");window.PreviewDriver.start();}else{poll();setInterval(poll,SAMPLE_INTERVAL);}}
+function boot(){interactions();document.body.classList.toggle("low-motion",runtime.lowMotion);var frameRate=PREVIEW?60:30;if(window.ProductScene){window.ProductScene.initialise(byId("productCanvas"));window.ProductScene.setFrameRate(frameRate);window.ProductScene.setLowMotion(runtime.lowMotion);}if(window.ThermalOverlay){window.ThermalOverlay.initialise(byId("thermalCanvas"));window.ThermalOverlay.setFrameRate(frameRate);window.ThermalOverlay.setLowMotion(runtime.lowMotion);}var query=new URLSearchParams(location.search),skip=runtime.lowMotion||query.has("review")||query.has("scenario")||query.has("presentation")||query.has("engineering")||query.has("thermal");if(query.has("presentation"))document.body.classList.add("presentation");if(query.has("engineering"))setMode("engineering");else if(query.has("thermal"))setMode("thermal");if(skip)byId("intro").remove();else setTimeout(function(){var intro=byId("intro");if(intro)intro.remove();},1450);if(PREVIEW&&window.PreviewDriver){document.body.classList.add("preview-mode");window.PreviewDriver.start();}else{poll();setInterval(poll,SAMPLE_INTERVAL);}}
 window.V3UI={acceptStatus:function(status,online){runtime.lastUpdate=Date.now();setOnline(online!==false,online===false?"Vorschau: Signal unterbrochen":"");render(status);},setOnline:setOnline,history:history,runtime:runtime,render:render,command:command,normalize:normalize,scheduleChart:scheduleChart};
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot,{once:true});else boot();
 })();

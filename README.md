@@ -121,7 +121,7 @@ python tools/build_ui.py
 python tools/build_ui.py --check
 ```
 
-`powershell -ExecutionPolicy Bypass -File tools/capture_ui_review.ps1 -Round manual` rendert die sieben Referenz-Viewports automatisiert mit lokal vorhandenem Chrome oder Edge nach `build/ui-review/manual/`. Konzeptentscheidung und visuelle Reviews sind unter `docs/` dokumentiert.
+`powershell -ExecutionPolicy Bypass -File tools/capture_ui_review.ps1 -Round manual` rendert die sieben Referenz-Viewports automatisiert mit exakt gesetzten Chrome-/Edge-DevTools-Gerätemetriken nach `build/ui-review/manual/`. Konzeptentscheidung, drei visuelle Reviews, Persona-/Anti-Card-Audit und Performancewerte sind unter `docs/` dokumentiert.
 
 ## Softwarearchitektur
 
