@@ -68,6 +68,9 @@ with tempfile.TemporaryDirectory(prefix="becherhalter-callout-test-") as profile
         keyboard = evaluate("""(()=>{const part=document.querySelector('[data-focus="peltier1"]');part.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',bubbles:true}));const entry=document.querySelector('[data-callout-entry="peltier1"]');return{active:entry.classList.contains('active'),expanded:entry.querySelector('.callout-row').getAttribute('aria-expanded'),label:entry.querySelector('.callout-status').getAttribute('aria-label')}})()""")
         assert keyboard["active"] and keyboard["expanded"] == "true" and keyboard["label"], keyboard
 
+        views = evaluate("""(()=>{const build=document.querySelector('[data-product-view="build"]');build.click();return{view:document.body.dataset.productView,pressed:build.getAttribute('aria-pressed'),exterior:getComputedStyle(document.querySelector('.variant-a')).display,cutaway:getComputedStyle(document.querySelector('.variant-b')).display}})()""")
+        assert views == {"view": "build", "pressed": "true", "exterior": "none", "cutaway": "block"}, views
+
         cdp.call("Emulation.setDeviceMetricsOverride", {"width": 390, "height": 844, "deviceScaleFactor": 1, "mobile": True, "screenWidth": 390, "screenHeight": 844})
         mobile_lines = evaluate("window.V4Twin.drawLines();document.querySelectorAll('[data-callout-path]').length")
         assert mobile_lines == 0, mobile_lines
@@ -78,4 +81,4 @@ with tempfile.TemporaryDirectory(prefix="becherhalter-callout-test-") as profile
         except subprocess.TimeoutExpired:
             process.terminate()
 
-print("callout configurator browser test passed: focus line, add, details, remove, keyboard, mobile")
+print("callout configurator browser test passed: view switch, focus line, add, details, remove, keyboard, mobile")

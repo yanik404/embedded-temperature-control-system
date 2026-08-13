@@ -1,12 +1,12 @@
 {
   "external_library_bytes": 0,
   "history_max_seconds": 1800,
-  "preview_bytes": 103116,
+  "preview_bytes": 101245,
   "product_rendering": "inline_svg",
-  "production_bytes": 89291,
-  "production_css_bytes": 26121,
-  "production_gzip_bytes_theoretical": 24521,
-  "production_javascript_bytes": 34502,
+  "production_bytes": 87254,
+  "production_css_bytes": 28272,
+  "production_gzip_bytes_theoretical": 24253,
+  "production_javascript_bytes": 34916,
   "runtime_http_requests_for_assets": 0,
   "webgl_draw_calls_per_frame": 0
 }

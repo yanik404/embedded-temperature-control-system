@@ -13,11 +13,11 @@ for group in ("TEMPERATUR","HEIZUNG","BEDIENUNG","SENSOREN","ELEKTRONIK"):
     assert group in twin
 for label in ("Temperatursensor 1","Temperatursensor 2","Peltier links","Peltier rechts","Lüfter","OLED","Taster","RGB-Ring","Lichtsensor","Bechererkennung","PCB / Pico W","Strommessung"):
     assert label in twin
-for behavior in ("toggleConnection","setConnected","setPartState","drawLines","visibleLineIds","renderDetail","lineMode"):
+for behavior in ("toggleConnection","setConnected","setPartState","drawLines","visibleLineIds","renderDetail","setProductView"):
     assert behavior in twin
 assert 'live.tone==="configured"' in twin and 'tone:"unmonitored"' in twin
-for mode in ('mode==="all"','mode==="group"','mode==="focus"'):
-    assert mode in twin
+assert 'return id?[id]:[]' in twin
+assert 'productView=view==="build"?"build":"exterior"' in twin
 assert 'class="component-control"' not in preview and 'class="component-hotspots"' not in preview
 assert 'class="callout-lines"' in preview and "data-callout-entry" in twin
 assert "callout-detail" in preview and "callout-remove" in preview

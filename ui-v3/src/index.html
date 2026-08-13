@@ -7,7 +7,7 @@
 <title>Becherhalter · Interaktiver Produktaufbau</title>
 <style>/*__CSS__*/</style>
 </head>
-<body data-state="AUS" data-live="false">
+<body data-state="AUS" data-live="false" data-product-view="exterior">
 <a class="skip-link" href="#aufbau">Zum Becherhalter</a>
 <header class="site-header">
  <a class="brand" href="#aufbau"><svg viewBox="0 0 32 46" aria-hidden="true"><path d="M11 5a5 5 0 0 1 10 0v22a10 10 0 1 1-10 0V5Z"/><path d="M16 13v19"/><circle cx="16" cy="34" r="2.5"/></svg><strong>BECHERHALTER</strong></a>
@@ -17,9 +17,10 @@
 
 <main>
  <section class="page-section product-section" id="aufbau" aria-labelledby="aufbauTitle">
-  <header class="section-heading"><span>01</span><div><p>AUFBAU</p><h1 id="aufbauTitle">Baue und prüfe den Becherhalter.</h1></div></header>
+  <header class="section-heading"><span>01</span><div><p>AUFBAU</p><h1 id="aufbauTitle">Außen ruhig. Innen verständlich.</h1></div></header>
   <div class="product-layout">
    <div class="product-stage" id="visualStage">
+    <div class="product-view-switch" role="group" aria-label="Produktansicht"><button type="button" data-product-view="exterior" aria-pressed="true">AUSSENANSICHT</button><i></i><button type="button" data-product-view="build" aria-pressed="false">AUFBAU</button></div>
     <!--__PRODUCT_SVG__-->
    </div>
    <svg class="callout-lines" id="calloutLines" aria-hidden="true"><g id="calloutPaths"></g></svg>
@@ -33,12 +34,15 @@
  <section class="page-section loop-section" id="regelkreis" aria-labelledby="loopTitle">
   <header class="section-heading"><span>02</span><div><p>REGELKREIS</p><h2 id="loopTitle">So hält das System die Temperatur.</h2><small>Soll und Ist werden verglichen. Der PI-Regler passt die Heizleistung automatisch an.</small></div></header>
   <div class="simple-loop" id="simpleLoop">
-   <div class="loop-step setpoint-step"><em id="loopSetpoint">—</em><strong>SOLL</strong><small>Sollwert · w(t)</small></div><i class="flow-arrow"></i>
-   <div class="loop-step compare-step"><span class="compare-symbol" aria-hidden="true">Σ</span><em id="loopDeviation">—</em><strong>VERGLEICH</strong><small>Fehler · e(t)</small></div><i class="flow-arrow"></i>
-   <div class="loop-step controller-step"><span class="pi-symbol" aria-hidden="true">PI</span><strong>REGLER</strong><small id="piNodeState">inaktiv</small></div><i class="flow-arrow"></i>
-   <div class="loop-step heat-step"><svg class="loop-heater" viewBox="0 0 64 50" aria-hidden="true"><path d="M3 10h13v31H3zm45 0h13v31H48z"/><path d="m18 14 7-5v33l-7-5zm28 0-7-5v33l7-5z"/></svg><em id="loopOutput">—</em><strong>HEIZUNG</strong><small>Peltier · u(t)</small></div><i class="flow-arrow"></i>
-   <div class="loop-step plant-step"><svg class="loop-product" viewBox="0 0 92 55" aria-hidden="true"><path class="loop-cup" d="M28 5h36l-4 37c-1 8-7 11-14 11s-13-3-14-11Z"/><path class="loop-rim" d="M27 5c0-5 38-5 38 0s-38 5-38 0"/></svg><strong>BECHER</strong><small>Regelstrecke · G(s)</small><i id="plantState">wird erwärmt</i></div><i class="flow-arrow"></i>
-   <div class="loop-step sensor-step"><svg class="loop-sensor" viewBox="0 0 34 45" aria-hidden="true"><path d="M6 18V8a11 11 0 0 1 22 0v10Z"/><path d="M10 18v26m7-26v26m7-26v26"/></svg><em id="loopSensor">—</em><strong>SENSOR · IST</strong><small>Messwert · y(t)</small></div>
+   <div class="loop-step setpoint-step"><em id="loopSetpoint">—</em><strong>SOLL</strong><small>Sollwert · w(t)</small></div>
+   <div class="loop-connector compare-connector"><i class="flow-arrow"></i><span><b aria-hidden="true">Σ</b><em id="loopDeviation">—</em><small>e(t)</small></span></div>
+   <div class="loop-step controller-step"><span class="pi-symbol" aria-hidden="true">PI</span><strong>REGLER</strong><small id="piNodeState">inaktiv</small></div>
+   <div class="loop-connector"><i class="flow-arrow"></i></div>
+   <div class="loop-step heat-step"><svg class="loop-heater" viewBox="0 0 64 50" aria-hidden="true"><path d="M3 10h13v31H3zm45 0h13v31H48z"/><path d="m18 14 7-5v33l-7-5zm28 0-7-5v33l7-5z"/></svg><em id="loopOutput">—</em><strong>HEIZEN</strong><small>Peltier · u(t)</small></div>
+   <div class="loop-connector"><i class="flow-arrow"></i></div>
+   <div class="loop-step plant-step"><svg class="loop-product" viewBox="0 0 92 55" aria-hidden="true"><path class="loop-cup" d="M28 5h36l-4 37c-1 8-7 11-14 11s-13-3-14-11Z"/><path class="loop-rim" d="M27 5c0-5 38-5 38 0s-38 5-38 0"/></svg><strong>BECHER</strong><small>Regelstrecke · G(s)</small><i id="plantState">wird erwärmt</i></div>
+   <div class="loop-connector sensor-connector"><i class="flow-arrow"></i><svg class="loop-sensor" viewBox="0 0 34 45" aria-hidden="true"><path d="M6 18V8a11 11 0 0 1 22 0v10Z"/><path d="M10 18v26m7-26v26m7-26v26"/></svg></div>
+   <div class="loop-step sensor-step"><em id="loopSensor">—</em><strong>IST</strong><small>Messwert · y(t)</small></div>
    <div class="feedback-route"><span>RÜCKFÜHRUNG · y(t)</span></div>
   </div>
  </section>
