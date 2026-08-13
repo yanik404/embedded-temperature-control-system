@@ -114,12 +114,14 @@ configurator discoverability, lens separation, card count, monospaced text, conn
 touch targets, focus clarity and preview chrome. The product now occupies the visual centre while
 control, chart, safety detail and Engineering remain outside the first screen.
 
-### Round 2 — Control loop (15 findings resolved)
+### Round 2 — Control loop (20 findings resolved)
 
 The `v4-refine-control` capture was checked for setpoint, comparator, error, PI, output, explicit
 Peltier actuator, product-as-plant, TMP36 sensor, feedback return, arrow direction, value legibility,
-state consistency, control separation, safety authority and ambient animation. The product remains
-the plant and `u(t)` now names the Peltier function directly.
+state consistency, control separation, safety authority and ambient animation. The review also
+verified orthogonal routing without Bezier curves, a separate vertical mobile route, clean
+actuator/plant/sensor anchors, suppression of duplicate primary values and unobstructed story text.
+The product remains the plant and `u(t)` names the Peltier function directly.
 
 ### Round 3 — Engineering and full scroll (15 findings resolved)
 
@@ -178,3 +180,29 @@ Configure, Loop, Live Control, Analysis, Safety and Engineering, and no horizont
 44. Added a realistic regression contract for a missing `temp2_ok` field.
 45. Re-rendered Product at all seven required exact CSS viewports.
 46. Re-rendered Control, Analysis, Safety and Engineering as deterministic review states.
+
+## Final mechanical and control-loop refinement
+
+The final refinement replaced the former laboratory-tube silhouette with a compact mechanical stack:
+slightly tapered drinking glass, liquid and defined wall/bottom, two side-mounted TMP36 packages,
+contact plate, two adjacent Peltier modules, finned aluminium sink, front fan and attached electronics.
+The PCB now carries recognizable Pico W, TLA2024, power-stage and connector volumes; display, buttons,
+status light and cup detection occupy attached interface points rather than floating positions.
+
+All 19 component records now contain a world-space anchor and exploded-view vector. The camera exports
+the matching projection, and the Digital Twin updates hotspot and signal locations from it. PRODUCT
+keeps five quiet entry points, mobile keeps the primary sensor, and ENGINEERING exposes a curated set
+of non-overlapping physical anchors while the configuration drawer still contains the complete system.
+
+The control-loop SVG was rebuilt from orthogonal segments. Desktop and mobile use distinct route
+geometry; neither contains Bézier paths. The actual product is the plant, the output path terminates at
+the Peltier stack and the feedback path begins at the TMP36. Duplicate hero readings and scroll copy
+are hidden while CONTROL is active so `w(t)`, `e(t)`, PI, `u(t)`, `G(s)` and `y(t)` remain legible.
+
+The visible UI is released only after initial preview data has populated the DOM. WebGL compilation is
+deferred behind the complete SVG product fallback and swaps without a cross-fade after the first real
+frame, eliminating empty values, incorrect scale and double-rendered geometry. Time-addressable captures
+were taken at first ready frame, +1 s and +5 s. The final automated matrix covered Product, X-ray,
+Signals, Control, Live Control, Analysis, Safety and Engineering at 1920×1080, 1440×900, 1366×768,
+1024×768, 768×1024, 430×932 and 390×844 with no reported viewport overflow or remaining visible
+layout collision after the final hotspot curation.
