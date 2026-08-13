@@ -91,32 +91,30 @@ UP/DOWN ändern den Sollwert in 0,5-°C-Schritten. OK startet oder stoppt; im Fe
 
 Die aktuelle Oberfläche folgt dem Prinzip **Simple Digital Twin** und erklärt das System in dieser Reihenfolge:
 
-1. **Aufbau:** kompletter Becherhalter mit Glas, Sensoren, Heizplatte, zwei Peltiers, Kühlkörper, Lüfter, PCB/Pico W, Display und Tastern. Wenige Hotspots führen zu den Zuständen `GEPLANT`, `ANGESCHLOSSEN` und `LIVE`; weitere Komponenten und der logisch explodierte Aufbau sind optional einblendbar.
-2. **Regelkreis:** einfache, geschlossene Darstellung von Solltemperatur über Vergleich und PI-Regler zu Peltier, realem Becher und Sensor mit Rückführung.
+1. **Aufbau:** hochwertige, sofort sichtbare 2.5D-SVG-Illustration des vollständigen Geräts. Der Becher sitzt in der Halterung; zwei dünne Peltiermodule und metallische Kontaktbacken liegen seitlich am Becher. TO-92-Sensoren, Bodenplatte, Lamellenkühlkörper, Sechsblatt-Lüfter, detaillierte PCB mit Pico W/TLA2024, OLED, vier Taster, RGB-Ring und 12-V-Anschluss sind mechanisch zusammenhängend dargestellt. Die Illustration benötigt weder WebGL noch JavaScript, um sichtbar zu sein.
+2. **Regelkreis:** dunkle, linienbasierte Darstellung von Solltemperatur über Vergleich und PI-Regler zu Heizleistung, seitlichen Peltiers, Becher und Sensor mit einer einzigen geraden Rückführung.
 3. **Live:** Isttemperatur, Solltemperatur, Heizleistung, Lüfter, Zustand und der Verlauf von IST, SOLL und HEIZLEISTUNG. Weitere Messreihen sind zunächst eingeklappt.
 4. **Technik:** optionale Details zu GPIO, Messwerten, PI-Parametern, WLAN, IP und Firmwarestatus.
 
-Live-Daten sind ohne Anmeldung lesbar. START, STOP und Sollwertänderungen sind dagegen zunächst gesperrt. Über **Mit PIN freigeben** wird die Präsentations-PIN `1234` an `POST /api/unlock` gesendet und ausschließlich auf dem Pico geprüft. Bei Erfolg erzeugt der Pico ein zufälliges, flüchtiges Token mit fünf Minuten Gültigkeit. Jeder Schreibbefehl muss dieses Token mitsenden; danach gelten unverändert sämtliche Sensor-, Becher-, Versorgungs-, Lüfter-, Strom- und Temperaturfreigaben der Firmware. Die PIN ist eine lokale Bedienfreigabe im vertrauenswürdigen Präsentationsnetz, keine verschlüsselte Benutzerverwaltung.
+Live-Daten sind ohne Anmeldung lesbar. START und Sollwertänderungen sind zunächst gesperrt. Über **Mit PIN freigeben** wird die Präsentations-PIN `1234` an `POST /api/unlock` gesendet und ausschließlich auf dem Pico geprüft. Bei Erfolg erzeugt der Pico ein zufälliges, flüchtiges Token mit fünf Minuten Gültigkeit. START und Sollwert müssen dieses Token mitsenden; danach gelten unverändert sämtliche Sensor-, Becher-, Versorgungs-, Lüfter-, Strom- und Temperaturfreigaben der Firmware. **STOPP ist aus Sicherheitsgründen jederzeit ohne Token erlaubt**, damit eine abgelaufene Sitzung niemals eine sichere Abschaltung verhindert. Die PIN ist eine lokale Bedienfreigabe im vertrauenswürdigen Präsentationsnetz, keine verschlüsselte Benutzerverwaltung.
 
-Der Pico W liefert die responsive Single-Page-Oberfläche direkt aus dem Flash unter `http://<PICO-IP>`. Der bestehende WebGL-Raymarcher zeichnet den mechanischen Aufbau; ohne WebGL erscheint sofort dieselbe Anordnung als SVG. Hotspots werden aus Modellkoordinaten projiziert und bleiben dadurch auch beim logisch explodierten Aufbau am Bauteil. Das Live-Diagramm aktualisiert sich alle 500 ms und hält bis zu 30 Minuten Verlauf ausschließlich im Browser. Die Produktion benötigt keine CDN-, Font- oder sonstigen Asset-Requests.
+Der Pico W liefert die responsive Single-Page-Oberfläche direkt aus dem Flash unter `http://<PICO-IP>`. Normales Scrollen verbindet die vier Bereiche; es gibt kein Scroll-Jacking, keine Kamerafahrt und keinen X-Ray-/Engineering-Modus. Das Live-Diagramm aktualisiert sich alle 500 ms und hält bis zu 30 Minuten Verlauf ausschließlich im Browser. Die Produktion benötigt keine CDN-, Font- oder sonstigen Asset-Requests.
 
 Statusfarben bleiben bewusst sparsam: Orange zeigt Heizenergie, Grün einen bestätigten sicheren Zustand, Rot einen echten Fehler, Blau Information und Grau einen unbekannten oder nicht angeschlossenen Zustand.
 
 ### Lokale Designvorschau
 
-`preview.html` direkt im Browser öffnen, um dieselbe Oberfläche ohne Pico und WLAN mit animierten Demo-Daten anzusehen. Der Konfigurator kann Bauteile sichtbar an ihre reale Modellposition einsetzen oder wieder entfernen. Die simulierte PIN ist ebenfalls `1234`; START, STOP und Sollwert verändern ausschließlich den lokalen Demo-Zustand und senden niemals Hardware- oder API-Befehle. Die vorhandenen Profile und Fehlerszenarien prüfen vollständige, minimale und teilweise bestückte Systeme sowie den Aufheiz-/Halteverlauf.
+`preview.html` direkt im Browser öffnen, um dieselbe Oberfläche ohne Pico und WLAN mit animierten Demo-Daten anzusehen. Fehlende Bauteile erscheinen direkt im Produkt als schwache gestrichelte Einbaukontur mit einem zugänglichen `+`. Ein Klick setzt das konkrete SVG-Bauteil in 480 ms sichtbar ein und ändert den Zustand auf `ANGESCHLOSSEN`; ein weiterer Klick entfernt es wieder. Es gibt keine zusätzliche Konfiguratorseite. Die simulierte PIN ist ebenfalls `1234`; START, STOP und Sollwert verändern ausschließlich den lokalen Demo-Zustand und senden niemals Hardware- oder API-Befehle.
 
 Die bewährte Render-, API- und Chart-Basis liegt unter `ui-v3/src/`; die V4-Digital-Twin-Schicht liegt getrennt unter `ui-v4/src/`. `ui/src/` bleibt als jederzeit wiederherstellbare Observatory-V2-Basis im Repository:
 
 - `index.html` – semantische Oberfläche und SVG-Systemdarstellungen
 - `experience.css` – vierstufige Simple-Digital-Twin-Komposition und responsive Layouts
-- `product-scene.js` – eigener 3D-SDF/WebGL-Renderer mit einem Draw Call
-- `thermal-overlay.js` – dezente Wärme-, Partikel- und Luftstromebene
 - `experience.js` – Read-only-Live-API, Token-Bedienung, Chart und technische Details
 - `preview.js` – ausschließlich lokale Simulation
 - `ui-v4/src/component-model.js` – vollständiger Hardwarekatalog und ehrliche Live-Discovery-Abbildung
-- `ui-v4/src/digital-twin.js` – Hotspots, einfacher Komponentenfokus und Preview-Konfigurator
-- `ui-v4/src/digital-twin.css` – ergänzende Hotspot-Zustände und Einsetzanimation
+- `ui-v4/src/digital-twin.js` – direkte SVG-Komponenteninteraktion, ehrliche Live-Zustände und Preview-Konfigurator
+- `ui-v4/src/digital-twin.css` – SVG-Komponentenstatus und Fokusdarstellung
 
 Die ausführbaren Vergleiche unter `ui-v3/prototypes/` enthalten einen echten Three.js-Prototyp, einen Custom-WebGL-Prototyp und drei funktionierende Sollwert-Bedienkonzepte. V3-Technologieentscheidung und V4-Digital-Twin-Architektur stehen in `docs/ui-v3-architecture.md` und `docs/ui-v4-architecture.md`.
 
@@ -127,7 +125,7 @@ python tools/build_ui.py
 python tools/build_ui.py --check
 ```
 
-`powershell -ExecutionPolicy Bypass -File tools/capture_ui_review.ps1 -Round manual` rendert die sieben Referenz-Viewports automatisiert mit exakt gesetzten Chrome-/Edge-DevTools-Gerätemetriken nach `build/ui-review/manual/`. `python tools/audit_ui_layout.py` prüft AUFBAU, REGELKREIS und LIVE bei denselben sieben Viewports auf sichtbare Kollisionen und horizontalen Overflow. Die drei Reduktions- und Responsive-Reviews stehen in `docs/simple-digital-twin-review.md`.
+`powershell -ExecutionPolicy Bypass -File tools/capture_ui_review.ps1 -Round manual` rendert die sieben Referenz-Viewports automatisiert mit exakt gesetzten Chrome-/Edge-DevTools-Gerätemetriken nach `build/ui-review/manual/`. `python tools/audit_ui_layout.py` prüft AUFBAU, REGELKREIS und LIVE bei denselben sieben Viewports auf sichtbare Kollisionen und horizontalen Overflow. Der SVG-Qualitätslauf mit drei Screenshot-Runden und über 30 konkreten Verbesserungen ist in `docs/product-explainer-review.md` dokumentiert.
 
 ## Softwarearchitektur
 
