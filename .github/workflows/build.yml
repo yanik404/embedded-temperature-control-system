@@ -33,7 +33,7 @@ jobs:
       - name: Test large HTTP response chunking
         run: python tests/test_http_large_response.py
       - name: Check embedded dashboard asset
-        run: python tests/test_dashboard_static.py && python tests/test_v3_visual_contract.py
+        run: python tests/test_dashboard_static.py && python tests/test_v3_visual_contract.py && python tests/test_v4_digital_twin.py
       - name: Upload UF2
         uses: actions/upload-artifact@v4
         with:

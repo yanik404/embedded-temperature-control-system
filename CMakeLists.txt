@@ -16,6 +16,9 @@ set(DASHBOARD_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/ui-v3/src/product-scene.js
     ${CMAKE_CURRENT_LIST_DIR}/ui-v3/src/thermal-overlay.js
     ${CMAKE_CURRENT_LIST_DIR}/ui-v3/src/preview.js
+    ${CMAKE_CURRENT_LIST_DIR}/ui-v4/src/component-model.js
+    ${CMAKE_CURRENT_LIST_DIR}/ui-v4/src/digital-twin.js
+    ${CMAKE_CURRENT_LIST_DIR}/ui-v4/src/digital-twin.css
     ${CMAKE_CURRENT_LIST_DIR}/tools/build_ui.py
 )
 

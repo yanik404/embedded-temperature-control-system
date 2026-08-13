@@ -46,6 +46,8 @@ for element_id in (
     "experience", "productCanvas", "thermalCanvas", "actualTemperature",
     "targetOrbit", "safetyLock", "spatialLoop", "timelineCanvas",
     "engineeringLayer", "piDetails", "presentationButton", "actionControl",
+    "visualStage", "twinHotspots", "componentLens", "configurationDrawer",
+    "guidedJourney", "storyTrack",
 ):
     assert element_id in production_ids, f"missing interface element: {element_id}"
 

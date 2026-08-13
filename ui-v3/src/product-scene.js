@@ -1,12 +1,12 @@
 (function(){
 "use strict";
 var canvas,gl,program,frame=0,last=0,observer=null;
-var model={state:"AUS",power:0,temperature:22,fan:0,mode:"overview",focus:"system",explode:0,lowMotion:false,frameInterval:33,pointerX:0,pointerY:0,visible:true};
+var model={state:"AUS",power:0,temperature:22,fan:0,mode:"product",lens:"product",focus:"system",explode:0,lowMotion:false,frameInterval:33,pointerX:0,pointerY:0,visible:true};
 var locations={};
 var vertex="attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}";
 var fragment=`precision highp float;
 uniform vec2 r;
-uniform float t,power,temp,state,explode,thermal,fan,focus;
+uniform float t,power,temp,state,explode,thermal,fan,focus,viewMode;
 uniform vec2 pointer;
 #define MAX_STEPS 88
 #define FAR 18.0
@@ -24,14 +24,14 @@ vec2 map(vec3 p){
  float inner=cyl(q-vec3(0.,.14,0.),1.3,1.02);
  float cup=max(outer,-inner);
  cup=max(cup,-(p.y-(2.57+ex*.68)));
- z=join(z,vec2(cup,1.));
+ if(viewMode<3.5||viewMode>4.5)z=join(z,vec2(cup,1.));
  z=join(z,vec2(torus(q-vec3(0.,1.34,0.),vec2(1.1,.07)),2.));
  z=join(z,vec2(torus(q-vec3(0.,.48,0.),vec2(1.12,.018)),15.));
  z=join(z,vec2(torus(q-vec3(0.,-.62,0.),vec2(1.12,.018)),15.));
  z=join(z,vec2(box(q-vec3(1.13,0.,0.),vec3(.018,1.28,.025)),15.));
  z=join(z,vec2(box(q-vec3(-1.13,0.,0.),vec3(.018,1.28,.025)),15.));
  vec3 li=p-vec3(0.,.86+ex*.62,0.);
- z=join(z,vec2(cyl(li,.82,.99),3.));
+ if(viewMode<3.5||viewMode>4.5)z=join(z,vec2(cyl(li,.82,.99),3.));
  vec3 plate=p-vec3(0.,-.30-ex*.14,0.);
  z=join(z,vec2(cyl(plate,.13,1.44),4.));
  vec3 pel=p-vec3(0.,-.67-ex*.5,0.);
@@ -69,9 +69,9 @@ vec3 material(float m,vec3 p,vec3 n){
  else if(m<10.5){c=vec3(.035,.27,.20);rough=.64;}
  else if(m<12.5){c=vec3(.035,.42,.52);rough=.21;}
  else if(m<13.5){c=state>3.5?vec3(1.,.03,.06):vec3(.12,.8,.9);rough=.16;}
- else if(m<14.5){float grid=step(.975,fract(p.x*2.))+step(.975,fract(p.z*2.));c=vec3(.018,.038,.044)+grid*vec3(.025,.08,.09);rough=.86;}
+ else if(m<14.5){float grid=(viewMode>2.5?step(.975,fract(p.x*2.))+step(.975,fract(p.z*2.)):0.);float contact=exp(-dot(p.xz,p.xz)*.28);c=vec3(.018,.027,.031)*(1.-contact*.42)+grid*vec3(.025,.08,.09);rough=.86;}
  else{c=vec3(.18,.52,.58);rough=.18;}
- if(explode>.2&&focus>1.5){float grid=step(.94,fract((p.x+p.z)*9.));c+=grid*vec3(.04,.24,.25);}
+ if(focus>1.5){bool sensorPart=m>7.5&&m<10.5;bool powerPart=m>3.5&&m<8.0;if((focus<2.5&&!sensorPart)||(focus>2.5&&!powerPart))c*=.54;else c+=vec3(.05,.20,.22);}
  return c*(.76+.24*(1.-rough));
 }
 float trace(vec3 ro,vec3 rd,out float m){float d=0.;m=0.;for(int i=0;i<MAX_STEPS;i++){vec2 h=map(ro+rd*d);m=h.y;if(h.x<.0015||d>FAR)break;d+=h.x*.76;}return d;}
@@ -102,7 +102,7 @@ function initialise(target){
   gl=canvas.getContext("webgl",{alpha:true,antialias:false,powerPreference:"high-performance"});if(!gl)return false;
   program=gl.createProgram();gl.attachShader(program,shader(gl.VERTEX_SHADER,vertex));gl.attachShader(program,shader(gl.FRAGMENT_SHADER,fragment));gl.linkProgram(program);if(!gl.getProgramParameter(program,gl.LINK_STATUS))throw new Error(gl.getProgramInfoLog(program));
   var buffer=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buffer);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);gl.useProgram(program);var point=gl.getAttribLocation(program,"p");gl.enableVertexAttribArray(point);gl.vertexAttribPointer(point,2,gl.FLOAT,false,0,0);
-  ["r","t","power","temp","state","explode","thermal","fan","focus","pointer"].forEach(function(k){locations[k]=gl.getUniformLocation(program,k);});
+  ["r","t","power","temp","state","explode","thermal","fan","focus","viewMode","pointer"].forEach(function(k){locations[k]=gl.getUniformLocation(program,k);});
   document.body.classList.add("webgl-ready");
   addEventListener("pointermove",function(event){if(model.lowMotion)return;model.pointerX=(event.clientX/innerWidth-.5)*2;model.pointerY=(event.clientY/innerHeight-.5)*-2;},{passive:true});
   addEventListener("resize",resize,{passive:true});
@@ -111,11 +111,12 @@ function initialise(target){
  }catch(error){console.warn("V3 WebGL fallback:",error);gl=null;return false;}
 }
 function resize(){if(!gl||!canvas)return;var rect=canvas.getBoundingClientRect();var embedded=innerWidth<1000;var ratio=Math.min(devicePixelRatio||1,embedded?1:.82);var width=Math.max(1,Math.floor(rect.width*ratio)),height=Math.max(1,Math.floor(rect.height*ratio));if(canvas.width!==width||canvas.height!==height){canvas.width=width;canvas.height=height;gl.viewport(0,0,width,height);}}
-function render(now){frame=requestAnimationFrame(render);if(!gl||!model.visible)return;var cap=model.lowMotion?250:model.frameInterval;if(now-last<cap)return;last=now;resize();var states={AUS:0,BEREIT:1,AUFHEIZEN:2,HALTEN:3,FEHLER:4},explodeTarget=model.mode==="engineering"?1:0;model.explode=model.lowMotion?explodeTarget:model.explode+(explodeTarget-model.explode)*.075;var heat=model.state==="AUFHEIZEN"||model.state==="HALTEN"?Math.max(.06,model.power/100):0;gl.useProgram(program);gl.uniform2f(locations.r,canvas.width,canvas.height);gl.uniform1f(locations.t,model.lowMotion?0:now/1000);gl.uniform1f(locations.power,model.power/100);gl.uniform1f(locations.temp,model.temperature);gl.uniform1f(locations.state,states[model.state]||0);gl.uniform1f(locations.explode,model.explode);gl.uniform1f(locations.thermal,heat);gl.uniform1f(locations.fan,model.lowMotion?0:Math.min(2,model.fan/2400));gl.uniform1f(locations.focus,{system:1,sensors:2,power:3}[model.focus]||1);gl.uniform2f(locations.pointer,model.pointerX,model.pointerY);gl.drawArrays(gl.TRIANGLES,0,3);}
+function render(now){frame=requestAnimationFrame(render);if(!gl||!model.visible)return;var cap=model.lowMotion?250:model.frameInterval;if(now-last<cap)return;last=now;resize();var states={AUS:0,BEREIT:1,AUFHEIZEN:2,HALTEN:3,FEHLER:4},views={product:0,control:1,thermal:2,engineering:3,xray:4,signals:5},view=model.mode==="engineering"?3:(views[model.lens]||views[model.mode]||0),explodeTarget=model.mode==="engineering"?1:(model.lens==="xray"?.16:0);model.explode=model.lowMotion?explodeTarget:model.explode+(explodeTarget-model.explode)*.075;var heat=model.state==="AUFHEIZEN"||model.state==="HALTEN"?Math.max(.06,model.power/100):0;gl.useProgram(program);gl.uniform2f(locations.r,canvas.width,canvas.height);gl.uniform1f(locations.t,model.lowMotion?0:now/1000);gl.uniform1f(locations.power,model.power/100);gl.uniform1f(locations.temp,model.temperature);gl.uniform1f(locations.state,states[model.state]||0);gl.uniform1f(locations.explode,model.explode);gl.uniform1f(locations.thermal,heat);gl.uniform1f(locations.fan,model.lowMotion?0:Math.min(2,model.fan/2400));gl.uniform1f(locations.focus,{system:1,sensors:2,power:3}[model.focus]||1);gl.uniform1f(locations.viewMode,view);gl.uniform2f(locations.pointer,model.pointerX,model.pointerY);gl.drawArrays(gl.TRIANGLES,0,3);}
 function update(status){model.state=status.state||"AUS";model.power=Number(status.power)||0;model.temperature=Number(status.temperature)||22;model.fan=Number(status.fan_rpm)||0;}
 function setMode(mode){model.mode=mode||"overview";}
+function setLens(lens){model.lens=lens||"product";}
 function setFocus(focus){model.focus=focus||"system";}
 function setLowMotion(value){model.lowMotion=!!value;}
 function setFrameRate(fps){model.frameInterval=1000/Math.max(1,Number(fps)||30);}
-window.ProductScene={initialise:initialise,update:update,setMode:setMode,setFocus:setFocus,setLowMotion:setLowMotion,setFrameRate:setFrameRate,resize:resize};
+window.ProductScene={initialise:initialise,update:update,setMode:setMode,setLens:setLens,setFocus:setFocus,setLowMotion:setLowMotion,setFrameRate:setFrameRate,resize:resize};
 })();
