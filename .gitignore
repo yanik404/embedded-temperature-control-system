@@ -3,3 +3,5 @@ build/
 *.uf2
 *.elf
 *.map
+__pycache__/
+*.pyc

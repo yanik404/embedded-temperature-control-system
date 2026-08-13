@@ -89,11 +89,11 @@ UP/DOWN ändern den Sollwert in 0,5-°C-Schritten. OK startet oder stoppt; im Fe
 
 ## Weboberfläche
 
-Der Pico W liefert das responsive **Thermal Control Observatory** direkt aus dem Flash unter `http://<PICO-IP>` aus. Die Oberfläche ist keine Sammlung gleichartiger Dashboard-Karten: Becher, Sensor, Heizplatte, Peltier und Lüfter bilden eine technische Schnittszene, in die Ist-/Solltemperatur, Regelabweichung, Stellgröße und Heizstatus räumlich integriert sind. Ein eigener GPU-Thermal-Field-Shader (ein Draw Call, 30-FPS-Limit) reagiert subtil auf Zustand und Heizleistung; ohne WebGL übernimmt automatisch ein Canvas-Fallback.
+Der Pico W liefert die responsive V3 **Interactive Thermal Product Experience** direkt aus dem Flash unter `http://<PICO-IP>` aus. Der Becherhalter ist die Oberfläche: Ein eigener WebGL-Raymarcher modelliert Becher und Inhalt, TMP36-Messstelle, Heizplatte, Peltier, Kühlkörper, Lüfter, Pico/PCB, OLED und Statuslicht in kontrollierter 3/4-Perspektive. Beleuchtung, Tiefennebel, Wärmematerial, Luft-/Energiefluss und die Explosionsdarstellung reagieren auf reale API-Werte. Ohne WebGL bleibt automatisch die semantische SVG-Produktrückfallebene sichtbar.
 
-Der geschlossene Regelkreis erscheint als große Signalstrecke mit getrenntem Rückführpfad und animiertem Signalfluss. Ein großflächiger Canvas-Verlauf aktualisiert Istwert, Sollwert, zweite Temperatur und Stellgröße alle 500 ms ohne Seitenreload; die Zeitfenster 1, 5 und 15 Minuten verwenden ausschließlich browserlokale Historie. Die Kopfzeile zeigt SSID, aktuelle DHCP-IP, Live/Offline und Zeit des letzten Signals.
+Der geschlossene Regelkreis läuft räumlich um das Produkt: `w(t)` → Vergleich → PI → `u(t)` → Peltier → Becher/Strecke → TMP36 `y(t)` → Rückführung. Ein transparenter Canvas-Zeithorizont aktualisiert Istwert, Sollwert, zweite Temperatur und Stellgröße alle 500 ms ohne Seitenreload; die Zeitfenster 1, 5 und 15 Minuten verwenden ausschließlich browserlokale Historie. Die minimale Randzeile zeigt SSID, aktuelle DHCP-IP, Live/Offline und Zeit des letzten Signals.
 
-Weitere Ebenen zeigen Read-only-PI-Diagnosewerte, browserlokale Regelungskennwerte, eine verbundene Safety-Rail, die Hardware als Pico-zentrierte Systemkarte, technische API-Werte und eine aus echten Zustandsänderungen abgeleitete Ereignislinie. Engineering-Details bleiben bis zum bewussten Öffnen verborgen. Der Vollbild-Präsentationsmodus priorisiert Produktszene, Regelkreis und großes Diagramm. Bei ausbleibenden API-Antworten bleibt der letzte Verlauf sichtbar, die Szene wechselt eindeutig auf OFFLINE und alle Bedienaktionen werden gesperrt. START, STOP und Sollwert bleiben auf PC, Tablet und Smartphone bedienbar, solange die Live-Verbindung besteht. Die Safety-Entscheidung bleibt immer serverseitig.
+Die Ansichten `ÜBERBLICK`, `THERMISCH` und `ENGINEERING` verändern dieselbe Szene. Engineering fährt das Produkt räumlich auseinander und blendet Hardware- sowie Signalpfade ein; ein PI-Fokus zeigt Kp, Ki, P-/I-Anteil und Anti-Windup read-only. Der Vollbild-Präsentationsmodus priorisiert Produkt, Regelkreis und Live-Verlauf. Bei ausbleibenden API-Antworten bleiben Szene und letzter Verlauf sichtbar, während alle Aktionen gesperrt werden. START, STOP und Sollwert bleiben auf PC, Tablet und Smartphone bedienbar. Die Safety-Entscheidung bleibt immer serverseitig.
 
 Der Hardwarestatus unterscheidet bewusst zwischen `OK`, `AKTIV`, `AUS`, `FEHLER`, `NICHT VERBUNDEN`, `NICHT VERFÜGBAR` und `UNBEKANNT`. Ein grüner Status wird nur angezeigt, wenn die Firmware die Initialisierung, einen plausiblen Messwert oder einen beobachtbaren Betriebswert bestätigen kann. Die Startfreigabe nennt bei einer Sperre den konkreten Grund, beispielsweise einen fehlenden Becher, eine ungültige Strommessung oder fehlendes Power-Good.
 
@@ -101,15 +101,18 @@ Die Statusfarben bedeuten: Grün = bestätigt/aktiv, Blau = normal/bereit, Orang
 
 ### Lokale Designvorschau
 
-`preview.html` direkt im Browser öffnen, um dieselbe Oberfläche ohne Pico und WLAN mit animierten Demo-Daten anzusehen. START, STOP und SETZEN verändern dort ausschließlich den lokalen Demo-Zustand. Die nur in der Vorschau vorhandenen Schalter `READY`, `HEATING`, `HOLDING`, `ERROR`, `DISCONNECT`, `RECOVERY` und `30 MIN DEMO` prüfen alle wesentlichen Zustände und einen beschleunigten vollständigen Aufheiz-/Halteverlauf.
+`preview.html` direkt im Browser öffnen, um exakt dieselbe Oberfläche ohne Pico und WLAN mit animierten Demo-Daten anzusehen. START, STOP und SOLLWERT ÜBERTRAGEN verändern dort ausschließlich den lokalen Demo-Zustand. Die nur in der Vorschau vorhandenen Schalter `READY`, `HEATING`, `HOLDING`, `ERROR`, `OFFLINE`, `RECONNECT`, `SENSOR ERROR`, `FAN ERROR`, `POWER ERROR` und `30 MIN DEMO` prüfen alle geforderten Zustände sowie einen vollständigen Aufheiz-/Halteverlauf von 22 auf 50 °C.
 
-Die wartbaren Quellen liegen getrennt unter `ui/src/`:
+Die wartbaren V3-Quellen liegen getrennt unter `ui-v3/src/`; `ui/src/` bleibt als jederzeit wiederherstellbare Observatory-V2-Basis im Repository:
 
 - `index.html` – semantische Oberfläche und SVG-Systemdarstellungen
-- `dashboard.css` – räumliches Layout, Zustände, Responsive- und Motion-System
-- `thermal-field.js` – kleiner WebGL-Shader mit Canvas-Fallback
-- `dashboard.js` – reale API, Bedienung, Chart und technische Ansichten
+- `experience.css` – räumliche Komposition, Zustände, Responsive- und Motion-System
+- `product-scene.js` – eigener 3D-SDF/WebGL-Renderer mit einem Draw Call
+- `thermal-overlay.js` – dezente Wärme-, Partikel- und Luftstromebene
+- `experience.js` – reale API, Bedienung, Chart und technische Ansichten
 - `preview.js` – ausschließlich lokale Simulation
+
+Die ausführbaren Vergleiche unter `ui-v3/prototypes/` enthalten einen echten Three.js-Prototyp, einen Custom-WebGL-Prototyp und drei funktionierende Sollwert-Bedienkonzepte. Architektur, Benchmark und Technologieentscheidung stehen in `docs/ui-v3-architecture.md`.
 
 `tools/build_ui.py` erzeugt daraus `preview.html`, die minifizierte Single-File-Produktion unter `ui/dist/dashboard.production.html`, Größenstatistiken und `include/web_assets.h`. Die Produktion enthält keine Simulation, keine externen URLs, keine CDN-Abhängigkeit und benötigt für Assets keinen weiteren HTTP-Request. Die CMake-Firmware hängt vom Generator ab; manuell lässt er sich mit dem im CMake-Cache erkannten Python ausführen:
 

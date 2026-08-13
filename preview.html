@@ -3,1222 +3,397 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#050b11">
-<title>Becherhalter · Thermal Control Observatory</title>
-<style>:root{color-scheme:dark;--bg:#050b11;--bg-soft:#08141c;--ink:#e8f2f5;--muted:#78919d;--faint:#3d5966;--line:#17323f;--line-bright:#2a5668;--cyan:#67dff1;--cyan-rgb:103,223,241;--heat:#ff9854;--heat-rgb:255,152,84;--green:#68dfa6;--green-rgb:104,223,166;--red:#ff6873;--red-rgb:255,104,115;--state:#7d95a1;--state-rgb:125,149,161;--motion-fast:150ms;--motion-normal:300ms;--motion-system:650ms;--header-h:92px;--edge:max(24px,calc((100vw - 1600px)/2));font-synthesis:none}
-*{box-sizing:border-box}html{scroll-behavior:smooth;background:var(--bg)}body{margin:0;min-width:320px;overflow-x:hidden;background:var(--bg);color:var(--ink);font:400 14px/1.5 "Segoe UI Variable","Segoe UI",Inter,system-ui,sans-serif;font-variant-numeric:tabular-nums}body[data-state="BEREIT"]{--state:#61bcff;--state-rgb:97,188,255}body[data-state="AUFHEIZEN"]{--state:var(--heat);--state-rgb:var(--heat-rgb)}body[data-state="HALTEN"]{--state:var(--green);--state-rgb:var(--green-rgb)}body[data-state="FEHLER"]{--state:var(--red);--state-rgb:var(--red-rgb)}button,input{font:inherit}button{color:inherit}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.skip-link{position:fixed;z-index:200;left:18px;top:-60px;padding:10px 14px;background:var(--cyan);color:#031118;font-weight:800}.skip-link:focus{top:18px}.thermal-field{position:fixed;z-index:0;inset:0;width:100%;height:100%;pointer-events:none;opacity:.72}.ambient-grid{position:fixed;z-index:0;inset:0;pointer-events:none;background:linear-gradient(rgba(55,111,132,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(55,111,132,.07) 1px,transparent 1px);background-size:72px 72px;mask-image:linear-gradient(to bottom,#000 0,transparent 80%)}main,.system-header{position:relative;z-index:2}body:after{content:"";position:fixed;z-index:1;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(1,5,8,.72),transparent 25% 75%,rgba(1,5,8,.68)),linear-gradient(to bottom,rgba(4,9,13,.28),transparent 42%,rgba(4,9,13,.7))}
+<meta name="theme-color" content="#02070b">
+<title>Becherhalter · Interactive Thermal System</title>
+<style>:root{color-scheme:dark;--bg:#02070b;--bg-soft:#061018;--ink:#ecf7f9;--muted:#718b95;--dim:#38535e;--line:#163541;--cyan:#68e2f1;--cyan-rgb:104,226,241;--heat:#ff8742;--heat-rgb:255,135,66;--green:#6ee0a8;--green-rgb:110,224,168;--red:#ff6471;--red-rgb:255,100,113;--state:#617883;--state-rgb:97,120,131;--fast:160ms;--normal:320ms;--system:680ms;--header:76px;--edge:max(28px,calc((100vw - 1800px)/2));font-synthesis:none}*{box-sizing:border-box}html{background:var(--bg);scroll-behavior:smooth}body{margin:0;min-width:320px;overflow-x:hidden;background:var(--bg);color:var(--ink);font:400 14px/1.45 "Segoe UI Variable","Segoe UI",system-ui,sans-serif;font-variant-numeric:tabular-nums}body[data-state="BEREIT"]{--state:#65c8ff;--state-rgb:101,200,255}body[data-state="AUFHEIZEN"]{--state:var(--heat);--state-rgb:var(--heat-rgb)}body[data-state="HALTEN"]{--state:var(--green);--state-rgb:var(--green-rgb)}body[data-state="FEHLER"]{--state:var(--red);--state-rgb:var(--red-rgb)}button,input{font:inherit;color:inherit}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.skip-link{position:fixed;z-index:300;left:20px;top:-60px;padding:10px 14px;background:var(--cyan);color:#021017;font-weight:800}.skip-link:focus{top:16px}button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
 
-.boot-sequence{position:fixed;z-index:150;inset:0;display:grid;place-content:center;gap:20px;background:#03080c;transition:opacity var(--motion-system),visibility var(--motion-system)}.boot-sequence.done{opacity:0;visibility:hidden}.boot-mark{display:flex;align-items:center;gap:15px;color:#b9d4dd;font:700 13px ui-monospace,Consolas,monospace;letter-spacing:.25em}.boot-mark i{width:22px;height:22px;border:1px solid var(--cyan);border-radius:50%;box-shadow:0 0 24px rgba(var(--cyan-rgb),.4);animation:bootPulse 1s ease-in-out infinite}.boot-copy{color:var(--muted);font:11px ui-monospace,Consolas,monospace;letter-spacing:.12em;text-align:center}@keyframes bootPulse{50%{transform:scale(.65);background:var(--cyan)}}
+.intro{position:fixed;z-index:250;inset:0;display:grid;place-content:center;justify-items:center;background:#010407;transition:opacity var(--system),visibility var(--system)}.intro.done{opacity:0;visibility:hidden}.intro svg{width:86px;fill:none;stroke:var(--cyan);stroke-width:1;stroke-dasharray:420;animation:introDraw 1.1s ease both}.intro span{margin-top:26px;font:700 12px ui-monospace,Consolas,monospace;letter-spacing:.28em}.intro small{margin-top:9px;color:var(--muted);font:8px ui-monospace,Consolas,monospace;letter-spacing:.18em}@keyframes introDraw{from{stroke-dashoffset:420;opacity:.1}to{stroke-dashoffset:0;opacity:1}}
 
-.system-header{min-height:var(--header-h);padding:20px var(--edge);display:grid;grid-template-columns:minmax(240px,1fr) auto auto;align-items:center;gap:34px;border-bottom:1px solid rgba(67,112,128,.25);background:linear-gradient(to bottom,rgba(4,10,15,.9),rgba(4,10,15,.55));backdrop-filter:blur(14px)}.identity{display:flex;align-items:center;gap:13px;color:inherit;text-decoration:none;min-width:0}.identity svg{width:42px;height:42px;fill:none;stroke:var(--cyan);stroke-width:1.5;filter:drop-shadow(0 0 9px rgba(var(--cyan-rgb),.2))}.identity strong,.identity small{display:block}.identity strong{font-size:17px;letter-spacing:.09em}.identity small{margin-top:2px;color:var(--muted);font-size:10px;letter-spacing:.09em}.connection-readout{display:flex;align-items:center;gap:16px;min-width:0}.connection-pulse{position:relative;width:8px;height:8px;flex:none;border-radius:50%;background:var(--muted)}body[data-live="true"] .connection-pulse{background:var(--cyan);box-shadow:0 0 14px rgba(var(--cyan-rgb),.9)}body[data-live="true"] .connection-pulse:after{content:"";position:absolute;inset:-5px;border:1px solid var(--cyan);border-radius:50%;animation:signalPulse 2.4s ease-out infinite}body[data-live="false"] .connection-pulse{background:var(--red)}@keyframes signalPulse{from{transform:scale(.45);opacity:.8}to{transform:scale(1.8);opacity:0}}.connection-readout span{min-width:0}.connection-readout small,.connection-readout strong{display:block}.connection-readout small{color:var(--muted);font:700 8px ui-monospace,Consolas,monospace;letter-spacing:.16em}.connection-readout strong{margin-top:3px;font-size:11px;font-weight:560;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.network-address,.last-sample{padding-left:16px;border-left:1px solid var(--line)}.header-actions{display:flex;align-items:center;gap:5px}.icon-action{min-height:42px;padding:7px 10px;display:flex;align-items:center;gap:7px;border:0;border-bottom:1px solid transparent;background:transparent;color:var(--muted);cursor:pointer;font-size:9px;font-weight:700;letter-spacing:.08em;transition:color var(--motion-fast),border var(--motion-fast),background var(--motion-fast)}.icon-action:hover,.icon-action:focus-visible{color:var(--ink);background:rgba(64,112,130,.1)}.icon-action.primary{color:#bdebf4;border-bottom-color:var(--cyan)}.motion-icon,.nodes-icon,.screen-icon{display:inline-block;width:14px;height:14px;position:relative}.motion-icon:before,.motion-icon:after{content:"";position:absolute;border:1px solid currentColor;border-radius:50%}.motion-icon:before{inset:1px 7px 1px 0}.motion-icon:after{inset:3px 0 3px 7px}.nodes-icon{background:radial-gradient(circle,currentColor 0 2px,transparent 2.5px) 0 0/7px 7px}.screen-icon{border:1px solid currentColor}.screen-icon:after{content:"";position:absolute;left:4px;right:4px;bottom:-3px;border-top:1px solid currentColor}
+.edge-header{position:fixed;z-index:100;left:0;right:0;top:0;height:var(--header);padding:0 var(--edge);display:grid;grid-template-columns:1fr auto 1fr;align-items:center;border-bottom:1px solid rgba(49,91,105,.22);background:linear-gradient(to bottom,rgba(2,7,11,.88),rgba(2,7,11,.42));backdrop-filter:blur(12px)}.brand{display:flex;align-items:center;gap:13px;color:inherit;text-decoration:none;width:max-content}.brand svg{width:27px;height:42px;fill:none;stroke:var(--cyan);stroke-width:1.35;filter:drop-shadow(0 0 8px rgba(var(--cyan-rgb),.25))}.brand strong,.brand small{display:block}.brand strong{font-size:14px;letter-spacing:.13em}.brand small{margin-top:3px;color:#6c8791;font-size:8px;letter-spacing:.08em}.link-state{display:flex;align-items:center;justify-self:center;gap:13px}.link-state>i{position:relative;width:8px;height:8px;border-radius:50%;background:var(--red)}body[data-live="true"] .link-state>i{background:var(--cyan);box-shadow:0 0 13px rgba(var(--cyan-rgb),.8)}body[data-live="true"] .link-state>i:after{content:"";position:absolute;inset:-5px;border:1px solid var(--cyan);border-radius:50%;animation:linkPulse 2.8s ease-out infinite}@keyframes linkPulse{from{opacity:.8;transform:scale(.4)}to{opacity:0;transform:scale(1.8)}}.link-state span{display:block}.link-state small{display:block;color:var(--muted);font:700 7px ui-monospace,Consolas,monospace;letter-spacing:.15em}.link-state strong{display:block;margin-top:2px;font-size:10px;font-weight:600}.link-state .ip{padding-left:13px;border-left:1px solid var(--line)}.link-state time{padding-left:13px;border-left:1px solid var(--line);color:#91a8b0;font:9px ui-monospace,Consolas,monospace}.view-modes{justify-self:end;display:flex;height:100%;align-items:center}.view-modes button{height:100%;padding:0 11px;border:0;border-bottom:1px solid transparent;background:transparent;color:#69838d;cursor:pointer;font:700 8px ui-monospace,Consolas,monospace;letter-spacing:.1em;transition:color var(--fast),border-color var(--fast)}.view-modes button:hover,.view-modes button:focus-visible,.view-modes button.active{color:#d8eef2;border-bottom-color:var(--cyan)}
 
-.thermal-hero{position:relative;min-height:calc(100vh - var(--header-h));padding:28px var(--edge) 110px;display:grid;grid-template-columns:132px minmax(560px,1fr) 360px;gap:28px;align-items:center;isolation:isolate}.state-spine{align-self:stretch;display:flex;flex-direction:column;justify-content:center;gap:56px;border-left:1px solid var(--line)}.state-spine span{position:relative;padding-left:22px;color:#47616d;font:700 9px ui-monospace,Consolas,monospace;letter-spacing:.14em}.state-spine i{position:absolute;left:-5px;top:3px;width:9px;height:9px;border:1px solid #385461;border-radius:50%;background:var(--bg)}.state-spine span.active{color:var(--state)}.state-spine span.active i{border-color:var(--state);background:var(--state);box-shadow:0 0 18px rgba(var(--state-rgb),.8)}
+.experience{position:relative;z-index:1;width:100%;height:100vh;min-height:720px;overflow:hidden;background:radial-gradient(ellipse at 50% 43%,rgba(21,52,64,.24),transparent 48%),linear-gradient(180deg,#02080c,#02070b 66%,#03090e)}.experience:before{content:"";position:absolute;inset:var(--header) 0 0;pointer-events:none;background:linear-gradient(rgba(48,100,117,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(48,100,117,.04) 1px,transparent 1px);background-size:72px 72px;mask-image:radial-gradient(ellipse at center,#000,transparent 77%)}.experience:after{content:"";position:absolute;z-index:2;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(0,3,5,.45),transparent 23% 77%,rgba(0,3,5,.38)),linear-gradient(180deg,transparent 55%,rgba(1,5,8,.72) 83%)}
 
-.assembly-stage{position:relative;justify-self:center;width:min(100%,820px);height:min(74vh,780px);min-height:650px}.scene-coordinate{position:absolute;color:#54717d;font:700 9px ui-monospace,Consolas,monospace;letter-spacing:.18em}.scene-coordinate.top{left:50%;top:0;transform:translateX(-50%)}.thermal-assembly{position:absolute;inset:0;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 28px 45px rgba(0,0,0,.38))}.vessel-shell{stroke:#82b7c9;stroke-width:2}.vessel-rim{fill:#08141b;stroke:#8ac7d8;stroke-width:2}.vessel-rim.rear{opacity:.7}.vessel-rim.front{fill:none}.liquid-fill{transform-origin:center bottom;transition:y var(--motion-system),height var(--motion-system),opacity var(--motion-system)}.liquid-surface{fill:#efad6a99;stroke:#ffc07b;stroke-width:1}.sensor-probe{fill:none;stroke:#6fd9e8;stroke-width:2}.sensor-tip{fill:#6fd9e8;filter:drop-shadow(0 0 8px #6fd9e8)}.plate-glow{fill:rgba(var(--state-rgb),.32);opacity:calc(.08 + var(--thermal-power,0)*.006)}.thermal-plate{stroke:#a85d37;stroke-width:1}.peltier-array path:first-child{fill:#102836;stroke:#85b6c6;stroke-width:1}.peltier-array path:last-child{fill:none;stroke:var(--state);stroke-width:5;opacity:calc(.25 + var(--thermal-power,0)*.007)}.fan-assembly{fill:none;stroke:#69cfe0;stroke-width:2}.fan-blades{fill:#163540;stroke:#69cfe0;transform-origin:360px 737px;animation:fanSpin var(--fan-duration,0s) linear infinite}.energy-axis{fill:none;stroke:var(--state);stroke-width:2;stroke-dasharray:5 10;animation:energyTravel 1.4s linear infinite}.heat-contours path{fill:none;stroke:var(--state);stroke-width:2;opacity:calc(var(--thermal-power,0)*.008);stroke-dasharray:8 11;animation:heatRise 3.6s linear infinite}.heat-contours path:nth-child(2){animation-delay:-1.2s}.heat-contours path:nth-child(3){animation-delay:-2.4s}@keyframes fanSpin{to{transform:rotate(360deg)}}@keyframes energyTravel{to{stroke-dashoffset:-30}}@keyframes heatRise{to{stroke-dashoffset:-38;transform:translateY(-10px);opacity:0}}.temperature-readout{position:absolute;left:3%;top:32%;z-index:2}.temperature-readout span,.temperature-readout small{display:block;color:var(--muted);font:700 9px ui-monospace,Consolas,monospace;letter-spacing:.14em}.temperature-readout strong{display:inline-block;margin-top:7px;font-size:clamp(70px,7vw,118px);font-weight:230;line-height:.88;letter-spacing:-.075em}.temperature-readout em{color:var(--state);font-size:32px;font-style:normal;font-weight:300}.temperature-readout small{margin-top:15px;letter-spacing:.04em}.assembly-annotation{position:absolute;display:flex;align-items:center;gap:9px;color:#72909d;font:700 8px ui-monospace,Consolas,monospace;letter-spacing:.12em}.assembly-annotation i{width:46px;height:1px;background:#385965}.assembly-annotation strong{color:#b9cbd2;font-size:10px}.assembly-annotation.sensor{right:0;top:42%}.assembly-annotation.plate{right:2%;top:78%}.assembly-annotation.peltier{left:3%;top:88%}.assembly-annotation.fan{right:8%;bottom:1%}
+.scene-viewport{position:absolute;z-index:3;left:25%;right:25%;top:9%;bottom:20%;perspective:1000px}.scene-viewport canvas,.product-fallback{position:absolute;inset:0;width:100%;height:100%}.product-fallback{z-index:0;overflow:visible;opacity:.72;filter:drop-shadow(0 35px 50px #0008);transition:opacity var(--system),transform var(--system)}#productCanvas{z-index:1;opacity:0;transition:opacity var(--system)}body.webgl-ready #productCanvas{opacity:1}body.webgl-ready .product-fallback{opacity:0}.fallback-product>ellipse{fill:#07151c;stroke:#75c8d8;stroke-width:2}.cup-body{stroke:#75aab9;stroke-width:2}.liquid-top{fill:#e5a25d99;stroke:#f4b472;stroke-width:1}.probe{fill:none;stroke:var(--cyan);stroke-width:2}.probe-tip{fill:var(--cyan);filter:drop-shadow(0 0 7px var(--cyan))}.heater{stroke:var(--state);stroke-width:1}.peltier{fill:#0d2632;stroke:#619aaa}.fins{fill:none;stroke:var(--state);stroke-width:5}.fallback-fan{fill:#102b36;stroke:var(--cyan);stroke-width:2;transform-origin:380px 826px;animation:fanFallback var(--fan-period,0s) linear infinite}@keyframes fanFallback{to{transform:rotate(360deg)}}#thermalCanvas{z-index:2;pointer-events:none;mix-blend-mode:screen;opacity:.78}
 
-.process-orbit{position:relative;align-self:center;min-height:650px;padding:35px 0 0}.orbit-heading{padding-left:22px;border-left:2px solid var(--state)}.orbit-heading span,.orbit-heading small{display:block;color:var(--muted);font:700 9px ui-monospace,Consolas,monospace;letter-spacing:.13em}.orbit-heading strong{display:block;margin:8px 0 5px;color:var(--state);font-size:29px;letter-spacing:.06em}.setpoint-dial{position:relative;width:270px;height:270px;margin:35px auto 5px}.setpoint-dial svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(135deg);overflow:visible}.dial-track,.dial-progress{fill:none;stroke-width:2}.dial-track{stroke:#173541;stroke-dasharray:75 25}.dial-progress{stroke:var(--state);stroke-dasharray:calc(var(--output)*.75) 100;filter:drop-shadow(0 0 7px rgba(var(--state-rgb),.45));transition:stroke-dasharray var(--motion-system)}.dial-tick{fill:none;stroke:#eff8fa;stroke-width:3;transform-origin:110px 110px;transform:rotate(var(--set-angle));transition:transform var(--motion-system)}.dial-center{position:absolute;inset:51px;display:grid;place-content:center;text-align:center}.dial-center>span,.dial-center small{color:var(--muted);font:700 8px ui-monospace,Consolas,monospace;letter-spacing:.12em}.dial-center label{display:flex;align-items:baseline;justify-content:center}.dial-center input{width:120px;border:0;border-bottom:1px solid #2a4b59;background:transparent;color:var(--ink);font-size:42px;font-weight:250;letter-spacing:-.06em;text-align:center;outline:0}.dial-center input:focus{border-color:var(--cyan)}.dial-center b{font-size:14px;font-weight:400}.setpoint-dial button{position:absolute;top:50%;width:40px;height:40px;transform:translateY(-50%);border:1px solid #274957;border-radius:50%;background:#07141b;cursor:pointer;font-size:20px}.setpoint-dial button:disabled{opacity:.3;cursor:not-allowed}.setpoint-dial #targetDown{left:-10px}.setpoint-dial #targetUp{right:-10px}.deviation-readout,.output-readout{display:flex;align-items:flex-end;justify-content:space-between;padding:13px 0;border-top:1px solid var(--line)}.deviation-readout span,.output-readout span{color:var(--muted);font:700 8px ui-monospace,Consolas,monospace;letter-spacing:.12em}.deviation-readout strong,.output-readout strong{font-size:25px;font-weight:350}.output-readout{position:relative;padding-bottom:23px}.output-readout i{position:absolute;left:0;right:0;bottom:11px;height:2px;background:#17313d}.output-readout i b{display:block;width:0;height:100%;background:var(--state);box-shadow:0 0 10px rgba(var(--state-rgb),.5);transition:width var(--motion-system)}.process-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}.process-actions button{border:0;background:transparent;cursor:pointer}.setpoint-action{grid-column:1/-1;min-height:39px;border-bottom:1px solid #2d586a!important;color:#9cd9e8;font-size:9px;font-weight:800;letter-spacing:.1em}.process-action{min-height:76px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px solid #264856!important}.process-action span{font-weight:800;letter-spacing:.12em}.process-action small{margin-top:4px;color:var(--muted);font-size:8px}.process-action.start:not(:disabled){border-color:rgba(var(--green-rgb),.55)!important;color:var(--green)}.process-action.stop:not(:disabled){border-color:rgba(var(--red-rgb),.5)!important;color:#ff9da5}.process-actions button:disabled{opacity:.3;cursor:not-allowed}
+.primary-reading{position:absolute;z-index:15;left:var(--edge);top:24%;width:28vw}.primary-reading>span,.target-control>span,.process-output>span{color:#7a969f;font:700 8px ui-monospace,Consolas,monospace;letter-spacing:.16em}.primary-reading>span b,.target-control>span b{color:#b3cbd1}.primary-reading div{display:flex;align-items:baseline;margin-top:11px}.primary-reading strong{font-size:clamp(82px,8.3vw,154px);font-weight:210;line-height:.8;letter-spacing:-.08em}.primary-reading em{margin-left:7px;color:var(--state);font-size:27px;font-style:normal;font-weight:300}.primary-reading small{display:block;margin-top:20px;color:#637d87;font:700 8px ui-monospace,Consolas,monospace;letter-spacing:.06em}.unavailable{opacity:.42}
 
-.safety-interlock{position:absolute;left:var(--edge);right:var(--edge);bottom:27px;display:grid;grid-template-columns:repeat(7,1fr);gap:0;border-top:1px solid #20404d}.interlock-node{position:relative;padding:15px 12px 0;color:#66818d;font:700 8px ui-monospace,Consolas,monospace;letter-spacing:.09em}.interlock-node:before{content:"";position:absolute;left:0;top:-5px;width:9px;height:9px;border:1px solid #3d5d68;border-radius:50%;background:var(--bg)}.interlock-node strong{display:block;margin-top:5px;color:#9bb0b8;font-size:9px}.interlock-node.ok:before{background:var(--green);border-color:var(--green);box-shadow:0 0 12px rgba(var(--green-rgb),.5)}.interlock-node.warn:before{background:#e8bd58;border-color:#e8bd58}.interlock-node.bad:before{background:var(--red);border-color:var(--red);box-shadow:0 0 12px rgba(var(--red-rgb),.6)}.system-alert{position:absolute;z-index:8;left:50%;top:50%;width:min(620px,calc(100% - 40px));padding:34px 40px;transform:translate(-50%,-44%) scale(.96);border-left:3px solid var(--red);background:rgba(21,7,11,.93);box-shadow:0 30px 90px #000a;opacity:0;visibility:hidden;transition:opacity var(--motion-system),transform var(--motion-system),visibility var(--motion-system)}.system-alert.visible{opacity:1;visibility:visible;transform:translate(-50%,-50%) scale(1)}.system-alert span{color:var(--red);font:800 10px ui-monospace,Consolas,monospace;letter-spacing:.2em}.system-alert strong{display:block;margin-top:12px;font-size:30px}.system-alert p{margin:8px 0 0;color:#c1d0d5}
+.state-reading{position:absolute;z-index:15;right:var(--edge);top:15%;width:285px;padding-left:18px;border-left:2px solid var(--state)}.state-reading small,.state-reading span{display:block}.state-reading small{color:#728c96;font:700 8px ui-monospace,Consolas,monospace;letter-spacing:.16em}.state-reading strong{display:block;margin:8px 0 5px;color:var(--state);font-size:30px;letter-spacing:.055em}.state-reading span{color:#8199a2;font:8px ui-monospace,Consolas,monospace;letter-spacing:.07em}
 
-.section-intro{max-width:850px}.section-intro>span,.history-heading>span,.event-rail header>span{color:var(--state);font:700 9px ui-monospace,Consolas,monospace;letter-spacing:.17em}.section-intro h2,.history-heading h2,.event-rail h2{margin:11px 0 8px;font-size:clamp(29px,3.1vw,50px);font-weight:280;letter-spacing:-.045em}.section-intro p,.event-rail header p{max-width:700px;margin:0;color:var(--muted);font-size:13px}.signal-landscape,.signal-history,.hardware-observatory,.event-rail{position:relative;z-index:2;padding:110px var(--edge)}.signal-landscape{min-height:900px;background:linear-gradient(180deg,rgba(5,12,17,.35),rgba(4,10,14,.94))}.loop-visual{position:relative;max-width:1550px;height:520px;margin:50px auto 0}.loop-path{position:absolute;inset:0;width:100%;height:100%;overflow:visible}.loop-path path{fill:none;vector-effect:non-scaling-stroke}.forward-base,.feedback-base{stroke:#234451;stroke-width:1}.forward-signal{stroke:var(--state);stroke-width:2;stroke-dasharray:7 18;animation:signalTravel 2.6s linear infinite}.feedback-signal{stroke:var(--cyan);stroke-width:1.5;stroke-dasharray:3 16;animation:signalReturn 4s linear infinite}@keyframes signalTravel{to{stroke-dashoffset:-50}}@keyframes signalReturn{to{stroke-dashoffset:50}}.loop-node{position:absolute;top:125px;width:140px;transform:translateX(-50%);text-align:center}.loop-node:before{content:"";position:absolute;z-index:-1;left:50%;top:45%;width:94px;height:94px;transform:translate(-50%,-50%);border:1px solid #315362;border-radius:50%;background:radial-gradient(circle,rgba(40,86,104,.22),rgba(5,13,18,.92) 69%)}.loop-node span{display:grid;place-content:center;width:43px;height:43px;margin:0 auto;color:#b9dce5;font:700 11px ui-monospace,Consolas,monospace}.loop-node strong{display:block;margin-top:24px;font-size:18px;font-weight:500}.loop-node small{display:block;margin-top:5px;color:var(--muted);font:8px ui-monospace,Consolas,monospace;letter-spacing:.08em}.loop-node.comparator:before{border-radius:0;transform:translate(-50%,-50%) rotate(45deg);width:72px;height:72px}.loop-node.controller:before{width:126px;height:126px;border-color:var(--state);box-shadow:inset 0 0 35px rgba(var(--state-rgb),.09)}.loop-node.plant:before{width:134px;height:80px;border-radius:50%}.loop-node.setpoint{left:5%}.loop-node.comparator{left:16%}.loop-node.controller{left:31%}.loop-node.output{left:47%}.loop-node.actuator{left:62%}.loop-node.plant{left:78%}.loop-node.sensor{left:94%}.feedback-label{position:absolute;left:40%;bottom:100px;color:#5c93a5;font:700 8px ui-monospace,Consolas,monospace;letter-spacing:.14em}.controller-equation{max-width:980px;margin:-48px auto 0;display:flex;justify-content:space-between;gap:20px;color:#7d99a4;font:12px ui-monospace,Consolas,monospace}.controller-equation span:nth-child(2){color:#bed5dc}
+.spatial-loop{position:absolute;z-index:10;inset:var(--header) 0 0;pointer-events:none}.loop-routes{position:absolute;inset:0;width:100%;height:100%;overflow:visible}.loop-routes path{fill:none;vector-effect:non-scaling-stroke}.forward-rail,.actuator-rail{stroke:rgba(var(--state-rgb),.4);stroke-width:1}.feedback-rail{stroke:rgba(var(--cyan-rgb),.35);stroke-width:1}.signal-pulse{stroke-width:1.7;stroke-dasharray:4 24;opacity:0}.signal-pulse.forward{stroke:var(--state)}.signal-pulse.feedback{stroke:var(--cyan)}body[data-state="AUFHEIZEN"] .signal-pulse,body[data-state="HALTEN"] .signal-pulse{opacity:.85;animation:signalFlow 3.2s linear infinite}.signal-pulse.feedback{animation-direction:reverse;animation-duration:5s}@keyframes signalFlow{to{stroke-dashoffset:-84}}.signal-node{position:absolute;display:grid;place-content:center;text-align:center;width:92px;height:92px;border:0;border-radius:50%;background:radial-gradient(circle,rgba(19,49,60,.64),rgba(2,8,12,.85) 69%);color:inherit;pointer-events:auto}.signal-node:before{content:"";position:absolute;inset:0;border:1px solid #28515f;border-radius:inherit}.signal-node span{color:#bdd8de;font:700 11px ui-monospace,Consolas,monospace}.signal-node small{margin-top:2px;color:#647f89;font:7px ui-monospace,Consolas,monospace;letter-spacing:.1em}.signal-node strong{margin-top:5px;font-size:13px;font-weight:500}.setpoint-node{left:11%;top:17%}.comparator-node{left:22%;top:26%;width:72px;height:72px}.comparator-node:before{border-radius:0;transform:rotate(45deg)}.pi-node{left:28%;top:39%;width:108px;height:108px;cursor:pointer}.pi-node:before{border-color:var(--state);box-shadow:inset 0 0 30px rgba(var(--state-rgb),.08)}.pi-node:hover{background:radial-gradient(circle,rgba(var(--state-rgb),.17),rgba(2,8,12,.9) 70%)}.output-node{left:37%;top:54%;width:82px;height:82px}.plant-node{left:47%;top:72%;width:114px;height:72px;border-radius:50%}.sensor-node{right:28%;top:41%}.feedback-copy{position:absolute;right:11%;bottom:15%;color:#4e889a;font:700 7px ui-monospace,Consolas,monospace;letter-spacing:.16em}
 
-.signal-history{min-height:850px;background:#050b11}.history-heading{display:grid;grid-template-columns:1fr auto;align-items:end}.history-heading>span,.history-heading h2{grid-column:1}.range-control{grid-column:2;grid-row:1/3;display:flex;gap:16px;align-self:center}.range-button{min-width:54px;min-height:38px;border:0;border-bottom:1px solid #284b59;background:transparent;color:var(--muted);cursor:pointer;font:800 9px ui-monospace,Consolas,monospace}.range-button.active{color:var(--cyan);border-color:var(--cyan)}.history-stage{position:relative;height:500px;margin-top:35px;border-left:1px solid #274653;border-bottom:1px solid #274653}.history-stage canvas{display:block;width:100%;height:100%}.live-cursor{position:absolute;right:1.5%;top:10px;bottom:0;width:1px;background:linear-gradient(var(--cyan),transparent)}.live-cursor i{position:absolute;left:-4px;top:34%;width:9px;height:9px;border-radius:50%;background:var(--cyan);box-shadow:0 0 14px var(--cyan)}.live-cursor span{position:absolute;right:8px;top:4px;color:var(--cyan);font:700 8px ui-monospace,Consolas,monospace;letter-spacing:.12em}.history-offline{position:absolute;inset:0;display:grid;place-content:center;text-align:center;background:rgba(4,10,14,.76);opacity:0;visibility:hidden;transition:opacity var(--motion-system),visibility var(--motion-system)}body[data-live="false"] .history-offline{opacity:1;visibility:visible}.history-offline strong{color:var(--red);letter-spacing:.15em}.history-offline span{margin-top:5px;color:var(--muted)}.history-legend{display:flex;gap:28px;margin-top:15px;color:#738c97;font:700 8px ui-monospace,Consolas,monospace;letter-spacing:.1em}.history-legend span:before{content:"";display:inline-block;width:20px;margin-right:8px;border-top:2px solid}.history-legend .actual:before{border-color:var(--cyan)}.history-legend .target:before{border-color:#a9d255}.history-legend .secondary:before{border-color:#7896a2}.history-legend .power:before{border-color:var(--heat)}.session-metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:26px;margin-top:55px}.session-metrics span{padding-left:13px;border-left:1px solid #285160}.session-metrics small,.session-metrics strong{display:block}.session-metrics small{color:var(--muted);font:700 8px ui-monospace,Consolas,monospace;letter-spacing:.11em}.session-metrics strong{margin-top:8px;font-size:22px;font-weight:400}
+.target-control{position:absolute;z-index:15;right:var(--edge);top:28%;width:275px}.target-control>span{display:block;text-align:center}.target-orbit{position:relative;width:246px;height:246px;margin:8px auto 0}.target-orbit svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(135deg);overflow:visible}.target-orbit circle{fill:none;stroke:#143440;stroke-width:1.4;stroke-dasharray:75 25}.target-orbit .target-progress{stroke:var(--state);stroke-dasharray:calc(var(--target-level)*.75) 100;stroke-width:2;filter:drop-shadow(0 0 7px rgba(var(--state-rgb),.45));transition:stroke-dasharray var(--system)}.target-marker{fill:none;stroke:#f4fbfc;stroke-width:3;transform-origin:130px 130px;transform:rotate(var(--target-angle));transition:transform var(--system)}.target-orbit label{position:absolute;inset:52px;display:grid;place-content:center;text-align:center}.target-orbit label>span{color:#718b94;font:7px ui-monospace,Consolas,monospace}.target-orbit input{width:125px;border:0;border-bottom:1px solid #2a5360;background:transparent;outline:0;color:var(--ink);font-size:43px;font-weight:230;letter-spacing:-.06em;text-align:center}.target-orbit input:focus{border-color:var(--cyan)}.target-orbit label em{position:absolute;right:4px;top:54px;font-style:normal}.target-orbit label small{margin-top:5px;color:#67818b;font:7px ui-monospace,Consolas,monospace;letter-spacing:.12em}.target-orbit button{position:absolute;top:50%;width:42px;height:42px;transform:translateY(-50%);border:1px solid #275362;border-radius:50%;background:#041016;cursor:pointer;font-size:20px}.target-orbit button:disabled{opacity:.25;cursor:not-allowed}#targetDown{left:-9px}#targetUp{right:-9px}.commit-target{display:block;width:100%;height:38px;border:0;border-bottom:1px solid #2c5b69;background:transparent;color:#9bd7e3;cursor:pointer;font:700 8px ui-monospace,Consolas,monospace;letter-spacing:.1em}.commit-target:disabled{opacity:.25;cursor:not-allowed}
 
-.hardware-observatory{min-height:1050px;background:linear-gradient(180deg,#050b11,#07131b)}.hardware-map{position:relative;max-width:1450px;height:720px;margin:45px auto 0}.hardware-links{position:absolute;inset:0;width:100%;height:100%}.hardware-links path{fill:none;stroke:#28505e;stroke-width:1;vector-effect:non-scaling-stroke}.pico-core{position:absolute;left:50%;top:50%;width:220px;height:290px;transform:translate(-50%,-50%);padding:40px 28px;border:1px solid #477383;background:linear-gradient(145deg,#102934,#07151c);box-shadow:0 35px 60px #0006}.pico-core:before,.pico-core:after{content:"";position:absolute;top:18px;bottom:18px;width:12px;background:repeating-linear-gradient(to bottom,#7aa0ac 0 5px,transparent 5px 13px)}.pico-core:before{left:-13px}.pico-core:after{right:-13px}.pico-core span,.pico-core small{display:block;color:#7f9ba6;font:700 9px ui-monospace,Consolas,monospace;letter-spacing:.12em}.pico-core strong{display:block;margin-top:34px;font-size:24px;font-weight:400}.pico-core small{margin-top:55px;color:var(--cyan)}.pico-core i{position:absolute;right:20px;top:20px;width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 12px var(--green)}.hardware-cluster{position:absolute;width:270px;padding:10px 0 13px 32px;border-bottom:1px solid #284b59}.hardware-cluster:before{content:"";position:absolute;left:0;bottom:-5px;width:9px;height:9px;border:1px solid #527785;border-radius:50%;background:#07131b}.hardware-cluster>span,.hardware-cluster small{display:block;color:#728e99;font:700 8px ui-monospace,Consolas,monospace;letter-spacing:.12em}.hardware-cluster strong{display:block;margin:8px 0 3px;font-size:17px;font-weight:480}.hardware-cluster i{position:absolute;right:0;bottom:-4px;width:7px;height:7px;border-radius:50%;background:#708792}.hardware-cluster.ok i{background:var(--green);box-shadow:0 0 10px rgba(var(--green-rgb),.5)}.hardware-cluster.active i{background:var(--heat);box-shadow:0 0 10px rgba(var(--heat-rgb),.5)}.hardware-cluster.warn i{background:#e8bd58}.hardware-cluster.bad i{background:var(--red)}.hardware-cluster.sensors{left:2%;top:9%}.hardware-cluster.measurement{left:0;top:38%}.hardware-cluster.interface{left:4%;top:69%}.hardware-cluster.actuation{right:2%;top:9%}.hardware-cluster.light{right:0;top:38%}.hardware-cluster.network{right:4%;top:69%}.hardware-cluster.power{left:50%;bottom:0;transform:translateX(-50%);text-align:center;padding-left:0}.hardware-cluster.power:before{left:50%;transform:translateX(-50%)}.inspection-action{display:flex;align-items:center;justify-content:space-between;width:min(650px,100%);min-height:64px;margin:-12px auto 0;padding:0 18px;border:0;border-bottom:1px solid #306274;background:transparent;cursor:pointer;text-align:left}.inspection-action span{color:#b9d6df;font-size:11px;font-weight:750;letter-spacing:.1em}.inspection-action small{color:var(--muted)}
+.process-output{position:absolute;z-index:15;left:var(--edge);top:54%;width:245px}.process-output>strong{display:block;margin-top:9px;color:var(--state);font-size:42px;font-weight:260}.process-output>i{display:block;height:2px;margin:10px 0;background:#153540}.process-output>i b{display:block;width:0;height:100%;background:var(--state);box-shadow:0 0 10px rgba(var(--state-rgb),.55);transition:width var(--system)}.process-output>small{color:#718892;font:8px ui-monospace,Consolas,monospace}.fan-readout{display:block!important;margin-top:19px;color:#5f7c86!important}.fan-readout b{margin-left:12px;color:#b1c5cb;font-size:11px}
 
-.event-rail{min-height:620px;background:#04090d}.event-rail{display:grid;grid-template-columns:340px 1fr;gap:70px}.event-rail header{padding-top:12px}.event-rail ol{position:relative;margin:0;padding:0 0 0 24px;list-style:none;border-left:1px solid #28505d}.event-rail li{position:relative;display:grid;grid-template-columns:90px 12px 1fr;gap:15px;align-items:start;padding:0 0 34px;color:#b4c6cd}.event-rail li:before{content:"";position:absolute;left:-29px;top:6px;width:9px;height:9px;border:1px solid #527683;border-radius:50%;background:#061016}.event-rail li.good:before{border-color:var(--green);background:var(--green)}.event-rail li.bad:before{border-color:var(--red);background:var(--red)}.event-rail li.warn:before{border-color:#e8bd58;background:#e8bd58}.event-rail time{color:#5f7c87;font:10px ui-monospace,Consolas,monospace}.event-rail li i{width:12px;margin-top:7px;border-top:1px solid #375965}.event-rail li span{font-size:12px}
+.action-control{position:absolute;z-index:16;right:calc(var(--edge) + 38px);top:65%;width:190px;height:190px}.action-control>svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(18deg)}.action-control>svg circle,.action-control>svg path{fill:none;stroke:#1a3d49;stroke-width:1}.action-control>svg path{stroke:var(--state);filter:drop-shadow(0 0 6px rgba(var(--state-rgb),.35))}.action-control>button{position:absolute;border:0;background:transparent;cursor:pointer}.action-control #startButton{inset:33px;display:grid;place-content:center;border-radius:50%;background:radial-gradient(circle,rgba(var(--state-rgb),.12),transparent 69%)}#startButton span{font-size:15px;font-weight:750;letter-spacing:.14em}#startButton small{margin-top:3px;color:#708892;font:7px ui-monospace,Consolas,monospace;letter-spacing:.08em}#stopButton{right:-27px;top:73px;width:55px;height:44px;border-bottom:1px solid rgba(var(--red-rgb),.6);color:#ff9da5;font:700 9px ui-monospace,Consolas,monospace;letter-spacing:.1em}.action-control button:disabled{opacity:.22;cursor:not-allowed}.action-control p{position:absolute;left:50%;top:100%;width:240px;transform:translateX(-50%);margin:4px 0 0;color:#667f88;text-align:center;font:7px ui-monospace,Consolas,monospace}
 
-.engineering-drawer{position:fixed;z-index:80;right:0;top:0;bottom:0;width:min(720px,94vw);padding:30px 38px 70px;overflow:auto;background:rgba(5,13,18,.98);border-left:1px solid #315865;box-shadow:-40px 0 100px #0009;transform:translateX(105%);visibility:hidden;transition:transform var(--motion-system),visibility var(--motion-system)}.engineering-drawer.open{transform:none;visibility:visible}.engineering-drawer>header{position:relative;padding-right:50px}.engineering-drawer>header span{color:var(--cyan);font:700 9px ui-monospace,Consolas,monospace;letter-spacing:.18em}.engineering-drawer h2{margin:8px 0 0;font-size:38px;font-weight:300}.engineering-drawer header button{position:absolute;right:0;top:0;width:42px;height:42px;border:1px solid #315865;border-radius:50%;background:transparent;cursor:pointer;font-size:24px}.engineering-drawer section{position:relative;margin-top:50px;padding-top:20px;border-top:1px solid #24434f}.engineering-drawer h3{margin:0 0 25px;color:#7e98a2;font:700 9px ui-monospace,Consolas,monospace;letter-spacing:.15em}.pi-inspection{min-height:300px}.pi-radial{float:left;width:210px;height:210px;margin-right:45px;display:grid;place-content:center;text-align:center;border-radius:50%;background:conic-gradient(var(--state) calc(var(--pi-output)*1%),#17313c 0);position:relative}.pi-radial:before{content:"";position:absolute;inset:8px;border-radius:50%;background:#071219}.pi-radial strong,.pi-radial span{position:relative;z-index:1}.pi-radial strong{font-size:39px;font-weight:300}.pi-radial span{color:var(--muted);font:9px ui-monospace,Consolas,monospace}.pi-inspection dl{display:grid;grid-template-columns:1fr 1fr;gap:15px}.pi-inspection dl div{padding-left:10px;border-left:1px solid #31515d}.pi-inspection dt{color:var(--muted);font:8px ui-monospace,Consolas,monospace}.pi-inspection dd{margin:5px 0 0;font-size:17px}.technical-values{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.technical-values div{padding-left:10px;border-left:1px solid #294b57}.technical-values span,.technical-values strong{display:block}.technical-values span{color:var(--muted);font:8px ui-monospace,Consolas,monospace;text-transform:uppercase}.technical-values strong{margin-top:5px;font-size:12px;word-break:break-word}.component-inspection{display:grid;grid-template-columns:1fr 1fr;gap:0 24px}.component{display:grid;grid-template-columns:1fr auto;gap:3px 12px;padding:13px 0;border-bottom:1px solid #162f39}.component strong{font-size:11px}.component span{color:var(--muted);font-size:9px}.component b{grid-column:2;grid-row:1/3;align-self:center;color:#9db2b9;font:700 8px ui-monospace,Consolas,monospace}.component.ok b{color:var(--green)}.component.active b{color:var(--heat)}.component.bad b{color:var(--red)}.drawer-scrim{position:fixed;z-index:70;inset:0;background:#010407aa;opacity:0;visibility:hidden;transition:opacity var(--motion-system),visibility var(--motion-system)}.drawer-scrim.visible{opacity:1;visibility:visible}
+.safety-lock{position:absolute;z-index:24;left:50%;top:66%;display:flex;align-items:center;gap:13px;transform:translateX(-50%);padding:8px 0;color:#7a929b;opacity:0;visibility:hidden;transition:opacity var(--normal),visibility var(--normal)}.safety-lock i{width:26px;height:26px;border:1px solid currentColor;transform:rotate(45deg)}.safety-lock span,.safety-lock small,.safety-lock strong,.safety-lock b{display:block}.safety-lock small{color:var(--red);font:700 7px ui-monospace,Consolas,monospace;letter-spacing:.16em}.safety-lock strong{margin-top:3px;color:#dce9ec;font-size:12px}.safety-lock b{color:#77909a;font-size:9px;font-weight:400}.safety-lock.visible{opacity:1;visibility:visible}body[data-state="FEHLER"] .safety-lock{top:48%;padding:20px 28px;border-left:2px solid var(--red);background:rgba(23,5,9,.86)}
 
-.preview-console{position:fixed;z-index:60;left:50%;bottom:14px;transform:translateX(-50%);display:flex;align-items:center;gap:4px;padding:6px;background:#06131bed;border:1px solid #315765;box-shadow:0 15px 50px #0008}.preview-console button{min-height:36px;padding:6px 10px;border:0;border-bottom:1px solid #274b59;background:transparent;color:#78929d;cursor:pointer;font:800 8px ui-monospace,Consolas,monospace;letter-spacing:.08em}.preview-console button.active{color:var(--state);border-color:var(--state)}.preview-console .demo-progress{width:100px;height:2px;background:#1b333e}.preview-console .demo-progress i{display:block;width:0;height:100%;background:var(--state)}
+.timeline-layer{position:absolute;z-index:12;left:var(--edge);right:var(--edge);bottom:0;height:205px;border-top:1px solid rgba(50,91,105,.44)}.timeline-layer header{position:absolute;z-index:3;left:0;right:0;top:0;height:40px;display:flex;align-items:center;gap:24px}.timeline-layer header>span small,.timeline-layer header>span strong{display:inline}.timeline-layer header small{color:#738d96;font:700 7px ui-monospace,Consolas,monospace;letter-spacing:.14em}.timeline-layer header strong{margin-left:10px;color:var(--cyan);font:700 7px ui-monospace,Consolas,monospace}.timeline-legend{color:#617b85;font:7px ui-monospace,Consolas,monospace;letter-spacing:.08em}.timeline-legend i{display:inline-block;width:16px;margin:0 5px 2px 14px;border-top:1px solid}.timeline-legend i.actual{border-color:var(--heat)}.timeline-legend i.target{border-color:var(--cyan)}.timeline-legend i.secondary{border-color:#9ca9cc}.timeline-legend i.power{border-color:var(--green)}.time-range{margin-left:auto;display:flex;height:100%}.time-range button{width:38px;border:0;border-bottom:1px solid transparent;background:transparent;color:#66808a;cursor:pointer;font:700 8px ui-monospace,Consolas,monospace}.time-range button.active{color:var(--cyan);border-color:var(--cyan)}#timelineCanvas{position:absolute;left:0;right:0;bottom:0;width:100%;height:165px}.timeline-offline{position:absolute;z-index:5;inset:40px 0 0;display:grid;place-content:center;text-align:center;background:rgba(2,7,11,.68);opacity:0;visibility:hidden;transition:opacity var(--normal),visibility var(--normal)}.timeline-offline strong{color:#ffadb4;font-size:10px;letter-spacing:.16em}.timeline-offline span{margin-top:4px;color:#738b94;font-size:9px}body[data-live="false"] .timeline-offline{opacity:1;visibility:visible}
 
-.live-value{transition:opacity var(--motion-normal),color var(--motion-normal)}body[data-live="false"] .live-value{opacity:.42}.is-loading .live-value{color:transparent!important;position:relative}.is-loading .live-value:after{content:"";position:absolute;inset:20% 8%;background:linear-gradient(90deg,#142b36,#244552,#142b36);background-size:200% 100%;animation:loadingSweep 1.5s linear infinite}@keyframes loadingSweep{to{background-position:-200% 0}}button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}.low-motion *{animation-play-state:paused!important;scroll-behavior:auto!important}.low-motion .thermal-field{opacity:.45}
+.pi-details{position:absolute;z-index:40;left:35%;top:24%;width:360px;padding:23px 26px 26px;border-left:1px solid var(--state);background:rgba(3,12,17,.94);box-shadow:25px 30px 80px #0008;opacity:0;visibility:hidden;transform:translateY(12px);transition:opacity var(--normal),visibility var(--normal),transform var(--normal)}.pi-details.open{opacity:1;visibility:visible;transform:none}.pi-details>button{position:absolute;right:12px;top:10px;width:32px;height:32px;border:1px solid #2b5260;border-radius:50%;background:transparent;cursor:pointer}.pi-details>small{color:var(--state);font:700 7px ui-monospace,Consolas,monospace;letter-spacing:.15em}.pi-details>strong{display:block;margin:11px 0 20px;font-size:15px;font-weight:400}.pi-details dl{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin:0}.pi-details dl div{padding-left:9px;border-left:1px solid #29505c}.pi-details dt{color:#69828c;font:7px ui-monospace,Consolas,monospace}.pi-details dd{margin:4px 0 0;font-size:12px}
 
-body.presentation{--header-h:74px}.presentation .system-header{padding-top:12px;padding-bottom:12px}.presentation .header-actions .icon-action:not(.primary),.presentation .state-spine,.presentation .safety-interlock,.presentation .hardware-observatory,.presentation .event-rail,.presentation .engineering-drawer,.presentation .drawer-scrim,.presentation .preview-console{display:none!important}.presentation .thermal-hero{grid-template-columns:minmax(600px,1fr) 390px;padding-left:var(--edge);min-height:calc(100vh - var(--header-h))}.presentation .assembly-stage{height:78vh}.presentation .signal-landscape,.presentation .signal-history{min-height:100vh;padding-top:80px}.presentation .section-intro h2,.presentation .history-heading h2{font-size:56px}.presentation .loop-visual{height:55vh}.presentation .history-stage{height:62vh}.presentation .identity small{display:none}
+.engineering-layer{position:absolute;z-index:22;inset:var(--header) 0 205px;pointer-events:none;opacity:0;visibility:hidden;transition:opacity var(--system),visibility var(--system)}body[data-mode="engineering"] .engineering-layer{opacity:1;visibility:visible}.component-tag{position:absolute;padding-left:14px;border-left:1px solid var(--cyan);min-width:170px;transform:translateY(10px);opacity:0;transition:opacity var(--system),transform var(--system)}body[data-mode="engineering"] .component-tag{opacity:1;transform:none}.component-tag span,.component-tag strong,.component-tag small{display:block}.component-tag span{color:#5c8795;font:700 7px ui-monospace,Consolas,monospace;letter-spacing:.14em}.component-tag strong{margin-top:5px;font-size:12px}.component-tag small{margin-top:3px;color:#79929b;font:8px ui-monospace,Consolas,monospace}.cup-tag{left:12%;top:14%}.sensor-tag{right:13%;top:19%}.plate-tag{left:14%;top:54%}.peltier-tag{left:17%;top:69%}.fan-tag{right:18%;top:68%}.pico-tag{right:12%;top:48%}.adc-tag{right:28%;top:61%}.engineering-rail{position:absolute;right:var(--edge);top:10%;display:flex;flex-direction:column}.engineering-rail button{width:90px;height:35px;border:0;border-right:1px solid #294f5c;background:transparent;color:#67818a;cursor:pointer;text-align:right;font:700 7px ui-monospace,Consolas,monospace}.engineering-rail button.active{color:var(--cyan);border-color:var(--cyan)}.engineering-values{position:absolute;right:var(--edge);bottom:3%;width:290px;display:grid;grid-template-columns:1fr 1fr;gap:9px}.engineering-values span{padding-left:8px;border-left:1px solid #234854}.engineering-values small,.engineering-values strong{display:block}.engineering-values small{color:#607b85;font:7px ui-monospace,Consolas,monospace}.engineering-values strong{margin-top:2px;font-size:10px}
 
-@media(max-width:1240px){:root{--edge:24px}.system-header{grid-template-columns:1fr auto;gap:18px}.connection-readout{grid-column:1/-1;grid-row:2}.header-actions{grid-column:2;grid-row:1}.system-header{padding-bottom:14px}.thermal-hero{grid-template-columns:100px minmax(440px,1fr) 320px;gap:15px}.assembly-stage{min-height:600px}.temperature-readout{left:0}.session-metrics{gap:12px}.event-rail{grid-template-columns:270px 1fr}.presentation .thermal-hero{grid-template-columns:minmax(500px,1fr) 340px}}
-@media(max-width:980px){:root{--header-h:142px}.thermal-hero{grid-template-columns:minmax(420px,1.25fr) minmax(300px,.75fr);align-items:start;padding-top:40px}.state-spine{grid-column:1/-1;align-self:auto;flex-direction:row;justify-content:space-between;gap:0;border-left:0;border-top:1px solid var(--line);padding-top:13px}.state-spine span{padding:0 5px}.state-spine i{left:50%;top:-18px;transform:translateX(-50%)}.assembly-stage{height:650px}.process-orbit{min-height:620px}.safety-interlock{grid-template-columns:repeat(4,1fr);row-gap:20px}.signal-landscape,.signal-history,.hardware-observatory,.event-rail{padding-top:80px;padding-bottom:80px}.loop-visual{height:760px;margin-top:30px}.loop-path{display:none}.loop-node{left:50%!important;top:auto;width:240px;transform:translateX(-50%)}.loop-node:after{content:"";position:absolute;left:50%;top:112px;height:34px;border-left:1px solid var(--state)}.loop-node.setpoint{top:0}.loop-node.comparator{top:120px}.loop-node.controller{top:240px}.loop-node.output{top:370px}.loop-node.actuator{top:490px}.loop-node.plant{top:610px}.loop-node.sensor{top:730px}.loop-node.sensor:after{display:none}.feedback-label{display:none}.controller-equation{margin-top:65px;flex-direction:column;align-items:center}.history-stage{height:420px}.session-metrics{grid-template-columns:repeat(3,1fr);row-gap:25px}.hardware-map{height:900px}.hardware-links{display:none}.pico-core{top:45%;width:190px;height:250px}.hardware-cluster{width:230px}.hardware-cluster.sensors{left:0;top:4%}.hardware-cluster.measurement{left:0;top:25%}.hardware-cluster.interface{left:0;top:66%}.hardware-cluster.actuation{right:0;top:4%}.hardware-cluster.light{right:0;top:25%}.hardware-cluster.network{right:0;top:66%}.hardware-cluster.power{bottom:0}.event-rail{grid-template-columns:1fr}.presentation .thermal-hero{grid-template-columns:1fr}.presentation .process-orbit{display:none}}
-@media(max-width:700px){:root{--header-h:188px;--edge:14px}.system-header{grid-template-columns:1fr auto;gap:12px;padding:14px var(--edge)}.identity strong{font-size:14px}.identity small{font-size:8px}.identity svg{width:36px}.header-actions .icon-action span:last-child{display:none}.icon-action{width:38px;justify-content:center}.connection-readout{display:grid;grid-template-columns:10px 1fr auto;gap:10px}.last-sample{display:none!important}.network-address{padding-left:10px}.thermal-hero{display:block;padding-top:25px;padding-bottom:210px}.state-spine{margin:0 5px 22px}.state-spine span{font-size:7px}.assembly-stage{width:100%;height:540px;min-height:0}.thermal-assembly{transform:scale(1.08)}.temperature-readout{left:2%;top:31%}.temperature-readout strong{font-size:65px}.temperature-readout em{font-size:22px}.assembly-annotation{font-size:6px}.assembly-annotation i{width:20px}.assembly-annotation.sensor{right:0}.assembly-annotation.plate{right:0}.assembly-annotation.peltier{left:0}.assembly-annotation.fan{right:0}.process-orbit{min-height:590px;padding:15px 4px 0}.orbit-heading{margin-bottom:5px}.setpoint-dial{width:245px;height:245px;margin-top:18px}.safety-interlock{bottom:25px;grid-template-columns:repeat(2,1fr);row-gap:19px}.interlock-node{font-size:7px;padding-top:10px}.interlock-node strong{font-size:8px}.signal-landscape,.signal-history,.hardware-observatory,.event-rail{padding:70px var(--edge)}.section-intro h2,.history-heading h2,.event-rail h2{font-size:31px}.section-intro p{font-size:12px}.loop-visual{height:780px}.loop-node{width:210px}.controller-equation{font-size:10px;text-align:center}.history-heading{display:block}.range-control{margin-top:22px}.range-button{min-height:44px}.history-stage{height:360px;margin-top:25px}.history-legend{gap:12px;flex-wrap:wrap}.session-metrics{grid-template-columns:1fr 1fr}.session-metrics strong{font-size:18px}.hardware-map{height:auto;margin-top:55px;padding:0 6px;display:flex;flex-direction:column;gap:30px}.pico-core,.hardware-cluster{position:relative;left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;transform:none!important;width:100%}.pico-core{height:190px;order:0}.pico-core strong{margin-top:22px}.pico-core small{margin-top:27px}.hardware-cluster{padding:10px 0 13px 25px}.hardware-cluster.sensors{order:1}.hardware-cluster.measurement{order:2}.hardware-cluster.actuation{order:3}.hardware-cluster.power{order:4;text-align:left}.hardware-cluster.power:before{left:0;transform:none}.hardware-cluster.interface{order:5}.hardware-cluster.light{order:6}.hardware-cluster.network{order:7}.inspection-action{margin-top:45px}.inspection-action small{display:none}.event-rail{gap:35px}.event-rail li{grid-template-columns:65px 8px 1fr;gap:9px}.engineering-drawer{width:100%;padding:25px 18px 60px}.pi-radial{float:none;margin:0 auto 35px}.technical-values{grid-template-columns:1fr 1fr}.component-inspection{grid-template-columns:1fr}.preview-console{left:8px;right:8px;bottom:8px;transform:none;overflow:auto}.preview-console button{white-space:nowrap}.presentation .thermal-hero{display:block;padding-bottom:40px}.presentation .assembly-stage{height:64vh;min-height:500px}.presentation .process-orbit{display:block;min-height:360px}.presentation .process-actions,.presentation .setpoint-dial button,.presentation .setpoint-action{display:none}.presentation .setpoint-dial{height:210px}.presentation .signal-landscape,.presentation .signal-history{min-height:auto}.presentation .history-stage{height:65vh}}
-@media(max-width:390px){.identity small{display:none}.assembly-stage{height:500px}.thermal-assembly{transform:scale(1.14)}.temperature-readout strong{font-size:58px}.assembly-annotation span{display:none}.session-metrics{grid-template-columns:1fr 1fr}.system-alert{padding:25px 22px}}
-@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.thermal-field{opacity:.45}.boot-sequence{display:none}}
+.offline-veil{position:absolute;z-index:30;inset:var(--header) 0 205px;display:grid;place-content:center;text-align:center;background:rgba(1,5,8,.61);opacity:0;visibility:hidden;pointer-events:none;transition:opacity var(--system),visibility var(--system)}body[data-live="false"]:not(.is-loading) .offline-veil{opacity:1;visibility:visible}.offline-veil span{color:#ff9ba4;font:700 9px ui-monospace,Consolas,monospace;letter-spacing:.18em}.offline-veil strong{margin-top:7px;color:#8ca1a8;font-size:11px;font-weight:400}.live-value{transition:opacity var(--normal)}body[data-live="false"] .live-value{opacity:.46}.is-loading .live-value{opacity:.25}
 
-/* Review-one refinements: chart semantics, preview separation and mobile spatial crop. */
-.history-legend .actual:before{border-color:var(--heat)}
-.history-legend .target:before{border-color:var(--cyan)}
-.history-legend .secondary:before{border-color:#97a4c7}
-.history-legend .power:before{border-color:var(--green)}
-.preview-mode .thermal-hero{padding-bottom:165px}
-.preview-mode .safety-interlock{bottom:82px}
-.visual-review .preview-console{display:none}
-.visual-review.preview-mode .thermal-hero{padding-bottom:110px}
-.visual-review.preview-mode .safety-interlock{bottom:27px}
+body[data-mode="thermal"] .primary-reading{transform:translateY(-2vh)}body[data-mode="thermal"] .target-control,body[data-mode="thermal"] .action-control{opacity:.34}body[data-mode="thermal"] .scene-viewport{left:22%;right:22%;top:5%;bottom:18%}body[data-mode="engineering"] .primary-reading,body[data-mode="engineering"] .target-control,body[data-mode="engineering"] .process-output,body[data-mode="engineering"] .action-control,body[data-mode="engineering"] .state-reading,body[data-mode="engineering"] .spatial-loop{opacity:.16;pointer-events:none}body[data-mode="engineering"] .scene-viewport{left:23%;right:23%;top:4%;bottom:15%}
 
-@media(max-width:700px){
- :root{--header-h:174px}
- .system-header{grid-template-columns:minmax(0,1fr) auto;overflow:hidden}
- .identity{min-width:0}
- .header-actions{width:114px;justify-content:flex-end}
- .connection-readout{width:100%;min-width:0;max-width:100%;grid-template-columns:10px minmax(0,1fr) minmax(0,96px);overflow:hidden}
- .connection-readout>span,.network-address{min-width:0}
- .connection-readout strong{overflow:hidden;text-overflow:ellipsis}
- .assembly-stage{height:460px}
- .thermal-assembly{transform:scale(.96)}
- .temperature-readout{top:32%}
- .temperature-readout strong{font-size:62px}
- .assembly-annotation span{display:none}
- .assembly-annotation.sensor,.assembly-annotation.plate,.assembly-annotation.fan{right:1%}
- .assembly-annotation.plate{max-width:116px}
- .process-orbit{min-height:560px;padding-top:8px}
- .thermal-hero{padding-bottom:190px}
- .preview-mode .thermal-hero{padding-bottom:245px}
- .preview-mode .safety-interlock{bottom:78px}
- .presentation .assembly-stage{height:58vh;min-height:430px}
-}
+.preview-deck{position:fixed;z-index:120;left:50%;bottom:8px;transform:translateX(-50%);display:flex;background:rgba(3,12,17,.94);border-top:1px solid #2c5664}.preview-deck button{height:34px;padding:0 8px;border:0;border-bottom:1px solid transparent;background:transparent;color:#647e87;cursor:pointer;font:700 7px ui-monospace,Consolas,monospace;letter-spacing:.07em}.preview-deck button.active{color:var(--state);border-color:var(--state)}.preview-mode .timeline-layer{bottom:42px}.preview-mode .engineering-layer,.preview-mode .offline-veil{bottom:247px}
 
-@media(max-width:700px){
- :root{--header-h:194px}
- .system-header{display:flex;flex-wrap:wrap;align-content:center}
- .identity{flex:0 0 calc(100vw - 154px)}
- .header-actions{flex:0 0 114px;order:2}
- .connection-readout{flex:0 0 calc(100vw - 28px);width:calc(100vw - 28px);grid-template-columns:10px minmax(0,1fr);grid-template-rows:auto auto;gap:3px 10px;order:3}
- .connection-pulse{grid-column:1;grid-row:1}
- .connection-readout>span:not(.network-address){grid-column:2;grid-row:1}
- .connection-readout .network-address{grid-column:2;grid-row:2;display:flex;align-items:baseline;gap:8px;padding:0;border:0}
- .network-address strong{margin-top:0}
- .state-spine{width:auto;margin-left:0;margin-right:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));text-align:center}
- .state-spine span{padding:0}
- .assembly-annotation i{display:none}
- .assembly-annotation.sensor,.assembly-annotation.plate,.assembly-annotation.fan{display:none}
- .assembly-annotation.peltier{left:3%;top:88%}
- .assembly-annotation.peltier span{display:inline;font-size:6px}
- .visual-review.preview-mode .thermal-hero{padding-bottom:190px}
- .visual-review.preview-mode .safety-interlock{bottom:25px}
-}
+body.presentation .view-modes button:not(#presentationButton),body.presentation .link-state time,body.presentation .preview-deck{display:none}body.presentation .edge-header{--header:66px}body.presentation .brand small{display:none}body.presentation .experience{min-height:100vh}body.presentation .scene-viewport{left:20%;right:34%;top:4%;bottom:15%}body.presentation .primary-reading{top:25%;width:31vw}body.presentation .primary-reading strong{font-size:clamp(110px,10vw,180px)}body.presentation .state-reading{top:16%}body.presentation .target-control{top:30%}body.presentation .action-control,body.presentation .process-output,body.presentation .safety-lock{display:none}body.presentation .timeline-layer{height:255px}body.presentation #timelineCanvas{height:215px}
 
-@media(min-width:701px) and (max-height:850px){
- .thermal-hero{padding-top:18px}
- .assembly-stage{height:550px;min-height:0}
- .process-orbit{min-height:550px;padding-top:12px}
- .setpoint-dial{width:235px;height:235px;margin-top:20px}
- .dial-center{inset:45px}
- .dial-center input{font-size:37px}
- .process-action{min-height:64px}
-}
+@media(max-width:1250px){:root{--edge:22px}.edge-header{grid-template-columns:auto 1fr auto}.link-state{margin-left:25px}.view-modes button{padding:0 7px}.scene-viewport{left:23%;right:23%}.primary-reading{width:25vw}.primary-reading strong{font-size:95px}.setpoint-node{left:8%}.comparator-node{left:20%}.pi-node{left:27%}.output-node{left:36%}.sensor-node{right:25%}.target-control{width:245px}.target-orbit{width:220px;height:220px}.target-orbit label{inset:46px}.action-control{right:var(--edge)}.process-output{width:210px}.timeline-layer{height:190px}#timelineCanvas{height:150px}.engineering-layer,.offline-veil{bottom:190px}}
+
+@media(max-width:900px){:root{--header:132px;--edge:18px}.edge-header{height:var(--header);display:grid;grid-template-columns:1fr auto;grid-template-rows:66px 66px}.brand{grid-column:1;grid-row:1}.view-modes{grid-column:2;grid-row:1}.view-modes button:not(#presentationButton){display:none}.link-state{grid-column:1/-1;grid-row:2;justify-self:start;margin:0}.experience{height:auto;min-height:1650px;overflow:hidden}.scene-viewport{left:8%;right:8%;top:12%;bottom:auto;height:600px}.primary-reading{left:var(--edge);top:18%;width:260px}.primary-reading strong{font-size:92px}.state-reading{right:var(--edge);top:17%;width:240px}.target-control{right:var(--edge);top:49%;width:250px}.process-output{left:var(--edge);top:51%;width:220px}.action-control{right:42px;top:68%}.spatial-loop{inset:var(--header) 0 330px}.setpoint-node{left:8%;top:7%}.comparator-node{left:10%;top:34%}.pi-node{left:11%;top:44%}.output-node{left:23%;top:56%}.plant-node{left:45%;top:65%}.sensor-node{right:8%;top:35%}.loop-routes{opacity:.65}.timeline-layer{left:var(--edge);right:var(--edge);height:310px}.timeline-layer header{height:60px;flex-wrap:wrap}.timeline-legend{order:3;width:100%}#timelineCanvas{height:250px}.engineering-layer,.offline-veil{bottom:310px}.component-tag{min-width:140px}.engineering-values{bottom:3%;left:var(--edge);right:auto}.preview-mode .timeline-layer{bottom:42px}.preview-mode .engineering-layer,.preview-mode .offline-veil{bottom:352px}}
+
+@media(max-width:600px){:root{--header:168px;--edge:14px}.edge-header{height:var(--header);grid-template-columns:1fr auto;grid-template-rows:60px 64px 44px;padding:0 var(--edge)}.brand svg{width:23px}.brand strong{font-size:12px}.brand small{font-size:7px}.link-state{grid-row:2;grid-column:1/-1;width:100%;display:grid;grid-template-columns:9px minmax(0,1fr) auto;gap:8px}.link-state .ip{padding-left:8px}.link-state time{display:none}.view-modes{grid-row:3;grid-column:1/-1;justify-self:stretch;display:grid;grid-template-columns:repeat(4,1fr)}.view-modes button,.view-modes button:not(#presentationButton){display:block;padding:0 2px;font-size:6px}.experience{min-height:1880px}.scene-viewport{top:12%;left:-2%;right:-2%;height:510px}.primary-reading{top:18%;left:var(--edge);width:200px}.primary-reading strong{font-size:68px}.primary-reading em{font-size:20px}.primary-reading small{font-size:6px;margin-top:12px}.state-reading{top:42%;left:var(--edge);right:auto;width:calc(100% - 28px)}.state-reading strong{font-size:26px}.target-control{top:49%;left:50%;right:auto;width:270px;transform:translateX(-50%)}.process-output{top:65%;left:var(--edge);width:175px}.process-output>strong{font-size:34px}.action-control{top:63%;right:4px;transform:scale(.82)}.safety-lock{top:76%;width:calc(100% - 34px);justify-content:center}.spatial-loop{top:var(--header);bottom:360px}.loop-routes{display:none}.signal-node{width:78px;height:78px}.setpoint-node{left:4%;top:48%}.comparator-node{left:38%;top:52%;width:60px;height:60px}.pi-node{left:62%;top:49%;width:82px;height:82px}.output-node{left:auto;right:4%;top:57%;width:70px;height:70px}.plant-node{left:36%;top:66%;width:100px;height:60px}.sensor-node{right:3%;top:31%;width:75px;height:75px}.feedback-copy{right:6%;bottom:17%}.timeline-layer{height:350px}.timeline-layer header{height:88px;align-content:center}.timeline-layer header>span{width:100%}.timeline-legend{font-size:6px;line-height:2}.time-range{position:absolute;right:0;top:0;height:38px}#timelineCanvas{height:262px}.pi-details{left:14px;right:14px;top:47%;width:auto}.engineering-layer{inset:var(--header) 0 350px}.component-tag{min-width:115px}.cup-tag{left:3%;top:12%}.sensor-tag{right:3%;top:20%}.plate-tag{left:3%;top:40%}.peltier-tag{left:3%;top:56%}.fan-tag{right:3%;top:61%}.pico-tag{right:3%;top:42%}.adc-tag{right:3%;top:53%}.engineering-rail{top:4%;right:var(--edge);flex-direction:row}.engineering-values{width:calc(100% - 28px);grid-template-columns:repeat(3,1fr)}.offline-veil{bottom:350px}.preview-deck{left:6px;right:6px;transform:none;overflow:auto}.preview-deck button{white-space:nowrap}.preview-mode .timeline-layer{bottom:42px}.preview-mode .engineering-layer,.preview-mode .offline-veil{bottom:392px}body.presentation .scene-viewport{left:-4%;right:-4%;top:11%;height:580px}body.presentation .primary-reading{top:18%;width:220px}body.presentation .primary-reading strong{font-size:78px}body.presentation .state-reading{top:43%}body.presentation .target-control{top:50%}body.presentation .timeline-layer{height:360px}body.presentation #timelineCanvas{height:272px}}
+
+@media(max-height:800px) and (min-width:901px){.scene-viewport{top:8%;bottom:20%}.primary-reading{top:25%}.primary-reading strong{font-size:90px}.state-reading{top:15%}.target-control{top:26%;transform:scale(.86);transform-origin:top right}.process-output{top:52%}.action-control{top:61%;transform:scale(.82);transform-origin:top right}.timeline-layer{height:170px}#timelineCanvas{height:130px}.engineering-layer,.offline-veil{bottom:170px}}
+
+.low-motion *{animation-play-state:paused!important;scroll-behavior:auto!important}.low-motion #thermalCanvas{opacity:.42}@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}.intro{display:none}#thermalCanvas{opacity:.42}}
+
+/* Review pass 1: protect the measurement hierarchy and the chart horizon. */
+@media(min-width:901px){.spatial-loop{bottom:205px}.loop-routes{overflow:hidden}.setpoint-node{left:17%;top:17%}.comparator-node{left:24%;top:29%}.pi-node{left:29%;top:44%}}
+#stopButton{right:-24px!important;top:68px!important;width:58px!important;height:58px!important;border:1px solid rgba(var(--red-rgb),.58)!important;border-radius:50%;transition:inset var(--normal),width var(--normal),height var(--normal),background var(--normal),box-shadow var(--normal)}
+body[data-state="AUFHEIZEN"] #stopButton,body[data-state="HALTEN"] #stopButton{right:51px!important;top:51px!important;width:88px!important;height:88px!important;background:radial-gradient(circle,rgba(var(--red-rgb),.12),transparent 70%);box-shadow:0 0 0 1px rgba(var(--red-rgb),.16),0 0 32px rgba(var(--red-rgb),.11)}
+body[data-state="AUFHEIZEN"] #startButton,body[data-state="HALTEN"] #startButton{opacity:.11}
+body[data-state="AUFHEIZEN"] #startButton,body[data-state="HALTEN"] #startButton{visibility:hidden}body[data-state="AUFHEIZEN"] #stopButton,body[data-state="HALTEN"] #stopButton{font-size:11px}
+.display-tag{left:12%;top:34%}.light-tag{right:13%;top:34%}.hardware-network{position:absolute;inset:0;width:100%;height:100%;opacity:.32}.hardware-network path{fill:none;stroke:var(--cyan);stroke-width:1;stroke-dasharray:2 9;vector-effect:non-scaling-stroke;animation:signalFlow 5s linear infinite}.hardware-network text{fill:#5e8c98;font:7px ui-monospace,Consolas,monospace;letter-spacing:.1em}
+@media(max-width:600px){.link-state .ip{justify-self:end;min-width:102px;padding-left:7px}.display-tag{left:3%;top:29%}.light-tag{right:3%;top:33%}.hardware-network{display:none}}
 </style>
 </head>
-<body class="is-loading" data-state="AUS" data-live="false">
-<a class="skip-link" href="#thermalHero">Zum Hauptinhalt</a>
-<canvas id="thermalField" class="thermal-field" aria-hidden="true"></canvas>
-<div class="ambient-grid" aria-hidden="true"></div>
+<body data-state="AUS" data-live="false" data-mode="overview" class="is-loading">
+<a class="skip-link" href="#experience">Zur Produktsteuerung</a>
 
-<div class="boot-sequence" id="bootSequence" aria-hidden="true">
- <div class="boot-mark"><i></i><span>THERMAL CONTROL</span></div>
- <div class="boot-copy" id="bootCopy">System wird initialisiert</div>
+<div class="intro" id="intro" aria-hidden="true">
+ <svg viewBox="0 0 120 120"><ellipse cx="60" cy="27" rx="28" ry="8"/><path d="M32 27l4 48c1 17 11 25 24 25s23-8 24-25l4-48"/><path d="M27 101h66"/></svg>
+ <span>THERMAL SYSTEM</span><small>PHYSICAL LOOP ONLINE</small>
 </div>
 
-<header class="system-header">
- <a class="identity" href="#thermalHero" aria-label="Zur Temperaturübersicht">
-  <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M14 7a6 6 0 0 1 12 0v14.2a10 10 0 1 1-12 0V7Z"/><path d="M20 12v14"/><circle cx="20" cy="29" r="3"/></svg>
-  <span><strong>BECHERHALTER</strong><small>Thermal Control Observatory</small></span>
+<header class="edge-header">
+ <a class="brand" href="#experience" aria-label="Zur Produktszene">
+  <svg viewBox="0 0 32 46" aria-hidden="true"><path d="M11 5a5 5 0 0 1 10 0v22a10 10 0 1 1-10 0V5Z"/><path d="M16 13v19"/><circle cx="16" cy="34" r="2.5"/></svg>
+  <span><strong>BECHERHALTER</strong><small>Interactive Thermal System</small></span>
  </a>
- <div class="connection-readout" role="status">
-  <i class="connection-pulse"></i>
-  <span><small id="connectionLabel">VERBINDE MIT PICO</small><strong id="networkIdentity">WLAN wird initialisiert</strong></span>
-  <span class="network-address"><small>IPv4</small><strong id="ipAddress">—</strong></span>
-  <span class="last-sample"><small>LETZTES SIGNAL</small><strong id="lastUpdate">—</strong></span>
- </div>
- <div class="header-actions">
-  <button class="icon-action" id="motionToggle" type="button" aria-pressed="false"><span class="motion-icon" aria-hidden="true"></span><span>LOW MOTION</span></button>
-  <button class="icon-action" id="engineeringOpen" type="button" aria-expanded="false" aria-controls="engineeringDrawer"><span class="nodes-icon" aria-hidden="true"></span><span>ENGINEERING</span></button>
-  <button class="icon-action primary" id="presentationToggle" type="button" aria-pressed="false"><span class="screen-icon" aria-hidden="true"></span><span id="presentationLabel">PRÄSENTATION</span></button>
- </div>
+ <div class="link-state" role="status" aria-live="polite"><i></i><span><small id="connectionState">PICO W WIRD GESUCHT</small><strong id="networkName">—</strong></span><span class="ip"><small>IPv4</small><strong id="networkIp">—</strong></span><time id="lastSignal">—</time></div>
+ <nav class="view-modes" aria-label="Produktansicht">
+  <button type="button" data-mode="overview" class="active">ÜBERBLICK</button>
+  <button type="button" data-mode="thermal">THERMISCH</button>
+  <button type="button" data-mode="engineering">ENGINEERING</button>
+  <button type="button" id="presentationButton" aria-pressed="false">PRÄSENTATION</button>
+ </nav>
 </header>
 
-<main>
- <section class="thermal-hero" id="thermalHero" aria-labelledby="heroTitle">
-  <h1 id="heroTitle" class="sr-only">Live-Temperatur und Heizprozess</h1>
-  <nav class="state-spine" aria-label="Systemzustände">
-   <span data-for-state="AUS"><i></i>AUS</span>
-   <span data-for-state="BEREIT"><i></i>BEREIT</span>
-   <span data-for-state="AUFHEIZEN"><i></i>AUFHEIZEN</span>
-   <span data-for-state="HALTEN"><i></i>HALTEN</span>
-   <span data-for-state="FEHLER"><i></i>FEHLER</span>
-  </nav>
+<main id="experience" class="experience">
+ <div class="scene-viewport" id="sceneViewport">
+  <svg class="product-fallback" id="productFallback" viewBox="0 0 760 860" role="img" aria-label="Technisches Modell von Becher, Heizplatte, Peltier, Sensor und Lüfter">
+   <defs><linearGradient id="cupGlassV3" x1="0" x2="1"><stop stop-color="#4c8a9c" stop-opacity=".08"/><stop offset=".48" stop-color="#c7f6ff" stop-opacity=".2"/><stop offset="1" stop-color="#376d7c" stop-opacity=".04"/></linearGradient><linearGradient id="liquidV3" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#f5b56d" stop-opacity=".75"/><stop offset="1" stop-color="#87351f" stop-opacity=".56"/></linearGradient><radialGradient id="heaterV3"><stop stop-color="#ffd099"/><stop offset=".2" stop-color="#ff7e36"/><stop offset=".75" stop-color="#5e2718"/><stop offset="1" stop-color="#0b1720"/></radialGradient></defs>
+   <g class="fallback-product"><ellipse cx="380" cy="170" rx="150" ry="42"/><path class="cup-body" d="M230 170l18 345c6 104 66 133 132 133s126-29 132-133l18-345" fill="url(#cupGlassV3)"/><path class="liquid" d="M242 330h276l-10 185c-5 91-65 119-128 119s-123-28-128-119Z" fill="url(#liquidV3)"/><ellipse class="liquid-top" cx="380" cy="330" rx="138" ry="34"/><path class="probe" d="M530 240h52v225h-54"/><circle class="probe-tip" cx="528" cy="465" r="8"/><ellipse class="heater" cx="380" cy="694" rx="205" ry="44" fill="url(#heaterV3)"/><path class="peltier" d="M285 739h190l-17 61H302Z"/><path class="fins" d="M314 746l-12 48m45-48-11 50m45-50-10 51m44-51-9 50m42-50-8 48"/><g class="fallback-fan"><circle cx="380" cy="826" r="24"/><path d="M380 804c20-15 35 5 18 21 15 20-5 35-21 18-20 15-35-5-18-21-15-20 5-35 21-18Z"/></g></g>
+  </svg>
+  <canvas id="productCanvas" aria-hidden="true"></canvas>
+  <canvas id="thermalCanvas" aria-hidden="true"></canvas>
+ </div>
 
-  <div class="assembly-stage" id="assemblyStage">
-   <div class="scene-coordinate top">THERMISCHE STRECKE / G(s)</div>
-   <svg class="thermal-assembly" viewBox="0 0 720 760" role="img" aria-label="Technische Schnittdarstellung von Becher, Heizplatte, Peltier und Lüfter">
-    <defs>
-     <linearGradient id="vesselGlass" x1="0" x2="1"><stop offset="0" stop-color="#82dcef" stop-opacity=".04"/><stop offset=".52" stop-color="#c8f4ff" stop-opacity=".15"/><stop offset="1" stop-color="#4aa7be" stop-opacity=".03"/></linearGradient>
-     <linearGradient id="liquidHeat" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffc179" stop-opacity=".72"/><stop offset=".55" stop-color="#ff874f" stop-opacity=".46"/><stop offset="1" stop-color="#c64f2f" stop-opacity=".24"/></linearGradient>
-     <radialGradient id="plateHeat"><stop offset="0" stop-color="#ffd18c"/><stop offset=".25" stop-color="#ff8e4b"/><stop offset=".62" stop-color="#783820"/><stop offset="1" stop-color="#122631"/></radialGradient>
-     <filter id="softGlow"><feGaussianBlur stdDeviation="12"/></filter>
-     <clipPath id="cupClip"><path d="M219 155L235 476Q240 578 360 582Q480 578 485 476L501 155Z"/></clipPath>
-    </defs>
-    <g class="heat-contours" aria-hidden="true"><path d="M306 130C278 89 319 58 295 20"/><path d="M362 125C333 82 382 52 359 8"/><path d="M416 130C390 91 435 61 414 24"/></g>
-    <ellipse class="vessel-rim rear" cx="360" cy="156" rx="142" ry="38"/>
-    <path class="vessel-shell" d="M219 155L235 476Q240 578 360 582Q480 578 485 476L501 155" fill="url(#vesselGlass)"/>
-    <g clip-path="url(#cupClip)"><rect class="liquid-fill" id="liquidFill" x="220" y="278" width="280" height="310" fill="url(#liquidHeat)"/><ellipse class="liquid-surface" cx="360" cy="278" rx="137" ry="31"/></g>
-    <ellipse class="vessel-rim front" cx="360" cy="156" rx="142" ry="38"/>
-    <path class="sensor-probe" d="M502 214h54v144h-45"/><circle class="sensor-tip" cx="511" cy="358" r="7"/>
-    <ellipse class="plate-glow" cx="360" cy="620" rx="190" ry="40" filter="url(#softGlow)"/>
-    <ellipse class="thermal-plate" cx="360" cy="616" rx="190" ry="38" fill="url(#plateHeat)"/>
-    <g class="peltier-array" id="peltierArray"><path d="M249 655h222l-17 58H266Z"/><path d="M276 659l-14 50m46-50-13 52m45-52-12 53m44-53-11 53m43-53-10 52m42-52-9 50"/></g>
-    <g class="fan-assembly"><path d="M297 733h126"/><circle cx="360" cy="737" r="17"/><path class="fan-blades" id="fanBlades" d="M360 720c15-12 28 3 17 15 12 15-3 28-15 17-15 12-28-3-17-15-12-15 3-28 15-17Z"/></g>
-    <path class="energy-axis" d="M360 716V596"/>
-   </svg>
+ <section class="primary-reading" aria-label="Temperaturmessung">
+  <span>ISTTEMPERATUR <b>y(t)</b></span>
+  <div><strong class="live-value" id="actualTemperature">—</strong><em>°C</em></div>
+  <small id="sensorQuality">Messsignal wird erwartet</small>
+ </section>
 
-   <div class="temperature-readout">
-    <span>ISTTEMPERATUR / y(t)</span>
-    <strong class="live-value" id="mainTemperature">—</strong><em>°C</em>
-    <small id="temperatureQuality">Messwert wird geladen</small>
-   </div>
-   <div class="assembly-annotation sensor"><i></i><span>TMP36 / SENSOR 1</span><strong id="sensorOneValue">—</strong></div>
-   <div class="assembly-annotation plate"><i></i><span>HEIZPLATTE</span><strong id="plateState">INAKTIV</strong></div>
-   <div class="assembly-annotation peltier"><i></i><span>PELTIER 1 / 2</span><strong id="peltierCurrent">—</strong></div>
-   <div class="assembly-annotation fan"><i></i><span>LUFTSTROM</span><strong id="fanValue">—</strong></div>
+ <section class="state-reading" aria-label="Systemzustand">
+  <small>SYSTEMZUSTAND</small><strong id="systemState">VERBINDUNG</strong><span id="stateNarrative">Physikalisches System wird synchronisiert</span>
+ </section>
+
+ <section class="spatial-loop" id="spatialLoop" aria-labelledby="loopHeading">
+  <h1 id="loopHeading" class="sr-only">In die Produktszene integrierter PI-Regelkreis</h1>
+  <svg class="loop-routes" viewBox="0 0 1920 1080" preserveAspectRatio="none" aria-hidden="true">
+   <defs><marker id="forwardArrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 7 3.5 0 7Z"/></marker><marker id="feedbackArrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 7 3.5 0 7Z"/></marker></defs>
+   <path class="forward-rail" d="M250 296C405 296 405 370 522 370S650 517 780 617" marker-end="url(#forwardArrow)"/>
+   <path class="actuator-rail" d="M780 617C858 704 885 780 960 822" marker-end="url(#forwardArrow)"/>
+   <path class="feedback-rail" d="M1268 502C1500 502 1542 650 1518 783C1490 935 1220 981 755 970C390 961 294 765 322 469" marker-end="url(#feedbackArrow)"/>
+   <path class="signal-pulse forward" d="M250 296C405 296 405 370 522 370S650 517 780 617C858 704 885 780 960 822"/>
+   <path class="signal-pulse feedback" d="M1268 502C1500 502 1542 650 1518 783C1490 935 1220 981 755 970C390 961 294 765 322 469"/>
+  </svg>
+  <div class="signal-node setpoint-node"><span>w(t)</span><small>SOLLWERT</small><strong id="loopSetpoint">—</strong></div>
+  <div class="signal-node comparator-node"><span>Σ</span><small>VERGLEICH</small><strong id="loopDeviation">—</strong></div>
+  <button class="signal-node pi-node" id="piNode" type="button" aria-expanded="false" aria-controls="piDetails"><span>PI</span><small>REGLER</small><strong id="piNodeState">INAKTIV</strong></button>
+  <div class="signal-node output-node"><span>u(t)</span><small>STELLGRÖSSE</small><strong id="loopOutput">—</strong></div>
+  <div class="signal-node plant-node"><span>G(s)</span><small>THERMISCHE STRECKE</small><strong id="plantState">STILLSTAND</strong></div>
+  <div class="signal-node sensor-node"><span>y(t)</span><small>TMP36 · SENSOR</small><strong id="loopSensor">—</strong></div>
+  <span class="feedback-copy">ISTWERT-RÜCKFÜHRUNG</span>
+ </section>
+
+ <section class="target-control" aria-label="Sollwertsteuerung">
+  <span>SOLLWERT <b>w(t)</b></span>
+  <div class="target-orbit" id="targetOrbit" style="--target-angle:216deg;--target-level:75">
+   <svg viewBox="0 0 260 260" aria-hidden="true"><circle cx="130" cy="130" r="109" pathLength="100"/><circle class="target-progress" cx="130" cy="130" r="109" pathLength="100"/><path class="target-marker" d="M130 5v17"/></svg>
+   <label><input id="targetInput" type="text" inputmode="decimal" value="45,0" aria-label="Solltemperatur in Grad Celsius" disabled><em>°C</em><small>20 — 60</small></label>
+   <button type="button" id="targetDown" aria-label="Sollwert um 0,5 Grad verringern" disabled>−</button><button type="button" id="targetUp" aria-label="Sollwert um 0,5 Grad erhöhen" disabled>+</button>
   </div>
-
-  <aside class="process-orbit" aria-label="Sollwert und Prozesssteuerung">
-   <div class="orbit-heading"><span>SYSTEMZUSTAND</span><strong id="systemState">VERBINDUNG</strong><small id="stateDescription">Live-System wird gesucht</small></div>
-   <div class="setpoint-dial" id="setpointDial" style="--set-angle:200deg;--output:0">
-    <svg viewBox="0 0 220 220" aria-hidden="true"><circle class="dial-track" cx="110" cy="110" r="91"/><circle class="dial-progress" cx="110" cy="110" r="91" pathLength="100"/><path class="dial-tick" d="M110 8v15"/></svg>
-    <div class="dial-center"><span>SOLLWERT / w(t)</span><label><input id="targetInput" type="text" inputmode="decimal" value="45,0" aria-label="Solltemperatur in Grad Celsius" disabled><b>°C</b></label><small>20 — 60 °C</small></div>
-    <button id="targetDown" type="button" aria-label="Sollwert um 0,5 Grad senken" disabled>−</button>
-    <button id="targetUp" type="button" aria-label="Sollwert um 0,5 Grad erhöhen" disabled>+</button>
-   </div>
-   <div class="deviation-readout"><span>REGELABWEICHUNG / e(t)</span><strong class="live-value" id="errorValue">—</strong></div>
-   <div class="output-readout"><span>STELLGRÖSSE / u(t)</span><strong class="live-value" id="powerValue">—</strong><i><b id="powerBar"></b></i></div>
-   <div class="process-actions">
-    <button class="setpoint-action" id="setpointButton" type="button" disabled>SOLLWERT ÜBERNEHMEN</button>
-    <button class="process-action start" id="startButton" type="button" disabled><span>START</span><small id="startCaption">Freigaben werden geprüft</small></button>
-    <button class="process-action stop" id="stopButton" type="button" disabled><span>STOP</span><small>Heizleistung sicher aus</small></button>
-   </div>
-  </aside>
-
-  <div class="safety-interlock" id="safetyInterlock" aria-label="Sicherheitsfreigaben"></div>
-  <div class="system-alert" id="systemAlert" role="alert" aria-live="assertive"><span>SAFETY LOCK</span><strong id="alertTitle">Systemfehler</strong><p id="alertText">Heizbetrieb gesperrt</p></div>
+  <button class="commit-target" id="setpointButton" type="button" disabled>SOLLWERT ÜBERTRAGEN</button>
  </section>
 
- <section class="signal-landscape" id="controlLoop" aria-labelledby="loopTitle">
-  <header class="section-intro"><span>01 · Geschlossener Regelkreis</span><h2 id="loopTitle">Der Regelkreis als lebendes Signal</h2><p>Messung, Entscheidung und Wärmeeintrag sind ein zusammenhängender Prozess – nicht sieben getrennte Kästen.</p></header>
-  <div class="loop-visual" id="loopVisual">
-   <svg class="loop-path" viewBox="0 0 1400 470" preserveAspectRatio="none" aria-hidden="true">
-    <path class="forward-base" d="M70 170H1280"/><path class="forward-signal" id="forwardSignal" d="M70 170H1280"/>
-    <path class="feedback-base" d="M1280 170v205H198V170"/><path class="feedback-signal" d="M1280 170v205H198V170"/>
-   </svg>
-   <div class="loop-node setpoint" data-loop="w"><span>w(t)</span><strong id="loopSetpoint">—</strong><small>Sollwert</small></div>
-   <div class="loop-node comparator" data-loop="e"><span>Σ</span><strong id="loopError">—</strong><small>Regelabweichung</small></div>
-   <div class="loop-node controller" data-loop="pi"><span>PI</span><strong id="loopController">INAKTIV</strong><small>Kp · e + Ki · ∫e dt</small></div>
-   <div class="loop-node output" data-loop="u"><span>u(t)</span><strong id="loopOutput">—</strong><small>Stellgröße</small></div>
-   <div class="loop-node actuator" data-loop="p"><span>P</span><strong id="loopPeltier">—</strong><small>Peltier</small></div>
-   <div class="loop-node plant" data-loop="g"><span>G(s)</span><strong id="loopPlant">STILLSTAND</strong><small>Becher / Heizstrecke</small></div>
-   <div class="loop-node sensor" data-loop="y"><span>y(t)</span><strong id="loopSensor">—</strong><small>Temperatursensor</small></div>
-   <span class="feedback-label">RÜCKFÜHRUNG DES ISTWERTS y(t)</span>
-  </div>
-  <div class="controller-equation"><span>e(t) = w(t) − y(t)</span><span>u(t) = Kp · e(t) + Ki · ∫e(t)dt</span><span>0 ≤ u(t) ≤ 100 %</span></div>
+ <section class="process-output" aria-label="Heizleistung und Lüfter">
+  <span>PELTIER · u(t)</span><strong id="powerOutput">—</strong><i><b id="outputFill"></b></i><small id="peltierDetail">P1 / P2 sicher aus</small>
+  <span class="fan-readout">LÜFTER <b id="fanRpm">—</b></span>
  </section>
 
- <section class="signal-history" id="signalHistory" aria-labelledby="historyTitle">
-  <header class="history-heading"><span>02 · Signalverlauf</span><h2 id="historyTitle">Thermischer Verlauf</h2><div class="range-control" role="group" aria-label="Diagrammzeitraum"><button class="range-button active" type="button" data-range="60">1 MIN</button><button class="range-button" type="button" data-range="300">5 MIN</button><button class="range-button" type="button" data-range="900">15 MIN</button></div></header>
-  <div class="history-stage"><canvas id="historyCanvas" role="img" aria-label="Zeitlicher Verlauf von Isttemperatur, Sollwert, Sensor 2 und Stellgröße">Ihr Browser unterstützt Canvas nicht.</canvas><div class="live-cursor" id="liveCursor"><i></i><span>LIVE</span></div><div class="history-offline"><strong>SIGNAL UNTERBROCHEN</strong><span>Der letzte Verlauf bleibt als historische Aufnahme sichtbar.</span></div></div>
-  <div class="history-legend"><span class="actual">ISTTEMPERATUR</span><span class="target">SOLLWERT</span><span class="secondary">SENSOR 2</span><span class="power">STELLGRÖSSE</span></div>
-  <div class="session-metrics"><span><small>MAX. ABWEICHUNG</small><strong id="maxError">—</strong></span><span><small>TEMPERATURANSTIEG</small><strong id="temperatureRise">—</strong></span><span><small>dT / dt</small><strong id="temperatureRate">—</strong></span><span><small>SEIT HEIZSTART</small><strong id="heatingTime">—</strong></span><span><small>IM HALTEN</small><strong id="holdingTime">—</strong></span></div>
+ <section class="action-control" id="actionControl" aria-label="Heizprozess steuern">
+  <svg viewBox="0 0 180 180" aria-hidden="true"><circle cx="90" cy="90" r="78"/><path d="M90 12a78 78 0 0 1 67 118"/></svg>
+  <button id="startButton" type="button" disabled><span id="startActionLabel">START</span><small id="startActionHint">HEIZVORGANG</small></button>
+  <button id="stopButton" type="button" disabled>STOP</button>
+  <p id="actionReason">Live-Freigabe wird geprüft</p>
  </section>
 
- <section class="hardware-observatory" id="hardwareMap" aria-labelledby="hardwareTitle">
-  <header class="section-intro"><span>03 · Embedded System</span><h2 id="hardwareTitle">Hardware als verbundenes System</h2><p>Der Pico W steht im Zentrum. Sensorik, Aktorik, Versorgung und Bedienung erscheinen dort, wo sie im System wirken.</p></header>
-  <div class="hardware-map">
-   <svg class="hardware-links" viewBox="0 0 1400 720" preserveAspectRatio="none" aria-hidden="true"><path d="M700 360C510 360 490 140 275 140M700 360C510 360 490 295 275 295M700 360C510 360 490 500 275 500M700 360C890 360 910 140 1125 140M700 360C890 360 910 295 1125 295M700 360C890 360 910 500 1125 500M700 360V640"/></svg>
-   <div class="pico-core"><span>RP2040</span><strong>Raspberry Pi<br>Pico W</strong><small id="picoCoreStatus">SYSTEM ONLINE</small><i></i></div>
-   <div class="hardware-cluster sensors" data-cluster="sensors"><span>SENSORIK</span><strong id="clusterSensors">—</strong><small>TMP36 ×2 · TLA2024 · Licht</small><i></i></div>
-   <div class="hardware-cluster measurement" data-cluster="measurement"><span>MESSUNG</span><strong id="clusterMeasurement">—</strong><small>Strom P1/P2 · Fan-Tacho</small><i></i></div>
-   <div class="hardware-cluster interface" data-cluster="interface"><span>INTERFACE</span><strong id="clusterInterface">—</strong><small>OLED · Taster · Detect</small><i></i></div>
-   <div class="hardware-cluster actuation" data-cluster="actuation"><span>AKTORIK</span><strong id="clusterActuation">—</strong><small>Peltier ×2 · Lüfter</small><i></i></div>
-   <div class="hardware-cluster light" data-cluster="light"><span>STATUSLICHT</span><strong id="clusterLight">—</strong><small>RGB-Ring · Status-LEDs</small><i></i></div>
-   <div class="hardware-cluster network" data-cluster="network"><span>NETZWERK</span><strong id="clusterNetwork">—</strong><small>CYW43 · HTTP · DHCP</small><i></i></div>
-   <div class="hardware-cluster power" data-cluster="power"><span>VERSORGUNG</span><strong id="clusterPower">—</strong><small>USB · PG_5V0 · 12-V-Last</small><i></i></div>
-  </div>
-  <button class="inspection-action" id="hardwareInspect" type="button"><span>VOLLSTÄNDIGE SYSTEMINSPEKTION</span><small>19 Komponenten · echte API-Zustände</small></button>
+ <section class="safety-lock" id="safetyLock" role="alert" aria-live="assertive"><i></i><span><small>START GESPERRT</small><strong id="safetyTitle">System nicht bereit</strong><b id="safetyReason">Sicherheitsfreigaben werden geprüft</b></span></section>
+
+ <section class="timeline-layer" id="timeline" aria-labelledby="timelineTitle">
+  <header><span><small id="timelineTitle">THERMISCHER VERLAUF</small><strong id="timelineNow">LIVE</strong></span><div class="timeline-legend"><i class="actual"></i>IST <i class="target"></i>SOLL <i class="secondary"></i>SENSOR 2 <i class="power"></i>u(t)</div><div class="time-range" role="group" aria-label="Diagrammzeitraum"><button type="button" class="active" data-range="60">1m</button><button type="button" data-range="300">5m</button><button type="button" data-range="900">15m</button></div></header>
+  <canvas id="timelineCanvas" role="img" aria-label="Live-Verlauf von Isttemperatur, Sollwert, Sensor 2 und Heizleistung"></canvas>
+  <div class="timeline-offline"><strong>SIGNAL EINGEFROREN</strong><span>Letzte Messung bleibt erhalten</span></div>
  </section>
 
- <section class="event-rail" id="eventRail" aria-labelledby="eventTitle">
-  <header><span>04 · Ereignissignal</span><h2 id="eventTitle">Systemereignisse</h2><p>Browserlokal aus echten Zustandsänderungen abgeleitet.</p></header>
-  <ol id="eventTimeline" aria-live="polite"></ol>
+ <aside class="pi-details" id="piDetails" aria-hidden="true">
+  <button type="button" id="piClose" aria-label="PI-Details schließen">×</button><small>PI-REGELUNG · READ ONLY</small><strong>u(t) = Kp · e(t) + Ki · ∫e(t)dt</strong>
+  <dl><div><dt>Kp</dt><dd id="piKp">—</dd></div><div><dt>Ki</dt><dd id="piKi">—</dd></div><div><dt>P</dt><dd id="piP">—</dd></div><div><dt>I</dt><dd id="piI">—</dd></div><div><dt>Anti-Windup</dt><dd id="piWindup">—</dd></div><div><dt>Zyklus</dt><dd id="piCycle">—</dd></div></dl>
+ </aside>
+
+ <section class="engineering-layer" id="engineeringLayer" aria-label="Explodierte Hardwareansicht">
+  <div class="component-tag cup-tag"><span>THERMISCHE STRECKE</span><strong>Becher / Inhalt</strong><small id="engCup">—</small></div>
+  <div class="component-tag sensor-tag"><span>MESSUNG</span><strong>TMP36 ×2</strong><small id="engSensors">—</small></div>
+  <div class="component-tag plate-tag"><span>ENERGIEÜBERTRAGUNG</span><strong>Heizplatte</strong><small id="engPlate">—</small></div>
+  <div class="component-tag peltier-tag"><span>AKTORIK</span><strong>VNH7070 · Peltier ×2</strong><small id="engPeltier">—</small></div>
+  <div class="component-tag fan-tag"><span>LUFTPFAD</span><strong>PWM-Lüfter</strong><small id="engFan">—</small></div>
+  <div class="component-tag pico-tag"><span>CONTROL CORE</span><strong>Raspberry Pi Pico W</strong><small id="engPico">—</small></div>
+  <div class="component-tag adc-tag"><span>ANALOG FRONT END</span><strong>TLA2024</strong><small id="engAdc">—</small></div>
+  <div class="component-tag display-tag"><span>HUMAN INTERFACE</span><strong>OLED · Taster</strong><small>SSD1306 · MODE / − / OK / +</small></div>
+  <div class="component-tag light-tag"><span>STATUSLICHT</span><strong>RGB-Ring · LEDs</strong><small>12 Pixel · 5 Statuskanäle</small></div>
+  <svg class="hardware-network" viewBox="0 0 1920 850" preserveAspectRatio="none" aria-hidden="true"><path d="M680 520C560 470 510 330 440 280"/><path d="M680 520C620 610 520 670 430 700"/><path d="M680 520C820 490 930 420 1080 310"/><path d="M680 520C900 590 1110 650 1390 640"/><text x="520" y="410">TMP36 · ADC0</text><text x="520" y="630">PWM · VNH7070</text><text x="850" y="438">I²C · TLA2024 / OLED</text><text x="1110" y="620">PWM / TACHO</text></svg>
+  <div class="engineering-rail"><button type="button" data-focus="system" class="active">SYSTEM</button><button type="button" data-focus="sensors">SENSOREN</button><button type="button" data-focus="power">POWER</button></div>
+  <div class="engineering-values" id="engineeringValues"></div>
  </section>
+
+ <div class="offline-veil"><span>LIVE-VERBINDUNG UNTERBROCHEN</span><strong id="offlineLastValue">Letzte Systemaufnahme bleibt sichtbar</strong></div>
 </main>
 
-<aside class="engineering-drawer" id="engineeringDrawer" aria-hidden="true" aria-labelledby="engineeringTitle">
- <header><span>ENGINEERING MODE</span><h2 id="engineeringTitle">Systeminspektion</h2><button id="engineeringClose" type="button" aria-label="Engineering-Ansicht schließen">×</button></header>
- <section class="pi-inspection"><h3>PI-REGLER / READ-ONLY</h3><div class="pi-radial" id="piRadial" style="--pi-output:0"><strong id="piOutput">—</strong><span>u(t)</span></div><dl><div><dt>Kp</dt><dd id="piKp">—</dd></div><div><dt>Ki</dt><dd id="piKi">—</dd></div><div><dt>P-Anteil</dt><dd id="piP">—</dd></div><div><dt>I-Anteil</dt><dd id="piI">—</dd></div><div><dt>Anti-Windup</dt><dd id="piAntiWindup">—</dd></div><div><dt>Regelzyklus</dt><dd id="controlPeriod">—</dd></div></dl></section>
- <section><h3>LIVE-MESSWERTE</h3><div class="technical-values" id="technicalValues"></div></section>
- <section><h3>HARDWAREKOMPONENTEN</h3><div class="component-inspection" id="componentInspection"></div></section>
-</aside>
-<div class="drawer-scrim" id="drawerScrim"></div>
-
-<div class="preview-console" aria-label="Lokale Vorschau-Szenarien">
+<div class="preview-deck" aria-label="Lokale Vorschau-Szenarien">
  <button type="button" data-scenario="ready">READY</button>
  <button type="button" data-scenario="heating" class="active">HEATING</button>
  <button type="button" data-scenario="holding">HOLDING</button>
  <button type="button" data-scenario="error">ERROR</button>
- <button type="button" data-scenario="disconnected">DISCONNECT</button>
- <button type="button" data-scenario="recovery">RECOVERY</button>
+ <button type="button" data-scenario="offline">OFFLINE</button>
+ <button type="button" data-scenario="reconnect">RECONNECT</button>
+ <button type="button" data-scenario="sensor-error">SENSOR ERROR</button>
+ <button type="button" data-scenario="fan-error">FAN ERROR</button>
+ <button type="button" data-scenario="power-error">POWER ERROR</button>
  <button type="button" data-scenario="demo30">30 MIN DEMO</button>
 </div>
-<script>(function () {
-  "use strict";
-
-  const stateColors = {
-    AUS: [0.18, 0.31, 0.37],
-    BEREIT: [0.17, 0.55, 0.88],
-    AUFHEIZEN: [1.0, 0.36, 0.11],
-    HALTEN: [0.20, 0.79, 0.49],
-    FEHLER: [1.0, 0.16, 0.24]
-  };
-  let canvas;
-  let gl;
-  let context2d;
-  let program;
-  let uniforms;
-  let frame = 0;
-  let lastFrame = 0;
-  let state = "AUS";
-  let power = 0;
-  let temperature = 20;
-  let lowMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  const vertexSource = `
-    attribute vec2 p;
-    varying vec2 uv;
-    void main(){uv=p*.5+.5;gl_Position=vec4(p,0.,1.);}
-  `;
-  const fragmentSource = `
-    precision mediump float;
-    varying vec2 uv;
-    uniform vec2 resolution;
-    uniform float time;
-    uniform float outputPower;
-    uniform float processTemperature;
-    uniform vec3 stateColor;
-    float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123);}
-    float noise(vec2 p){
-      vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
-      return mix(mix(hash(i),hash(i+vec2(1.,0.)),f.x),mix(hash(i+vec2(0.,1.)),hash(i+vec2(1.)),f.x),f.y);
-    }
-    float fbm(vec2 p){float v=0.;v+=noise(p)*.55;p=p*2.03+9.2;v+=noise(p)*.28;p=p*2.01+2.7;v+=noise(p)*.14;return v;}
-    void main(){
-      vec2 q=uv;vec2 aspect=vec2(resolution.x/max(resolution.y,1.),1.);
-      vec2 p=(q-.5)*aspect;
-      float motion=time*(.035+.09*outputPower);
-      float plume=fbm(vec2(p.x*2.1,p.y*1.15-motion));
-      float vessel=exp(-length((p-vec2(-.12,.02))*vec2(.78,1.18))*3.1);
-      float heat=exp(-length((p-vec2(-.12,-.34))*vec2(.7,1.55))*3.7);
-      float trace=smoothstep(.82,.16,abs(p.y-.08*sin(p.x*5.5+motion*4.))+.5*abs(p.x));
-      float energy=(.12+outputPower*.78)*(heat*.68+plume*vessel*.32);
-      vec3 cold=vec3(.008,.027,.043);
-      vec3 thermal=mix(vec3(.035,.14,.19),stateColor,clamp(energy+trace*.035,0.,1.));
-      vec3 color=mix(cold,thermal,clamp(vessel*.20+energy+plume*.035,0.,.72));
-      color+=stateColor*trace*.022;
-      color*=.91+.09*smoothstep(20.,60.,processTemperature);
-      float vignette=smoothstep(1.15,.25,length(p));color*=mix(.55,1.,vignette);
-      gl_FragColor=vec4(color,1.);
-    }
-  `;
-
-  function compile(type, source) {
-    const shader = gl.createShader(type);
-    gl.shaderSource(shader, source);
-    gl.compileShader(shader);
-    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(shader));
-    return shader;
-  }
-
-  function initialiseWebGL() {
-    gl = canvas.getContext("webgl", { alpha: false, antialias: false, depth: false, powerPreference: "low-power" });
-    if (!gl) return false;
-    program = gl.createProgram();
-    gl.attachShader(program, compile(gl.VERTEX_SHADER, vertexSource));
-    gl.attachShader(program, compile(gl.FRAGMENT_SHADER, fragmentSource));
-    gl.linkProgram(program);
-    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(program));
-    gl.useProgram(program);
-    const buffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
-    const position = gl.getAttribLocation(program, "p");
-    gl.enableVertexAttribArray(position);
-    gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
-    uniforms = {
-      resolution: gl.getUniformLocation(program, "resolution"),
-      time: gl.getUniformLocation(program, "time"),
-      power: gl.getUniformLocation(program, "outputPower"),
-      temperature: gl.getUniformLocation(program, "processTemperature"),
-      color: gl.getUniformLocation(program, "stateColor")
-    };
-    return true;
-  }
-
-  function resize() {
-    const ratio = Math.min(devicePixelRatio || 1, 1.35);
-    const width = Math.max(1, Math.floor(innerWidth * ratio));
-    const height = Math.max(1, Math.floor(innerHeight * ratio));
-    if (canvas.width === width && canvas.height === height) return;
-    canvas.width = width;
-    canvas.height = height;
-    if (gl) gl.viewport(0, 0, width, height);
-  }
-
-  function drawFallback() {
-    resize();
-    const ctx = context2d;
-    if (!ctx) {
-      canvas.style.background = "radial-gradient(circle at 43% 62%, rgba(255,152,84,.09), transparent 58%), #050b11";
-      return;
-    }
-    const width = canvas.width;
-    const height = canvas.height;
-    const color = stateColors[state] || stateColors.AUS;
-    ctx.fillStyle = "#050b11";
-    ctx.fillRect(0, 0, width, height);
-    const gradient = ctx.createRadialGradient(width * .43, height * .62, 0, width * .43, height * .62, Math.max(width, height) * .64);
-    const rgb = color.map(value => Math.round(value * 255)).join(",");
-    gradient.addColorStop(0, `rgba(${rgb},${.08 + power * .0018})`);
-    gradient.addColorStop(.48, `rgba(${rgb},.035)`);
-    gradient.addColorStop(1, "rgba(5,11,17,0)");
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, width, height);
-  }
-
-  function render(now) {
-    frame = lowMotion ? 0 : requestAnimationFrame(render);
-    if (document.hidden || (!lowMotion && now - lastFrame < 33)) return;
-    lastFrame = now;
-    resize();
-    if (!gl) return drawFallback();
-    const color = stateColors[state] || stateColors.AUS;
-    gl.uniform2f(uniforms.resolution, canvas.width, canvas.height);
-    gl.uniform1f(uniforms.time, lowMotion ? 0 : now * .001);
-    gl.uniform1f(uniforms.power, power / 100);
-    gl.uniform1f(uniforms.temperature, temperature);
-    gl.uniform3fv(uniforms.color, color);
-    gl.drawArrays(gl.TRIANGLES, 0, 3);
-  }
-
-  function initialise(target) {
-    canvas = target;
-    if (!canvas) return;
-    try {
-      if (!initialiseWebGL()) context2d = canvas.getContext("2d");
-    } catch (error) {
-      gl = null;
-      context2d = canvas.getContext("2d");
-      console.info("[UI] WebGL nicht verfügbar, Canvas-Fallback aktiv", error.message);
-    }
-    addEventListener("resize", resize, { passive: true });
-    document.addEventListener("visibilitychange", () => { if (!document.hidden) lastFrame = 0; });
-    cancelAnimationFrame(frame);
-    frame = requestAnimationFrame(render);
-  }
-
-  window.ThermalField = {
-    initialise,
-    update(nextState, nextPower, nextTemperature) {
-      state = nextState || "AUS";
-      power = Math.max(0, Math.min(100, Number(nextPower) || 0));
-      temperature = Number.isFinite(Number(nextTemperature)) ? Number(nextTemperature) : 20;
-      if (lowMotion) { lastFrame = 0; requestAnimationFrame(render); }
-    },
-    setLowMotion(enabled) {
-      cancelAnimationFrame(frame);
-      lowMotion = Boolean(enabled);
-      lastFrame = 0;
-      frame = requestAnimationFrame(render);
-    }
-  };
-}());
+<script>(function(){
+"use strict";
+var canvas,gl,program,frame=0,last=0,observer=null;
+var model={state:"AUS",power:0,temperature:22,fan:0,mode:"overview",focus:"system",lowMotion:false,pointerX:0,pointerY:0,visible:true};
+var locations={};
+var vertex="attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}";
+var fragment=`precision highp float;
+uniform vec2 r;
+uniform float t,power,temp,state,explode,thermal,fan,focus;
+uniform vec2 pointer;
+#define MAX_STEPS 88
+#define FAR 18.0
+mat2 rot(float a){float c=cos(a),s=sin(a);return mat2(c,-s,s,c);}
+float box(vec3 p,vec3 b){vec3 q=abs(p)-b;return length(max(q,0.))+min(max(q.x,max(q.y,q.z)),0.);}
+float cyl(vec3 p,float h,float ra){vec2 d=abs(vec2(length(p.xz),p.y))-vec2(ra,h);return min(max(d.x,d.y),0.)+length(max(d,0.));}
+float torus(vec3 p,vec2 q){return length(vec2(length(p.xz)-q.x,p.y))-q.y;}
+vec2 join(vec2 a,vec2 b){return a.x<b.x?a:b;}
+vec2 map(vec3 p){
+ float ex=explode;
+ vec2 z=vec2(99.,0.);
+ vec3 q=p;
+ q.y-=1.28+ex*.68;
+ float outer=cyl(q,1.37,1.18);
+ float inner=cyl(q-vec3(0.,.14,0.),1.3,1.02);
+ float cup=max(outer,-inner);
+ cup=max(cup,-(p.y-(2.57+ex*.68)));
+ z=join(z,vec2(cup,1.));
+ z=join(z,vec2(torus(q-vec3(0.,1.34,0.),vec2(1.1,.07)),2.));
+ vec3 li=p-vec3(0.,.86+ex*.62,0.);
+ z=join(z,vec2(cyl(li,.82,.99),3.));
+ vec3 plate=p-vec3(0.,-.30-ex*.14,0.);
+ z=join(z,vec2(cyl(plate,.13,1.44),4.));
+ vec3 pel=p-vec3(0.,-.67-ex*.5,0.);
+ z=join(z,vec2(box(pel,vec3(.88,.20,.82)),5.));
+ vec3 sink=p-vec3(0.,-1.08-ex*.82,0.);
+ z=join(z,vec2(box(sink,vec3(.98,.16,.9)),6.));
+ for(int i=0;i<7;i++){float fi=float(i)-3.;z=join(z,vec2(box(sink-vec3(fi*.25,-.34,0.),vec3(.055,.35,.86)),6.));}
+ vec3 fp=p-vec3(0.,-1.82-ex*1.15,.0);
+ fp.xz=rot(t*fan*.85)*fp.xz;
+ z=join(z,vec2(cyl(fp,.08,.25),7.));
+ for(int i=0;i<5;i++){float a=float(i)*1.2566;vec3 blade=fp;blade.xz=rot(a)*blade.xz;blade.x-=.52;z=join(z,vec2(box(blade,vec3(.38,.07,.12)),7.));}
+ vec3 probe=p-vec3(1.30+ex*.42,1.18+ex*.38,0.);
+ z=join(z,vec2(cyl(probe,.9,.045),8.));
+ z=join(z,vec2(length(probe-vec3(0.,-.9,0.))-.10,9.));
+ vec3 pcb=p-vec3(-1.62-ex*.65,-.87-ex*.24,.10);
+ z=join(z,vec2(box(pcb,vec3(.5,.035,.7)),10.));
+ z=join(z,vec2(box(pcb-vec3(-.18,.10,.0),vec3(.18,.08,.26)),11.));
+ z=join(z,vec2(box(pcb-vec3(.12,.07,.30),vec3(.27,.025,.18)),12.));
+ z=join(z,vec2(torus(pcb-vec3(-.08,.12,-.32),vec2(.16,.025)),13.));
+ return z;
+}
+vec3 normal(vec3 p){vec2 e=vec2(.002,0.);return normalize(vec3(map(p+e.xyy).x-map(p-e.xyy).x,map(p+e.yxy).x-map(p-e.yxy).x,map(p+e.yyx).x-map(p-e.yyx).x));}
+vec3 material(float m,vec3 p,vec3 n){
+ vec3 c=vec3(.08,.13,.15);float rough=.7;
+ if(m<1.5){c=vec3(.19,.34,.39)+pow(max(n.y,0.),4.)*.16;rough=.28;}
+ else if(m<2.5){c=vec3(.48,.70,.74);rough=.22;}
+ else if(m<3.5){c=mix(vec3(.20,.10,.045),vec3(1.,.39,.09),thermal*.65+clamp((temp-20.)/45.,0.,1.)*.35);rough=.42;}
+ else if(m<4.5){c=mix(vec3(.14,.20,.22),vec3(1.,.19,.035),thermal);rough=.28;}
+ else if(m<5.5){c=mix(vec3(.08,.18,.22),vec3(.78,.16,.035),thermal*.75);rough=.5;}
+ else if(m<6.5){c=vec3(.12,.19,.21);rough=.46;}
+ else if(m<7.5){c=vec3(.055,.14,.17);rough=.58;}
+ else if(m<8.5){c=vec3(.23,.52,.59);rough=.28;}
+ else if(m<9.5){c=state>3.5?vec3(1.,.08,.12):vec3(.12,.85,1.);rough=.18;}
+ else if(m<10.5){c=vec3(.035,.27,.20);rough=.64;}
+ else if(m<12.5){c=vec3(.035,.42,.52);rough=.21;}
+ else{c=state>3.5?vec3(1.,.03,.06):vec3(.12,.8,.9);rough=.16;}
+ if(explode>.2&&focus>1.5){float grid=step(.94,fract((p.x+p.z)*9.));c+=grid*vec3(.04,.24,.25);}
+ return c*(.76+.24*(1.-rough));
+}
+float trace(vec3 ro,vec3 rd,out float m){float d=0.;m=0.;for(int i=0;i<MAX_STEPS;i++){vec2 h=map(ro+rd*d);m=h.y;if(h.x<.0015||d>FAR)break;d+=h.x*.76;}return d;}
+void main(){
+ vec2 uv=(gl_FragCoord.xy*2.-r)/r.y;
+ float yaw=-.56+pointer.x*.055+explode*.12;
+ float pitch=-.14+pointer.y*.035-explode*.04;
+ vec3 ro=vec3(4.7+explode*1.1,3.2+explode*.55,6.8+explode*1.5);
+ ro.xz=rot(yaw)*ro.xz;ro.yz=rot(pitch)*ro.yz;
+ vec3 ta=vec3(0.,.25,0.);vec3 ww=normalize(ta-ro),uu=normalize(cross(ww,vec3(0.,1.,0.))),vv=cross(uu,ww);
+ vec3 rd=normalize(ww*2.25+uv.x*uu+uv.y*vv);
+ float m;float d=trace(ro,rd,m);vec3 bg=mix(vec3(.006,.018,.025),vec3(.025,.075,.09),max(0.,uv.y*.5+.3));
+ float halo=exp(-length(uv-vec2(0.,-.23))*3.4)*thermal;bg+=vec3(.30,.055,.01)*halo;
+ if(d>FAR){gl_FragColor=vec4(bg,1.);return;}
+ vec3 pos=ro+rd*d,n=normal(pos);vec3 key=normalize(vec3(-.6,.8,.45)),rim=normalize(vec3(.8,.28,-.6));
+ float diff=max(dot(n,key),0.),edge=pow(1.-max(dot(-rd,n),0.),3.),spec=pow(max(dot(reflect(-key,n),-rd),0.),24.);
+ vec3 c=material(m,pos,n);c*=.34+diff*.96;c+=spec*.38+edge*vec3(.15,.36,.42);
+ float heat=max(0.,1.-abs(pos.y+.25)*.65)*thermal;c+=vec3(.55,.085,.01)*heat*.34;
+ float red=state>3.5?.55:0.;c+=red*vec3(.65,.015,.02)*edge;
+ float fog=1.-exp(-d*d*.009);c=mix(c,bg,fog);
+ c=c/(c+vec3(1.));c=pow(c,vec3(.82));
+ float vignette=smoothstep(1.48,.28,length(uv*vec2(.72,1.)));gl_FragColor=vec4(c*vignette,1.);
+}`;
+function shader(type,source){var s=gl.createShader(type);gl.shaderSource(s,source);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS))throw new Error(gl.getShaderInfoLog(s));return s;}
+function initialise(target){
+ canvas=target;if(!canvas)return false;
+ try{
+  gl=canvas.getContext("webgl",{alpha:true,antialias:false,powerPreference:"high-performance"});if(!gl)return false;
+  program=gl.createProgram();gl.attachShader(program,shader(gl.VERTEX_SHADER,vertex));gl.attachShader(program,shader(gl.FRAGMENT_SHADER,fragment));gl.linkProgram(program);if(!gl.getProgramParameter(program,gl.LINK_STATUS))throw new Error(gl.getProgramInfoLog(program));
+  var buffer=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buffer);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);gl.useProgram(program);var point=gl.getAttribLocation(program,"p");gl.enableVertexAttribArray(point);gl.vertexAttribPointer(point,2,gl.FLOAT,false,0,0);
+  ["r","t","power","temp","state","explode","thermal","fan","focus","pointer"].forEach(function(k){locations[k]=gl.getUniformLocation(program,k);});
+  document.body.classList.add("webgl-ready");
+  addEventListener("pointermove",function(event){if(model.lowMotion)return;model.pointerX=(event.clientX/innerWidth-.5)*2;model.pointerY=(event.clientY/innerHeight-.5)*-2;},{passive:true});
+  addEventListener("resize",resize,{passive:true});
+  if("IntersectionObserver" in window){observer=new IntersectionObserver(function(entries){model.visible=entries[0].isIntersecting;});observer.observe(canvas);}
+  resize();frame=requestAnimationFrame(render);return true;
+ }catch(error){console.warn("V3 WebGL fallback:",error);gl=null;return false;}
+}
+function resize(){if(!gl||!canvas)return;var rect=canvas.getBoundingClientRect();var embedded=innerWidth<1000;var ratio=Math.min(devicePixelRatio||1,embedded?1:.82);var width=Math.max(1,Math.floor(rect.width*ratio)),height=Math.max(1,Math.floor(rect.height*ratio));if(canvas.width!==width||canvas.height!==height){canvas.width=width;canvas.height=height;gl.viewport(0,0,width,height);}}
+function render(now){frame=requestAnimationFrame(render);if(!gl||!model.visible)return;var cap=model.lowMotion?250:33;if(now-last<cap)return;last=now;resize();var states={AUS:0,BEREIT:1,AUFHEIZEN:2,HALTEN:3,FEHLER:4};var heat=model.state==="AUFHEIZEN"||model.state==="HALTEN"?Math.max(.06,model.power/100):0;gl.useProgram(program);gl.uniform2f(locations.r,canvas.width,canvas.height);gl.uniform1f(locations.t,model.lowMotion?0:now/1000);gl.uniform1f(locations.power,model.power/100);gl.uniform1f(locations.temp,model.temperature);gl.uniform1f(locations.state,states[model.state]||0);gl.uniform1f(locations.explode,model.mode==="engineering"?1:0);gl.uniform1f(locations.thermal,heat);gl.uniform1f(locations.fan,model.lowMotion?0:Math.min(2,model.fan/2400));gl.uniform1f(locations.focus,{system:1,sensors:2,power:3}[model.focus]||1);gl.uniform2f(locations.pointer,model.pointerX,model.pointerY);gl.drawArrays(gl.TRIANGLES,0,3);}
+function update(status){model.state=status.state||"AUS";model.power=Number(status.power)||0;model.temperature=Number(status.temperature)||22;model.fan=Number(status.fan_rpm)||0;}
+function setMode(mode){model.mode=mode||"overview";}
+function setFocus(focus){model.focus=focus||"system";}
+function setLowMotion(value){model.lowMotion=!!value;}
+window.ProductScene={initialise:initialise,update:update,setMode:setMode,setFocus:setFocus,setLowMotion:setLowMotion,resize:resize};
+})();
 
 
-(function () {
-  "use strict";
-
-  document.body.classList.add("preview-mode");
-
-  const nominal = {
-    state: "AUFHEIZEN",
-    fault: "KEIN FEHLER",
-    fault_description: "Keine aktive Störung",
-    temperature: 42.6,
-    temperature1: 42.6,
-    temperature2: 42.1,
-    setpoint: 50,
-    error: 7.4,
-    power: 68,
-    fan_rpm: 1850,
-    fan_percent: 73,
-    current1: 2.8,
-    current2: 2.7,
-    light_level: .71,
-    sensor_ok: true,
-    temp1_ok: true,
-    temp2_ok: true,
-    current_ok: true,
-    current1_ok: true,
-    current2_ok: true,
-    tla2024_ok: true,
-    light_ok: true,
-    display_initialized: true,
-    leds_initialized: true,
-    cup: true,
-    power_good: true,
-    wifi: true,
-    webserver_ready: true,
-    wifi_ssid: "Obi W-lan Kenobi",
-    wifi_ip: "10.78.252.72",
-    night: false,
-    start_allowed: false,
-    start_block_reason: "Heizvorgang ist bereits aktiv",
-    kp: 8,
-    ki: .12,
-    p_term: 59.2,
-    i_term: 8.8,
-    output_limited: false,
-    anti_windup: false,
-    control_period_ms: 250,
-    max_safe_temperature: 65,
-    uptime_ms: 267000
-  };
-  let demo = { ...nominal };
-  let scenario = "heating";
-  let automatic = true;
-  let simulatedMinutes = 8.7;
-  let previousTick = performance.now();
-
-  function updateDerived() {
-    demo.error = demo.sensor_ok ? demo.setpoint - demo.temperature : NaN;
-    demo.temperature1 = demo.sensor_ok ? demo.temperature : NaN;
-    if (demo.temp2_ok) demo.temperature2 = demo.temperature - .45 + Math.sin(simulatedMinutes * .7) * .08;
-    demo.uptime_ms += 500;
-    demo.p_term = demo.state === "AUFHEIZEN" || demo.state === "HALTEN" ? Math.max(0, demo.error * demo.kp) : 0;
-    demo.i_term = Math.max(0, demo.power - demo.p_term);
-    demo.fan_percent = demo.power ? 38 + demo.power * .52 : 0;
-    demo.fan_rpm = demo.power ? Math.round(640 + demo.fan_percent * 16.2 + Math.sin(simulatedMinutes) * 18) : 0;
-    demo.current1 = demo.power ? demo.power * .0412 : 0;
-    demo.current2 = demo.power ? demo.power * .0397 : 0;
-    demo.start_allowed = demo.state === "BEREIT" && demo.cup && demo.power_good && demo.sensor_ok;
-    demo.start_block_reason = demo.start_allowed ? "Alle Sicherheitsbedingungen erfüllt" : demo.state === "AUFHEIZEN" || demo.state === "HALTEN" ? "Heizprozess ist bereits aktiv" : demo.fault_description;
-  }
-
-  function applyScenario(name) {
-    scenario = name;
-    automatic = name === "demo30";
-    Object.assign(demo, nominal);
-    if (name === "ready") Object.assign(demo, { state: "BEREIT", temperature: 24.2, temperature1: 24.2, temperature2: 23.8, power: 0, fan_rpm: 0, fan_percent: 0, current1: 0, current2: 0, start_allowed: true, start_block_reason: "Alle Sicherheitsbedingungen erfüllt" });
-    if (name === "holding") Object.assign(demo, { state: "HALTEN", temperature: 49.9, temperature1: 49.9, temperature2: 49.5, error: .1, power: 23, fan_rpm: 1190, fan_percent: 43, current1: .94, current2: .91, p_term: .8, i_term: 22.2 });
-    if (name === "error") Object.assign(demo, { state: "FEHLER", fault: "TEMPERATURSENSOR", fault_description: "Temperatursensor 1 nicht verfügbar", temperature: NaN, temperature1: NaN, temperature2: 41.8, error: NaN, power: 0, fan_rpm: 0, fan_percent: 0, current1: 0, current2: 0, sensor_ok: false, temp1_ok: false, start_allowed: false, start_block_reason: "Temperatursensor nicht verfügbar" });
-    if (name === "disconnected") Object.assign(demo, { state: "BEREIT", power: 0, wifi: false, webserver_ready: false, wifi_ip: "—", start_allowed: false });
-    if (name === "recovery") Object.assign(demo, { state: "BEREIT", temperature: 31.8, temperature1: 31.8, temperature2: 31.4, power: 0, start_allowed: true, start_block_reason: "Verbindung wiederhergestellt · Start freigegeben" });
-    if (name === "demo30") {
-      simulatedMinutes = 0;
-      Object.assign(demo, { state: "BEREIT", temperature: 23.7, temperature1: 23.7, temperature2: 23.4, setpoint: 50, power: 0, fan_rpm: 0, current1: 0, current2: 0, start_allowed: true });
-      if (window.ThermalUI) window.ThermalUI.history.splice(0);
-    }
-    updateDerived();
-    document.querySelectorAll("[data-scenario]").forEach(button => button.classList.toggle("active", button.dataset.scenario === name));
-    if (window.ThermalUI) {
-      window.ThermalUI.addEvent(`Szenario ${name.toUpperCase()} aktiviert`, name === "error" || name === "disconnected" ? "bad" : "info");
-      window.ThermalUI.acceptStatus(demo, name !== "disconnected");
-    }
-  }
-
-  function simulateThirtyMinutes(deltaSeconds) {
-    simulatedMinutes += deltaSeconds * .13;
-    if (simulatedMinutes < .7) {
-      demo.state = "BEREIT"; demo.power = 0;
-    } else if (simulatedMinutes < 22) {
-      demo.state = "AUFHEIZEN";
-      const progress = (simulatedMinutes - .7) / 21.3;
-      const targetTemperature = 23.7 + 26.5 * (1 - Math.exp(-progress * 3.15));
-      demo.temperature += (targetTemperature - demo.temperature) * .065;
-      demo.power = Math.max(24, 96 - progress * 83 + Math.sin(simulatedMinutes * .5) * 1.5);
-    } else {
-      demo.state = "HALTEN";
-      demo.temperature = 50 + Math.sin(simulatedMinutes * 1.3) * .14 - Math.cos(simulatedMinutes * .43) * .05;
-      demo.power = 21.5 + Math.sin(simulatedMinutes * .72) * 2.4;
-    }
-    if (simulatedMinutes >= 30) simulatedMinutes = 22;
-  }
-
-  function tick(now) {
-    const deltaSeconds = Math.min(1, (now - previousTick) / 1000);
-    previousTick = now;
-    if (automatic) simulateThirtyMinutes(deltaSeconds);
-    else if (scenario === "heating") {
-      simulatedMinutes += deltaSeconds / 60;
-      demo.temperature += Math.max(0, demo.setpoint - demo.temperature) * .00042 + Math.sin(now * .001) * .0005;
-    } else if (scenario === "holding") {
-      demo.temperature = demo.setpoint - .08 + Math.sin(now * .0007) * .08;
-      demo.power = 23 + Math.sin(now * .00045) * 1.7;
-    }
-    updateDerived();
-    if (window.ThermalUI) window.ThermalUI.acceptStatus(demo, scenario !== "disconnected");
-    setTimeout(() => requestAnimationFrame(tick), 440);
-  }
-
-  function command(path) {
-    if (path === "start") {
-      if (demo.start_allowed) {
-        scenario = "heating"; automatic = false; demo.state = "AUFHEIZEN"; demo.power = 92;
-        window.ThermalUI.addEvent("Demo-START bestätigt · Heizsimulation aktiv", "good");
-      }
-    } else if (path === "stop") {
-      scenario = "ready"; automatic = false; demo.state = "BEREIT"; demo.power = 0;
-      window.ThermalUI.addEvent("Demo-STOP bestätigt · Leistung sicher aus", "warn");
-    } else if (path.startsWith("setpoint?value=")) {
-      demo.setpoint = Math.max(20, Math.min(60, Number(new URLSearchParams(path.split("?")[1]).get("value")) || demo.setpoint));
-      window.ThermalUI.addEvent(`Demo-Sollwert ${demo.setpoint.toFixed(1).replace(".", ",")} °C`, "good");
-    }
-    updateDerived();
-    window.ThermalUI.acceptStatus(demo, true);
-  }
-
-  function prefillHistory() {
-    if (!window.ThermalUI || window.ThermalUI.history.length) return;
-    const now = Date.now();
-    for (let secondsAgo = 300; secondsAgo > 0; secondsAgo -= 2) {
-      const progress = (300 - secondsAgo) / 300;
-      const temperature = 37.1 + progress * 5.5 + Math.sin(progress * 13) * .05;
-      window.ThermalUI.history.push({
-        time: now - secondsAgo * 1000,
-        temperature,
-        temperature2: temperature - .45,
-        target: 50,
-        power: 82 - progress * 14,
-        valid: true,
-        valid2: true
-      });
-    }
-  }
-
-  window.PreviewDriver = {
-    start() {
-      document.querySelectorAll("[data-scenario]").forEach(button => button.addEventListener("click", () => applyScenario(button.dataset.scenario)));
-      prefillHistory();
-      updateDerived();
-      const requested = new URLSearchParams(location.search).get("scenario");
-      if (["ready", "heating", "holding", "error", "disconnected", "recovery", "demo30"].includes(requested)) applyScenario(requested);
-      else if (window.ThermalUI) window.ThermalUI.acceptStatus(demo, true);
-      requestAnimationFrame(tick);
-    },
-    command,
-    applyScenario
-  };
-}());
+(function(){
+"use strict";
+var canvas,ctx,frame=0,last=0,particles=[],status={state:"AUS",power:0,fan_rpm:0},mode="overview",lowMotion=false;
+function initialise(target){canvas=target;if(!canvas)return;ctx=canvas.getContext("2d");if(!ctx)return;for(var i=0;i<34;i++)particles.push(seed(i/34));addEventListener("resize",resize,{passive:true});resize();frame=requestAnimationFrame(draw);}
+function seed(progress){return{x:(Math.random()-.5)*.33,y:progress||Math.random(),phase:Math.random()*6.28,speed:.0012+Math.random()*.0015};}
+function resize(){if(!ctx)return;var rect=canvas.getBoundingClientRect(),ratio=Math.min(devicePixelRatio||1,1.25),w=Math.max(1,Math.floor(rect.width*ratio)),h=Math.max(1,Math.floor(rect.height*ratio));if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;ctx.setTransform(ratio,0,0,ratio,0,0);}}
+function draw(now){frame=requestAnimationFrame(draw);if(!ctx||now-last<(lowMotion?250:33))return;last=now;resize();var rect=canvas.getBoundingClientRect(),w=rect.width,h=rect.height,active=status.state==="AUFHEIZEN"||status.state==="HALTEN",intensity=active?Math.max(.07,Number(status.power||0)/100):0;ctx.clearRect(0,0,w,h);if(!intensity)return;
+ var cx=w*.50,base=h*.81,top=h*.28;
+ var field=ctx.createRadialGradient(cx,base,0,cx,base,h*.48);field.addColorStop(0,"rgba(255,102,35,"+(.22*intensity)+")");field.addColorStop(.32,"rgba(255,137,55,"+(.10*intensity)+")");field.addColorStop(1,"rgba(255,126,43,0)");ctx.fillStyle=field;ctx.fillRect(0,0,w,h);
+ ctx.save();ctx.globalCompositeOperation="lighter";ctx.lineWidth=.7;
+ particles.forEach(function(point,index){if(!lowMotion){point.y+=point.speed*(.45+intensity)*33;if(point.y>1)Object.assign(point,seed(0));}var y=base-(base-top)*point.y,x=cx+point.x*w+Math.sin(point.phase+now*.00055+index)*w*.018*point.y;var alpha=(1-point.y)*(.12+.34*intensity);ctx.beginPath();ctx.moveTo(x,y+9);ctx.quadraticCurveTo(x+Math.sin(point.phase)*8,y+3,x,y);ctx.strokeStyle="rgba(255,"+(105+Math.round(point.y*75))+",70,"+alpha+")";ctx.stroke();});
+ if(mode==="thermal"){for(var ring=0;ring<4;ring++){var phase=(lowMotion?.45:(now*.00012+ring*.23)%1);ctx.beginPath();ctx.ellipse(cx,base-(h*.43*phase),w*(.09+.12*phase),h*(.018+.025*phase),0,0,Math.PI*2);ctx.strokeStyle="rgba(255,136,66,"+((1-phase)*.16*intensity)+")";ctx.stroke();}}
+ var fan=Math.min(1,Number(status.fan_rpm||0)/2800);if(fan){ctx.strokeStyle="rgba(104,226,241,"+(.12*fan)+")";for(var a=0;a<3;a++){var yy=h*(.88+a*.035);ctx.beginPath();ctx.moveTo(w*.35,yy);ctx.bezierCurveTo(w*.42,yy+Math.sin(now*.002+a)*8,w*.58,yy-6,w*.67,yy-2);ctx.stroke();}}
+ ctx.restore();}
+function update(next){status=next||status;}
+function setMode(next){mode=next||"overview";}
+function setLowMotion(value){lowMotion=!!value;}
+window.ThermalOverlay={initialise:initialise,update:update,setMode:setMode,setLowMotion:setLowMotion};
+})();
 
 
-(function () {
-  "use strict";
+(function(){
+"use strict";
+var base={state:"AUFHEIZEN",fault:"KEIN FEHLER",fault_description:"Keine aktive Störung",temperature:32.4,temperature1:32.4,temperature2:31.8,setpoint:45,error:12.6,power:68,fan_rpm:1850,fan_percent:64,current1:2.8,current2:2.7,light_level:.72,sensor_ok:true,temp1_ok:true,temp2_ok:true,current_ok:true,current1_ok:true,current2_ok:true,tla2024_ok:true,light_ok:true,display_initialized:true,leds_initialized:true,cup:true,power_good:true,wifi:true,webserver_ready:true,wifi_ssid:"Obi W-lan Kenobi",wifi_ip:"10.78.252.72",night:false,start_allowed:false,start_block_reason:"Heizvorgang bereits aktiv",kp:5.2,ki:.075,p_term:65.5,i_term:2.5,output_limited:false,anti_windup:true,control_period_ms:250,max_safe_temperature:65,uptime_ms:438000};
+var demo=Object.assign({},base),scenario="heating",automatic=false,started=performance.now(),last=started,simMinutes=0;
+function derived(){demo.error=demo.setpoint-demo.temperature;demo.temperature1=demo.temperature;demo.temperature2=demo.temperature-.6+Math.sin(performance.now()/4500)*.08;demo.fan_percent=demo.power>0?Math.max(35,Math.round(demo.power*.82)):0;demo.fan_rpm=demo.fan_percent?Math.round(760+demo.fan_percent*19.5):0;demo.current1=demo.power*.0412;demo.current2=demo.power*.0397;demo.p_term=Math.max(0,demo.error*demo.kp);demo.i_term=Math.max(0,demo.power-demo.p_term);demo.uptime_ms+=500;}
+function nominal(){Object.assign(demo,base,{fault:"KEIN FEHLER",fault_description:"Keine aktive Störung",sensor_ok:true,temp1_ok:true,temp2_ok:true,current_ok:true,current1_ok:true,current2_ok:true,tla2024_ok:true,cup:true,power_good:true,wifi:true,webserver_ready:true});}
+function apply(name){scenario=name;automatic=false;nominal();if(name==="ready")Object.assign(demo,{state:"BEREIT",temperature:23.8,power:0,fan_rpm:0,fan_percent:0,start_allowed:true,start_block_reason:"Alle Freigaben bestätigt"});
+ else if(name==="heating")Object.assign(demo,{state:"AUFHEIZEN",temperature:32.4,power:68,start_allowed:false,start_block_reason:"Heizvorgang bereits aktiv"});
+ else if(name==="holding")Object.assign(demo,{state:"HALTEN",temperature:44.9,power:23,start_allowed:false,start_block_reason:"Halteregelung aktiv"});
+ else if(name==="error")Object.assign(demo,{state:"FEHLER",fault:"UEBERTEMPERATUR",fault_description:"Maximale sichere Temperatur überschritten",temperature:65.3,power:0,start_allowed:false,start_block_reason:"Fehler quittieren und Ursache prüfen"});
+ else if(name==="offline")Object.assign(demo,{power:0,wifi:false,webserver_ready:false,start_allowed:false,start_block_reason:"Keine Live-Verbindung"});
+ else if(name==="reconnect")Object.assign(demo,{state:"BEREIT",temperature:29.1,power:0,start_allowed:true,start_block_reason:"Alle Freigaben bestätigt"});
+ else if(name==="sensor-error")Object.assign(demo,{state:"FEHLER",fault:"TEMPERATURSENSOR",fault_description:"Temperatursignal fehlt oder ist unplausibel",temperature:NaN,temperature1:NaN,sensor_ok:false,temp1_ok:false,power:0,start_allowed:false,start_block_reason:"Temperatursensor prüfen"});
+ else if(name==="fan-error")Object.assign(demo,{state:"FEHLER",fault:"LUEFTER",fault_description:"Kein plausibles Tachosignal bei aktiver Heizleistung",power:0,fan_rpm:0,fan_percent:0,start_allowed:false,start_block_reason:"Lüfter und Tachosignal prüfen"});
+ else if(name==="power-error")Object.assign(demo,{state:"FEHLER",fault:"VERSORGUNG",fault_description:"12-V-Leistungsversorgung nicht freigegeben",power:0,power_good:false,start_allowed:false,start_block_reason:"Leistungsversorgung prüfen"});
+ else if(name==="demo30"){Object.assign(demo,{state:"AUFHEIZEN",temperature:22,power:100,setpoint:50,start_allowed:false,start_block_reason:"Heizsimulation aktiv"});automatic=true;simMinutes=0;window.V3UI.history.splice(0);prefillThirtyMinutes();}
+ derived();document.querySelectorAll("[data-scenario]").forEach(function(button){button.classList.toggle("active",button.dataset.scenario===name);});window.V3UI.acceptStatus(demo,name!=="offline");}
+function prefill(){if(window.V3UI.history.length)return;var now=Date.now();for(var seconds=300;seconds>=0;seconds-=2){var progress=(300-seconds)/300,temperature=23.2+9.2*progress+Math.sin(progress*12)*.06,power=88-20*progress;window.V3UI.history.push({time:now-seconds*1000,temperature:temperature,temperature2:temperature-.6,target:45,power:power,valid:true,valid2:true});}window.V3UI.scheduleChart();}
+function prefillThirtyMinutes(){var now=Date.now();for(var seconds=1800;seconds>=0;seconds-=5){var minute=(1800-seconds)/60,temperature=22+28.15*(1-Math.exp(-minute/7.5)),error=50-temperature,power=minute<2?100:Math.max(19,Math.min(100,error*4.8+16));window.V3UI.history.push({time:now-seconds*1000,temperature:temperature,temperature2:temperature-.65+Math.sin(minute)*.05,target:50,power:power,valid:true,valid2:true});}window.V3UI.runtime.range=900;window.V3UI.scheduleChart();}
+function tick(now){var dt=Math.min(1,(now-last)/1000);last=now;if(automatic){simMinutes+=dt*1.35;demo.temperature=22+28.05*(1-Math.exp(-simMinutes/7.4));demo.error=demo.setpoint-demo.temperature;demo.power=simMinutes<1.2?100:Math.max(18,Math.min(100,demo.error*4.8+16));demo.state=Math.abs(demo.error)<.35?"HALTEN":"AUFHEIZEN";}else if(scenario==="heating"){demo.temperature+=dt*.014;demo.power=Math.max(25,68-(demo.temperature-32.4)*2.4);}else if(scenario==="holding"){demo.temperature=44.9+Math.sin(now/3000)*.06;demo.power=23+Math.sin(now/2400)*1.5;}derived();if(window.V3UI)window.V3UI.acceptStatus(demo,scenario!=="offline");requestAnimationFrame(tick);}
+function command(path){if(path==="start"){scenario="heating";automatic=true;simMinutes=Math.max(0,(demo.temperature-22)/2);demo.state="AUFHEIZEN";demo.power=92;demo.start_allowed=false;demo.start_block_reason="Heizvorgang bereits aktiv";}else if(path==="stop"){scenario="ready";automatic=false;demo.state="BEREIT";demo.power=0;demo.start_allowed=true;demo.start_block_reason="Alle Freigaben bestätigt";}else if(path.indexOf("setpoint?value=")===0){demo.setpoint=Math.max(20,Math.min(60,Number(decodeURIComponent(path.split("=")[1]))||45));}derived();window.V3UI.acceptStatus(demo,true);}
+function start(){document.querySelectorAll("[data-scenario]").forEach(function(button){button.addEventListener("click",function(){apply(button.dataset.scenario);});});prefill();var requested=new URLSearchParams(location.search).get("scenario");apply(requested&&document.querySelector('[data-scenario="'+CSS.escape(requested)+'"]')?requested:"heating");requestAnimationFrame(function(now){last=now;tick(now);});}
+window.PreviewDriver={start:start,command:command,apply:apply};
+})();
 
-  const PREVIEW = true;
-  const SAMPLE_INTERVAL = 500;
-  const MAX_HISTORY_SECONDS = 30 * 60;
-  const stateDescriptions = {
-    AUS: "Leistungspfad sicher deaktiviert",
-    BEREIT: "Alle Bedingungen für einen bewussten Start werden geprüft",
-    AUFHEIZEN: "PI-Regler führt thermische Energie zu",
-    HALTEN: "Solltemperatur erreicht · Energie wird nachgeführt",
-    FEHLER: "Safety Lock aktiv · Heizleistung ist gesperrt"
-  };
-  const faultDescriptions = {
-    "KEIN FEHLER": "Keine aktive Störung",
-    TEMPERATURSENSOR: "Temperatursignal fehlt oder ist unplausibel",
-    UEBERTEMPERATUR: "Maximale sichere Temperatur überschritten",
-    LUEFTER: "Kein plausibles Tachosignal bei aktiver Heizleistung",
-    UEBERSTROM: "Stromgrenze eines Heizkanals überschritten",
-    STROMSENSOR: "Strommessung nicht plausibel",
-    BECHER_ENTFERNT: "Becher während des Heizvorgangs entfernt",
-    VERSORGUNG: "Leistungsversorgung nicht freigegeben"
-  };
-  const safetyDefinition = [
-    ["temperature", "TEMPERATUR"],
-    ["current", "STROM"],
-    ["fan", "LÜFTER"],
-    ["cup", "BECHER"],
-    ["power", "VERSORGUNG"],
-    ["network", "NETZWERK"],
-    ["server", "HTTP"]
-  ];
-  const history = [];
-  const events = [];
-  const runtime = {
-    online: false,
-    initial: true,
-    busy: false,
-    previous: null,
-    current: null,
-    lastUpdate: 0,
-    range: 60,
-    lowMotion: matchMedia("(prefers-reduced-motion: reduce)").matches,
-    heatingStarted: 0,
-    holdingStarted: 0,
-    maxError: 0,
-    initialTemperature: null,
-    drawQueued: false
-  };
 
-  const byId = id => document.getElementById(id);
-  const all = selector => Array.from(document.querySelectorAll(selector));
-  const finite = (value, fallback = 0) => {
-    const number = typeof value === "string" ? Number(value.replace(",", ".")) : Number(value);
-    return Number.isFinite(number) ? number : fallback;
-  };
-  const truth = (value, fallback = false) => typeof value === "boolean" ? value : fallback;
-  const clamp = (value, minimum, maximum) => Math.max(minimum, Math.min(maximum, value));
-  const fixed = (value, digits = 1) => Number.isFinite(Number(value)) ? Number(value).toFixed(digits).replace(".", ",") : "—";
-  const setText = (id, value) => { const node = byId(id); if (node) node.textContent = value; };
-  const available = (id, yes) => { const node = byId(id); if (node) node.classList.toggle("unavailable", !yes); };
-  const escapeHtml = value => String(value).replace(/[&<>"']/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]);
-
-  function normalize(source) {
-    source = source || {};
-    const temperature = finite(source.temperature, NaN);
-    const setpoint = finite(source.setpoint, 45);
-    return {
-      state: ["AUS", "BEREIT", "AUFHEIZEN", "HALTEN", "FEHLER"].includes(source.state) ? source.state : "AUS",
-      fault: source.fault || "KEIN FEHLER",
-      fault_description: source.fault_description || faultDescriptions[source.fault] || "Unbekannter Systemfehler",
-      temperature,
-      temperature1: finite(source.temperature1, NaN),
-      temperature2: finite(source.temperature2, NaN),
-      setpoint,
-      error: Number.isFinite(Number(source.error)) ? Number(source.error) : setpoint - temperature,
-      power: clamp(finite(source.power), 0, 100),
-      fan_rpm: Math.max(0, finite(source.fan_rpm)),
-      fan_percent: clamp(finite(source.fan_percent), 0, 100),
-      current1: Math.max(0, finite(source.current1)),
-      current2: Math.max(0, finite(source.current2)),
-      light_level: clamp(finite(source.light_level), 0, 1),
-      sensor_ok: truth(source.sensor_ok),
-      temp1_ok: truth(source.temp1_ok),
-      temp2_ok: truth(source.temp2_ok),
-      current_ok: truth(source.current_ok),
-      current1_ok: truth(source.current1_ok),
-      current2_ok: truth(source.current2_ok),
-      tla2024_ok: truth(source.tla2024_ok),
-      light_ok: truth(source.light_ok),
-      display_initialized: truth(source.display_initialized),
-      leds_initialized: truth(source.leds_initialized),
-      cup: truth(source.cup),
-      power_good: truth(source.power_good),
-      wifi: truth(source.wifi),
-      webserver_ready: truth(source.webserver_ready),
-      wifi_ssid: String(source.wifi_ssid || "—"),
-      wifi_ip: String(source.wifi_ip || "—"),
-      night: truth(source.night),
-      start_allowed: truth(source.start_allowed),
-      start_block_reason: String(source.start_block_reason || "Startfreigabe nicht bestätigt"),
-      kp: finite(source.kp),
-      ki: finite(source.ki),
-      p_term: finite(source.p_term),
-      i_term: finite(source.i_term),
-      output_limited: truth(source.output_limited),
-      anti_windup: truth(source.anti_windup),
-      control_period_ms: Math.max(0, finite(source.control_period_ms)),
-      max_safe_temperature: finite(source.max_safe_temperature, 65),
-      uptime_ms: Math.max(0, finite(source.uptime_ms))
-    };
-  }
-
-  function formatDuration(milliseconds) {
-    const seconds = Math.max(0, Math.floor(milliseconds / 1000));
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor(seconds % 3600 / 60);
-    const remainder = seconds % 60;
-    return hours ? `${hours} h ${String(minutes).padStart(2, "0")} min` : `${minutes}:${String(remainder).padStart(2, "0")} min`;
-  }
-
-  function setOnline(online, message) {
-    if (runtime.online === online && !runtime.initial) return;
-    runtime.online = online;
-    document.body.dataset.live = String(online);
-    setText("connectionLabel", online ? "LIVE · PICO W" : "SIGNAL UNTERBROCHEN");
-    if (!online) {
-      setText("networkIdentity", message || "Pico nicht erreichbar");
-      setText("lastUpdate", runtime.lastUpdate ? new Date(runtime.lastUpdate).toLocaleTimeString("de-DE") : "—");
-      addEvent("Verbindung zum Pico unterbrochen", "bad");
-    } else if (!runtime.initial) {
-      addEvent("Live-Verbindung wiederhergestellt", "good");
-    }
-  }
-
-  function addEvent(message, tone = "info") {
-    const latest = events[0];
-    if (latest && latest.message === message && Date.now() - latest.time < 1500) return;
-    events.unshift({ message, tone, time: Date.now() });
-    events.splice(30);
-    const timeline = byId("eventTimeline");
-    if (!timeline) return;
-    timeline.replaceChildren(...events.slice(0, 10).map(event => {
-      const item = document.createElement("li");
-      item.className = event.tone;
-      const time = document.createElement("time");
-      time.dateTime = new Date(event.time).toISOString();
-      time.textContent = new Date(event.time).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
-      const point = document.createElement("i");
-      const text = document.createElement("span");
-      text.textContent = event.message;
-      item.append(time, point, text);
-      return item;
-    }));
-  }
-
-  function deriveEvents(status) {
-    const old = runtime.previous;
-    if (!old) {
-      addEvent(PREVIEW ? "Lokale thermische Simulation gestartet" : "Dashboard mit Pico synchronisiert", "good");
-      addEvent(`Systemzustand ${status.state}`);
-      runtime.previous = { ...status };
-      return;
-    }
-    if (old.state !== status.state) {
-      const copy = { AUS: "System sicher ausgeschaltet", BEREIT: "System bereit", AUFHEIZEN: "Heizprozess bewusst gestartet", HALTEN: "Sollwert erreicht · Halteregelung aktiv", FEHLER: `Safety Lock: ${status.fault_description}` };
-      addEvent(copy[status.state], status.state === "FEHLER" ? "bad" : status.state === "HALTEN" ? "good" : "info");
-    }
-    if (Math.abs(old.setpoint - status.setpoint) > .01) addEvent(`Sollwert auf ${fixed(status.setpoint)} °C geändert`);
-    if (old.wifi !== status.wifi) addEvent(status.wifi ? `WLAN verbunden · ${status.wifi_ssid}` : "WLAN getrennt", status.wifi ? "good" : "bad");
-    if (old.power_good !== status.power_good) addEvent(status.power_good ? "Leistungsversorgung freigegeben" : "Leistungsversorgung nicht verfügbar", status.power_good ? "good" : "warn");
-    if (old.fault !== status.fault && status.fault !== "KEIN FEHLER") addEvent(status.fault_description, "bad");
-    runtime.previous = { ...status };
-  }
-
-  function safetyStates(status) {
-    const active = status.state === "AUFHEIZEN" || status.state === "HALTEN";
-    return {
-      temperature: status.sensor_ok && status.temp1_ok && status.temperature < status.max_safe_temperature,
-      current: status.current_ok && status.current1_ok && status.current2_ok,
-      fan: !active || status.fan_rpm > 100,
-      cup: status.cup,
-      power: status.power_good,
-      network: status.wifi,
-      server: status.webserver_ready
-    };
-  }
-
-  function renderSafety(status) {
-    const states = safetyStates(status);
-    const nodes = safetyDefinition.map(([key, label]) => {
-      const node = document.createElement("span");
-      node.className = `interlock-node ${states[key] ? "ok" : "bad"}`;
-      node.innerHTML = `<i></i><strong>${escapeHtml(label)}</strong><small>${states[key] ? "FREI" : "GESPERRT"}</small>`;
-      return node;
-    });
-    byId("safetyInterlock").replaceChildren(...nodes);
-  }
-
-  function componentData(status) {
-    const inactive = status.power <= 0;
-    const item = (name, group, ok, state, detail) => ({ name, group, ok, state, detail });
-    return [
-      item("Raspberry Pi Pico W", "SYSTEM", runtime.online, runtime.online ? "ONLINE" : "OFFLINE", `Uptime ${formatDuration(status.uptime_ms)}`),
-      item("OLED SSD1306", "INTERFACE", status.display_initialized, status.display_initialized ? "OK" : "NICHT VERFÜGBAR", "128 × 64 · I²C"),
-      item("TMP36 Sensor 1", "SENSORIK", status.temp1_ok, status.temp1_ok ? "OK" : "FEHLER", status.temp1_ok ? `${fixed(status.temperature1)} °C` : "Kein plausibles Signal"),
-      item("TMP36 Sensor 2", "SENSORIK", status.temp2_ok, status.temp2_ok ? "OK" : "OFFEN", status.temp2_ok ? `${fixed(status.temperature2)} °C` : "Nicht verfügbar"),
-      item("TLA2024 ADC", "MESSUNG", status.tla2024_ok, status.tla2024_ok ? "OK" : "OFFEN", "Strom ×2 · Licht"),
-      item("Lichtsensor", "SENSORIK", status.light_ok, status.light_ok ? status.night ? "NACHT" : "TAG" : "OFFEN", status.light_ok ? `Level ${fixed(status.light_level, 2)}` : "Kein Messwert"),
-      item("Lüfter PWM", "AKTORIK", inactive || status.fan_percent > 0, inactive ? "INAKTIV" : "AKTIV", `${fixed(status.fan_percent, 0)} %`),
-      item("Fan-Tacho", "MESSUNG", inactive || status.fan_rpm > 100, inactive ? "INAKTIV" : status.fan_rpm > 100 ? "OK" : "FEHLER", `${fixed(status.fan_rpm, 0)} rpm`),
-      item("Peltier 1", "AKTORIK", status.current1_ok || inactive, inactive ? "SICHER AUS" : "HEIZT", `${fixed(status.power, 0)} % · ${fixed(status.current1, 2)} A`),
-      item("Peltier 2", "AKTORIK", status.current2_ok || inactive, inactive ? "SICHER AUS" : "HEIZT", `${fixed(status.power, 0)} % · ${fixed(status.current2, 2)} A`),
-      item("Strommessung P1", "MESSUNG", status.current1_ok, status.current1_ok ? "OK" : "OFFEN", `${fixed(status.current1, 3)} A`),
-      item("Strommessung P2", "MESSUNG", status.current2_ok, status.current2_ok ? "OK" : "OFFEN", `${fixed(status.current2, 3)} A`),
-      item("Bechererkennung", "SAFETY", status.cup, status.cup ? "ERKANNT" : "GESPERRT", "S_DETECT"),
-      item("PG_5V0", "VERSORGUNG", status.power_good, status.power_good ? "FREI" : "NICHT FREI", status.power_good ? "Leistungspfad verfügbar" : "USB-only / keine Last"),
-      item("RGB-Ring", "STATUS", status.leds_initialized, status.leds_initialized ? "OK" : "OFFEN", `Gesamtzustand ${status.state}`),
-      item("Status-LEDs", "STATUS", status.leds_initialized, status.leds_initialized ? "OK" : "OFFEN", "READY · HEATING · HOLDING · HTTP · ERROR"),
-      item("Taster", "INTERFACE", true, "AKTIV", "MODE · DOWN · OK · UP · DETECT"),
-      item("CYW43 WLAN", "NETZWERK", status.wifi, status.wifi ? "VERBUNDEN" : "GETRENNT", `${status.wifi_ssid} · ${status.wifi_ip}`),
-      item("HTTP-Webserver", "NETZWERK", status.webserver_ready, status.webserver_ready ? "BEREIT" : "OFFLINE", status.webserver_ready ? `http://${status.wifi_ip}` : "Listener nicht bestätigt")
-    ];
-  }
-
-  function renderHardware(status) {
-    const values = componentData(status);
-    const group = name => values.filter(item => item.group === name);
-    const groupText = names => {
-      const items = names.flatMap(group);
-      return `${items.filter(item => item.ok).length}/${items.length} NOMINAL`;
-    };
-    setText("clusterSensors", groupText(["SENSORIK"]));
-    setText("clusterMeasurement", groupText(["MESSUNG"]));
-    setText("clusterInterface", groupText(["INTERFACE"]));
-    setText("clusterActuation", status.power > 0 ? `${fixed(status.power, 0)} % AKTIV` : "SICHER AUS");
-    setText("clusterLight", status.leds_initialized ? "SYNCHRON" : "OFFEN");
-    setText("clusterNetwork", status.webserver_ready ? "LIVE / HTTP" : "OFFLINE");
-    setText("clusterPower", status.power_good ? "LAST FREI" : "USB / GESPERRT");
-    setText("picoCoreStatus", runtime.online ? "CONTROL CORE ONLINE" : "SIGNAL OFFLINE");
-    all(".hardware-cluster").forEach(node => {
-      const key = node.dataset.cluster;
-      const checks = {
-        sensors: status.sensor_ok,
-        measurement: status.current_ok,
-        interface: status.display_initialized,
-        actuation: status.state !== "FEHLER",
-        light: status.leds_initialized,
-        network: status.webserver_ready,
-        power: status.power_good
-      };
-      node.classList.toggle("fault", !checks[key]);
-    });
-    const inspection = values.map(value => {
-      const node = document.createElement("article");
-      node.className = `component ${value.ok ? "ok" : "bad"}`;
-      node.innerHTML = `<span>${escapeHtml(value.group)}</span><strong>${escapeHtml(value.name)}</strong><b>${escapeHtml(value.state)}</b><small>${escapeHtml(value.detail)}</small>`;
-      return node;
-    });
-    byId("componentInspection").replaceChildren(...inspection);
-  }
-
-  function renderTechnical(status) {
-    const values = [
-      ["Zustand", status.state], ["Fehlercode", status.fault], ["Isttemperatur y(t)", status.sensor_ok ? `${fixed(status.temperature)} °C` : "nicht verfügbar"],
-      ["Sensor 1", status.temp1_ok ? `${fixed(status.temperature1)} °C` : "nicht verfügbar"], ["Sensor 2", status.temp2_ok ? `${fixed(status.temperature2)} °C` : "nicht verfügbar"],
-      ["Sollwert w(t)", `${fixed(status.setpoint)} °C`], ["Abweichung e(t)", Number.isFinite(status.error) ? `${fixed(status.error)} K` : "nicht verfügbar"],
-      ["Stellgröße u(t)", `${fixed(status.power)} %`], ["Strom P1", status.current1_ok ? `${fixed(status.current1, 3)} A` : "nicht verfügbar"],
-      ["Strom P2", status.current2_ok ? `${fixed(status.current2, 3)} A` : "nicht verfügbar"], ["Lüfter", `${fixed(status.fan_rpm, 0)} rpm · ${fixed(status.fan_percent, 0)} %`],
-      ["Licht", status.light_ok ? `${fixed(status.light_level, 3)} · ${status.night ? "Nacht" : "Tag"}` : "nicht verfügbar"], ["Becher", status.cup ? "erkannt" : "nicht erkannt"],
-      ["PG_5V0", status.power_good ? "freigegeben" : "nicht freigegeben"], ["WLAN", status.wifi ? "verbunden" : "getrennt"], ["SSID", status.wifi_ssid],
-      ["IPv4", status.wifi_ip], ["HTTP", status.webserver_ready ? "bereit" : "nicht verfügbar"], ["Uptime", formatDuration(status.uptime_ms)],
-      ["Max. Temperatur", `${fixed(status.max_safe_temperature)} °C`]
-    ];
-    byId("technicalValues").replaceChildren(...values.map(([label, value]) => {
-      const row = document.createElement("div");
-      row.innerHTML = `<span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong>`;
-      return row;
-    }));
-  }
-
-  function updateMetrics(status) {
-    if (runtime.initialTemperature === null && status.sensor_ok) runtime.initialTemperature = status.temperature;
-    if (Number.isFinite(status.error)) runtime.maxError = Math.max(runtime.maxError, Math.abs(status.error));
-    if (status.state === "AUFHEIZEN" && !runtime.heatingStarted) runtime.heatingStarted = Date.now();
-    if (status.state === "HALTEN" && !runtime.holdingStarted) runtime.holdingStarted = Date.now();
-    if (status.state === "AUS" || status.state === "BEREIT" || status.state === "FEHLER") {
-      runtime.heatingStarted = 0;
-      runtime.holdingStarted = 0;
-    }
-    const recent = history.length > 10 ? history[Math.max(0, history.length - 11)] : null;
-    const rate = recent && status.sensor_ok ? (status.temperature - recent.temperature) / Math.max(.001, (Date.now() - recent.time) / 60000) : NaN;
-    setText("maxError", runtime.maxError ? `${fixed(runtime.maxError)} K` : "—");
-    setText("temperatureRise", runtime.initialTemperature !== null && status.sensor_ok ? `${fixed(status.temperature - runtime.initialTemperature)} K` : "—");
-    setText("temperatureRate", Number.isFinite(rate) ? `${rate >= 0 ? "+" : ""}${fixed(rate, 2)} K/min` : "—");
-    setText("heatingTime", runtime.heatingStarted ? formatDuration(Date.now() - runtime.heatingStarted) : "—");
-    setText("holdingTime", runtime.holdingStarted ? formatDuration(Date.now() - runtime.holdingStarted) : "—");
-  }
-
-  function addHistory(status) {
-    history.push({ time: Date.now(), temperature: status.temperature, temperature2: status.temperature2, target: status.setpoint, power: status.power, valid: status.sensor_ok, valid2: status.temp2_ok });
-    const earliest = Date.now() - MAX_HISTORY_SECONDS * 1000;
-    while (history.length && history[0].time < earliest) history.shift();
-    scheduleChart();
-  }
-
-  function scheduleChart() {
-    if (runtime.drawQueued) return;
-    runtime.drawQueued = true;
-    requestAnimationFrame(() => { runtime.drawQueued = false; drawChart(); });
-  }
-
-  function drawChart() {
-    const canvas = byId("historyCanvas");
-    if (!canvas) return;
-    const rect = canvas.getBoundingClientRect();
-    const ratio = Math.min(devicePixelRatio || 1, 2);
-    const width = Math.max(1, Math.round(rect.width * ratio));
-    const height = Math.max(1, Math.round(rect.height * ratio));
-    if (canvas.width !== width || canvas.height !== height) { canvas.width = width; canvas.height = height; }
-    const ctx = canvas.getContext("2d");
-    ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
-    const w = rect.width, h = rect.height, left = 52, right = 46, top = 28, bottom = 38;
-    ctx.clearRect(0, 0, w, h);
-    const visibleFrom = Date.now() - runtime.range * 1000;
-    const data = history.filter(point => point.time >= visibleFrom);
-    const validTemperatures = data.flatMap(point => [point.valid ? point.temperature : NaN, point.valid2 ? point.temperature2 : NaN, point.target]).filter(Number.isFinite);
-    const minTemperature = validTemperatures.length ? Math.floor(Math.min(...validTemperatures) - 3) : 20;
-    const maxTemperature = validTemperatures.length ? Math.ceil(Math.max(...validTemperatures) + 3) : 60;
-    const tempSpan = Math.max(8, maxTemperature - minTemperature);
-    const x = time => left + (time - visibleFrom) / (runtime.range * 1000) * (w - left - right);
-    const y = value => top + (maxTemperature - value) / tempSpan * (h - top - bottom);
-    ctx.font = "10px Segoe UI, sans-serif";
-    ctx.textBaseline = "middle";
-    for (let i = 0; i <= 4; i++) {
-      const yy = top + i / 4 * (h - top - bottom);
-      ctx.strokeStyle = "rgba(82,137,158,.16)"; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(left, yy); ctx.lineTo(w - right, yy); ctx.stroke();
-      ctx.fillStyle = "rgba(132,166,179,.72)"; ctx.textAlign = "right"; ctx.fillText(`${fixed(maxTemperature - tempSpan * i / 4, 0)}°`, left - 10, yy);
-      ctx.textAlign = "left"; ctx.fillText(`${100 - i * 25}%`, w - right + 10, yy);
-    }
-    for (let i = 0; i <= 5; i++) {
-      const xx = left + i / 5 * (w - left - right);
-      ctx.strokeStyle = "rgba(82,137,158,.09)"; ctx.beginPath(); ctx.moveTo(xx, top); ctx.lineTo(xx, h - bottom); ctx.stroke();
-      const ago = runtime.range * (5 - i) / 5;
-      ctx.fillStyle = "rgba(132,166,179,.6)"; ctx.textAlign = "center"; ctx.fillText(i === 5 ? "JETZT" : `−${ago >= 60 ? fixed(ago / 60, 0) + "m" : fixed(ago, 0) + "s"}`, xx, h - 15);
-    }
-    const line = (key, color, widthLine, predicate = () => true) => {
-      ctx.beginPath(); let started = false;
-      data.forEach(point => {
-        const value = point[key];
-        if (!Number.isFinite(value) || !predicate(point)) { started = false; return; }
-        const px = x(point.time), py = y(value);
-        if (!started) ctx.moveTo(px, py); else ctx.lineTo(px, py);
-        started = true;
-      });
-      ctx.strokeStyle = color; ctx.lineWidth = widthLine; ctx.lineJoin = "round"; ctx.lineCap = "round"; ctx.stroke();
-    };
-    line("target", "rgba(103,223,241,.56)", 1.5);
-    line("temperature2", "rgba(151,164,199,.58)", 1.25, point => point.valid2);
-    if (data.length > 1) {
-      ctx.save();
-      const gradient = ctx.createLinearGradient(0, top, 0, h - bottom);
-      gradient.addColorStop(0, "rgba(255,152,84,.19)"); gradient.addColorStop(1, "rgba(255,152,84,0)");
-      ctx.beginPath(); let started = false;
-      data.forEach(point => { if (!point.valid) return; const px = x(point.time), py = y(point.temperature); if (!started) ctx.moveTo(px, h - bottom), ctx.lineTo(px, py); else ctx.lineTo(px, py); started = true; });
-      if (started) { const last = data[data.length - 1]; ctx.lineTo(x(last.time), h - bottom); ctx.closePath(); ctx.fillStyle = gradient; ctx.fill(); }
-      ctx.restore();
-    }
-    line("temperature", "#ffad68", 2.5, point => point.valid);
-    ctx.beginPath(); let powerStarted = false;
-    data.forEach(point => { const px = x(point.time), py = top + (100 - point.power) / 100 * (h - top - bottom); if (!powerStarted) ctx.moveTo(px, py); else ctx.lineTo(px, py); powerStarted = true; });
-    ctx.strokeStyle = "rgba(104,223,166,.62)"; ctx.lineWidth = 1.5; ctx.stroke();
-  }
-
-  function render(statusInput, options = {}) {
-    const status = normalize(statusInput);
-    runtime.current = status;
-    document.body.dataset.state = status.state;
-    document.body.classList.remove("is-loading");
-    const active = status.state === "AUFHEIZEN" || status.state === "HALTEN";
-    const temperatureAvailable = status.sensor_ok && Number.isFinite(status.temperature);
-    const controlsAvailable = runtime.online;
-    setText("networkIdentity", status.wifi ? status.wifi_ssid : "WLAN getrennt");
-    setText("ipAddress", status.wifi_ip !== "—" ? status.wifi_ip : "—");
-    setText("lastUpdate", runtime.lastUpdate ? new Date(runtime.lastUpdate).toLocaleTimeString("de-DE") : "—");
-    setText("mainTemperature", temperatureAvailable ? fixed(status.temperature) : "—");
-    setText("temperatureQuality", temperatureAvailable ? `${status.night ? "NACHTMODUS" : "TAGMODUS"} · SENSOR PLAUSIBEL` : "MESSWERT NICHT VERFÜGBAR");
-    available("mainTemperature", temperatureAvailable);
-    setText("sensorOneValue", status.temp1_ok ? `${fixed(status.temperature1)} °C` : "NICHT VERFÜGBAR");
-    setText("plateState", active ? status.state === "HALTEN" ? "STABILISIERT" : "WÄRMEEINTRAG" : "SICHER AUS");
-    setText("peltierCurrent", status.current_ok ? `${fixed(status.current1, 2)} / ${fixed(status.current2, 2)} A` : "MESSUNG OFFEN");
-    setText("fanValue", `${fixed(status.fan_rpm, 0)} rpm`);
-    setText("systemState", status.state);
-    setText("stateDescription", stateDescriptions[status.state]);
-    all("[data-for-state]").forEach(node => node.classList.toggle("active", node.dataset.forState === status.state));
-    const angle = 36 + clamp((status.setpoint - 20) / 40, 0, 1) * 288;
-    byId("setpointDial").style.setProperty("--set-angle", `${angle}deg`);
-    byId("setpointDial").style.setProperty("--output", status.power);
-    if (document.activeElement !== byId("targetInput")) byId("targetInput").value = fixed(status.setpoint);
-    setText("errorValue", Number.isFinite(status.error) ? `${status.error >= 0 ? "+" : ""}${fixed(status.error)} K` : "—");
-    available("errorValue", Number.isFinite(status.error));
-    setText("powerValue", `${fixed(status.power, 0)} %`);
-    byId("powerBar").style.width = `${status.power}%`;
-    setText("loopSetpoint", `${fixed(status.setpoint)} °C`);
-    setText("loopError", Number.isFinite(status.error) ? `${status.error >= 0 ? "+" : ""}${fixed(status.error)} K` : "—");
-    setText("loopController", active ? "REGELT" : "INAKTIV");
-    setText("loopOutput", `${fixed(status.power, 0)} %`);
-    setText("loopPeltier", `${fixed(status.power, 0)} %`);
-    setText("loopPlant", active ? status.state === "HALTEN" ? "STABIL" : "ERWÄRMT" : "STILLSTAND");
-    setText("loopSensor", temperatureAvailable ? `${fixed(status.temperature)} °C` : "—");
-    byId("loopVisual").classList.toggle("flowing", active && status.power > 0 && runtime.online);
-    setText("piOutput", `${fixed(status.power)} %`);
-    setText("piKp", fixed(status.kp, 3)); setText("piKi", fixed(status.ki, 3));
-    setText("piP", `${fixed(status.p_term)} %`); setText("piI", `${fixed(status.i_term)} %`);
-    setText("piAntiWindup", status.anti_windup ? "AKTIV" : status.output_limited ? "AUSGANG BEGRENZT" : "IN BEREITSCHAFT");
-    setText("controlPeriod", `${fixed(status.control_period_ms, 0)} ms`);
-    byId("piRadial").style.setProperty("--pi-output", status.power);
-    const startCaption = !controlsAvailable ? "Keine Live-Verbindung" : status.start_allowed ? "Alle Freigaben bestätigt" : status.start_block_reason;
-    setText("startCaption", startCaption);
-    byId("startButton").disabled = !controlsAvailable || !status.start_allowed || active;
-    byId("stopButton").disabled = !controlsAvailable;
-    byId("setpointButton").disabled = !controlsAvailable;
-    byId("targetDown").disabled = !controlsAvailable;
-    byId("targetUp").disabled = !controlsAvailable;
-    byId("targetInput").disabled = !controlsAvailable;
-    const fault = status.state === "FEHLER" || status.fault !== "KEIN FEHLER";
-    byId("systemAlert").classList.toggle("visible", fault);
-    setText("alertTitle", fault ? status.fault : "System nominal");
-    setText("alertText", fault ? status.fault_description : "Alle Schutzfunktionen aktiv");
-    document.documentElement.style.setProperty("--fan-speed", `${Math.max(.55, 3.5 - status.fan_percent * .028)}s`);
-    byId("liquidFill").style.transform = `translateY(${clamp((50 - finite(status.temperature, 20)) * .45, 0, 12)}px)`;
-    byId("assemblyStage").style.setProperty("--thermal-power", status.power);
-    byId("assemblyStage").style.setProperty("--fan-duration", status.fan_percent > 0 ? `${Math.max(.45, 3.2 - status.fan_percent * .028)}s` : "0s");
-    renderSafety(status);
-    renderHardware(status);
-    renderTechnical(status);
-    if (options.record !== false) {
-      deriveEvents(status);
-      updateMetrics(status);
-      addHistory(status);
-    }
-    if (window.ThermalField) window.ThermalField.update(status.state, status.power, status.temperature);
-    if (!document.documentElement.dataset.uiReadyMs) document.documentElement.dataset.uiReadyMs = performance.now().toFixed(1);
-    runtime.initial = false;
-  }
-
-  async function fetchWithTimeout(url, options = {}) {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 1800);
-    try { return await fetch(url, { cache: "no-store", ...options, signal: controller.signal }); }
-    finally { clearTimeout(timeout); }
-  }
-
-  async function poll() {
-    if (PREVIEW || runtime.busy) return;
-    runtime.busy = true;
-    try {
-      const response = await fetchWithTimeout("/api/status");
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const status = await response.json();
-      runtime.lastUpdate = Date.now();
-      setOnline(true);
-      render(status);
-    } catch (error) {
-      setOnline(false, runtime.initial ? "Warte auf Pico W" : "Live-API nicht erreichbar");
-    } finally { runtime.busy = false; }
-  }
-
-  async function command(path) {
-    if (!runtime.online) return;
-    if (PREVIEW && window.PreviewDriver) {
-      window.PreviewDriver.command(path);
-      return;
-    }
-    const controls = ["startButton", "stopButton", "setpointButton", "targetDown", "targetUp"].map(byId);
-    controls.forEach(control => { if (control) control.disabled = true; });
-    try {
-      const response = await fetchWithTimeout(`/api/${path}`, { method: "POST" });
-      const result = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(result.reason || `HTTP ${response.status}`);
-      addEvent(path === "start" ? "START an Pico übertragen" : path === "stop" ? "STOP an Pico übertragen" : "Sollwert an Pico übertragen", path === "stop" ? "warn" : "good");
-      await poll();
-    } catch (error) {
-      addEvent(`Befehl abgelehnt: ${error.message}`, "bad");
-      setOnline(false, "Befehl konnte nicht bestätigt werden");
-    } finally { if (runtime.current) render(runtime.current, { record: false }); }
-  }
-
-  function setpointDelta(delta) {
-    const input = byId("targetInput");
-    input.value = fixed(clamp(finite(input.value, 45) + delta, 20, 60));
-    const angle = 36 + (finite(input.value) - 20) / 40 * 288;
-    byId("setpointDial").style.setProperty("--set-angle", `${angle}deg`);
-  }
-
-  function setpointCommand() {
-    const value = clamp(finite(byId("targetInput").value, 45), 20, 60);
-    byId("targetInput").value = fixed(value);
-    command(`setpoint?value=${encodeURIComponent(value.toFixed(1))}`);
-  }
-
-  function openEngineering(open) {
-    byId("engineeringDrawer").classList.toggle("open", open);
-    byId("engineeringDrawer").setAttribute("aria-hidden", String(!open));
-    byId("engineeringOpen").setAttribute("aria-expanded", String(open));
-    byId("drawerScrim").classList.toggle("visible", open);
-    document.querySelector("main").inert = open;
-    document.querySelector(".system-header").inert = open;
-    if (open) byId("engineeringClose").focus(); else byId("engineeringOpen").focus();
-  }
-
-  function togglePresentation() {
-    const active = !document.body.classList.contains("presentation");
-    document.body.classList.toggle("presentation", active);
-    byId("presentationToggle").setAttribute("aria-pressed", String(active));
-    setText("presentationLabel", active ? "PRÄSENTATION BEENDEN" : "PRÄSENTATION");
-    if (active) scrollTo({ top: 0, behavior: runtime.lowMotion ? "auto" : "smooth" });
-    if (active && document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(() => {});
-    if (!active && document.fullscreenElement) document.exitFullscreen().catch(() => {});
-    scheduleChart();
-  }
-
-  function initialiseInteractions() {
-    byId("startButton").addEventListener("click", () => command("start"));
-    byId("stopButton").addEventListener("click", () => command("stop"));
-    byId("setpointButton").addEventListener("click", setpointCommand);
-    byId("targetDown").addEventListener("click", () => setpointDelta(-.5));
-    byId("targetUp").addEventListener("click", () => setpointDelta(.5));
-    byId("targetInput").addEventListener("change", () => setpointDelta(0));
-    byId("targetInput").addEventListener("keydown", event => { if (event.key === "Enter") setpointCommand(); });
-    byId("engineeringOpen").addEventListener("click", () => openEngineering(true));
-    byId("hardwareInspect").addEventListener("click", () => openEngineering(true));
-    byId("engineeringClose").addEventListener("click", () => openEngineering(false));
-    byId("drawerScrim").addEventListener("click", () => openEngineering(false));
-    byId("presentationToggle").addEventListener("click", togglePresentation);
-    byId("motionToggle").addEventListener("click", () => {
-      runtime.lowMotion = !runtime.lowMotion;
-      document.body.classList.toggle("low-motion", runtime.lowMotion);
-      byId("motionToggle").setAttribute("aria-pressed", String(runtime.lowMotion));
-      if (window.ThermalField) window.ThermalField.setLowMotion(runtime.lowMotion);
-    });
-    all(".range-button").forEach(button => button.addEventListener("click", () => {
-      runtime.range = finite(button.dataset.range, 60);
-      all(".range-button").forEach(item => item.classList.toggle("active", item === button));
-      scheduleChart();
-    }));
-    addEventListener("resize", scheduleChart, { passive: true });
-    addEventListener("keydown", event => { if (event.key === "Escape") openEngineering(false); });
-    document.addEventListener("fullscreenchange", () => {
-      if (!document.fullscreenElement && document.body.classList.contains("presentation")) {
-        document.body.classList.remove("presentation");
-        byId("presentationToggle").setAttribute("aria-pressed", "false");
-        setText("presentationLabel", "PRÄSENTATION");
-      }
-    });
-  }
-
-  function boot() {
-    initialiseInteractions();
-    document.body.classList.toggle("low-motion", runtime.lowMotion);
-    byId("motionToggle").setAttribute("aria-pressed", String(runtime.lowMotion));
-    if (window.ThermalField) {
-      window.ThermalField.initialise(byId("thermalField"));
-      window.ThermalField.setLowMotion(runtime.lowMotion);
-    }
-    const query = new URLSearchParams(location.search);
-    const reviewing = query.has("review");
-    const skipIntro = runtime.lowMotion || reviewing || query.has("scenario") || query.has("presentation") || query.has("engineering");
-    document.body.classList.toggle("visual-review", reviewing);
-    if (reviewing) document.documentElement.style.scrollBehavior = "auto";
-    if (query.has("presentation")) {
-      document.body.classList.add("presentation");
-      byId("presentationToggle").setAttribute("aria-pressed", "true");
-      setText("presentationLabel", "PRÄSENTATION BEENDEN");
-    }
-    if (skipIntro) byId("bootSequence").classList.add("done");
-    else setTimeout(() => byId("bootSequence").classList.add("done"), 1350);
-    const reviewSection = query.get("section");
-    const anchor = reviewSection ? byId(reviewSection) : location.hash ? document.querySelector(location.hash) : null;
-    if (anchor) setTimeout(() => scrollTo(0, anchor.getBoundingClientRect().top + scrollY), 300);
-    if (query.has("engineering")) setTimeout(() => openEngineering(true), 120);
-    if (PREVIEW && window.PreviewDriver) window.PreviewDriver.start();
-    else {
-      poll();
-      setInterval(poll, SAMPLE_INTERVAL);
-    }
-  }
-
-  window.ThermalUI = {
-    acceptStatus(status, online = true) {
-      runtime.lastUpdate = Date.now();
-      setOnline(online, online ? "" : "Vorschau: Signal unterbrochen");
-      render(status);
-    },
-    setOnline,
-    addEvent,
-    command,
-    history,
-    runtime
-  };
-
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, { once: true });
-  else boot();
-}());
+(function(){
+"use strict";
+var PREVIEW=true,SAMPLE_INTERVAL=500,MAX_HISTORY_SECONDS=1800;
+var history=[],runtime={online:false,initial:true,busy:false,current:null,lastUpdate:0,range:60,drawQueued:false,mode:"overview",focus:"system",lowMotion:matchMedia("(prefers-reduced-motion: reduce)").matches};
+var narratives={AUS:"Leistungspfad sicher deaktiviert",BEREIT:"System bereit für einen bewussten Start",AUFHEIZEN:"PI-Regler führt thermische Energie zu",HALTEN:"Solltemperatur erreicht · Energie wird nachgeführt",FEHLER:"Safety Lock aktiv · Heizleistung gesperrt"};
+var faultCopy={"KEIN FEHLER":"Keine aktive Störung",TEMPERATURSENSOR:"Temperatursignal fehlt oder ist unplausibel",UEBERTEMPERATUR:"Maximale sichere Temperatur überschritten",LUEFTER:"Kein plausibles Tachosignal bei Heizleistung",UEBERSTROM:"Stromgrenze eines Heizkanals überschritten",STROMSENSOR:"Strommessung ist nicht plausibel",BECHER_ENTFERNT:"Becher wurde während des Heizvorgangs entfernt",VERSORGUNG:"12-V-Leistungsversorgung nicht freigegeben"};
+var byId=function(id){return document.getElementById(id);},all=function(selector){return Array.prototype.slice.call(document.querySelectorAll(selector));};
+function number(value,fallback){var parsed=typeof value==="string"?Number(value.replace(",",".")):Number(value);return Number.isFinite(parsed)?parsed:(fallback===undefined?0:fallback);}
+function truth(value,fallback){return typeof value==="boolean"?value:!!fallback;}
+function clamp(value,min,max){return Math.max(min,Math.min(max,value));}
+function fixed(value,digits){digits=digits===undefined?1:digits;return Number.isFinite(Number(value))?Number(value).toFixed(digits).replace(".",","):"—";}
+function text(id,value){var node=byId(id);if(node)node.textContent=value;}
+function normalize(source){source=source||{};var temperature=number(source.temperature,NaN),setpoint=number(source.setpoint,45),states=["AUS","BEREIT","AUFHEIZEN","HALTEN","FEHLER"],fault=String(source.fault||"KEIN FEHLER");return{
+ state:states.indexOf(source.state)>=0?source.state:"AUS",fault:fault,fault_description:String(source.fault_description||faultCopy[fault]||"Unbekannter Systemfehler"),temperature:temperature,temperature1:number(source.temperature1,NaN),temperature2:number(source.temperature2,NaN),setpoint:setpoint,error:Number.isFinite(Number(source.error))?Number(source.error):setpoint-temperature,power:clamp(number(source.power),0,100),fan_rpm:Math.max(0,number(source.fan_rpm)),fan_percent:clamp(number(source.fan_percent),0,100),current1:Math.max(0,number(source.current1)),current2:Math.max(0,number(source.current2)),light_level:clamp(number(source.light_level),0,1),sensor_ok:truth(source.sensor_ok),temp1_ok:truth(source.temp1_ok),temp2_ok:truth(source.temp2_ok),current_ok:truth(source.current_ok),current1_ok:truth(source.current1_ok),current2_ok:truth(source.current2_ok),tla2024_ok:truth(source.tla2024_ok),light_ok:truth(source.light_ok),display_initialized:truth(source.display_initialized),leds_initialized:truth(source.leds_initialized),cup:truth(source.cup),power_good:truth(source.power_good),wifi:truth(source.wifi),webserver_ready:truth(source.webserver_ready),wifi_ssid:String(source.wifi_ssid||"—"),wifi_ip:String(source.wifi_ip||"—"),night:truth(source.night),start_allowed:truth(source.start_allowed),start_block_reason:String(source.start_block_reason||"Startfreigabe nicht bestätigt"),kp:number(source.kp),ki:number(source.ki),p_term:number(source.p_term),i_term:number(source.i_term),output_limited:truth(source.output_limited),anti_windup:truth(source.anti_windup),control_period_ms:Math.max(0,number(source.control_period_ms)),max_safe_temperature:number(source.max_safe_temperature,65),uptime_ms:Math.max(0,number(source.uptime_ms))};}
+function setOnline(online,message){runtime.online=!!online;document.body.dataset.live=String(runtime.online);text("connectionState",online?"LIVE · PICO W":"SIGNAL UNTERBROCHEN");if(!online){text("networkName",message||"Pico nicht erreichbar");text("lastSignal",runtime.lastUpdate?new Date(runtime.lastUpdate).toLocaleTimeString("de-DE"):"—");}else{text("lastSignal","LIVE "+new Date(runtime.lastUpdate||Date.now()).toLocaleTimeString("de-DE"));}}
+function addHistory(status,time){var stamp=time||Date.now(),previous=history[history.length-1];if(previous&&stamp-previous.time<450)return;history.push({time:stamp,temperature:status.temperature,temperature2:status.temperature2,target:status.setpoint,power:status.power,valid:status.sensor_ok&&Number.isFinite(status.temperature),valid2:status.temp2_ok&&Number.isFinite(status.temperature2)});var earliest=stamp-MAX_HISTORY_SECONDS*1000;while(history.length&&history[0].time<earliest)history.shift();scheduleChart();}
+function scheduleChart(){if(runtime.drawQueued)return;runtime.drawQueued=true;requestAnimationFrame(function(){runtime.drawQueued=false;drawChart();});}
+function drawChart(){var canvas=byId("timelineCanvas");if(!canvas)return;var rect=canvas.getBoundingClientRect(),ratio=Math.min(devicePixelRatio||1,2),width=Math.max(1,Math.round(rect.width*ratio)),height=Math.max(1,Math.round(rect.height*ratio));if(canvas.width!==width||canvas.height!==height){canvas.width=width;canvas.height=height;}var ctx=canvas.getContext("2d");ctx.setTransform(ratio,0,0,ratio,0,0);var w=rect.width,h=rect.height,left=37,right=39,top=14,bottom=22;ctx.clearRect(0,0,w,h);var now=history.length?history[history.length-1].time:Date.now(),from=now-runtime.range*1000,data=history.filter(function(point){return point.time>=from;});var temps=[];data.forEach(function(point){if(point.valid)temps.push(point.temperature);if(point.valid2)temps.push(point.temperature2);temps.push(point.target);});var min=temps.length?Math.floor(Math.min.apply(null,temps)-2):20,max=temps.length?Math.ceil(Math.max.apply(null,temps)+2):60,span=Math.max(7,max-min);function x(time){return left+(time-from)/(runtime.range*1000)*(w-left-right);}function y(value){return top+(max-value)/span*(h-top-bottom);}ctx.font="7px ui-monospace,monospace";ctx.fillStyle="#55717b";ctx.strokeStyle="rgba(77,126,141,.16)";ctx.lineWidth=1;for(var i=0;i<4;i++){var yy=top+i/3*(h-top-bottom),label=(max-i/3*span).toFixed(0)+"°";ctx.beginPath();ctx.moveTo(left,yy);ctx.lineTo(w-right,yy);ctx.stroke();ctx.fillText(label,1,yy+3);}for(var j=0;j<6;j++){var xx=left+j/5*(w-left-right);ctx.beginPath();ctx.moveTo(xx,top);ctx.lineTo(xx,h-bottom);ctx.stroke();if(j<5)ctx.fillText("−"+Math.round(runtime.range*(5-j)/5)+"s",xx-8,h-5);}
+ function line(key,color,lineWidth,predicate){ctx.beginPath();var started=false;data.forEach(function(point){if(!predicate(point)||!Number.isFinite(point[key])){started=false;return;}var px=x(point.time),py=y(point[key]);if(started)ctx.lineTo(px,py);else ctx.moveTo(px,py);started=true;});ctx.strokeStyle=color;ctx.lineWidth=lineWidth;ctx.lineJoin="round";ctx.lineCap="round";ctx.stroke();}
+ if(data.length){var fill=ctx.createLinearGradient(0,top,0,h-bottom);fill.addColorStop(0,"rgba(255,135,66,.20)");fill.addColorStop(1,"rgba(255,135,66,0)");ctx.beginPath();var begun=false;data.forEach(function(point){if(!point.valid)return;var px=x(point.time),py=y(point.temperature);if(!begun){ctx.moveTo(px,h-bottom);ctx.lineTo(px,py);}else ctx.lineTo(px,py);begun=true;});if(begun){ctx.lineTo(x(data[data.length-1].time),h-bottom);ctx.closePath();ctx.fillStyle=fill;ctx.fill();}}
+ line("target","rgba(104,226,241,.82)",1,function(){return true;});line("temperature2","rgba(157,172,205,.52)",1,function(point){return point.valid2;});line("temperature","#ff9a54",2.4,function(point){return point.valid;});ctx.beginPath();var started=false;data.forEach(function(point){var px=x(point.time),py=top+(100-point.power)/100*(h-top-bottom);if(started)ctx.lineTo(px,py);else ctx.moveTo(px,py);started=true;});ctx.strokeStyle="rgba(110,224,168,.66)";ctx.lineWidth=1.25;ctx.stroke();if(data.length){var latest=data[data.length-1],cursor=x(latest.time);ctx.strokeStyle="rgba(225,247,250,.23)";ctx.beginPath();ctx.moveTo(cursor,top);ctx.lineTo(cursor,h-bottom);ctx.stroke();if(latest.valid){ctx.fillStyle="#ffd1ae";ctx.beginPath();ctx.arc(cursor,y(latest.temperature),3.5,0,Math.PI*2);ctx.fill();}}}
+function engineeringValues(status){var host=byId("engineeringValues");if(!host)return;var values=[["12 V",status.power_good?"FREIGEGEBEN":"GESPERRT"],["3,3 V","LOGIK OK"],["P1",fixed(status.current1,2)+" A"],["P2",fixed(status.current2,2)+" A"],["LICHT",Math.round(status.light_level*100)+" %"],["UPTIME",Math.floor(status.uptime_ms/60000)+" min"]];host.replaceChildren();values.forEach(function(pair){var node=document.createElement("span"),small=document.createElement("small"),strong=document.createElement("strong");small.textContent=pair[0];strong.textContent=pair[1];node.append(small,strong);host.appendChild(node);});}
+function render(statusInput,options){var status=normalize(statusInput),record=!options||options.record!==false;runtime.current=status;document.body.dataset.state=status.state;document.body.classList.remove("is-loading");var active=status.state==="AUFHEIZEN"||status.state==="HALTEN",temperatureAvailable=status.sensor_ok&&Number.isFinite(status.temperature),controls=runtime.online;
+ text("networkName",status.wifi?status.wifi_ssid:"WLAN getrennt");text("networkIp",status.wifi_ip!=="—"?status.wifi_ip:"—");text("lastSignal",runtime.lastUpdate?"LIVE "+new Date(runtime.lastUpdate).toLocaleTimeString("de-DE"):"—");text("actualTemperature",temperatureAvailable?fixed(status.temperature):"—");byId("actualTemperature").classList.toggle("unavailable",!temperatureAvailable);text("sensorQuality",temperatureAvailable?(status.night?"NACHTMODUS":"TAGMODUS")+" · SENSOR PLAUSIBEL":"MESSWERT NICHT VERFÜGBAR");text("systemState",status.state);text("stateNarrative",narratives[status.state]);text("loopSetpoint",fixed(status.setpoint)+" °C");text("loopDeviation",Number.isFinite(status.error)?(status.error>=0?"+":"")+fixed(status.error)+" K":"—");text("piNodeState",active?"REGELT":"INAKTIV");text("loopOutput",fixed(status.power,0)+" %");text("loopSensor",temperatureAvailable?fixed(status.temperature)+" °C":"—");text("plantState",active?(status.state==="HALTEN"?"STABIL":"ERWÄRMT"):"STILLSTAND");
+ var orbit=byId("targetOrbit"),level=clamp((status.setpoint-20)/40*100,0,100),angle=level*.75*3.6;orbit.style.setProperty("--target-level",level.toFixed(1));orbit.style.setProperty("--target-angle",angle.toFixed(1)+"deg");if(document.activeElement!==byId("targetInput"))byId("targetInput").value=fixed(status.setpoint);text("powerOutput",fixed(status.power,0)+" %");byId("outputFill").style.width=status.power+"%";text("peltierDetail",active?"P1 "+fixed(status.current1,2)+" A · P2 "+fixed(status.current2,2)+" A":"P1 / P2 sicher aus");text("fanRpm",fixed(status.fan_rpm,0)+" rpm");document.documentElement.style.setProperty("--fan-period",status.fan_percent>0?Math.max(.4,3.5-status.fan_percent*.03)+"s":"0s");
+ text("piKp",fixed(status.kp,3));text("piKi",fixed(status.ki,3));text("piP",fixed(status.p_term)+" %");text("piI",fixed(status.i_term)+" %");text("piWindup",status.anti_windup?"AKTIV":status.output_limited?"BEGRENZT":"BEREIT");text("piCycle",fixed(status.control_period_ms,0)+" ms");
+ text("startActionLabel",active?"AKTIV":"START");text("startActionHint",active?"REGELKREIS":"HEIZVORGANG");var blocked=!status.start_allowed&&!active,fault=status.state==="FEHLER"||status.fault!=="KEIN FEHLER";byId("safetyLock").classList.toggle("visible",blocked||fault);text("safetyTitle",fault?status.fault:"System nicht bereit");text("safetyReason",fault?status.fault_description:status.start_block_reason);text("actionReason",!controls?"Keine Live-Verbindung":active?"Regelkreis aktiv":status.start_allowed?"Alle Freigaben bestätigt":status.start_block_reason);byId("startButton").disabled=!controls||!status.start_allowed||active;byId("stopButton").disabled=!controls;byId("setpointButton").disabled=!controls;byId("targetDown").disabled=!controls;byId("targetUp").disabled=!controls;byId("targetInput").disabled=!controls;
+ text("engCup",temperatureAvailable?fixed(status.temperature)+" °C · w(t) "+fixed(status.setpoint)+" °C":"Messung offen");text("engSensors","T1 "+(status.temp1_ok?fixed(status.temperature1)+" °C":"FEHLER")+" · T2 "+(status.temp2_ok?fixed(status.temperature2)+" °C":"FEHLER"));text("engPlate",active?fixed(status.power,0)+" % Wärmeeintrag":"sicher aus");text("engPeltier","P1 "+fixed(status.current1,2)+" A · P2 "+fixed(status.current2,2)+" A");text("engFan",fixed(status.fan_rpm,0)+" rpm · "+fixed(status.fan_percent,0)+" %");text("engPico",status.wifi?status.wifi_ip:"WLAN getrennt");text("engAdc",status.tla2024_ok?"online · Licht "+Math.round(status.light_level*100)+" %":"nicht verfügbar");engineeringValues(status);text("offlineLastValue",temperatureAvailable?"Letzte Temperatur: "+fixed(status.temperature)+" °C":"Letzte Systemaufnahme bleibt sichtbar");
+ if(record)addHistory(status);if(window.ProductScene)window.ProductScene.update(status);if(window.ThermalOverlay)window.ThermalOverlay.update(status);if(!document.documentElement.dataset.uiReadyMs)document.documentElement.dataset.uiReadyMs=performance.now().toFixed(1);runtime.initial=false;}
+async function fetchWithTimeout(url,options){var controller=new AbortController(),timeout=setTimeout(function(){controller.abort();},1800);try{return await fetch(url,Object.assign({cache:"no-store",signal:controller.signal},options||{}));}finally{clearTimeout(timeout);}}
+async function poll(){if(PREVIEW||runtime.busy)return;runtime.busy=true;try{var response=await fetchWithTimeout("/api/status");if(!response.ok)throw new Error("HTTP "+response.status);var status=await response.json();runtime.lastUpdate=Date.now();setOnline(true);render(status);}catch(error){setOnline(false,runtime.initial?"Warte auf Pico W":"Live-API nicht erreichbar");}finally{runtime.busy=false;}}
+async function command(path){if(!runtime.online)return;if(PREVIEW&&window.PreviewDriver){window.PreviewDriver.command(path);return;}var controls=["startButton","stopButton","setpointButton","targetDown","targetUp"].map(byId);controls.forEach(function(control){if(control)control.disabled=true;});try{var response=await fetchWithTimeout("/api/"+path,{method:"POST"}),result=await response.json().catch(function(){return{};});if(!response.ok)throw new Error(result.reason||"HTTP "+response.status);await poll();}catch(error){setOnline(false,"Befehl abgelehnt: "+error.message);}finally{if(runtime.current)render(runtime.current,{record:false});}}
+function adjustTarget(delta){var input=byId("targetInput"),value=clamp(number(input.value,45)+delta,20,60),level=(value-20)/40*100;input.value=fixed(value);byId("targetOrbit").style.setProperty("--target-level",level);byId("targetOrbit").style.setProperty("--target-angle",(level*.75*3.6)+"deg");}
+function setpoint(){var value=clamp(number(byId("targetInput").value,45),20,60);byId("targetInput").value=fixed(value);command("setpoint?value="+encodeURIComponent(value.toFixed(1)));}
+function setMode(mode){runtime.mode=mode;document.body.dataset.mode=mode;all("[data-mode]").forEach(function(button){button.classList.toggle("active",button.dataset.mode===mode);});if(window.ProductScene)window.ProductScene.setMode(mode);if(window.ThermalOverlay)window.ThermalOverlay.setMode(mode);scheduleChart();}
+function setFocus(focus){runtime.focus=focus;byId("engineeringLayer").dataset.focus=focus;all("[data-focus]").forEach(function(button){button.classList.toggle("active",button.dataset.focus===focus);});if(window.ProductScene)window.ProductScene.setFocus(focus);}
+function togglePi(open){var panel=byId("piDetails"),show=open===undefined?!panel.classList.contains("open"):open;panel.classList.toggle("open",show);panel.setAttribute("aria-hidden",String(!show));byId("piNode").setAttribute("aria-expanded",String(show));if(show)byId("piClose").focus();}
+function togglePresentation(){var active=!document.body.classList.contains("presentation");document.body.classList.toggle("presentation",active);byId("presentationButton").setAttribute("aria-pressed",String(active));if(active&&document.documentElement.requestFullscreen)document.documentElement.requestFullscreen().catch(function(){});if(!active&&document.fullscreenElement)document.exitFullscreen().catch(function(){});scheduleChart();if(window.ProductScene)window.ProductScene.resize();}
+function interactions(){byId("startButton").addEventListener("click",function(){command("start");});byId("stopButton").addEventListener("click",function(){command("stop");});byId("setpointButton").addEventListener("click",setpoint);byId("targetDown").addEventListener("click",function(){adjustTarget(-.5);});byId("targetUp").addEventListener("click",function(){adjustTarget(.5);});byId("targetInput").addEventListener("change",function(){adjustTarget(0);});byId("targetInput").addEventListener("keydown",function(event){if(event.key==="Enter")setpoint();});all("[data-mode]").forEach(function(button){button.addEventListener("click",function(){setMode(button.dataset.mode);});});all("[data-focus]").forEach(function(button){button.addEventListener("click",function(){setFocus(button.dataset.focus);});});all("[data-range]").forEach(function(button){button.addEventListener("click",function(){runtime.range=number(button.dataset.range,60);all("[data-range]").forEach(function(item){item.classList.toggle("active",item===button);});scheduleChart();});});byId("piNode").addEventListener("click",function(){togglePi();});byId("piClose").addEventListener("click",function(){togglePi(false);});byId("presentationButton").addEventListener("click",togglePresentation);addEventListener("resize",scheduleChart,{passive:true});addEventListener("keydown",function(event){if(event.key==="Escape")togglePi(false);});document.addEventListener("fullscreenchange",function(){if(!document.fullscreenElement){document.body.classList.remove("presentation");byId("presentationButton").setAttribute("aria-pressed","false");}});}
+function boot(){interactions();document.body.classList.toggle("low-motion",runtime.lowMotion);if(window.ProductScene){window.ProductScene.initialise(byId("productCanvas"));window.ProductScene.setLowMotion(runtime.lowMotion);}if(window.ThermalOverlay){window.ThermalOverlay.initialise(byId("thermalCanvas"));window.ThermalOverlay.setLowMotion(runtime.lowMotion);}var query=new URLSearchParams(location.search),skip=runtime.lowMotion||query.has("review")||query.has("scenario")||query.has("presentation")||query.has("engineering");if(query.has("presentation"))document.body.classList.add("presentation");if(query.has("engineering"))setMode("engineering");if(skip){byId("intro").classList.add("done");byId("intro").hidden=true;}else setTimeout(function(){byId("intro").classList.add("done");byId("intro").hidden=true;},1450);if(PREVIEW&&window.PreviewDriver){document.body.classList.add("preview-mode");window.PreviewDriver.start();}else{poll();setInterval(poll,SAMPLE_INTERVAL);}}
+window.V3UI={acceptStatus:function(status,online){runtime.lastUpdate=Date.now();setOnline(online!==false,online===false?"Vorschau: Signal unterbrochen":"");render(status);},setOnline:setOnline,history:history,runtime:runtime,render:render,command:command,normalize:normalize,scheduleChart:scheduleChart};
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot,{once:true});else boot();
+})();
 </script>
 </body>
 </html>

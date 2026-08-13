@@ -10,11 +10,12 @@ set(CMAKE_CXX_STANDARD 17)
 find_package(Python3 REQUIRED COMPONENTS Interpreter)
 
 set(DASHBOARD_SOURCES
-    ${CMAKE_CURRENT_LIST_DIR}/ui/src/index.html
-    ${CMAKE_CURRENT_LIST_DIR}/ui/src/dashboard.css
-    ${CMAKE_CURRENT_LIST_DIR}/ui/src/dashboard.js
-    ${CMAKE_CURRENT_LIST_DIR}/ui/src/thermal-field.js
-    ${CMAKE_CURRENT_LIST_DIR}/ui/src/preview.js
+    ${CMAKE_CURRENT_LIST_DIR}/ui-v3/src/index.html
+    ${CMAKE_CURRENT_LIST_DIR}/ui-v3/src/experience.css
+    ${CMAKE_CURRENT_LIST_DIR}/ui-v3/src/experience.js
+    ${CMAKE_CURRENT_LIST_DIR}/ui-v3/src/product-scene.js
+    ${CMAKE_CURRENT_LIST_DIR}/ui-v3/src/thermal-overlay.js
+    ${CMAKE_CURRENT_LIST_DIR}/ui-v3/src/preview.js
     ${CMAKE_CURRENT_LIST_DIR}/tools/build_ui.py
 )
 
