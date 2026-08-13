@@ -1,0 +1,40 @@
+<svg id="productV3Silhouette" viewBox="160 70 600 690" role="img" aria-labelledby="v3SilTitle v3SilDesc" xmlns="http://www.w3.org/2000/svg">
+ <title id="v3SilTitle">Neue Silhouette eines kompakten intelligenten Becherhalters</title>
+ <desc id="v3SilDesc">Ein breiter Trinkbecher sitzt tief in einer geschlossenen ovalen Aufnahme auf einem kompakten, gerundeten Produktfuß.</desc>
+ <defs>
+  <clipPath id="silCupClip"><path d="M338 139Q454 113 570 139L557 367Q553 405 454 411Q355 405 351 367Z"/></clipPath>
+  <filter id="silGroundBlur" x="-20%" y="-80%" width="140%" height="260%"><feGaussianBlur stdDeviation="8"/></filter>
+ </defs>
+
+ <ellipse cx="458" cy="718" rx="222" ry="21" fill="#050706" opacity=".46" filter="url(#silGroundBlur)"/>
+
+ <!-- Phase 1: cup. One body, one liquid mass, no technology. -->
+ <g class="v3-sil-cup">
+  <path d="M338 139Q454 113 570 139L557 367Q553 405 454 411Q355 405 351 367Z" fill="#818a85" fill-opacity=".48"/>
+  <g clip-path="url(#silCupClip)"><path d="M353 187Q454 165 555 187L545 366Q541 391 454 397Q367 391 363 366Z" fill="#9a674b"/><ellipse cx="454" cy="187" rx="101" ry="22" fill="#ad7858"/><ellipse cx="454" cy="189" rx="83" ry="14" fill="#664536" opacity=".55"/></g>
+  <ellipse cx="454" cy="139" rx="116" ry="26" fill="#8e9792" fill-opacity=".26" stroke="#c6ccc8" stroke-width="3"/>
+  <path d="M366 372Q454 398 542 372Q538 405 454 411Q370 405 366 372Z" fill="#717a75" opacity=".45"/>
+ </g>
+
+ <!-- Phase 1: a single continuous holder body, narrower above and grounded below. -->
+ <g class="v3-sil-housing">
+  <!-- A shallow plinth sits behind the body instead of becoming a separate box. -->
+  <path d="M256 568Q303 546 354 556Q424 570 493 563Q566 556 627 552Q657 551 674 570L669 638Q660 676 588 700Q510 724 438 724Q351 720 287 695Q254 681 246 649Z" fill="#202622"/>
+  <path d="M438 564Q535 557 627 552Q657 551 674 570L669 638Q660 676 588 700Q510 724 438 724Z" fill="#171c19"/>
+  <path d="M251 641Q327 681 437 686Q548 682 666 640L665 657Q643 689 585 707Q508 730 438 730Q351 726 289 702Q260 690 250 670Z" fill="#151a17"/>
+
+  <path d="M276 385Q294 348 346 332Q397 316 454 316Q527 316 587 337Q625 350 640 382L626 565Q620 606 565 629Q509 652 438 652Q367 649 316 627Q274 607 269 565Z" fill="#3c433f"/>
+  <path d="M438 339Q520 329 587 348Q625 360 640 392L626 565Q620 606 565 629Q509 652 438 652Z" fill="#2b312d"/>
+  <path d="M279 393Q307 361 354 347Q414 330 471 338" fill="none" stroke="#626a65" stroke-width="3" opacity=".22"/>
+  <path d="M438 340Q521 330 589 352" fill="none" stroke="#747c77" stroke-width="2" opacity=".14"/>
+ </g>
+
+ <!-- Phase 1: a substantial spatial collar that visibly captures the cup. -->
+ <g class="v3-sil-collar">
+  <ellipse cx="454" cy="365" rx="157" ry="42" fill="#181d1a"/>
+  <ellipse cx="454" cy="359" rx="151" ry="39" fill="#59615c"/>
+  <ellipse cx="454" cy="359" rx="133" ry="31" fill="#171c19"/>
+  <ellipse cx="454" cy="370" rx="113" ry="22" fill="#373e3a"/>
+  <path d="M350 372Q454 395 558 372" fill="none" stroke="#0a0d0b" stroke-width="6" opacity=".7"/>
+ </g>
+</svg>
