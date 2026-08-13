@@ -19,6 +19,11 @@ for component in (
 ):
     assert component in component_ids, f"missing component: {component}"
 
+anchors = re.findall(r'anchor:\[([^\]]+)\]', model)
+assert len(anchors) == len(component_ids), "every component needs a world-space model anchor"
+assert "setProjectionListener" in twin and "projectHotspots" in twin
+assert 'style.left=item.position' in twin, "static positions remain the no-WebGL fallback"
+
 for status in (
     "VORGESEHEN", "ERKANNT", "AKTIV", "MESSUNG GÜLTIG", "NICHT ANGESCHLOSSEN",
     "NICHT ERKANNT", "NICHT VERFÜGBAR", "FEHLER",
@@ -47,11 +52,21 @@ for signal in ("temperature", "temperature2", "target", "power", "current1", "cu
     assert f'data-signal="{signal}"' in production, f"missing adaptive analysis signal: {signal}"
 
 for token in (
-    "twin-hotspot", "component-lens", "configuration-drawer", "guided-journey",
+    "configuration-drawer", "guided-journey",
     "twin-signal-web", "liveFor", "updateSignalAvailability", "startGuide",
     "storyObserver", "setLens", "viewMode",
 ):
     assert token in production, f"missing V4 behavior: {token}"
+assert "twin-hotspot" in preview and 'class="ths"' in production
+assert "component-lens" in preview and 'class="cl"' in production
+
+for component_state in ("componentConfigured", "componentConnectionState", "componentLive", "componentMeasurement"):
+    assert component_state in production, f"missing component detail state: {component_state}"
+
+index_source = Path("ui-v3/src/index.html").read_text(encoding="utf-8")
+assert "C" not in re.search(r'class="loop-routes desktop-routes".*?</svg>', index_source, re.S).group(0), "control routes must be orthogonal"
+assert 'class="loop-routes mobile-routes"' in index_source
+assert "sensor-rail" in index_source
 
 assert "Konfiguration ist schreibgeschützt" in production
 assert "Änderungen betreffen niemals Hardware" in preview

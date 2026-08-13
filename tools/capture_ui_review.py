@@ -109,7 +109,7 @@ def free_port() -> int:
         return candidate.getsockname()[1]
 
 
-def capture(browser: Path, output: Path, width: int, height: int, url: str, profile: Path) -> None:
+def capture(browser: Path, output: Path, width: int, height: int, url: str, profile: Path, delay_ms: int) -> None:
     port = free_port()
     process = subprocess.Popen(
         [str(browser), "--headless=new", f"--remote-debugging-port={port}",
@@ -138,7 +138,15 @@ def capture(browser: Path, output: Path, width: int, height: int, url: str, prof
         })
         cdp.call("Page.navigate", {"url": url})
         cdp.call("Runtime.evaluate", {
-            "expression": "new Promise(resolve => setTimeout(resolve, 4500))",
+            "expression": (
+                "new Promise(resolve => {"
+                "const started=performance.now();"
+                "const ready=()=>{if(document.body&&document.body.classList.contains('ui-ready'))"
+                "setTimeout(resolve," + str(delay_ms) + ");"
+                "else if(performance.now()-started>3000)resolve();else requestAnimationFrame(ready)};"
+                "if(document.readyState==='complete')ready();else addEventListener('load',ready,{once:true});"
+                "})"
+            ),
             "awaitPromise": True, "returnByValue": True,
         })
         result = cdp.call("Page.captureScreenshot", {
@@ -158,6 +166,7 @@ def main() -> int:
     parser.add_argument("--round", default="manual")
     parser.add_argument("--query", default="review=1")
     parser.add_argument("--viewport", help="capture one viewport, for example 1920x1080")
+    parser.add_argument("--delay-ms", type=int, default=4500, help="delay after the load event")
     parser.add_argument("--browser", type=Path, help="explicit Chrome/Edge executable")
     args = parser.parse_args()
     browser = args.browser if args.browser and args.browser.exists() else next((candidate for candidate in CHROME if candidate.exists()), None)
@@ -172,7 +181,7 @@ def main() -> int:
         viewports = ((width, height),)
     for width, height in viewports:
         target = output / f"{width}x{height}.png"
-        capture(browser, target, width, height, url, output / f"profile-{width}x{height}")
+        capture(browser, target, width, height, url, output / f"profile-{width}x{height}", max(0, args.delay_ms))
         print(f"captured {width}x{height}: {target}")
     return 0
 

@@ -75,7 +75,7 @@ for token in (
     assert token in sources, f"missing behavior: {token}"
 
 for token in (
-    "MAX_STEPS 88", "explode", "thermal", "fan", "TMP36", "TLA2024",
+    "MAX_STEPS 104", "explode", "thermal", "fan", "TMP36", "TLA2024",
     "VNH7070", "Istwert-Rückführung", "ENGINEERING", "PRÄSENTATION",
 ):
     assert token in production, f"missing V3 product experience contract: {token}"
