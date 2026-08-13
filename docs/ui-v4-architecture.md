@@ -33,9 +33,10 @@ The explicit top-level views answer separate questions:
 
 ## Digital-twin truth model
 
-Every component has two independent dimensions:
+Every component has three deliberately independent dimensions:
 
 - `configured`: part of the planned PCB/system architecture;
+- `connected`: preview-only simulated physical presence;
 - `live`: derived only from a matching API field or clearly labelled inference.
 
 `configured` never implies `detected`. Components without discovery telemetry (buttons, individual
@@ -43,8 +44,9 @@ H-bridges, a stopped fan) are labelled accordingly. Optional or disconnected har
 unless the firmware reports a related system fault. The UI never fabricates measurements.
 
 The component catalogue in `ui-v4/src/component-model.js` records function, physical position,
-signal, connection and pin/channel for the complete system. Preview configuration mutates a local
-copy only; it cannot reach hardware.
+signal, connection and pin/channel for the complete system. Boolean API fields are normalized as
+`true`, `false` or `unknown`; missing fields therefore render as `NICHT VERFÜGBAR`, never as an
+invented fault. Preview connection profiles mutate a local `Set` only; they cannot reach hardware.
 
 ## Source and build layering
 

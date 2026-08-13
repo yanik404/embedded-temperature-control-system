@@ -58,6 +58,7 @@ assert 'command("stop")' in production
 assert "setpoint?value=" in production
 
 for scenario in (
+    "full-system", "minimal-system", "partial-hardware", "no-sensors",
     "ready", "heating", "holding", "error", "offline", "reconnect",
     "sensor-error", "fan-error", "power-error", "demo30",
 ):

@@ -101,7 +101,7 @@
   <div class="signal-node setpoint-node"><span>w(t)</span><small>Sollwert</small><strong id="loopSetpoint">—</strong></div>
   <div class="signal-node comparator-node"><span>Σ</span><small>Vergleich</small><strong id="loopDeviation">—</strong></div>
   <button class="signal-node pi-node" id="piNode" type="button" aria-expanded="false" aria-controls="piDetails"><span>PI</span><small>Regler</small><strong id="piNodeState">INAKTIV</strong></button>
-  <div class="signal-node output-node"><span>u(t)</span><small>Stellgröße</small><strong id="loopOutput">—</strong></div>
+  <div class="signal-node output-node"><span>u(t)</span><small>Stellgröße · Peltier</small><strong id="loopOutput">—</strong></div>
   <div class="signal-node plant-node"><span>G(s)</span><small>Thermische Strecke</small><strong id="plantState">STILLSTAND</strong></div>
   <div class="signal-node sensor-node"><span>y(t)</span><small>TMP36 · Sensor</small><strong id="loopSensor">—</strong></div>
   <span class="feedback-copy">Istwert-Rückführung</span>
@@ -130,6 +130,7 @@
  </section>
 
  <section class="safety-lock" id="safetyLock" role="alert" aria-live="assertive"><i></i><span><small>START GESPERRT</small><strong id="safetyTitle">System nicht bereit</strong><b id="safetyReason">Sicherheitsfreigaben werden geprüft</b></span></section>
+ <section class="safety-matrix" id="safetyMatrix" aria-label="Sicherheits- und Systemfreigaben"></section>
 
  <section class="timeline-layer" id="timeline" aria-labelledby="timelineTitle">
   <header><span><small id="timelineTitle">Live-Analyse</small><strong id="timelineNow">LIVE</strong></span><div class="timeline-legend" role="group" aria-label="Signale ein- oder ausblenden"><button class="active actual" data-signal="temperature" type="button">TEMP 1</button><button class="active target" data-signal="target" type="button">SOLL</button><button class="active secondary" data-signal="temperature2" type="button">TEMP 2</button><button class="active power" data-signal="power" type="button">u(t)</button><button class="current" data-signal="current1" type="button">I1</button><button class="current" data-signal="current2" type="button">I2</button><button class="fan" data-signal="fan" type="button">FAN</button><button class="light" data-signal="light" type="button">LIGHT</button></div><div class="time-range" role="group" aria-label="Diagrammzeitraum"><button type="button" class="active" data-range="60">1m</button><button type="button" data-range="300">5m</button><button type="button" data-range="900">15m</button></div></header>
@@ -144,16 +145,6 @@
  </aside>
 
  <section class="engineering-layer" id="engineeringLayer" aria-label="Explodierte Hardwareansicht">
-  <div class="component-tag cup-tag"><span>THERMISCHE STRECKE</span><strong>Becher / Inhalt</strong><small id="engCup">—</small></div>
-  <div class="component-tag sensor-tag"><span>MESSUNG</span><strong>TMP36 ×2</strong><small id="engSensors">—</small></div>
-  <div class="component-tag plate-tag"><span>ENERGIEÜBERTRAGUNG</span><strong>Heizplatte</strong><small id="engPlate">—</small></div>
-  <div class="component-tag peltier-tag"><span>AKTORIK</span><strong>VNH7070 · Peltier ×2</strong><small id="engPeltier">—</small></div>
-  <div class="component-tag fan-tag"><span>LUFTPFAD</span><strong>PWM-Lüfter</strong><small id="engFan">—</small></div>
-  <div class="component-tag pico-tag"><span>CONTROL CORE</span><strong>Raspberry Pi Pico W</strong><small id="engPico">—</small></div>
-  <div class="component-tag adc-tag"><span>ANALOG FRONT END</span><strong>TLA2024</strong><small id="engAdc">—</small></div>
-  <div class="component-tag display-tag"><span>HUMAN INTERFACE</span><strong>OLED · Taster</strong><small>SSD1306 · MODE / − / OK / +</small></div>
-  <div class="component-tag light-tag"><span>STATUSLICHT</span><strong>RGB-Ring · LEDs</strong><small>12 Pixel · 5 Statuskanäle</small></div>
-  <svg class="hardware-network" viewBox="0 0 1920 850" preserveAspectRatio="none" aria-hidden="true"><path d="M680 520C560 470 510 330 440 280"/><path d="M680 520C620 610 520 670 430 700"/><path d="M680 520C820 490 930 420 1080 310"/><path d="M680 520C900 590 1110 650 1390 640"/><text x="520" y="410">TMP36 · ADC0</text><text x="520" y="630">PWM · VNH7070</text><text x="850" y="438">I²C · TLA2024 / OLED</text><text x="1110" y="620">PWM / TACHO</text></svg>
   <div class="engineering-rail"><button type="button" data-focus="system" class="active">SYSTEM</button><button type="button" data-focus="sensors">SENSOREN</button><button type="button" data-focus="power">POWER</button></div>
   <div class="engineering-values" id="engineeringValues"></div>
  </section>

@@ -25,6 +25,15 @@ for status in (
 ):
     assert status in model + twin, f"missing truthful discovery state: {status}"
 
+# A missing optional API field is an explicit third state. It must never be
+# coerced to false or presented as a hardware fault.
+experience = Path("ui-v3/src/experience.js").read_text(encoding="utf-8")
+assert 'fallback===undefined?null:fallback' in experience
+assert 'if(supplied===null)return unknown()' in model
+assert 'state:"NICHT VERFÜGBAR",tone:"unknown"' in model
+assert 'var supplied=s[key];if(supplied===null)return unknown()' in model
+assert '!!s[key]' not in model
+
 for mode in ('data-mode="product"', 'data-mode="control"', 'data-mode="thermal"', 'data-mode="engineering"'):
     assert mode in production, f"missing V4 mode: {mode}"
 
@@ -46,6 +55,14 @@ for token in (
 
 assert "Konfiguration ist schreibgeschützt" in production
 assert "Änderungen betreffen niemals Hardware" in preview
+for scenario in (
+    "full-system", "minimal-system", "partial-hardware", "no-sensors",
+    "heating", "holding", "sensor-error", "fan-error", "offline",
+):
+    assert f'data-scenario="{scenario}"' in preview
+    assert f'data-scenario="{scenario}"' not in production
+assert "setConnected" in preview and "useProfile(profiles" in preview
+assert "useProfile(profiles" not in production
 assert 'command("start")' in production and "start_allowed" in production
 assert "/api/status" in production
 assert "/api/" not in twin, "digital-twin preview configuration must not call hardware APIs"

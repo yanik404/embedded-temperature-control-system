@@ -21,6 +21,10 @@ STATS = ROOT / "ui" / "dist" / "build-stats.json"
 
 PREVIEW_CONTROLS = """
 <div class="preview-deck" aria-label="Lokale Vorschau-Szenarien">
+ <button type="button" data-scenario="full-system">FULL SYSTEM</button>
+ <button type="button" data-scenario="minimal-system">MINIMAL SYSTEM</button>
+ <button type="button" data-scenario="partial-hardware">PARTIAL HARDWARE</button>
+ <button type="button" data-scenario="no-sensors">NO SENSORS</button>
  <button type="button" data-scenario="ready">READY</button>
  <button type="button" data-scenario="heating" class="active">HEATING</button>
  <button type="button" data-scenario="holding">HOLDING</button>
