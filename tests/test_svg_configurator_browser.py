@@ -44,7 +44,7 @@ with tempfile.TemporaryDirectory(prefix="becherhalter-callout-test-") as profile
         cdp = review.DevTools(page["webSocketDebuggerUrl"])
         cdp.call("Page.enable")
         cdp.call("Emulation.setDeviceMetricsOverride", {"width": 1440, "height": 900, "deviceScaleFactor": 1, "mobile": False})
-        cdp.call("Page.navigate", {"url": (ROOT / "preview.html").as_uri() + "?scenario=minimal-system&component=peltier2&callouts=focus"})
+        cdp.call("Page.navigate", {"url": (ROOT / "preview.html").as_uri() + "?scenario=minimal-system&component=peltier2"})
         time.sleep(.9)
 
         def evaluate(expression: str):

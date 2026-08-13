@@ -91,8 +91,8 @@ UP/DOWN ändern den Sollwert in 0,5-°C-Schritten. OK startet oder stoppt; im Fe
 
 Die aktuelle Oberfläche folgt dem Prinzip **Simple Digital Twin** und erklärt das System in dieser Reihenfolge:
 
-1. **Aufbau:** hochwertige, sofort sichtbare 2.5D-SVG-Illustration des vollständigen Geräts mit ruhiger technischer Callout-Legende. Fünf Gruppen ordnen zwölf Montagebeziehungen; beim Fokussieren führt genau eine orthogonale Linie zum realen Einbauort. Auf Mobilgeräten stehen Produkt und Legende untereinander, ohne gequetschte Linien. Die Illustration benötigt weder WebGL noch JavaScript, um sichtbar zu sein.
-2. **Regelkreis:** dunkle, linienbasierte Darstellung von Solltemperatur über Vergleich und PI-Regler zu Heizleistung, seitlichen Peltiers, Becher und Sensor mit einer einzigen geraden Rückführung.
+1. **Aufbau:** hochwertige, sofort sichtbare 2.5D-SVG-Illustration eines geschlossenen Geräts. **AUSSENANSICHT** zeigt das fertige Produkt ohne Kabel und Innenleben; **AUFBAU** öffnet kontrolliert Hülle und Basis für Peltiers, Kontaktbacken, TMP36-Sensoren, PCB/Pico und das integrierte Kühlmodul. Fünf kompakte Gruppen ordnen zwölf Montagebeziehungen; beim Fokussieren führt genau eine dezente Linie zum realen Einbauort. Auf Mobilgeräten stehen Produkt und Legende untereinander, ohne Callout-Linien. Die Illustration benötigt weder WebGL noch externe Assets.
+2. **Regelkreis:** dunkle, linienbasierte Darstellung der fünf Hauptpunkte SOLL → PI → HEIZEN → BECHER → IST. Vergleich und Sensor bleiben kleine Zwischenelemente; eine einzige blaue Linie zeigt die Rückführung.
 3. **Live:** eine dominante Isttemperatur, darunter Zustand sowie eine kompakte Zeile für Sollwert, Heizleistung und Lüfter. Es folgt unmittelbar der Verlauf von IST, SOLL und HEIZLEISTUNG; weitere Messreihen sind zunächst eingeklappt.
 4. **Technik:** optionale Details zu GPIO, Messwerten, PI-Parametern, WLAN, IP und Firmwarestatus.
 
@@ -126,7 +126,7 @@ python tools/build_ui.py
 python tools/build_ui.py --check
 ```
 
-`powershell -ExecutionPolicy Bypass -File tools/capture_ui_review.ps1 -Round manual` rendert die sieben Referenz-Viewports automatisiert mit exakt gesetzten Chrome-/Edge-DevTools-Gerätemetriken nach `build/ui-review/manual/`. `python tools/audit_ui_layout.py` prüft AUFBAU, REGELKREIS und LIVE bei denselben sieben Viewports auf sichtbare Kollisionen und horizontalen Overflow. Ausgangsstand, drei empirisch verglichene Linienvarianten, zwei Qualitätsrunden und die finalen Screenshotpfade stehen in `docs/callout-configurator-review.md`.
+`powershell -ExecutionPolicy Bypass -File tools/capture_ui_review.ps1 -Round manual` rendert die sieben Referenz-Viewports automatisiert mit exakt gesetzten Chrome-/Edge-DevTools-Gerätemetriken nach `build/ui-review/manual/`. `python tools/audit_ui_layout.py` prüft AUFBAU, REGELKREIS und LIVE bei denselben sieben Viewports auf sichtbare Kollisionen und horizontalen Overflow. Mit `tools/capture_ui_review.py --product-test product|scale20|grayscale|silhouette` lässt sich die Produktgrafik reproduzierbar isolieren. Ausgangsstand, A/B/C-Vergleich, Auswahlbegründung, Qualitätsprüfungen und finale Screenshotpfade stehen in `docs/product-art-direction-review.md`.
 
 ## Softwarearchitektur
 
