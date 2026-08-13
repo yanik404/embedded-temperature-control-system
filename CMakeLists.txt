@@ -13,8 +13,6 @@ set(DASHBOARD_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/ui-v3/src/index.html
     ${CMAKE_CURRENT_LIST_DIR}/ui-v3/src/experience.css
     ${CMAKE_CURRENT_LIST_DIR}/ui-v3/src/experience.js
-    ${CMAKE_CURRENT_LIST_DIR}/ui-v3/src/product-scene.js
-    ${CMAKE_CURRENT_LIST_DIR}/ui-v3/src/thermal-overlay.js
     ${CMAKE_CURRENT_LIST_DIR}/ui-v3/src/preview.js
     ${CMAKE_CURRENT_LIST_DIR}/ui-v4/src/component-model.js
     ${CMAKE_CURRENT_LIST_DIR}/ui-v4/src/digital-twin.js

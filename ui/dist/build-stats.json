@@ -1,15 +1,12 @@
 {
-  "embedded_product_scene_frame_cap_fps": 30,
-  "embedded_thermal_overlay_frame_cap_fps": 30,
   "external_library_bytes": 0,
   "history_max_seconds": 1800,
-  "preview_bytes": 97296,
-  "preview_product_scene_frame_cap_fps": 60,
-  "preview_thermal_overlay_frame_cap_fps": 60,
-  "production_bytes": 84454,
-  "production_css_bytes": 20295,
-  "production_gzip_bytes_theoretical": 25677,
-  "production_javascript_bytes": 52305,
+  "preview_bytes": 84311,
+  "product_rendering": "inline_svg",
+  "production_bytes": 70712,
+  "production_css_bytes": 19435,
+  "production_gzip_bytes_theoretical": 20814,
+  "production_javascript_bytes": 30246,
   "runtime_http_requests_for_assets": 0,
-  "webgl_draw_calls_per_frame": 1
+  "webgl_draw_calls_per_frame": 0
 }

@@ -57,10 +57,8 @@ def minify_css(source: str) -> str:
 
 def shorten_css_selectors(css: str, html: str, javascript: str) -> tuple[str, str, str]:
     replacements = {
-        "twin-hotspot": "th", "twin-hotspots": "ths", "signal-node": "sn",
-        "product-fallback": "pf", "component-state": "cs", "component-lens": "cl",
-        "engineering-values": "ev", "story-chapter": "sc", "scene-viewport": "sv",
-        "configuration-drawer": "cd", "configuration-item": "ci", "section-heading": "sh",
+        "section-heading": "sh", "component-control": "cc", "component-focus": "cf",
+        "component-item": "ci", "component-hotspots": "ch",
         "product-section": "ps", "product-stage": "pg", "timeline-layer": "tl",
         "technical-grid": "tg", "simple-loop": "sl", "loop-step": "ls",
     }
@@ -145,7 +143,7 @@ def minify_javascript(source: str) -> str:
 def compose(*, preview: bool, minified: bool) -> tuple[str, str, str]:
     template = read("index.html")
     css = "\n\n".join([read("experience.css"), read_v4("digital-twin.css")])
-    scripts = [read("product-scene.js"), read("thermal-overlay.js"), read_v4("component-model.js"), read_v4("digital-twin.js")]
+    scripts = [read_v4("component-model.js"), read_v4("digital-twin.js")]
     if preview:
         scripts.append(read("preview.js"))
     scripts.append(read("experience.js").replace("__PREVIEW_MODE__", "true" if preview else "false"))
@@ -189,11 +187,8 @@ def build_stats(preview_html: str, production_html: str, css: str, javascript: s
         "production_javascript_bytes": size(javascript),
         "external_library_bytes": 0,
         "runtime_http_requests_for_assets": 0,
-        "webgl_draw_calls_per_frame": 1,
-        "preview_product_scene_frame_cap_fps": 60,
-        "preview_thermal_overlay_frame_cap_fps": 60,
-        "embedded_product_scene_frame_cap_fps": 30,
-        "embedded_thermal_overlay_frame_cap_fps": 30,
+        "webgl_draw_calls_per_frame": 0,
+        "product_rendering": "inline_svg",
         "history_max_seconds": 1800,
     }
 
