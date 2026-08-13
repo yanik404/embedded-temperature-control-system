@@ -118,27 +118,34 @@ PRODUCT_TEST_CSS = {
         .page-section{min-height:100vh!important;padding:0!important;border:0!important}
         .product-layout{display:block!important;width:100vw!important;height:100vh!important;margin:0!important}
         .product-stage{display:grid!important;width:100%!important;height:100%!important;place-items:center!important}
-        .product-view-switch{display:none!important}.product-illustration{width:min(92vw,1100px)!important;max-height:94vh!important}
+        .product-view-switch{display:none!important}.product-illustration,#productIllustration{width:min(92vw,1100px)!important;max-height:94vh!important}
     """,
     "scale20": """
         .site-header,.section-heading,.product-panel,.callout-lines,.preview-tools{display:none!important}
         .page-section{min-height:100vh!important;padding:0!important;border:0!important}
         .product-layout{display:block!important;width:100vw!important;height:100vh!important;margin:0!important}
         .product-stage{display:grid!important;width:100%!important;height:100%!important;place-items:center!important}
-        .product-view-switch{display:none!important}.product-illustration{width:20vw!important;max-height:20vh!important}
+        .product-view-switch{display:none!important}.product-illustration,#productIllustration{width:20vw!important;max-height:20vh!important}
     """,
     "grayscale": """
         .site-header,.section-heading,.product-panel,.callout-lines,.preview-tools{display:none!important}
         .page-section{min-height:100vh!important;padding:0!important;border:0!important}
         .product-layout{display:block!important;width:100vw!important;height:100vh!important;margin:0!important}
         .product-stage{display:grid!important;width:100%!important;height:100%!important;place-items:center!important;filter:grayscale(1)}
-        .product-view-switch{display:none!important}.product-illustration{width:min(92vw,1100px)!important;max-height:94vh!important}
+        .product-view-switch{display:none!important}.product-illustration,#productIllustration{width:min(92vw,1100px)!important;max-height:94vh!important;filter:grayscale(1)!important}
+    """,
+    "blur": """
+        .site-header,.section-heading,.product-panel,.callout-lines,.preview-tools{display:none!important}
+        .page-section{min-height:100vh!important;padding:0!important;border:0!important}
+        .product-layout{display:block!important;width:100vw!important;height:100vh!important;margin:0!important}
+        .product-stage{display:grid!important;width:100%!important;height:100%!important;place-items:center!important}
+        .product-view-switch{display:none!important}.product-illustration,#productIllustration{width:min(92vw,1100px)!important;max-height:94vh!important;filter:blur(6px)!important}
     """,
     "silhouette": """
         html,body,.product-section{background:#e7e7e2!important}.site-header,.section-heading,.product-panel,.callout-lines,.preview-tools{display:none!important}
         .page-section{min-height:100vh!important;padding:0!important;border:0!important}.product-layout{display:block!important;width:100vw!important;height:100vh!important;margin:0!important}
         .product-stage{display:grid!important;width:100%!important;height:100%!important;place-items:center!important}.product-view-switch{display:none!important}
-        .product-illustration{width:min(92vw,1100px)!important;max-height:94vh!important;filter:none!important}.product-illustration *{fill:#111!important;stroke:#111!important;opacity:1!important;filter:none!important}
+        .product-illustration,#productIllustration{width:min(92vw,1100px)!important;max-height:94vh!important;filter:brightness(0)!important}.product-illustration *{fill:#111!important;stroke:#111!important;opacity:1!important;filter:none!important}
         .product-illustration .ground-shadow{display:none!important}
     """,
 }
@@ -208,13 +215,15 @@ def main() -> int:
     parser.add_argument("--delay-ms", type=int, default=4500, help="delay after the load event")
     parser.add_argument("--browser", type=Path, help="explicit Chrome/Edge executable")
     parser.add_argument("--product-test", choices=tuple(PRODUCT_TEST_CSS), default="", help="isolate the product for visual quality checks")
+    parser.add_argument("--page", type=Path, default=ROOT / "preview.html", help="HTML file to capture")
     args = parser.parse_args()
     browser = args.browser if args.browser and args.browser.exists() else next((candidate for candidate in CHROME if candidate.exists()), None)
     if not browser:
         raise SystemExit("Chrome or Edge was not found")
     output = ROOT / "build" / "ui-review" / args.round
     output.mkdir(parents=True, exist_ok=True)
-    url = (ROOT / "preview.html").as_uri() + "?" + args.query
+    page = args.page if args.page.is_absolute() else ROOT / args.page
+    url = page.resolve().as_uri() + "?" + args.query
     viewports = VIEWPORTS
     if args.viewport:
         width, height = (int(value) for value in args.viewport.lower().split("x", 1))
