@@ -46,3 +46,18 @@ flachte den Fuß von 124 auf 108 Einheiten ab.
 
 Freigegebene Formbasis:
 `build/ui-review/compact-v3-phase1-approved/1920x1080.png`.
+
+## Phase 2 – Gehäusedetail, Material und Licht
+
+Die freigegebene Form wird mit vier ruhigen Materialfamilien umgesetzt:
+mattes Graphit, transparentes Glas, gedämpftes Aluminium und Amber. Ein
+weiches Licht von links oben, ein sehr schwaches rechtes Fill sowie genau ein
+Boden- und ein Kontaktschatten modellieren die Form. Es gibt keine weiße
+Außenkontur, keine konstruktiven Linien und keine einzeln schwebenden Schatten.
+
+Die erste Materialaufnahme
+`build/ui-review/compact-v3-phase2-initial/1920x1080.png` zeigte einen zu
+hellen Ring, zu metallische Kontaktstützen, eine dominante Glasoberkante und
+einen zu breiten Bodenschatten. Die Freigabefassung dunkelt das Aluminium ab,
+verkürzt und verschmälert beide Kontakte, senkt den Glasrandkontrast und zieht
+den Schatten enger an den Fuß.
