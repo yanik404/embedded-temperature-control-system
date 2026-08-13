@@ -111,3 +111,27 @@ Prozent abgeflacht, der Bildraum enger zugeschnitten und Ambient- sowie
 Bodenschatten verkleinert. Die Ringfront, Glasreflexion, Flüssigkeitsdeckung
 und der Kontaktschatten werden reduziert. Dadurch rücken Becher, Halter, Basis
 und Bedienung optisch zu einem einzigen niedrigen Tischprodukt zusammen.
+
+## Visual Review 2 – Feinabstimmung
+
+Referenz vor Korrektur:
+`build/ui-review/compact-v3-review2-before/1920x1080.png`.
+
+1. Ringfront noch etwas zu kräftig.
+2. Kontaktflächen noch leicht stützenartig.
+3. Flüssigkeitsrand etwas zu dick.
+4. Glasrand minimal dominant.
+5. Basisoberseite verbindet Halter und Bedienung noch nicht weich genug.
+6. Rechte Sockelschattierung etwas zu dunkel.
+7. Displayglas etwas zu schwarz.
+8. Tasterlabels in der Gesamtansicht zu präsent.
+9. Lüftung zu nah am rechten Rand.
+10. Untere Gehäusefuge zu lang.
+11. Amberfläche minimal zu gesättigt.
+12. Vorderkante des inneren Halters noch zu dunkel.
+
+Die Schlussfassung reduziert beide Ringkanten, verkürzt die sichtbaren
+Kontaktflächen erneut, flacht die Flüssigkeitsellipse ab, dämpft Glas- und
+Amberkontrast und hellt die rechte Basisfacette an. Displayglas und Labels
+werden ruhiger; die Lüftung wandert nach innen und die untere Fuge wird um
+28 Einheiten verkürzt.

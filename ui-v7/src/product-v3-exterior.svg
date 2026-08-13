@@ -3,7 +3,7 @@
  <desc id="productV3Desc">Ein normaler Trinkbecher mit warmem Getränk steht in einem niedrigen Haltering auf einer flachen ovalen Basis.</desc>
  <defs>
   <linearGradient id="p3Glass" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#707a75" stop-opacity=".48"/><stop offset=".18" stop-color="#edf0ed" stop-opacity=".48"/><stop offset=".43" stop-color="#aab2ad" stop-opacity=".18"/><stop offset=".78" stop-color="#d7dcd8" stop-opacity=".38"/><stop offset="1" stop-color="#59635e" stop-opacity=".46"/></linearGradient>
-  <linearGradient id="p3Drink" x1=".08" y1="0" x2=".86" y2="1"><stop stop-color="#d98b51"/><stop offset=".45" stop-color="#b96841"/><stop offset="1" stop-color="#80422f"/></linearGradient>
+  <linearGradient id="p3Drink" x1=".08" y1="0" x2=".86" y2="1"><stop stop-color="#d1854e"/><stop offset=".45" stop-color="#b36440"/><stop offset="1" stop-color="#7b402e"/></linearGradient>
   <linearGradient id="p3Base" x1=".08" y1="0" x2=".9" y2="1"><stop stop-color="#4b524e"/><stop offset=".46" stop-color="#373d39"/><stop offset="1" stop-color="#242925"/></linearGradient>
   <linearGradient id="p3BaseTop" x1="0" y1="0" x2="1" y2=".28"><stop stop-color="#626a65"/><stop offset=".5" stop-color="#414743"/><stop offset="1" stop-color="#303632"/></linearGradient>
   <linearGradient id="p3Metal" x1="0" y1="0" x2="1" y2=".18"><stop stop-color="#5e6862"/><stop offset=".22" stop-color="#7f8983"/><stop offset=".52" stop-color="#59635d"/><stop offset=".78" stop-color="#737d77"/><stop offset="1" stop-color="#48524c"/></linearGradient>
@@ -20,9 +20,9 @@
   <g id="product-v3-base" transform="matrix(1 0 0 .82 0 78)">
    <ellipse cx="320" cy="446" rx="147" ry="29" fill="url(#p3BaseTop)"/>
    <path d="M174 446Q187 430 227 425Q320 413 420 424Q458 429 468 446L465 497Q459 521 414 532Q321 555 222 531Q183 522 176 500Z" fill="url(#p3Base)"/>
-   <path d="M320 420Q391 416 420 424Q458 429 468 446L465 497Q459 521 414 532Q367 544 320 544Z" fill="#171b18" opacity=".24"/>
+   <path d="M320 420Q391 416 420 424Q458 429 468 446L465 497Q459 521 414 532Q367 544 320 544Z" fill="#171b18" opacity=".18"/>
    <path d="M177 491Q234 513 320 516Q406 513 465 491L465 508Q454 529 414 540Q321 563 222 540Q187 531 176 510Z" fill="#171b18" opacity=".82"/>
-   <path d="M202 520Q252 537 320 539Q389 537 440 521" fill="none" stroke="#77807a" stroke-width="1.5" opacity=".1"/>
+   <path d="M216 521Q263 536 320 537Q380 535 426 522" fill="none" stroke="#77807a" stroke-width="1.2" opacity=".075"/>
   </g>
 
   <g id="product-v3-holder">
@@ -37,16 +37,16 @@
   </g>
 
   <g id="product-v3-thermal-covers">
-   <path d="M205 412Q209 400 222 395L227 399L226 435Q223 444 216 447Q211 443 210 436Z" fill="#6f7973" opacity=".44"/>
-   <path d="M435 412Q431 400 418 395L413 399L414 435Q417 444 424 447Q429 443 430 436Z" fill="#68726c" opacity=".34"/>
+   <path d="M208 413Q212 403 222 399L226 402L225 432Q222 440 217 443Q213 440 212 433Z" fill="#6f7973" opacity=".36"/>
+   <path d="M432 413Q428 403 418 399L414 402L415 432Q418 440 423 443Q427 440 428 433Z" fill="#68726c" opacity=".28"/>
    <path d="M226 406Q228 417 226 428" fill="none" stroke="#a96543" stroke-width="1.5" stroke-linecap="round" opacity=".24"/>
    <path d="M414 406Q412 417 414 428" fill="none" stroke="#a96543" stroke-width="1.5" stroke-linecap="round" opacity=".2"/>
   </g>
 
   <g id="product-v3-cup" transform="matrix(1 0 0 .92 0 24)">
    <path d="M215 91Q320 65 425 91L411 381Q407 417 320 422Q233 417 229 381Z" fill="url(#p3Glass)" opacity=".82"/>
-   <g clip-path="url(#p3CupClip)"><path d="M231 140Q320 120 409 140L398 376Q394 402 320 407Q246 402 242 376Z" fill="url(#p3Drink)" opacity=".86"/><ellipse cx="320" cy="140" rx="89" ry="20" fill="#d98a50"/><ellipse cx="320" cy="142" rx="72" ry="12" fill="#80432f" opacity=".52"/></g>
-   <ellipse cx="320" cy="91" rx="105" ry="26" fill="#d7ddda" fill-opacity=".035" stroke="#88918c" stroke-width="1.5" opacity=".62"/>
+   <g clip-path="url(#p3CupClip)"><path d="M231 140Q320 120 409 140L398 376Q394 402 320 407Q246 402 242 376Z" fill="url(#p3Drink)" opacity=".84"/><ellipse cx="320" cy="140" rx="89" ry="19" fill="#d1844d"/><ellipse cx="320" cy="142" rx="74" ry="11" fill="#80432f" opacity=".48"/></g>
+   <ellipse cx="320" cy="91" rx="105" ry="26" fill="#d7ddda" fill-opacity=".025" stroke="#828b86" stroke-width="1.2" opacity=".54"/>
    <path d="M232 112Q233 252 243 366" fill="none" stroke="#eef1ee" stroke-width="2" stroke-linecap="round" opacity=".08"/>
    <path d="M233 379Q320 406 407 379Q402 418 320 422Q238 418 233 379Z" fill="#79827d" opacity=".18"/>
   </g>
@@ -54,22 +54,22 @@
   <ellipse cx="320" cy="407" rx="100" ry="8" fill="#050706" opacity=".25" filter="url(#p3ContactBlur)"/>
   <g id="product-v3-holder-ring">
    <path d="M197 395A123 33 0 1 0 443 395A123 33 0 1 0 197 395M219 395A101 22 0 1 1 421 395A101 22 0 1 1 219 395" fill="url(#p3Metal)" fill-rule="evenodd" opacity=".9"/>
-   <path d="M205 400Q320 434 435 400" fill="none" stroke="#272d29" stroke-width="4.5" opacity=".62"/>
-   <path d="M232 402Q320 421 408 402" fill="none" stroke="#101411" stroke-width="3" opacity=".44"/>
+   <path d="M208 400Q320 431 432 400" fill="none" stroke="#272d29" stroke-width="3.5" opacity=".55"/>
+   <path d="M235 402Q320 419 405 402" fill="none" stroke="#101411" stroke-width="2.5" opacity=".38"/>
   </g>
 
   <g id="product-v3-front">
-   <path d="M273 465Q320 473 367 465L365 491Q320 499 275 491Z" fill="#101512" opacity=".9"/>
+   <path d="M273 465Q320 473 367 465L365 491Q320 499 275 491Z" fill="#141b18" opacity=".88"/>
    <path d="M280 471Q320 477 360 471L359 486Q320 492 281 486Z" fill="#092226"/>
    <text x="289" y="486" fill="#c8e5e1" font-family="Segoe UI, sans-serif" font-size="10" font-weight="550">32.4°</text>
    <text x="342" y="486" fill="#82a4a2" font-family="Segoe UI, sans-serif" font-size="7" font-weight="550">45.0°</text>
    <g fill="#515a54" stroke="#747d77" stroke-width=".7"><circle cx="280" cy="505" r="3.2"/><circle cx="307" cy="508" r="3.2"/><circle cx="334" cy="508" r="3.2"/><circle cx="361" cy="505" r="3.2"/></g>
-   <g fill="#8f9892" font-family="Segoe UI, sans-serif" font-size="3.4" font-weight="600" text-anchor="middle"><text x="280" y="514">MODE</text><text x="307" y="517">DOWN</text><text x="334" y="517">OK</text><text x="361" y="514">UP</text></g>
+   <g fill="#828b85" font-family="Segoe UI, sans-serif" font-size="3" font-weight="600" text-anchor="middle"><text x="280" y="513">MODE</text><text x="307" y="516">DOWN</text><text x="334" y="516">OK</text><text x="361" y="513">UP</text></g>
   </g>
   <g id="product-v3-vent" fill="#68716b" opacity=".48">
-   <rect x="430" y="482" width="2" height="14" rx="1" transform="rotate(8 431 489)"/>
-   <rect x="437" y="480" width="2" height="14" rx="1" transform="rotate(8 438 487)"/>
-   <rect x="444" y="478" width="2" height="14" rx="1" transform="rotate(8 445 485)"/>
+   <rect x="421" y="483" width="2" height="12" rx="1" transform="rotate(8 422 489)"/>
+   <rect x="428" y="481" width="2" height="12" rx="1" transform="rotate(8 429 487)"/>
+   <rect x="435" y="479" width="2" height="12" rx="1" transform="rotate(8 436 485)"/>
   </g>
  </g>
 </svg>
