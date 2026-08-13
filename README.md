@@ -91,9 +91,9 @@ UP/DOWN ändern den Sollwert in 0,5-°C-Schritten. OK startet oder stoppt; im Fe
 
 Die aktuelle Oberfläche folgt dem Prinzip **Simple Digital Twin** und erklärt das System in dieser Reihenfolge:
 
-1. **Aufbau:** hochwertige, sofort sichtbare 2.5D-SVG-Illustration des vollständigen Geräts. Der Becher sitzt in der Halterung; zwei dünne Peltiermodule und metallische Kontaktbacken liegen seitlich am Becher. TO-92-Sensoren, Bodenplatte, Lamellenkühlkörper, Sechsblatt-Lüfter, detaillierte PCB mit Pico W/TLA2024, OLED, vier Taster, RGB-Ring und 12-V-Anschluss sind mechanisch zusammenhängend dargestellt. Die Illustration benötigt weder WebGL noch JavaScript, um sichtbar zu sein.
+1. **Aufbau:** hochwertige, sofort sichtbare 2.5D-SVG-Illustration des vollständigen Geräts mit ruhiger technischer Callout-Legende. Fünf Gruppen ordnen zwölf Montagebeziehungen; beim Fokussieren führt genau eine orthogonale Linie zum realen Einbauort. Auf Mobilgeräten stehen Produkt und Legende untereinander, ohne gequetschte Linien. Die Illustration benötigt weder WebGL noch JavaScript, um sichtbar zu sein.
 2. **Regelkreis:** dunkle, linienbasierte Darstellung von Solltemperatur über Vergleich und PI-Regler zu Heizleistung, seitlichen Peltiers, Becher und Sensor mit einer einzigen geraden Rückführung.
-3. **Live:** Isttemperatur, Solltemperatur, Heizleistung, Lüfter, Zustand und der Verlauf von IST, SOLL und HEIZLEISTUNG. Weitere Messreihen sind zunächst eingeklappt.
+3. **Live:** eine dominante Isttemperatur, darunter Zustand sowie eine kompakte Zeile für Sollwert, Heizleistung und Lüfter. Es folgt unmittelbar der Verlauf von IST, SOLL und HEIZLEISTUNG; weitere Messreihen sind zunächst eingeklappt.
 4. **Technik:** optionale Details zu GPIO, Messwerten, PI-Parametern, WLAN, IP und Firmwarestatus.
 
 Live-Daten sind ohne Anmeldung lesbar. START und Sollwertänderungen sind zunächst gesperrt. Über **Mit PIN freigeben** wird die Präsentations-PIN `1234` an `POST /api/unlock` gesendet und ausschließlich auf dem Pico geprüft. Bei Erfolg erzeugt der Pico ein zufälliges, flüchtiges Token mit fünf Minuten Gültigkeit. START und Sollwert müssen dieses Token mitsenden; danach gelten unverändert sämtliche Sensor-, Becher-, Versorgungs-, Lüfter-, Strom- und Temperaturfreigaben der Firmware. **STOPP ist aus Sicherheitsgründen jederzeit ohne Token erlaubt**, damit eine abgelaufene Sitzung niemals eine sichere Abschaltung verhindert. Die PIN ist eine lokale Bedienfreigabe im vertrauenswürdigen Präsentationsnetz, keine verschlüsselte Benutzerverwaltung.
@@ -104,7 +104,7 @@ Statusfarben bleiben bewusst sparsam: Orange zeigt Heizenergie, Grün einen best
 
 ### Lokale Designvorschau
 
-`preview.html` direkt im Browser öffnen, um dieselbe Oberfläche ohne Pico und WLAN mit animierten Demo-Daten anzusehen. Fehlende Bauteile erscheinen direkt im Produkt als schwache gestrichelte Einbaukontur mit einem zugänglichen `+`. Ein Klick setzt das konkrete SVG-Bauteil in 480 ms sichtbar ein und ändert den Zustand auf `ANGESCHLOSSEN`; ein weiterer Klick entfernt es wieder. Es gibt keine zusätzliche Konfiguratorseite. Die simulierte PIN ist ebenfalls `1234`; START, STOP und Sollwert verändern ausschließlich den lokalen Demo-Zustand und senden niemals Hardware- oder API-Befehle.
+`preview.html` direkt im Browser öffnen, um dieselbe Oberfläche ohne Pico und WLAN mit animierten Demo-Daten anzusehen. Fehlende Bauteile erscheinen als schwache gestrichelte Einbaukontur; das `+` sitzt ausschließlich in der zugehörigen Legendenzeile. Hinzufügen blendet das konkrete SVG-Bauteil mit einer kurzen Montagebewegung ein, der Haken bestätigt den Zustand, und **Aus Vorschau entfernen** nimmt es wieder heraus. Die Szenarien sind standardmäßig verborgen und öffnen sich über **DEMO TOOLS** oder `Alt+D`; in der Produktionsdatei werden diese Werkzeuge nicht erzeugt. Die simulierte PIN ist ebenfalls `1234`; START, STOP und Sollwert verändern ausschließlich den lokalen Demo-Zustand und senden niemals Hardware- oder API-Befehle.
 
 Die bewährte Render-, API- und Chart-Basis liegt unter `ui-v3/src/`; die V4-Digital-Twin-Schicht liegt getrennt unter `ui-v4/src/`. `ui/src/` bleibt als jederzeit wiederherstellbare Observatory-V2-Basis im Repository:
 
@@ -114,8 +114,8 @@ Die bewährte Render-, API- und Chart-Basis liegt unter `ui-v3/src/`; die V4-Dig
 - `experience.js` – Read-only-Live-API, Token-Bedienung, Chart und technische Details
 - `preview.js` – ausschließlich lokale Simulation
 - `ui-v4/src/component-model.js` – vollständiger Hardwarekatalog und ehrliche Live-Discovery-Abbildung
-- `ui-v4/src/digital-twin.js` – direkte SVG-Komponenteninteraktion, ehrliche Live-Zustände und Preview-Konfigurator
-- `ui-v4/src/digital-twin.css` – SVG-Komponentenstatus und Fokusdarstellung
+- `ui-v4/src/digital-twin.js` – Callout-Legende, SVG-Montageanker, ehrliche Live-Zustände und Preview-Konfigurator
+- `ui-v4/src/digital-twin.css` – orthogonale Zuordnungslinien, Statussemantik und Inline-Fokusdarstellung
 
 Die stabilisierte Produktion verwendet ausschließlich die leichtgewichtige Inline-SVG-/DOM-/Canvas-Architektur. Frühere WebGL-, X-Ray-, Scroll-Mode- und Bedienlabor-Prototypen wurden nach Abschluss der Technologieentscheidung entfernt. Die aktuelle Architektur steht in `docs/ui-v3-architecture.md` und `docs/ui-v4-architecture.md`.
 
@@ -126,7 +126,7 @@ python tools/build_ui.py
 python tools/build_ui.py --check
 ```
 
-`powershell -ExecutionPolicy Bypass -File tools/capture_ui_review.ps1 -Round manual` rendert die sieben Referenz-Viewports automatisiert mit exakt gesetzten Chrome-/Edge-DevTools-Gerätemetriken nach `build/ui-review/manual/`. `python tools/audit_ui_layout.py` prüft AUFBAU, REGELKREIS und LIVE bei denselben sieben Viewports auf sichtbare Kollisionen und horizontalen Overflow. Ausgangsstand, zwei Review-Runden, mechanische/thermische Plausibilität und die finalen Screenshotpfade stehen in `docs/product-quality-review.md`.
+`powershell -ExecutionPolicy Bypass -File tools/capture_ui_review.ps1 -Round manual` rendert die sieben Referenz-Viewports automatisiert mit exakt gesetzten Chrome-/Edge-DevTools-Gerätemetriken nach `build/ui-review/manual/`. `python tools/audit_ui_layout.py` prüft AUFBAU, REGELKREIS und LIVE bei denselben sieben Viewports auf sichtbare Kollisionen und horizontalen Overflow. Ausgangsstand, drei empirisch verglichene Linienvarianten, zwei Qualitätsrunden und die finalen Screenshotpfade stehen in `docs/callout-configurator-review.md`.
 
 ## Softwarearchitektur
 
