@@ -103,6 +103,33 @@ capture. Native Safari is not available on the Windows build host; the implement
 WebGL 1, Canvas 2D, SVG, Fetch, IntersectionObserver and standards-based CSS, with the existing SVG
 fallback for unavailable WebGL.
 
+## Refinement review rounds
+
+### Round 1 — Product (20 findings resolved)
+
+The final `v4-refine-product` and seven-viewport `v4-refine-final` captures were checked for product
+scale, silhouette, negative space, text hierarchy, hotspot attachment, lighting, first-screen scope,
+header weight, technical detail leakage, thermal color, state prominence, temperature prominence,
+configurator discoverability, lens separation, card count, monospaced text, connection prominence,
+touch targets, focus clarity and preview chrome. The product now occupies the visual centre while
+control, chart, safety detail and Engineering remain outside the first screen.
+
+### Round 2 — Control loop (15 findings resolved)
+
+The `v4-refine-control` capture was checked for setpoint, comparator, error, PI, output, explicit
+Peltier actuator, product-as-plant, TMP36 sensor, feedback return, arrow direction, value legibility,
+state consistency, control separation, safety authority and ambient animation. The product remains
+the plant and `u(t)` now names the Peltier function directly.
+
+### Round 3 — Engineering and full scroll (15 findings resolved)
+
+The `v4-refine-engineering`, `v4-refine-safety` and `v4-refine-analysis` captures were checked for
+exploded geometry, attached hotspots, planned/live separation, unknown status, disconnected status,
+real faults, pin detail, optional hardware, configuration grouping, neutral colour, IP visibility,
+Safety/System separation, chart availability, story order and sticky continuity. A scripted Chrome
+audit traversed all six chapters: the stage remained at viewport bounds, the story advanced through
+Configure, Loop, Live Control, Analysis, Safety and Engineering, and no horizontal overflow occurred.
+
 ## Corrections made during review
 
 1. Reduced the permanent cyan/HUD treatment in PRODUCT.
@@ -125,3 +152,29 @@ fallback for unavailable WebGL.
 18. Added truthful neutral states for non-discoverable hardware.
 19. Added preview-only component assembly interaction.
 20. Added exact query-addressable review states for deterministic screenshots.
+21. Separated planned configuration from preview-only physical connection state.
+22. Added full, minimal, partial and sensorless hardware profiles.
+23. Made missing API booleans an explicit unknown state instead of implicit `false`.
+24. Removed static claims such as a fictitious monitored 3.3-V logic status.
+25. Added a dedicated Safety matrix for temperature, current, fan, cup and power checks.
+26. Marked WLAN, webserver and sensor bus as system context rather than thermal safety checks.
+27. Replaced the full-screen offline veil with a compact edge status while preserving the model.
+28. Grouped the configurator into temperature, actuators, sensors, interface and system.
+29. Increased hotspot hit targets to 44 px while retaining visually small markers.
+30. Added exact German ARIA labels ending in “öffnen” and a visible keyboard focus ring.
+31. Added ESC and free-stage click return to the overview camera.
+32. Coupled hotspot translation to the component-focus camera movement.
+33. Simplified the header and hid DHCP details outside Engineering.
+34. Increased Product typography sizes and reduced micro-label density.
+35. Enlarged the Product scene to roughly 72% of the central stage width.
+36. Clarified `u(t)` as the Peltier actuator at the control-loop node.
+37. Corrected chart time labels for seconds, minute:second and minutes.
+38. Prevented absent target, power, fan or optional sensors from becoming zero-lines.
+39. Removed obsolete Engineering text tags duplicated by interactive component details.
+40. Consolidated old mobile override patches and reduced `!important` usage from 75 to zero.
+41. Kept START, STOP and setpoint behavior on the established API path without changes.
+42. Kept PreviewDriver entirely out of the generated Pico production document.
+43. Kept the single-file production dashboard below its existing 128-KiB budget.
+44. Added a realistic regression contract for a missing `temp2_ok` field.
+45. Re-rendered Product at all seven required exact CSS viewports.
+46. Re-rendered Control, Analysis, Safety and Engineering as deterministic review states.
