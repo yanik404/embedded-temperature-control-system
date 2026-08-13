@@ -17,8 +17,8 @@ set(DASHBOARD_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/ui-v4/src/component-model.js
     ${CMAKE_CURRENT_LIST_DIR}/ui-v4/src/digital-twin.js
     ${CMAKE_CURRENT_LIST_DIR}/ui-v4/src/digital-twin.css
-    ${CMAKE_CURRENT_LIST_DIR}/ui-v5/src/product-v2-exterior.svg
     ${CMAKE_CURRENT_LIST_DIR}/ui-v5/src/product-v2-cutaway.svg
+    ${CMAKE_CURRENT_LIST_DIR}/ui-v6/src/product-v3-exterior.svg
     ${CMAKE_CURRENT_LIST_DIR}/tools/build_ui.py
 )
 

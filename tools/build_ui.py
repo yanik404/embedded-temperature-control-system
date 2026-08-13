@@ -15,6 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "ui-v3" / "src"
 V4_SOURCE = ROOT / "ui-v4" / "src"
 V5_SOURCE = ROOT / "ui-v5" / "src"
+V6_SOURCE = ROOT / "ui-v6" / "src"
 PREVIEW = ROOT / "preview.html"
 PRODUCTION = ROOT / "ui" / "dist" / "dashboard.production.html"
 HEADER = ROOT / "include" / "web_assets.h"
@@ -53,6 +54,10 @@ def read_v4(name: str) -> str:
 
 def read_v5(name: str) -> str:
     return (V5_SOURCE / name).read_text(encoding="utf-8")
+
+
+def read_v6(name: str) -> str:
+    return (V6_SOURCE / name).read_text(encoding="utf-8")
 
 
 def minify_css(source: str) -> str:
@@ -149,7 +154,7 @@ def minify_javascript(source: str) -> str:
 
 def compose(*, preview: bool, minified: bool) -> tuple[str, str, str]:
     template = read("index.html")
-    template = template.replace("<!--__PRODUCT_V2_EXTERIOR__-->", read_v5("product-v2-exterior.svg"))
+    template = template.replace("<!--__PRODUCT_V3_EXTERIOR__-->", read_v6("product-v3-exterior.svg"))
     template = template.replace("<!--__PRODUCT_V2_CUTAWAY__-->", read_v5("product-v2-cutaway.svg"))
     css = "\n\n".join([read("experience.css"), read_v4("digital-twin.css")])
     scripts = [read_v4("component-model.js"), read_v4("digital-twin.js")]

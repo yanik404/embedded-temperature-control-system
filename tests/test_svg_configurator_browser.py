@@ -52,7 +52,7 @@ with tempfile.TemporaryDirectory(prefix="becherhalter-callout-test-") as profile
             return result["result"].get("value")
 
         before = evaluate("""(()=>{const e=document.querySelector('[data-callout-entry="peltier2"]'),p=document.querySelector('[data-part="peltier2"]');return{status:e.querySelector('.callout-status').textContent,connected:e.classList.contains('connected'),hidden:p.classList.contains('disconnected'),lines:document.querySelectorAll('[data-callout-path]').length,details:!e.querySelector('.callout-detail').hidden}})()""")
-        assert before == {"status": "+", "connected": False, "hidden": True, "lines": 1, "details": True}, before
+        assert before == {"status": "+", "connected": False, "hidden": True, "lines": 0, "details": True}, before
 
         evaluate("document.querySelector('[data-callout-entry=\"peltier2\"] .callout-status').click()")
         time.sleep(.6)

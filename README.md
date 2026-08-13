@@ -116,8 +116,9 @@ Die bewährte Render-, API- und Chart-Basis liegt unter `ui-v3/src/`; die V4-Dig
 - `ui-v4/src/component-model.js` – vollständiger Hardwarekatalog und ehrliche Live-Discovery-Abbildung
 - `ui-v4/src/digital-twin.js` – Callout-Legende, SVG-Montageanker, ehrliche Live-Zustände und Preview-Konfigurator
 - `ui-v4/src/digital-twin.css` – orthogonale Zuordnungslinien, Statussemantik und Inline-Fokusdarstellung
-- `ui-v5/src/product-v2-exterior.svg` – neue geschlossene 2.5D-Außenansicht
-- `ui-v5/src/product-v2-cutaway.svg` – technische Schnittansicht innerhalb derselben Produktform
+- `ui-v6/src/product-v3-exterior.svg` – eigenständig neu entwickelte, geschlossene Außenansicht ohne technische Callouts
+- `ui-v5/src/product-v2-exterior.svg` – unveränderter visueller Fallback der vorherigen Außenansicht
+- `ui-v5/src/product-v2-cutaway.svg` – unverändert beibehaltene technische Bestandsansicht
 
 Die stabilisierte Produktion verwendet ausschließlich die leichtgewichtige Inline-SVG-/DOM-/Canvas-Architektur. Frühere WebGL-, X-Ray-, Scroll-Mode- und Bedienlabor-Prototypen wurden nach Abschluss der Technologieentscheidung entfernt. Die aktuelle Architektur steht in `docs/ui-v3-architecture.md` und `docs/ui-v4-architecture.md`.
 
@@ -128,7 +129,7 @@ python tools/build_ui.py
 python tools/build_ui.py --check
 ```
 
-`powershell -ExecutionPolicy Bypass -File tools/capture_ui_review.ps1 -Round manual` rendert die sieben Referenz-Viewports automatisiert mit exakt gesetzten Chrome-/Edge-DevTools-Gerätemetriken nach `build/ui-review/manual/`. `python tools/audit_ui_layout.py` prüft AUFBAU, REGELKREIS und LIVE bei denselben sieben Viewports auf sichtbare Kollisionen und horizontalen Overflow. Mit `tools/capture_ui_review.py --product-test product|scale20|grayscale|blur|silhouette` lässt sich die Produktgrafik reproduzierbar isolieren. Art-Direction-Phasen, beide Reviewrunden, Fallback-Abgrenzung und finale Screenshotpfade stehen in `docs/product-v2-art-direction.md`; `tests/test_product_v2_responsive.py` prüft beide Produktansichten automatisiert bei 1920, 1440, 1366, 768 und 390 Pixeln.
+`powershell -ExecutionPolicy Bypass -File tools/capture_ui_review.ps1 -Round manual` rendert die sieben Referenz-Viewports automatisiert mit exakt gesetzten Chrome-/Edge-DevTools-Gerätemetriken nach `build/ui-review/manual/`. `python tools/audit_ui_layout.py` prüft AUFBAU, REGELKREIS und LIVE bei denselben sieben Viewports auf sichtbare Kollisionen und horizontalen Overflow. Mit `tools/capture_ui_review.py --product-test product|scale20|grayscale|blur|silhouette` lässt sich die Produktgrafik reproduzierbar isolieren. Die vier Art-Direction-Phasen, mehr als 30 konkrete Korrekturen und die No-UI-Qualitätsfreigabe der neuen Außenansicht stehen in `docs/product-v3-art-direction.md`; `tests/test_product_v2_responsive.py` prüft die neue Außen- und die unveränderte Bestandsansicht automatisiert bei 1920, 1440, 1366, 768 und 390 Pixeln.
 
 ## Softwarearchitektur
 

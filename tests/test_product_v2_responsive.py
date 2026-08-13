@@ -1,4 +1,4 @@
-"""Validate both Product V2 views at the presentation viewport contract."""
+"""Validate the Product V3 exterior and retained build view at all viewports."""
 
 from __future__ import annotations
 
@@ -19,10 +19,10 @@ import capture_ui_review as review  # noqa: E402
 VIEWPORTS = ((1920, 1080), (1440, 900), (1366, 768), (768, 1024), (390, 844))
 browser = next((candidate for candidate in review.CHROME if candidate.exists()), None)
 if browser is None:
-    print("Product V2 responsive test skipped: Chrome/Chromium not found")
+    print("Product V3 responsive test skipped: Chrome/Chromium not found")
     raise SystemExit(0)
 
-with tempfile.TemporaryDirectory(prefix="becherhalter-product-v2-", ignore_cleanup_errors=True) as profile:
+with tempfile.TemporaryDirectory(prefix="becherhalter-product-v3-", ignore_cleanup_errors=True) as profile:
     port = review.free_port()
     process = subprocess.Popen(
         [str(browser), "--headless=new", f"--remote-debugging-port={port}",
@@ -78,4 +78,4 @@ with tempfile.TemporaryDirectory(prefix="becherhalter-product-v2-", ignore_clean
         except subprocess.TimeoutExpired:
             process.terminate()
 
-print("Product V2 responsive test passed: exterior/build at 1920, 1440, 1366, 768 and 390 px")
+print("Product V3 responsive test passed: exterior/build at 1920, 1440, 1366, 768 and 390 px")

@@ -31,13 +31,15 @@
 .preview-tools{position:fixed;z-index:300;right:12px;bottom:12px}.preview-tools-toggle{height:28px;padding:0 9px;border:1px solid #3a403b;border-radius:4px;background:#0b0d0bdd;color:#969c96;font-size:9px;letter-spacing:.08em;cursor:pointer}.preview-deck{position:absolute;right:0;bottom:34px;display:grid;width:180px;height:auto;max-height:65vh;padding:6px;border:1px solid #343a35;border-radius:6px;background:#0b0d0bf2;overflow:auto}.preview-deck[hidden]{display:none}.preview-deck button{min-height:27px;border:0;border-bottom:1px solid #2f342f;background:transparent;color:#999f99;font-size:9px;text-align:left}.preview-deck button.active{color:#fff;background:#4e2b1b}
 
 /* Two deliberate product views: a complete exterior and one controlled cutaway. */
-.product-view-switch{position:absolute;z-index:8;top:18px;left:50%;display:flex;align-items:center;gap:10px;transform:translateX(-50%);padding:5px;border:1px solid #3a413c;border-radius:999px;background:#111511d9;box-shadow:0 8px 28px #0005;backdrop-filter:blur(8px)}.product-view-switch button{min-height:28px;padding:0 12px;border:0;border-radius:999px;background:transparent;color:#858c86;font-size:9px;font-weight:700;letter-spacing:.09em;cursor:pointer}.product-view-switch button[aria-pressed="true"]{background:#313833;color:#f1f1ea}.product-view-switch button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}.product-view-switch i{width:1px;height:15px;background:#414843}.product-v2-view{display:none}.product-v2-view[data-product-illustration="exterior"]{display:block}body[data-product-view="build"] .product-v2-view[data-product-illustration="exterior"]{display:none}body[data-product-view="build"] .product-v2-view[data-product-illustration="build"]{display:block}.product-v2-illustration{width:100%;max-height:710px}.internal-hint{opacity:0;pointer-events:none}.internal-hint.focused{opacity:1;pointer-events:auto}.heat-trim{transition:opacity .4s}body[data-state="AUS"] .heat-trim,body[data-state="BEREIT"] .heat-trim{opacity:.15}.button-bank ellipse{fill:#59615c;stroke:#8d958f}.product-illustration .pico-module{stroke:#65aeb8;stroke-width:1.5}.product-illustration .to92 path:first-child{fill:#111513;stroke:#8c958f;stroke-width:1.5}.product-illustration .to92 path:last-child{fill:none;stroke:#aeb5af;stroke-width:1.5}
+.product-view-switch{position:absolute;z-index:8;top:18px;left:50%;display:flex;align-items:center;gap:10px;transform:translateX(-50%);padding:5px;border:1px solid #3a413c;border-radius:999px;background:#111511d9;box-shadow:0 8px 28px #0005;backdrop-filter:blur(8px)}.product-view-switch button{min-height:28px;padding:0 12px;border:0;border-radius:999px;background:transparent;color:#858c86;font-size:9px;font-weight:700;letter-spacing:.09em;cursor:pointer}.product-view-switch button[aria-pressed="true"]{background:#313833;color:#f1f1ea}.product-view-switch button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}.product-view-switch i{width:1px;height:15px;background:#414843}.product-view{display:none}.product-view[data-product-illustration="exterior"]{display:block}body[data-product-view="build"] .product-view[data-product-illustration="exterior"]{display:none}body[data-product-view="build"] .product-view[data-product-illustration="build"]{display:block}.product-v3-illustration,.product-v2-illustration{width:100%;max-height:710px}.internal-hint{opacity:0;pointer-events:none}.internal-hint.focused{opacity:1;pointer-events:auto}.heat-trim{transition:opacity .4s}body[data-state="AUS"] .heat-trim,body[data-state="BEREIT"] .heat-trim{opacity:.15}.button-bank ellipse{fill:#59615c;stroke:#8d958f}.product-illustration .pico-module{stroke:#65aeb8;stroke-width:1.5}.product-illustration .to92 path:first-child{fill:#111513;stroke:#8c958f;stroke-width:1.5}.product-illustration .to92 path:last-child{fill:none;stroke:#aeb5af;stroke-width:1.5}
+.product-v3-illustration{max-height:850px;transform:translateY(-24px)}
 
 /* Five main control-loop points; comparison and sensor stay subordinate. */
 .simple-loop{grid-template-columns:minmax(118px,1fr) minmax(100px,.7fr) minmax(118px,1fr) 38px minmax(130px,1fr) 38px minmax(130px,1fr) minmax(90px,.65fr) minmax(125px,1fr)}.loop-connector{position:relative;display:flex;min-width:0;align-items:center;justify-content:center}.loop-connector>.flow-arrow{width:100%}.compare-connector>span{position:absolute;display:grid;min-width:72px;place-items:center;padding:5px 7px;background:#0e100e;color:var(--muted);text-align:center}.compare-connector b{display:grid;width:25px;height:25px;place-items:center;border:1px solid #4b524d;border-radius:50%;font-size:13px}.compare-connector em{color:#d9ddd7;font-size:13px;font-style:normal}.compare-connector small{font-size:9px}.sensor-connector .loop-sensor{position:absolute;width:21px;height:29px;padding:3px;background:#0e100e}.feedback-route{left:6.8%;right:5.7%}
 @media(max-width:1180px){.simple-loop{grid-template-columns:minmax(95px,1fr) minmax(75px,.65fr) minmax(95px,1fr) 25px minmax(105px,1fr) 25px minmax(105px,1fr) minmax(70px,.6fr) minmax(105px,1fr)}}
 @media(max-width:900px){.product-view-switch{top:8px}.simple-loop{grid-template-columns:1fr}.loop-connector{width:1px;height:38px;justify-self:center}.loop-connector>.flow-arrow{width:1px;height:100%}.compare-connector>span{left:12px;min-width:70px}.sensor-connector .loop-sensor{left:12px}.feedback-route{left:auto;right:9px}}
-@media(max-width:600px){.product-view-switch{top:4px}.product-view-switch button{padding:0 9px;font-size:8px}}
+@media(max-width:900px){.product-v3-illustration{max-height:650px;transform:none}}
+@media(max-width:600px){.product-view-switch{top:4px}.product-view-switch button{padding:0 9px;font-size:8px}.product-v3-illustration{max-height:none}}
 
 
 .product-layout{position:relative}
@@ -98,103 +100,88 @@
   <div class="product-layout">
    <div class="product-stage" id="visualStage">
     <div class="product-view-switch" role="group" aria-label="Produktansicht"><button type="button" data-product-view="exterior" aria-pressed="true">AUSSENANSICHT</button><i></i><button type="button" data-product-view="build" aria-pressed="false">AUFBAU</button></div>
-    <div class="product-v2-view" data-product-illustration="exterior"><svg class="product-illustration product-v2-illustration" id="productIllustration" viewBox="175 72 570 666" role="img" aria-labelledby="v2Title v2Description" xmlns="http://www.w3.org/2000/svg">
- <title id="v2Title">Premium-Produktentwurf des intelligenten Becherhalters</title>
- <desc id="v2Description">Ein normal proportionierter Glasbecher sitzt tief in einem kompakten anthrazitfarbenen Tischgerät. Eine runde Aufnahme, zwei integrierte thermische Seitenmodule, ein bündiges OLED, vier Taster und eine seitliche Lüftungsöffnung bilden ein geschlossenes Produkt.</desc>
- <style>.part-placeholder{opacity:0}.callout-anchors circle{opacity:0}.callout-anchors circle.active{opacity:.32}</style>
+    <div class="product-view" data-product-illustration="exterior"><svg id="productIllustration" class="product-illustration product-v3-illustration" viewBox="205 75 500 680" role="img" aria-labelledby="v3ProductTitle v3ProductDesc" xmlns="http://www.w3.org/2000/svg">
+ <title id="v3ProductTitle">Kompakter intelligenter Becherhalter</title>
+ <desc id="v3ProductDesc">Ein breiter Glasbecher mit amberfarbenem Getränk sitzt tief in einem geschlossenen matten Graphitgehäuse mit Aluminiumaufnahme, kleinem Bedienfeld und flachem Produktfuß.</desc>
  <defs>
-  <linearGradient id="v2Glass" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#73827e" stop-opacity=".48"/><stop offset=".18" stop-color="#eaf0ed" stop-opacity=".72"/><stop offset=".42" stop-color="#9aa8a4" stop-opacity=".28"/><stop offset=".76" stop-color="#e6ece9" stop-opacity=".56"/><stop offset="1" stop-color="#5d6a66" stop-opacity=".42"/></linearGradient>
-  <linearGradient id="v2Drink" x1="0" y1="0" x2=".65" y2="1"><stop stop-color="#d58a50"/><stop offset=".48" stop-color="#ae623c"/><stop offset="1" stop-color="#713724"/></linearGradient>
-  <linearGradient id="v2Top" x1=".1" y1="0" x2=".9" y2="1"><stop stop-color="#565e59"/><stop offset=".36" stop-color="#3a413c"/><stop offset="1" stop-color="#252b27"/></linearGradient>
-  <linearGradient id="v2Front" x1="0" y1="0" x2=".72" y2="1"><stop stop-color="#424a45"/><stop offset=".45" stop-color="#303632"/><stop offset="1" stop-color="#202521"/></linearGradient>
-  <linearGradient id="v2Right" x1="0" y1="0" x2="1" y2=".8"><stop stop-color="#333a35"/><stop offset="1" stop-color="#181d1a"/></linearGradient>
-  <linearGradient id="v2Module" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#4e5651"/><stop offset=".55" stop-color="#393f3b"/><stop offset="1" stop-color="#292f2b"/></linearGradient>
-  <linearGradient id="v2Metal" x1="0" y1="0" x2="1" y2=".2"><stop stop-color="#747d78"/><stop offset=".28" stop-color="#c3c9c5"/><stop offset=".5" stop-color="#7e8782"/><stop offset=".76" stop-color="#d3d7d3"/><stop offset="1" stop-color="#59615d"/></linearGradient>
-  <radialGradient id="v2Ambient"><stop stop-color="#59635c" stop-opacity=".2"/><stop offset="1" stop-color="#111410" stop-opacity="0"/></radialGradient>
-  <filter id="v2ContactShadow" x="-30%" y="-30%" width="160%" height="180%"><feGaussianBlur stdDeviation="7"/></filter>
-  <clipPath id="v2CupClip"><path d="M328 129Q454 99 580 129L560 389Q554 435 454 443Q354 435 348 389Z"/></clipPath>
+  <linearGradient id="matGlass" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#5d6863" stop-opacity=".48"/><stop offset=".16" stop-color="#eef2ef" stop-opacity=".64"/><stop offset=".36" stop-color="#a9b1ad" stop-opacity=".26"/><stop offset=".7" stop-color="#dce2de" stop-opacity=".5"/><stop offset="1" stop-color="#505a55" stop-opacity=".45"/></linearGradient>
+  <linearGradient id="matDrink" x1=".12" y1="0" x2=".78" y2="1"><stop stop-color="#df985c"/><stop offset=".34" stop-color="#bf7448"/><stop offset=".72" stop-color="#9b5639"/><stop offset="1" stop-color="#673728"/></linearGradient>
+  <linearGradient id="matBody" x1=".05" y1="0" x2=".94" y2="1"><stop stop-color="#5a625d"/><stop offset=".22" stop-color="#474e49"/><stop offset=".56" stop-color="#373d39"/><stop offset=".82" stop-color="#2d332f"/><stop offset="1" stop-color="#252a27"/></linearGradient>
+  <linearGradient id="matSide" x1="0" y1="0" x2="1" y2=".82"><stop stop-color="#3d443f"/><stop offset=".58" stop-color="#2b312d"/><stop offset="1" stop-color="#202521"/></linearGradient>
+  <linearGradient id="matBase" x1=".1" y1="0" x2=".8" y2="1"><stop stop-color="#343a36"/><stop offset=".65" stop-color="#202521"/><stop offset="1" stop-color="#151916"/></linearGradient>
+  <linearGradient id="matAluminium" x1="0" y1="0" x2="1" y2=".16"><stop stop-color="#626c66"/><stop offset=".2" stop-color="#969f99"/><stop offset=".4" stop-color="#737d77"/><stop offset=".64" stop-color="#a8b0ab"/><stop offset=".84" stop-color="#6d7771"/><stop offset="1" stop-color="#4f5853"/></linearGradient>
+  <radialGradient id="matAmbient"><stop stop-color="#667069" stop-opacity=".13"/><stop offset=".68" stop-color="#303631" stop-opacity=".045"/><stop offset="1" stop-color="#101310" stop-opacity="0"/></radialGradient>
+  <clipPath id="matCupClip"><path d="M338 139Q454 113 570 139L557 367Q553 405 454 411Q355 405 351 367Z"/></clipPath>
+  <filter id="matGroundBlur" x="-20%" y="-80%" width="140%" height="260%"><feGaussianBlur stdDeviation="8"/></filter>
+  <filter id="matContactBlur" x="-30%" y="-80%" width="160%" height="260%"><feGaussianBlur stdDeviation="4"/></filter>
  </defs>
 
- <ellipse cx="460" cy="390" rx="340" ry="310" fill="url(#v2Ambient)"/>
- <ellipse class="v2-ground-shadow" cx="454" cy="706" rx="222" ry="22" fill="#050706" opacity=".43" filter="url(#v2ContactShadow)"/>
+ <ellipse cx="438" cy="398" rx="235" ry="282" fill="url(#matAmbient)"/>
+ <ellipse cx="454" cy="731" rx="187" ry="15" fill="#050706" opacity=".42" filter="url(#matGroundBlur)"/>
 
- <g class="product-v2-exterior">
-  <!-- Phase B: a broad, lightly tapered beverage glass and one liquid body. -->
-  <g class="v2-cup component-part" data-part="cup" data-focus="cup" tabindex="0" role="button" aria-label="Becher und Bechererkennung anzeigen">
-   <g class="part-solid">
-   <path d="M328 129Q454 99 580 129L560 389Q554 435 454 443Q354 435 348 389Z" fill="url(#v2Glass)"/>
-   <g clip-path="url(#v2CupClip)"><path d="M345 181Q454 155 563 181L548 389Q542 418 454 426Q366 418 360 389Z" fill="url(#v2Drink)" opacity=".84"/><ellipse cx="454" cy="181" rx="109" ry="24" fill="#d48a50"/><ellipse cx="454" cy="183" rx="89" ry="16" fill="#884628" opacity=".63"/></g>
-   <ellipse cx="454" cy="129" rx="126" ry="29" fill="#cbd6d2" fill-opacity=".1" stroke="#d8dfdb" stroke-width="3"/>
-   <path d="M352 151Q355 278 368 383" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".15"/>
-   </g>
-   <path class="part-placeholder" d="M328 129Q454 99 580 129L560 389Q554 435 454 443Q354 435 348 389Z"/>
-  </g>
-
-  <!-- Phase A: one compact housing with an intentionally simple silhouette. -->
-  <g class="v2-housing">
-   <path d="M226 391Q234 354 284 337Q367 307 445 306Q555 305 648 336Q688 350 695 384L670 433Q552 476 430 484Q327 475 244 444Z" fill="url(#v2Top)"/>
-   <path d="M244 433Q337 475 430 484Q546 476 670 423L650 616Q642 661 430 688Q267 664 256 620Z" fill="url(#v2Front)"/>
-   <path d="M430 484Q552 476 670 423L650 616Q642 648 430 688Z" fill="url(#v2Right)" opacity=".97"/>
-   <path d="M257 614Q347 644 430 655Q543 644 650 611L648 639Q621 673 430 699Q282 677 257 643Z" fill="#151a17" opacity=".95"/>
-   <path d="M430 486Q552 477 670 426" fill="none" stroke="#68716b" stroke-width="1" opacity=".26"/>
-   <path d="M266 438Q274 566 286 620" fill="none" stroke="#aeb7b1" stroke-width="2" opacity=".08"/>
-   <path d="M651 445Q648 548 638 611" fill="none" stroke="#c6cec9" stroke-width="2" opacity=".1"/>
-  </g>
-
-  <!-- The cup sits behind this collar and therefore visibly inside the appliance. -->
-  <g class="v2-collar">
-   <ellipse cx="454" cy="382" rx="150" ry="31" fill="#080b09" opacity=".48" filter="url(#v2ContactShadow)"/>
-   <ellipse cx="454" cy="359" rx="166" ry="44" fill="#222824"/>
-   <ellipse cx="454" cy="356" rx="162" ry="42" fill="none" stroke="url(#v2Metal)" stroke-width="10" opacity=".64"/>
-   <ellipse cx="454" cy="358" rx="139" ry="32" fill="#1b211d"/>
-   <ellipse cx="454" cy="369" rx="126" ry="23" fill="#343b36" opacity=".9"/>
-   <path d="M337 370Q454 405 571 370" fill="none" stroke="#0b0e0c" stroke-width="5" opacity=".72"/>
-   <path d="M350 368Q454 392 558 368" fill="none" stroke="#69716c" stroke-width="2" opacity=".35"/>
-   <g class="component-part" data-part="rgb" data-focus="rgb" tabindex="0" role="button" aria-label="RGB-Ring anzeigen"><ellipse class="v2-rgb rgb-light part-solid" cx="454" cy="356" rx="156" ry="39" fill="none" stroke="#a9633f" stroke-width="2" stroke-dasharray="2 24" stroke-linecap="round" opacity=".42"/></g>
-  </g>
-
-  <!-- Phase D: symmetric thermal pods are flush with the housing. -->
-  <g class="v2-side-modules">
-   <g class="component-part" data-part="peltier1" data-focus="peltier1" tabindex="0" role="button" aria-label="Heizmodul links anzeigen"><g class="part-solid"><path d="M231 391Q239 359 281 343L301 364L291 487Q280 505 251 506Z" fill="url(#v2Module)"/><path d="M248 385Q254 366 278 356L286 372L279 478Q271 490 259 487Z" fill="#69716c" opacity=".25"/><path d="M290 390Q292 427 287 462" fill="none" stroke="#b8734d" stroke-width="4" stroke-linecap="round" opacity=".42"/><path d="M248 503Q271 520 293 493" fill="none" stroke="#171c19" stroke-width="8" opacity=".48"/></g><path class="part-placeholder" d="M231 391Q239 359 281 343L301 364L291 487Q280 505 251 506Z"/></g>
-   <g class="component-part" data-part="peltier2" data-focus="peltier2" tabindex="0" role="button" aria-label="Heizmodul rechts anzeigen"><g class="part-solid"><path d="M686 386Q680 355 647 343L625 365L635 485Q646 504 671 503Z" fill="url(#v2Module)"/><path d="M669 382Q664 365 647 357L638 372L645 477Q653 488 663 486Z" fill="#69716c" opacity=".22"/><path d="M631 389Q629 426 634 460" fill="none" stroke="#b8734d" stroke-width="4" stroke-linecap="round" opacity=".42"/><path d="M632 491Q650 516 672 500" fill="none" stroke="#171c19" stroke-width="8" opacity=".48"/></g><path class="part-placeholder" d="M686 386Q680 355 647 343L625 365L635 485Q646 504 671 503Z"/></g>
-  </g>
-
-  <!-- Phase C: one recessed, centered control module. -->
-  <g class="v2-front-panel">
-   <path d="M321 506Q426 530 531 510L524 633Q425 651 329 630Z" fill="#151a17"/>
-   <g class="component-part" data-part="oled" data-focus="oled" tabindex="0" role="button" aria-label="OLED anzeigen">
-   <g class="part-solid">
-   <path d="M343 528Q426 545 509 529L506 586Q426 600 346 584Z" fill="#060a09"/>
-   <path d="M356 536Q426 549 496 537L494 577Q426 588 358 577Z" fill="#0c282c"/>
-   <text x="376" y="567" fill="#c7ece8" font-family="Segoe UI, sans-serif" font-size="24" font-weight="500">32.4°</text>
-   <text x="465" y="566" fill="#82a5a5" font-family="Segoe UI, sans-serif" font-size="9" font-weight="600">45.0°</text>
-   </g><path class="part-placeholder" d="M343 528Q426 545 509 529L506 586Q426 600 346 584Z"/></g>
-   <g class="component-part" data-part="buttons" data-focus="buttons" tabindex="0" role="button" aria-label="Taster anzeigen"><g class="part-solid">
-   <g fill="#141815" opacity=".95"><ellipse cx="363" cy="608" rx="12" ry="6"/><ellipse cx="405" cy="614" rx="12" ry="6"/><ellipse cx="447" cy="614" rx="12" ry="6"/><ellipse cx="489" cy="608" rx="12" ry="6"/></g>
-   <g class="v2-buttons" fill="#68716c" stroke="#929b95" stroke-width="1"><circle cx="363" cy="604" r="9"/><circle cx="405" cy="610" r="9"/><circle cx="447" cy="610" r="9"/><circle cx="489" cy="604" r="9"/></g>
-   <g fill="#a9b2ac" font-family="Segoe UI, sans-serif" font-size="6.5" font-weight="600" text-anchor="middle"><text x="363" y="627">MODE</text><text x="405" y="634">DOWN</text><text x="447" y="634">OK</text><text x="489" y="627">UP</text></g>
-   </g><path class="part-placeholder" d="M344 590Q426 604 508 589L505 637Q426 650 347 635Z"/></g>
-  </g>
-
-  <!-- Exterior cooling is communicated by a quiet side vent, never a bare fan. -->
-  <g class="v2-side-vent component-part" data-part="fan" data-focus="fan" tabindex="0" role="button" aria-label="Integrierten Lüfter anzeigen" opacity=".86">
-   <g class="part-solid">
-   <path d="M557 530Q606 520 650 497L643 599Q602 615 558 622Z" fill="#0b0e0c"/>
-   <path d="M568 545Q603 537 635 521L630 585Q599 597 567 603Z" fill="#1b211d" stroke="#59615c" stroke-width="1"/>
-   <g fill="none" stroke="#77807a" stroke-width="4" stroke-linecap="round"><path d="M578 548 575 594"/><path d="M590 545 587 591"/><path d="M602 541 598 587"/><path d="M614 536 609 582"/><path d="M626 530 620 577"/></g>
-   </g><path class="part-placeholder" d="M557 530Q606 520 650 497L643 599Q602 615 558 622Z"/>
-  </g>
-
-  <g class="component-part" data-part="light" data-focus="light" tabindex="0" role="button" aria-label="Lichtsensor anzeigen"><circle class="part-solid" cx="537" cy="622" r="4" fill="#b08b58"/><circle class="part-placeholder" cx="537" cy="622" r="8"/></g>
-
-  <!-- Phase E: sparse studio highlights, no per-component glow. -->
-  <path d="M278 455Q303 568 397 631" fill="none" stroke="#fff" stroke-width="3" opacity=".045"/>
-  <path d="M646 446Q627 481 615 504" fill="none" stroke="#cdd5d0" stroke-width="2" opacity=".07"/>
+ <g class="v3-material-cup">
+  <path d="M338 139Q454 113 570 139L557 367Q553 405 454 411Q355 405 351 367Z" fill="url(#matGlass)" opacity=".88"/>
+  <g clip-path="url(#matCupClip)"><path d="M353 187Q454 165 555 187L545 366Q541 391 454 397Q367 391 363 366Z" fill="url(#matDrink)" opacity=".88"/><ellipse cx="454" cy="187" rx="101" ry="22" fill="#d58b51"/><ellipse cx="454" cy="189" rx="83" ry="14" fill="#7a432e" opacity=".56"/></g>
+  <ellipse cx="454" cy="139" rx="116" ry="26" fill="#d8dfdb" fill-opacity=".055" stroke="#c5ccc8" stroke-width="2.4" opacity=".9"/>
+  <path d="M355 157Q356 258 367 357" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".13"/>
+  <path d="M366 372Q454 398 542 372Q538 405 454 411Q370 405 366 372Z" fill="#7d8882" opacity=".18"/>
  </g>
- <g class="callout-anchors" aria-hidden="true"><circle data-callout-anchor="temp1" cx="386" cy="390" r="2"/><circle data-callout-anchor="temp2" cx="518" cy="391" r="2"/><circle data-callout-anchor="peltier1" cx="275" cy="418" r="2"/><circle data-callout-anchor="peltier2" cx="650" cy="417" r="2"/><circle data-callout-anchor="fan" cx="603" cy="557" r="2"/><circle data-callout-anchor="oled" cx="426" cy="558" r="2"/><circle data-callout-anchor="buttons" cx="426" cy="611" r="2"/><circle data-callout-anchor="rgb" cx="454" cy="356" r="2"/><circle data-callout-anchor="light" cx="537" cy="622" r="2"/><circle data-callout-anchor="cup" cx="454" cy="272" r="2"/><circle data-callout-anchor="pico" cx="424" cy="554" r="2"/><circle data-callout-anchor="current1" cx="493" cy="548" r="2"/></g>
+
+ <g class="v3-material-base">
+  <path d="M267 568Q306 550 354 557Q424 570 493 563Q566 557 619 553Q647 552 660 570L656 637Q647 673 582 696Q507 718 438 718Q354 715 294 692Q266 680 258 650Z" fill="url(#matBase)"/>
+  <path d="M438 564Q535 558 619 553Q647 552 660 570L656 637Q647 673 582 696Q507 718 438 718Z" fill="#181d1a" opacity=".46"/>
+  <path d="M263 643Q331 678 437 682Q543 679 653 639L652 657Q633 685 579 703Q506 724 438 724Q356 720 298 698Q271 688 262 669Z" fill="#141916" opacity=".82"/>
+  <path d="M292 690Q360 714 438 716Q518 713 584 694" fill="none" stroke="#707974" stroke-width="2" opacity=".08"/>
+ </g>
+
+ <g class="v3-material-housing">
+  <path d="M276 385Q294 348 346 332Q397 316 454 316Q527 316 587 337Q625 350 640 382L626 565Q620 606 565 629Q509 652 438 652Q367 649 316 627Q274 607 269 565Z" fill="url(#matBody)"/>
+  <path d="M438 339Q520 329 587 348Q625 360 640 392L626 565Q620 606 565 629Q509 652 438 652Z" fill="url(#matSide)" opacity=".7"/>
+  <path d="M276 385Q294 348 346 332Q389 319 438 317L438 651Q370 649 318 628Q276 608 269 565Z" fill="#dce1dd" opacity=".026"/>
+  <path d="M291 386Q314 360 354 347" fill="none" stroke="#e1e5e2" stroke-width="3" stroke-linecap="round" opacity=".055"/>
+  <path d="M626 403Q629 477 616 546" fill="none" stroke="#d9dfdb" stroke-width="2.5" stroke-linecap="round" opacity=".07"/>
+ </g>
+
+ <!-- Closed side covers sit flush with the housing. -->
+ <g class="v3-thermal-covers">
+  <path d="M279 405Q293 377 324 359Q338 352 349 360L344 464Q335 493 307 501Q289 498 279 483Z" fill="#373e39"/>
+  <path d="M292 410Q303 389 325 377Q333 372 339 377L335 453Q329 474 313 481Q302 479 295 469Z" fill="#626b65" opacity=".23"/>
+  <path d="M632 405Q620 378 591 360Q577 353 566 361L571 461Q579 489 604 497Q621 495 631 480Z" fill="#2b312d"/>
+  <path d="M619 411Q609 391 590 378Q582 373 576 378L580 451Q586 472 601 478Q612 476 618 467Z" fill="#59625c" opacity=".2"/>
+  <path d="M343 383Q345 410 341 436" fill="none" stroke="#b86f4b" stroke-width="3" stroke-linecap="round" opacity=".24"/>
+  <path d="M567 383Q565 410 569 435" fill="none" stroke="#b86f4b" stroke-width="3" stroke-linecap="round" opacity=".24"/>
+ </g>
+
+ <!-- A quiet recessed side vent completes the exterior. -->
+ <g class="v3-exterior-vent" opacity=".68">
+  <path d="M573 500Q598 494 620 481L617 548Q596 558 575 562Z" fill="#151a17"/>
+  <path d="M580 510Q597 505 612 496L610 538Q595 545 580 548Z" fill="#252b27"/>
+  <g fill="none" stroke="#68716b" stroke-width="3" stroke-linecap="round"><path d="M586 514 584 542"/><path d="M594 512 592 540"/><path d="M602 508 599 537"/><path d="M609 503 606 533"/></g>
+ </g>
+
+ <!-- Phase 3: one integrated recess containing a small OLED and four physical keys. -->
+ <g class="v3-control-panel">
+  <path d="M343 513Q391 527 438 528Q485 527 529 514L525 619Q482 632 438 633Q392 632 347 618Z" fill="#252b27"/>
+  <path d="M357 531Q397 542 438 543Q478 542 516 532L513 585Q476 596 438 597Q397 596 360 585Z" fill="#111613"/>
+  <path d="M368 540Q403 549 438 550Q472 549 504 541L502 577Q470 585 438 586Q403 585 370 577Z" fill="#0a2529"/>
+  <text x="387" y="571" fill="#c8e8e5" font-family="Segoe UI, sans-serif" font-size="20" font-weight="500">32.4 °C</text>
+  <text x="464" y="570" fill="#7fa0a0" font-family="Segoe UI, sans-serif" font-size="7.5" font-weight="600">SOLL 45.0</text>
+  <g fill="#111512" opacity=".8"><ellipse cx="375" cy="609" rx="10" ry="5"/><ellipse cx="417" cy="614" rx="10" ry="5"/><ellipse cx="459" cy="614" rx="10" ry="5"/><ellipse cx="501" cy="609" rx="10" ry="5"/></g>
+  <g fill="#48504b" stroke="#667069" stroke-width="1"><circle cx="375" cy="605" r="8"/><circle cx="417" cy="610" r="8"/><circle cx="459" cy="610" r="8"/><circle cx="501" cy="605" r="8"/></g>
+  <g fill="#9ca49f" font-family="Segoe UI, sans-serif" font-size="6" font-weight="600" text-anchor="middle"><text x="375" y="626">MODE</text><text x="417" y="632">DOWN</text><text x="459" y="632">OK</text><text x="501" y="626">UP</text></g>
+ </g>
+
+ <ellipse cx="454" cy="383" rx="140" ry="25" fill="#080b09" opacity=".36" filter="url(#matContactBlur)"/>
+ <g class="v3-material-collar">
+  <ellipse cx="454" cy="365" rx="157" ry="42" fill="#181d1a"/>
+  <ellipse cx="454" cy="359" rx="151" ry="39" fill="none" stroke="url(#matAluminium)" stroke-width="9" opacity=".88"/>
+  <ellipse cx="454" cy="359" rx="133" ry="31" fill="#171c19"/>
+  <ellipse cx="454" cy="370" rx="113" ry="22" fill="#424a45"/>
+  <path d="M350 372Q454 395 558 372" fill="none" stroke="#080b09" stroke-width="6" opacity=".72"/>
+ </g>
 </svg>
 </div>
-    <div class="product-v2-view" data-product-illustration="build"><svg class="product-illustration product-v2-illustration product-v2-cutaway" id="productV2Cutaway" viewBox="175 72 570 666" role="img" aria-labelledby="v2CutTitle v2CutDescription" xmlns="http://www.w3.org/2000/svg">
+    <div class="product-view" data-product-illustration="build"><svg class="product-illustration product-v2-illustration product-v2-cutaway" id="productV2Cutaway" viewBox="175 72 570 666" role="img" aria-labelledby="v2CutTitle v2CutDescription" xmlns="http://www.w3.org/2000/svg">
  <title id="v2CutTitle">Technische Schnittansicht des intelligenten Becherhalters</title>
  <desc id="v2CutDescription">Dieselbe kompakte Produktform mit dezent geöffneter Front. Sichtbar sind Kontaktplatte, zwei Peltier-Heizelemente, zwei Temperaturfühler, Pico-Steuerung, Leiterplatte und der hinter der Seitenlüftung sitzende Lüfter.</desc>
  <style>.callout-anchors circle{opacity:0}.callout-anchors circle.active{opacity:.32}</style>
