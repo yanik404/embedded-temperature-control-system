@@ -1,4 +1,4 @@
-<svg id="productIllustration" class="product-illustration product-v3-illustration" viewBox="150 52 340 520" role="img" aria-labelledby="productV3Title productV3Desc" xmlns="http://www.w3.org/2000/svg">
+<svg id="productIllustration" class="product-illustration product-v3-illustration" viewBox="150 76 340 480" role="img" aria-labelledby="productV3Title productV3Desc" xmlns="http://www.w3.org/2000/svg">
  <title id="productV3Title">Kompakter intelligenter Becherhalter</title>
  <desc id="productV3Desc">Ein normaler Trinkbecher mit warmem Getränk steht in einem niedrigen Haltering auf einer flachen ovalen Basis.</desc>
  <defs>
@@ -14,10 +14,10 @@
  </defs>
 
  <g id="product-v3">
-  <ellipse cx="320" cy="313" rx="164" ry="235" fill="url(#p3Ambient)"/>
-  <ellipse cx="320" cy="553" rx="130" ry="9" fill="#050706" opacity=".42" filter="url(#p3GroundBlur)"/>
+  <ellipse cx="320" cy="313" rx="160" ry="220" fill="url(#p3Ambient)"/>
+  <ellipse cx="320" cy="535" rx="124" ry="8" fill="#050706" opacity=".38" filter="url(#p3GroundBlur)"/>
 
-  <g id="product-v3-base">
+  <g id="product-v3-base" transform="matrix(1 0 0 .82 0 78)">
    <ellipse cx="320" cy="446" rx="147" ry="29" fill="url(#p3BaseTop)"/>
    <path d="M174 446Q187 430 227 425Q320 413 420 424Q458 429 468 446L465 497Q459 521 414 532Q321 555 222 531Q183 522 176 500Z" fill="url(#p3Base)"/>
    <path d="M320 420Q391 416 420 424Q458 429 468 446L465 497Q459 521 414 532Q367 544 320 544Z" fill="#171b18" opacity=".24"/>
@@ -43,19 +43,19 @@
    <path d="M414 406Q412 417 414 428" fill="none" stroke="#a96543" stroke-width="1.5" stroke-linecap="round" opacity=".2"/>
   </g>
 
-  <g id="product-v3-cup">
+  <g id="product-v3-cup" transform="matrix(1 0 0 .92 0 24)">
    <path d="M215 91Q320 65 425 91L411 381Q407 417 320 422Q233 417 229 381Z" fill="url(#p3Glass)" opacity=".82"/>
-   <g clip-path="url(#p3CupClip)"><path d="M231 140Q320 120 409 140L398 376Q394 402 320 407Q246 402 242 376Z" fill="url(#p3Drink)" opacity=".9"/><ellipse cx="320" cy="140" rx="89" ry="20" fill="#d98a50"/><ellipse cx="320" cy="142" rx="72" ry="12" fill="#80432f" opacity=".52"/></g>
+   <g clip-path="url(#p3CupClip)"><path d="M231 140Q320 120 409 140L398 376Q394 402 320 407Q246 402 242 376Z" fill="url(#p3Drink)" opacity=".86"/><ellipse cx="320" cy="140" rx="89" ry="20" fill="#d98a50"/><ellipse cx="320" cy="142" rx="72" ry="12" fill="#80432f" opacity=".52"/></g>
    <ellipse cx="320" cy="91" rx="105" ry="26" fill="#d7ddda" fill-opacity=".035" stroke="#88918c" stroke-width="1.5" opacity=".62"/>
-   <path d="M232 112Q233 252 243 366" fill="none" stroke="#eef1ee" stroke-width="2.5" stroke-linecap="round" opacity=".11"/>
+   <path d="M232 112Q233 252 243 366" fill="none" stroke="#eef1ee" stroke-width="2" stroke-linecap="round" opacity=".08"/>
    <path d="M233 379Q320 406 407 379Q402 418 320 422Q238 418 233 379Z" fill="#79827d" opacity=".18"/>
   </g>
 
-  <ellipse cx="320" cy="407" rx="103" ry="10" fill="#050706" opacity=".34" filter="url(#p3ContactBlur)"/>
+  <ellipse cx="320" cy="407" rx="100" ry="8" fill="#050706" opacity=".25" filter="url(#p3ContactBlur)"/>
   <g id="product-v3-holder-ring">
    <path d="M197 395A123 33 0 1 0 443 395A123 33 0 1 0 197 395M219 395A101 22 0 1 1 421 395A101 22 0 1 1 219 395" fill="url(#p3Metal)" fill-rule="evenodd" opacity=".9"/>
-   <path d="M205 400Q320 434 435 400" fill="none" stroke="#272d29" stroke-width="6" opacity=".68"/>
-   <path d="M232 402Q320 421 408 402" fill="none" stroke="#101411" stroke-width="3.5" opacity=".52"/>
+   <path d="M205 400Q320 434 435 400" fill="none" stroke="#272d29" stroke-width="4.5" opacity=".62"/>
+   <path d="M232 402Q320 421 408 402" fill="none" stroke="#101411" stroke-width="3" opacity=".44"/>
   </g>
 
   <g id="product-v3-front">

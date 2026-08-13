@@ -77,3 +77,37 @@ Kontaktformen. Zwei tonale Metallflächen und jeweils eine kurze matte
 Amberfuge deuten Wärmeübertragung an, ohne Peltiers sichtbar zu machen. Drei
 kleine Schlitze sitzen hinten rechts in der Basis; es gibt weder einen Rotor
 noch ein Fan-Symbol, PCB, Sensoren, Kabel oder andere interne Technik.
+
+## Visual Review 1 – Gesamtform
+
+Referenz vor Korrektur:
+`build/ui-review/compact-v3-review1-before/1920x1080.png`.
+
+1. Der Becher wirkt noch etwas zu lang.
+2. Der sichtbare Glasanteil dominiert die gesamte vertikale Komposition.
+3. Der Abstand vom Becherrand zur Flüssigkeit ist leicht zu groß.
+4. Der Haltering wirkt noch zu technisch präzise.
+5. Die dunkle vordere Ringkante ist zu kräftig.
+6. Der Kontaktschatten unter dem Becher ist zu breit.
+7. Die beiden Kontaktzonen lesen sich noch als kurze Stützen.
+8. Der Fuß ist optisch höher als sein geometrischer Zielwert vermuten lässt.
+9. Die obere Basisfläche nimmt zu viel leere Fläche ein.
+10. Halter und Frontbedienung wirken vertikal zu weit getrennt.
+11. Der untere dunkle Sockelstreifen ist zu hoch.
+12. Die rechte Sockelhälfte fällt etwas zu dunkel aus.
+13. Der Bodenschatten ist zu breit.
+14. Das Ambientlicht zieht sich zu weit nach oben und unten.
+15. Die linke Glasreflexion ist zu lang.
+16. Das Ambervolumen ist etwas zu deckend.
+17. Der OLED-Kontrast ist im Verhältnis zum matten Fuß minimal zu hoch.
+18. Die Buttonbeschriftungen konkurrieren bei großer Darstellung mit dem OLED.
+19. Die Lüftung sitzt nahe an der äußeren Basisbegrenzung.
+20. Die Ringellipse erscheint stärker isometrisch als die Basisellipse.
+21. Der zugeschnittene Bildraum enthält oben noch zu viel Luft.
+22. Das Produkt könnte bei gleicher Breite insgesamt kompakter wirken.
+
+Korrekturen: Der Becher wird vertikal um acht Prozent verkürzt, der Fuß um 18
+Prozent abgeflacht, der Bildraum enger zugeschnitten und Ambient- sowie
+Bodenschatten verkleinert. Die Ringfront, Glasreflexion, Flüssigkeitsdeckung
+und der Kontaktschatten werden reduziert. Dadurch rücken Becher, Halter, Basis
+und Bedienung optisch zu einem einzigen niedrigen Tischprodukt zusammen.
