@@ -1,4 +1,4 @@
-"""Exercise the direct one-click SVG configurator in a real browser."""
+"""Exercise the callout configurator and its SVG relationship in a real browser."""
 
 from __future__ import annotations
 
@@ -18,10 +18,10 @@ import capture_ui_review as review  # noqa: E402
 
 browser = next((candidate for candidate in review.CHROME if candidate.exists()), None)
 if browser is None:
-    print("SVG configurator browser test skipped: Chrome/Chromium not found")
+    print("callout configurator browser test skipped: Chrome/Chromium not found")
     raise SystemExit(0)
 
-with tempfile.TemporaryDirectory(prefix="becherhalter-svg-test-") as profile:
+with tempfile.TemporaryDirectory(prefix="becherhalter-callout-test-") as profile:
     port = review.free_port()
     process = subprocess.Popen(
         [str(browser), "--headless=new", f"--remote-debugging-port={port}",
@@ -43,24 +43,34 @@ with tempfile.TemporaryDirectory(prefix="becherhalter-svg-test-") as profile:
         page = next(target for target in targets if target.get("type") == "page")
         cdp = review.DevTools(page["webSocketDebuggerUrl"])
         cdp.call("Page.enable")
-        cdp.call("Page.navigate", {"url": (ROOT / "preview.html").as_uri() + "?scenario=minimal-system"})
-        time.sleep(.8)
+        cdp.call("Emulation.setDeviceMetricsOverride", {"width": 1440, "height": 900, "deviceScaleFactor": 1, "mobile": False})
+        cdp.call("Page.navigate", {"url": (ROOT / "preview.html").as_uri() + "?scenario=minimal-system&component=peltier2&callouts=focus"})
+        time.sleep(.9)
 
         def evaluate(expression: str):
             result = cdp.call("Runtime.evaluate", {"expression": expression, "returnByValue": True})
             return result["result"].get("value")
 
-        before = evaluate("""(()=>{const b=document.querySelector('[data-component-control="peltier2"]'),p=document.querySelector('[data-part="peltier2"]');return{button:b.textContent.trim(),connected:b.classList.contains('connected'),hidden:p.classList.contains('disconnected')}})()""")
-        assert before == {"button": "+Peltier 2", "connected": False, "hidden": True}, before
+        before = evaluate("""(()=>{const e=document.querySelector('[data-callout-entry="peltier2"]'),p=document.querySelector('[data-part="peltier2"]');return{status:e.querySelector('.callout-status').textContent,connected:e.classList.contains('connected'),hidden:p.classList.contains('disconnected'),lines:document.querySelectorAll('[data-callout-path]').length,details:!e.querySelector('.callout-detail').hidden}})()""")
+        assert before == {"status": "+", "connected": False, "hidden": True, "lines": 1, "details": True}, before
 
-        evaluate("document.querySelector('[data-component-control=\"peltier2\"]').click()")
+        evaluate("document.querySelector('[data-callout-entry=\"peltier2\"] .callout-status').click()")
         time.sleep(.6)
-        added = evaluate("""(()=>{const b=document.querySelector('[data-component-control="peltier2"]'),p=document.querySelector('[data-part="peltier2"]');return{connected:b.classList.contains('connected'),visible:!p.classList.contains('disconnected'),status:document.getElementById('componentConnected').textContent}})()""")
-        assert added == {"connected": True, "visible": True, "status": "JA"}, added
+        added = evaluate("""(()=>{const e=document.querySelector('[data-callout-entry="peltier2"]'),p=document.querySelector('[data-part="peltier2"]');return{status:e.querySelector('.callout-status').textContent,connected:e.classList.contains('connected'),visible:!p.classList.contains('disconnected'),detail:e.querySelector('[data-detail="live"]').textContent,count:document.getElementById('componentCount').textContent}})()""")
+        assert added["status"] == "✓" and added["connected"] and added["visible"], added
+        assert added["detail"] and added["count"].endswith("/ 19"), added
 
-        evaluate("document.querySelector('[data-component-control=\"peltier2\"]').click()")
-        removed = evaluate("""(()=>{const b=document.querySelector('[data-component-control="peltier2"]'),p=document.querySelector('[data-part="peltier2"]');return{connected:b.classList.contains('connected'),hidden:p.classList.contains('disconnected'),status:document.getElementById('componentConnected').textContent}})()""")
-        assert removed == {"connected": False, "hidden": True, "status": "NEIN"}, removed
+        evaluate("document.querySelector('[data-callout-entry=\"peltier2\"] .callout-remove').click()")
+        time.sleep(.1)
+        removed = evaluate("""(()=>{const e=document.querySelector('[data-callout-entry="peltier2"]'),p=document.querySelector('[data-part="peltier2"]');return{status:e.querySelector('.callout-status').textContent,connected:e.classList.contains('connected'),hidden:p.classList.contains('disconnected')}})()""")
+        assert removed == {"status": "+", "connected": False, "hidden": True}, removed
+
+        keyboard = evaluate("""(()=>{const part=document.querySelector('[data-focus="peltier1"]');part.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',bubbles:true}));const entry=document.querySelector('[data-callout-entry="peltier1"]');return{active:entry.classList.contains('active'),expanded:entry.querySelector('.callout-row').getAttribute('aria-expanded'),label:entry.querySelector('.callout-status').getAttribute('aria-label')}})()""")
+        assert keyboard["active"] and keyboard["expanded"] == "true" and keyboard["label"], keyboard
+
+        cdp.call("Emulation.setDeviceMetricsOverride", {"width": 390, "height": 844, "deviceScaleFactor": 1, "mobile": True, "screenWidth": 390, "screenHeight": 844})
+        mobile_lines = evaluate("window.V4Twin.drawLines();document.querySelectorAll('[data-callout-path]').length")
+        assert mobile_lines == 0, mobile_lines
         cdp.call("Browser.close")
     finally:
         try:
@@ -68,4 +78,4 @@ with tempfile.TemporaryDirectory(prefix="becherhalter-svg-test-") as profile:
         except subprocess.TimeoutExpired:
             process.terminate()
 
-print("direct SVG configurator browser test passed: add, connected status, remove")
+print("callout configurator browser test passed: focus line, add, details, remove, keyboard, mobile")

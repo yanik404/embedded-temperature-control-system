@@ -20,7 +20,9 @@ HEADER = ROOT / "include" / "web_assets.h"
 STATS = ROOT / "ui" / "dist" / "build-stats.json"
 
 PREVIEW_CONTROLS = """
-<div class="preview-deck" aria-label="Lokale Vorschau-Szenarien">
+<div class="preview-tools">
+ <button class="preview-tools-toggle" type="button" aria-expanded="false">DEMO TOOLS</button>
+ <div class="preview-deck" aria-label="Lokale Vorschau-Szenarien" hidden>
  <button type="button" data-scenario="full-system">FULL SYSTEM</button>
  <button type="button" data-scenario="minimal-system">MINIMAL SYSTEM</button>
  <button type="button" data-scenario="partial-hardware">PARTIAL HARDWARE</button>
@@ -34,7 +36,8 @@ PREVIEW_CONTROLS = """
  <button type="button" data-scenario="sensor-error">SENSOR ERROR</button>
  <button type="button" data-scenario="fan-error">FAN ERROR</button>
  <button type="button" data-scenario="power-error">POWER ERROR</button>
- <button type="button" data-scenario="demo30">30 MIN DEMO</button>
+  <button type="button" data-scenario="demo30">30 MIN DEMO</button>
+ </div>
 </div>
 """.strip()
 
@@ -57,8 +60,7 @@ def minify_css(source: str) -> str:
 
 def shorten_css_selectors(css: str, html: str, javascript: str) -> tuple[str, str, str]:
     replacements = {
-        "section-heading": "sh", "component-control": "cc", "component-focus": "cf",
-        "component-item": "ci", "component-hotspots": "ch",
+        "section-heading": "sh", "callout-entry": "ce", "component-legend": "cl",
         "product-section": "ps", "product-stage": "pg", "timeline-layer": "tl",
         "technical-grid": "tg", "simple-loop": "sl", "loop-step": "ls",
     }

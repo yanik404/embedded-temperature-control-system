@@ -9,15 +9,21 @@ ids=re.findall(r'part\("([^"]+)"',model)
 assert len(ids)==19 and len(set(ids))==19
 for component in ("cup","temp1","temp2","plate","peltier1","peltier2","fan","pico","adc","current1","current2","light","oled","rgb","leds","buttons","power","wifi","webserver"):
     assert component in ids
-for token in ("GEPLANT","ANGESCHLOSSEN","LIVE","NICHT DIREKT ÜBERWACHT","NICHT VERFÜGBAR"):
-    assert token in preview+model+twin
-for behavior in ("buildDirectControls","toggleConnection","setConnected","setVisualState","part.classList.toggle"):
+for group in ("TEMPERATUR","HEIZUNG","BEDIENUNG","SENSOREN","ELEKTRONIK"):
+    assert group in twin
+for label in ("Temperatursensor 1","Temperatursensor 2","Peltier links","Peltier rechts","Lüfter","OLED","Taster","RGB-Ring","Lichtsensor","Bechererkennung","PCB / Pico W","Strommessung"):
+    assert label in twin
+for behavior in ("toggleConnection","setConnected","setPartState","drawLines","visibleLineIds","renderDetail","lineMode"):
     assert behavior in twin
+assert 'live.tone==="configured"' in twin and 'tone:"unmonitored"' in twin
+for mode in ('mode==="all"','mode==="group"','mode==="focus"'):
+    assert mode in twin
+assert 'class="component-control"' not in preview and 'class="component-hotspots"' not in preview
+assert 'class="callout-lines"' in preview and "data-callout-entry" in twin
+assert "callout-detail" in preview and "callout-remove" in preview
 assert "configuration-drawer" not in preview and "projectHotspots" not in twin and "ProductScene" not in twin
-assert 'class="component-hotspots"' in preview and "component-control" in preview
-assert 'var configurable=["temp1","temp2","peltier1","peltier2","oled","fan"]' in twin
-assert twin.count("var positions=")==1
 assert "/api/" not in twin
 assert "useProfile(profiles" in preview and "useProfile(profiles" not in production
+assert "NICHT VERFÜGBAR" in model+twin and "NICHT DIREKT ÜBERWACHT" in model+twin
 assert len(production.encode("utf-8"))<128*1024
-print(f"direct SVG component checks passed: components={len(ids)}, production={len(production.encode('utf-8'))} bytes")
+print(f"callout digital twin checks passed: components={len(ids)}, production={len(production.encode('utf-8'))} bytes")

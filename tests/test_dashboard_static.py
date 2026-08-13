@@ -28,13 +28,15 @@ assert preview_ids==production_ids
 assert embedded==production
 referenced_ids=set(re.findall(r'byId\("([^"]+)"\)',preview))
 assert not referenced_ids-preview_ids,f"JavaScript references missing IDs: {sorted(referenced_ids-preview_ids)}"
-for element_id in ("aufbau","regelkreis","live","technik","productIllustration","componentHotspots","componentLens","configurationList","simpleLoop","actualTemperature","timelineCanvas","controlActions","unlockDialog","unlockForm","safetySummary","stopButton"):
+for element_id in ("aufbau","regelkreis","live","technik","productIllustration","calloutLines","calloutPaths","configurationList","componentCount","simpleLoop","actualTemperature","timelineCanvas","controlActions","unlockDialog","unlockForm","safetySummary","stopButton"):
     assert element_id in production_ids,f"missing interface element: {element_id}"
 for token in ("/api/status","/api/unlock",'command("start",true)','command("stop",false)',"setpoint?value=",'body:token?"token="+encodeURIComponent(token):""',"Steuerung gesperrt","Technische Details","Mehr Messwerte"):
     assert token in production,f"missing dashboard behavior: {token}"
 for scenario in ("full-system","minimal-system","partial-hardware","no-sensors","ready","heating","holding","error","offline","sensor-error","fan-error","power-error","demo30"):
     assert f'data-scenario="{scenario}"' in preview
 assert "data-scenario=" not in production
+assert '<div class="preview-tools">' in preview and '<div class="preview-tools">' not in production
+assert 'class="preview-deck" aria-label="Lokale Vorschau-Szenarien" hidden' in preview
 assert "Obi W-lan Kenobi" not in production
 assert 'getContext("2d"' in production and 'getContext("webgl"' not in preview+production
 assert "productCanvas" not in preview+production and "thermalCanvas" not in preview+production
