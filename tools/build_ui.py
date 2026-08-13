@@ -55,16 +55,88 @@ def minify_css(source: str) -> str:
     return source.strip()
 
 
+def shorten_css_selectors(css: str, html: str, javascript: str) -> tuple[str, str, str]:
+    replacements = {
+        "twin-hotspot": "th", "twin-hotspots": "ths", "signal-node": "sn",
+        "product-fallback": "pf", "component-state": "cs", "component-lens": "cl",
+        "engineering-values": "ev", "story-chapter": "sc", "scene-viewport": "sv",
+    }
+    for source, target in replacements.items():
+        css = css.replace(source, target)
+        html = html.replace(source, target)
+        javascript = javascript.replace(source, target)
+    return css, html, javascript
+
+
 def minify_javascript(source: str) -> str:
-    # This conservative pass preserves string/template literal semantics. It removes
-    # comments and indentation while leaving statement newlines intact.
-    source = re.sub(r"/\*.*?\*/", "", source, flags=re.DOTALL)
-    lines = []
-    for line in source.splitlines():
-        stripped = line.strip()
-        if stripped and not stripped.startswith("//"):
-            lines.append(stripped)
-    return "\n".join(lines)
+    """Remove lexical whitespace while preserving strings and the GLSL template."""
+    def compact_glsl(match: re.Match[str]) -> str:
+        directives: list[str] = []
+        lines: list[str] = []
+        for line in match.group(1).splitlines():
+            stripped = line.strip()
+            if stripped.startswith("#"):
+                token = f"GLSLDIRECTIVE{len(directives)}X"
+                directives.append(stripped)
+                lines.append(token)
+            else:
+                lines.append(stripped)
+        body = re.sub(r"\s+", " ", " ".join(lines)).strip()
+        body = re.sub(r"\s*([{}();,\[\]+*/<>=?:-])\s*", r"\1", body)
+        for index, directive in enumerate(directives):
+            body = body.replace(f"GLSLDIRECTIVE{index}X", "\n" + directive + "\n")
+        return "var fragment=`" + body + "`"
+
+    source = re.sub(r"var fragment=`(.*?)`", compact_glsl, source, flags=re.DOTALL)
+    output: list[str] = []
+    index = 0
+    pending_space = False
+    quote = ""
+    while index < len(source):
+        char = source[index]
+        following = source[index + 1] if index + 1 < len(source) else ""
+        if quote:
+            output.append(char)
+            if char == "\\" and following:
+                output.append(following)
+                index += 2
+                continue
+            if char == quote:
+                quote = ""
+            index += 1
+            continue
+        if char in ('"', "'", "`"):
+            if pending_space and output and (output[-1][-1].isalnum() or output[-1][-1] in "_$"):
+                output.append(" ")
+            pending_space = False
+            quote = char
+            output.append(char)
+            index += 1
+            continue
+        if char == "/" and following == "*":
+            end = source.find("*/", index + 2)
+            index = len(source) if end < 0 else end + 2
+            pending_space = True
+            continue
+        if char == "/" and following == "/":
+            end = source.find("\n", index + 2)
+            index = len(source) if end < 0 else end + 1
+            pending_space = True
+            continue
+        if char.isspace():
+            pending_space = True
+            index += 1
+            continue
+        if pending_space and output:
+            previous = output[-1][-1]
+            if (previous.isalnum() or previous in "_$") and (char.isalnum() or char in "_$"):
+                output.append(" ")
+            elif previous in "+-" and char == previous:
+                output.append(" ")
+        pending_space = False
+        output.append(char)
+        index += 1
+    return "".join(output)
 
 
 def compose(*, preview: bool, minified: bool) -> tuple[str, str, str]:
@@ -78,11 +150,17 @@ def compose(*, preview: bool, minified: bool) -> tuple[str, str, str]:
     if minified:
         css = minify_css(css)
         javascript = minify_javascript(javascript)
+        css, template, javascript = shorten_css_selectors(css, template, javascript)
     html = template.replace("/*__CSS__*/", css)
     html = html.replace("<!--__PREVIEW_CONTROLS__-->", PREVIEW_CONTROLS if preview else "")
     html = html.replace("/*__SCRIPT__*/", javascript)
     if minified:
-        html = re.sub(r">\s+<", "><", html).strip() + "\n"
+        html = re.sub(r">\s+<", "><", html)
+        html = re.sub(r"\s+([{}])", r"\1", html)
+        html = re.sub(r"\s+(aria-hidden|aria-label|aria-labelledby|aria-live|aria-pressed|aria-expanded|aria-controls|role)=\"[^\"]*\"", "", html)
+        html = re.sub(r"\s+class=\"([^\"]+)\"", lambda match: f' class="{match.group(1)}"', html)
+        html = re.sub(r"[ \t]+\n", "\n", html)
+        html = html.strip() + "\n"
     return html, css, javascript
 
 

@@ -3,13 +3,13 @@
   "embedded_thermal_overlay_frame_cap_fps": 30,
   "external_library_bytes": 0,
   "history_max_seconds": 1800,
-  "preview_bytes": 140058,
+  "preview_bytes": 145428,
   "preview_product_scene_frame_cap_fps": 60,
   "preview_thermal_overlay_frame_cap_fps": 60,
-  "production_bytes": 129492,
-  "production_css_bytes": 55424,
-  "production_gzip_bytes_theoretical": 34353,
-  "production_javascript_bytes": 59061,
+  "production_bytes": 131020,
+  "production_css_bytes": 51017,
+  "production_gzip_bytes_theoretical": 35608,
+  "production_javascript_bytes": 65416,
   "runtime_http_requests_for_assets": 0,
   "webgl_draw_calls_per_frame": 1
 }
