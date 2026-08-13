@@ -91,3 +91,16 @@ Referenz: `build/ui-review/product-v3-phase2-material/1920x1080.png`
 Die korrigierte Materialfassung
 `build/ui-review/product-v3-phase2-approved/1920x1080.png` wurde freigegeben.
 Sie bleibt auf Graphit, Glas, Aluminium und Amber beschränkt.
+
+## Phase 3 – Frontpanelreview
+
+Referenz: `build/ui-review/product-v3-phase3-front/1920x1080.png`
+
+- Das Panel ist als gemeinsame, zurückgesetzte Gehäusefläche lesbar und
+  schwebt nicht vor dem Produkt.
+- Das OLED bleibt klein; Istwert und Sollwert sind trotzdem eindeutig.
+- Die vier Taster sind gleichmäßig angeordnet und als physische Kreise lesbar.
+- Für die Schlussfassung wird der Tasterkontrast leicht reduziert und die
+  Panelunterkante ruhiger an den Sockel angebunden.
+- Die noch sehr glatten Seiten erhalten erst in Phase 4 geschlossene,
+  gehäusebündige Thermikabdeckungen.

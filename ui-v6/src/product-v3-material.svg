@@ -40,6 +40,18 @@
   <path d="M626 403Q629 477 616 546" fill="none" stroke="#d9dfdb" stroke-width="2.5" stroke-linecap="round" opacity=".07"/>
  </g>
 
+ <!-- Phase 3: one integrated recess containing a small OLED and four physical keys. -->
+ <g class="v3-control-panel">
+  <path d="M343 513Q391 527 438 528Q485 527 529 514L525 623Q481 639 438 640Q390 638 347 622Z" fill="#252b27"/>
+  <path d="M357 531Q397 542 438 543Q478 542 516 532L513 585Q476 596 438 597Q397 596 360 585Z" fill="#111613"/>
+  <path d="M368 540Q403 549 438 550Q472 549 504 541L502 577Q470 585 438 586Q403 585 370 577Z" fill="#0a2529"/>
+  <text x="387" y="571" fill="#c8e8e5" font-family="Segoe UI, sans-serif" font-size="20" font-weight="500">32.4 °C</text>
+  <text x="464" y="570" fill="#7fa0a0" font-family="Segoe UI, sans-serif" font-size="7.5" font-weight="600">SOLL 45.0</text>
+  <g fill="#111512" opacity=".8"><ellipse cx="375" cy="609" rx="10" ry="5"/><ellipse cx="417" cy="614" rx="10" ry="5"/><ellipse cx="459" cy="614" rx="10" ry="5"/><ellipse cx="501" cy="609" rx="10" ry="5"/></g>
+  <g fill="#4e5751" stroke="#727c75" stroke-width="1"><circle cx="375" cy="605" r="8"/><circle cx="417" cy="610" r="8"/><circle cx="459" cy="610" r="8"/><circle cx="501" cy="605" r="8"/></g>
+  <g fill="#9ca49f" font-family="Segoe UI, sans-serif" font-size="6" font-weight="600" text-anchor="middle"><text x="375" y="626">MODE</text><text x="417" y="632">DOWN</text><text x="459" y="632">OK</text><text x="501" y="626">UP</text></g>
+ </g>
+
  <ellipse cx="454" cy="383" rx="140" ry="25" fill="#080b09" opacity=".36" filter="url(#matContactBlur)"/>
  <g class="v3-material-collar">
   <ellipse cx="454" cy="365" rx="157" ry="42" fill="#181d1a"/>
