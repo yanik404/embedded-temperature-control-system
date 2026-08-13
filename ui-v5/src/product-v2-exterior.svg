@@ -1,6 +1,7 @@
-<svg class="product-v2-illustration" id="productV2Illustration" viewBox="175 72 570 666" role="img" aria-labelledby="v2Title v2Description" xmlns="http://www.w3.org/2000/svg">
+<svg class="product-illustration product-v2-illustration" id="productIllustration" viewBox="175 72 570 666" role="img" aria-labelledby="v2Title v2Description" xmlns="http://www.w3.org/2000/svg">
  <title id="v2Title">Premium-Produktentwurf des intelligenten Becherhalters</title>
  <desc id="v2Description">Ein normal proportionierter Glasbecher sitzt tief in einem kompakten anthrazitfarbenen Tischgerät. Eine runde Aufnahme, zwei integrierte thermische Seitenmodule, ein bündiges OLED, vier Taster und eine seitliche Lüftungsöffnung bilden ein geschlossenes Produkt.</desc>
+ <style>.part-placeholder{opacity:0}.callout-anchors circle{opacity:0}.callout-anchors circle.active{opacity:.32}</style>
  <defs>
   <linearGradient id="v2Glass" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#73827e" stop-opacity=".48"/><stop offset=".18" stop-color="#eaf0ed" stop-opacity=".72"/><stop offset=".42" stop-color="#9aa8a4" stop-opacity=".28"/><stop offset=".76" stop-color="#e6ece9" stop-opacity=".56"/><stop offset="1" stop-color="#5d6a66" stop-opacity=".42"/></linearGradient>
   <linearGradient id="v2Drink" x1="0" y1="0" x2=".65" y2="1"><stop stop-color="#d58a50"/><stop offset=".48" stop-color="#ae623c"/><stop offset="1" stop-color="#713724"/></linearGradient>
@@ -19,11 +20,14 @@
 
  <g class="product-v2-exterior">
   <!-- Phase B: a broad, lightly tapered beverage glass and one liquid body. -->
-  <g class="v2-cup">
+  <g class="v2-cup component-part" data-part="cup" data-focus="cup" tabindex="0" role="button" aria-label="Becher und Bechererkennung anzeigen">
+   <g class="part-solid">
    <path d="M328 129Q454 99 580 129L560 389Q554 435 454 443Q354 435 348 389Z" fill="url(#v2Glass)"/>
    <g clip-path="url(#v2CupClip)"><path d="M345 181Q454 155 563 181L548 389Q542 418 454 426Q366 418 360 389Z" fill="url(#v2Drink)" opacity=".84"/><ellipse cx="454" cy="181" rx="109" ry="24" fill="#d48a50"/><ellipse cx="454" cy="183" rx="89" ry="16" fill="#884628" opacity=".63"/></g>
    <ellipse cx="454" cy="129" rx="126" ry="29" fill="#cbd6d2" fill-opacity=".1" stroke="#d8dfdb" stroke-width="3"/>
    <path d="M352 151Q355 278 368 383" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".15"/>
+   </g>
+   <path class="part-placeholder" d="M328 129Q454 99 580 129L560 389Q554 435 454 443Q354 435 348 389Z"/>
   </g>
 
   <!-- Phase A: one compact housing with an intentionally simple silhouette. -->
@@ -46,42 +50,46 @@
    <ellipse cx="454" cy="369" rx="126" ry="23" fill="#343b36" opacity=".9"/>
    <path d="M337 370Q454 405 571 370" fill="none" stroke="#0b0e0c" stroke-width="5" opacity=".72"/>
    <path d="M350 368Q454 392 558 368" fill="none" stroke="#69716c" stroke-width="2" opacity=".35"/>
-   <ellipse class="v2-rgb" cx="454" cy="356" rx="156" ry="39" fill="none" stroke="#a9633f" stroke-width="2" stroke-dasharray="2 24" stroke-linecap="round" opacity=".42"/>
+   <g class="component-part" data-part="rgb" data-focus="rgb" tabindex="0" role="button" aria-label="RGB-Ring anzeigen"><ellipse class="v2-rgb rgb-light part-solid" cx="454" cy="356" rx="156" ry="39" fill="none" stroke="#a9633f" stroke-width="2" stroke-dasharray="2 24" stroke-linecap="round" opacity=".42"/></g>
   </g>
 
   <!-- Phase D: symmetric thermal pods are flush with the housing. -->
   <g class="v2-side-modules">
-   <path d="M231 391Q239 359 281 343L301 364L291 487Q280 505 251 506Z" fill="url(#v2Module)"/>
-   <path d="M686 386Q680 355 647 343L625 365L635 485Q646 504 671 503Z" fill="url(#v2Module)"/>
-   <path d="M248 385Q254 366 278 356L286 372L279 478Q271 490 259 487Z" fill="#69716c" opacity=".25"/>
-   <path d="M669 382Q664 365 647 357L638 372L645 477Q653 488 663 486Z" fill="#69716c" opacity=".22"/>
-   <path d="M290 390Q292 427 287 462" fill="none" stroke="#b8734d" stroke-width="4" stroke-linecap="round" opacity=".42"/>
-   <path d="M631 389Q629 426 634 460" fill="none" stroke="#b8734d" stroke-width="4" stroke-linecap="round" opacity=".42"/>
-   <path d="M248 503Q271 520 293 493" fill="none" stroke="#171c19" stroke-width="8" opacity=".48"/>
-   <path d="M632 491Q650 516 672 500" fill="none" stroke="#171c19" stroke-width="8" opacity=".48"/>
+   <g class="component-part" data-part="peltier1" data-focus="peltier1" tabindex="0" role="button" aria-label="Heizmodul links anzeigen"><g class="part-solid"><path d="M231 391Q239 359 281 343L301 364L291 487Q280 505 251 506Z" fill="url(#v2Module)"/><path d="M248 385Q254 366 278 356L286 372L279 478Q271 490 259 487Z" fill="#69716c" opacity=".25"/><path d="M290 390Q292 427 287 462" fill="none" stroke="#b8734d" stroke-width="4" stroke-linecap="round" opacity=".42"/><path d="M248 503Q271 520 293 493" fill="none" stroke="#171c19" stroke-width="8" opacity=".48"/></g><path class="part-placeholder" d="M231 391Q239 359 281 343L301 364L291 487Q280 505 251 506Z"/></g>
+   <g class="component-part" data-part="peltier2" data-focus="peltier2" tabindex="0" role="button" aria-label="Heizmodul rechts anzeigen"><g class="part-solid"><path d="M686 386Q680 355 647 343L625 365L635 485Q646 504 671 503Z" fill="url(#v2Module)"/><path d="M669 382Q664 365 647 357L638 372L645 477Q653 488 663 486Z" fill="#69716c" opacity=".22"/><path d="M631 389Q629 426 634 460" fill="none" stroke="#b8734d" stroke-width="4" stroke-linecap="round" opacity=".42"/><path d="M632 491Q650 516 672 500" fill="none" stroke="#171c19" stroke-width="8" opacity=".48"/></g><path class="part-placeholder" d="M686 386Q680 355 647 343L625 365L635 485Q646 504 671 503Z"/></g>
   </g>
 
   <!-- Phase C: one recessed, centered control module. -->
   <g class="v2-front-panel">
    <path d="M321 506Q426 530 531 510L524 633Q425 651 329 630Z" fill="#151a17"/>
+   <g class="component-part" data-part="oled" data-focus="oled" tabindex="0" role="button" aria-label="OLED anzeigen">
+   <g class="part-solid">
    <path d="M343 528Q426 545 509 529L506 586Q426 600 346 584Z" fill="#060a09"/>
    <path d="M356 536Q426 549 496 537L494 577Q426 588 358 577Z" fill="#0c282c"/>
    <text x="376" y="567" fill="#c7ece8" font-family="Segoe UI, sans-serif" font-size="24" font-weight="500">32.4°</text>
    <text x="465" y="566" fill="#82a5a5" font-family="Segoe UI, sans-serif" font-size="9" font-weight="600">45.0°</text>
+   </g><path class="part-placeholder" d="M343 528Q426 545 509 529L506 586Q426 600 346 584Z"/></g>
+   <g class="component-part" data-part="buttons" data-focus="buttons" tabindex="0" role="button" aria-label="Taster anzeigen"><g class="part-solid">
    <g fill="#141815" opacity=".95"><ellipse cx="363" cy="608" rx="12" ry="6"/><ellipse cx="405" cy="614" rx="12" ry="6"/><ellipse cx="447" cy="614" rx="12" ry="6"/><ellipse cx="489" cy="608" rx="12" ry="6"/></g>
    <g class="v2-buttons" fill="#68716c" stroke="#929b95" stroke-width="1"><circle cx="363" cy="604" r="9"/><circle cx="405" cy="610" r="9"/><circle cx="447" cy="610" r="9"/><circle cx="489" cy="604" r="9"/></g>
    <g fill="#a9b2ac" font-family="Segoe UI, sans-serif" font-size="6.5" font-weight="600" text-anchor="middle"><text x="363" y="627">MODE</text><text x="405" y="634">DOWN</text><text x="447" y="634">OK</text><text x="489" y="627">UP</text></g>
+   </g><path class="part-placeholder" d="M344 590Q426 604 508 589L505 637Q426 650 347 635Z"/></g>
   </g>
 
   <!-- Exterior cooling is communicated by a quiet side vent, never a bare fan. -->
-  <g class="v2-side-vent" opacity=".86">
+  <g class="v2-side-vent component-part" data-part="fan" data-focus="fan" tabindex="0" role="button" aria-label="Integrierten Lüfter anzeigen" opacity=".86">
+   <g class="part-solid">
    <path d="M557 530Q606 520 650 497L643 599Q602 615 558 622Z" fill="#0b0e0c"/>
    <path d="M568 545Q603 537 635 521L630 585Q599 597 567 603Z" fill="#1b211d" stroke="#59615c" stroke-width="1"/>
    <g fill="none" stroke="#77807a" stroke-width="4" stroke-linecap="round"><path d="M578 548 575 594"/><path d="M590 545 587 591"/><path d="M602 541 598 587"/><path d="M614 536 609 582"/><path d="M626 530 620 577"/></g>
+   </g><path class="part-placeholder" d="M557 530Q606 520 650 497L643 599Q602 615 558 622Z"/>
   </g>
+
+  <g class="component-part" data-part="light" data-focus="light" tabindex="0" role="button" aria-label="Lichtsensor anzeigen"><circle class="part-solid" cx="537" cy="622" r="4" fill="#b08b58"/><circle class="part-placeholder" cx="537" cy="622" r="8"/></g>
 
   <!-- Phase E: sparse studio highlights, no per-component glow. -->
   <path d="M278 455Q303 568 397 631" fill="none" stroke="#fff" stroke-width="3" opacity=".045"/>
   <path d="M646 446Q627 481 615 504" fill="none" stroke="#cdd5d0" stroke-width="2" opacity=".07"/>
  </g>
+ <g class="callout-anchors" aria-hidden="true"><circle data-callout-anchor="temp1" cx="386" cy="390" r="2"/><circle data-callout-anchor="temp2" cx="518" cy="391" r="2"/><circle data-callout-anchor="peltier1" cx="275" cy="418" r="2"/><circle data-callout-anchor="peltier2" cx="650" cy="417" r="2"/><circle data-callout-anchor="fan" cx="603" cy="557" r="2"/><circle data-callout-anchor="oled" cx="426" cy="558" r="2"/><circle data-callout-anchor="buttons" cx="426" cy="611" r="2"/><circle data-callout-anchor="rgb" cx="454" cy="356" r="2"/><circle data-callout-anchor="light" cx="537" cy="622" r="2"/><circle data-callout-anchor="cup" cx="454" cy="272" r="2"/><circle data-callout-anchor="pico" cx="424" cy="554" r="2"/><circle data-callout-anchor="current1" cx="493" cy="548" r="2"/></g>
 </svg>

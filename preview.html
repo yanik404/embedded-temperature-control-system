@@ -31,7 +31,7 @@
 .preview-tools{position:fixed;z-index:300;right:12px;bottom:12px}.preview-tools-toggle{height:28px;padding:0 9px;border:1px solid #3a403b;border-radius:4px;background:#0b0d0bdd;color:#969c96;font-size:9px;letter-spacing:.08em;cursor:pointer}.preview-deck{position:absolute;right:0;bottom:34px;display:grid;width:180px;height:auto;max-height:65vh;padding:6px;border:1px solid #343a35;border-radius:6px;background:#0b0d0bf2;overflow:auto}.preview-deck[hidden]{display:none}.preview-deck button{min-height:27px;border:0;border-bottom:1px solid #2f342f;background:transparent;color:#999f99;font-size:9px;text-align:left}.preview-deck button.active{color:#fff;background:#4e2b1b}
 
 /* Two deliberate product views: a complete exterior and one controlled cutaway. */
-.product-view-switch{position:absolute;z-index:8;top:18px;left:50%;display:flex;align-items:center;gap:10px;transform:translateX(-50%);padding:5px;border:1px solid #3a413c;border-radius:999px;background:#111511d9;box-shadow:0 8px 28px #0005;backdrop-filter:blur(8px)}.product-view-switch button{min-height:28px;padding:0 12px;border:0;border-radius:999px;background:transparent;color:#858c86;font-size:9px;font-weight:700;letter-spacing:.09em;cursor:pointer}.product-view-switch button[aria-pressed="true"]{background:#313833;color:#f1f1ea}.product-view-switch button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}.product-view-switch i{width:1px;height:15px;background:#414843}.art-variant{display:none}.variant-a{display:block}body[data-product-view="build"] .variant-a{display:none}body[data-product-view="build"] .variant-b{display:block}.internal-hint{opacity:0;pointer-events:none}.internal-hint.focused{opacity:1;pointer-events:auto}.premium-shell path,.cutaway-shell path{stroke:none}.heat-trim{transition:opacity .4s}body[data-state="AUS"] .heat-trim,body[data-state="BEREIT"] .heat-trim{opacity:.15}.button-bank ellipse{fill:#59615c;stroke:#8d958f}.product-illustration .pico-module{stroke:#65aeb8;stroke-width:1.5}.product-illustration .to92 path:first-child{fill:#111513;stroke:#8c958f;stroke-width:1.5}.product-illustration .to92 path:last-child{fill:none;stroke:#aeb5af;stroke-width:1.5}
+.product-view-switch{position:absolute;z-index:8;top:18px;left:50%;display:flex;align-items:center;gap:10px;transform:translateX(-50%);padding:5px;border:1px solid #3a413c;border-radius:999px;background:#111511d9;box-shadow:0 8px 28px #0005;backdrop-filter:blur(8px)}.product-view-switch button{min-height:28px;padding:0 12px;border:0;border-radius:999px;background:transparent;color:#858c86;font-size:9px;font-weight:700;letter-spacing:.09em;cursor:pointer}.product-view-switch button[aria-pressed="true"]{background:#313833;color:#f1f1ea}.product-view-switch button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}.product-view-switch i{width:1px;height:15px;background:#414843}.product-v2-view{display:none}.product-v2-view[data-product-illustration="exterior"]{display:block}body[data-product-view="build"] .product-v2-view[data-product-illustration="exterior"]{display:none}body[data-product-view="build"] .product-v2-view[data-product-illustration="build"]{display:block}.product-v2-illustration{width:100%;max-height:710px}.internal-hint{opacity:0;pointer-events:none}.internal-hint.focused{opacity:1;pointer-events:auto}.heat-trim{transition:opacity .4s}body[data-state="AUS"] .heat-trim,body[data-state="BEREIT"] .heat-trim{opacity:.15}.button-bank ellipse{fill:#59615c;stroke:#8d958f}.product-illustration .pico-module{stroke:#65aeb8;stroke-width:1.5}.product-illustration .to92 path:first-child{fill:#111513;stroke:#8c958f;stroke-width:1.5}.product-illustration .to92 path:last-child{fill:none;stroke:#aeb5af;stroke-width:1.5}
 
 /* Five main control-loop points; comparison and sensor stay subordinate. */
 .simple-loop{grid-template-columns:minmax(118px,1fr) minmax(100px,.7fr) minmax(118px,1fr) 38px minmax(130px,1fr) 38px minmax(130px,1fr) minmax(90px,.65fr) minmax(125px,1fr)}.loop-connector{position:relative;display:flex;min-width:0;align-items:center;justify-content:center}.loop-connector>.flow-arrow{width:100%}.compare-connector>span{position:absolute;display:grid;min-width:72px;place-items:center;padding:5px 7px;background:#0e100e;color:var(--muted);text-align:center}.compare-connector b{display:grid;width:25px;height:25px;place-items:center;border:1px solid #4b524d;border-radius:50%;font-size:13px}.compare-connector em{color:#d9ddd7;font-size:13px;font-style:normal}.compare-connector small{font-size:9px}.sensor-connector .loop-sensor{position:absolute;width:21px;height:29px;padding:3px;background:#0e100e}.feedback-route{left:6.8%;right:5.7%}
@@ -98,77 +98,224 @@
   <div class="product-layout">
    <div class="product-stage" id="visualStage">
     <div class="product-view-switch" role="group" aria-label="Produktansicht"><button type="button" data-product-view="exterior" aria-pressed="true">AUSSENANSICHT</button><i></i><button type="button" data-product-view="build" aria-pressed="false">AUFBAU</button></div>
-    <svg class="product-illustration" id="productIllustration" viewBox="0 0 1000 720" role="img" aria-labelledby="productTitle productDescription">
- <title id="productTitle">2.5D Produktillustration des Becherhalters</title>
- <desc id="productDescription">Drei vergleichbare Art-Direction-Varianten zeigen denselben Becherhalter als Premium-Außenansicht, technische Schnittansicht und halb offene Produktansicht.</desc>
+    <div class="product-v2-view" data-product-illustration="exterior"><svg class="product-illustration product-v2-illustration" id="productIllustration" viewBox="175 72 570 666" role="img" aria-labelledby="v2Title v2Description" xmlns="http://www.w3.org/2000/svg">
+ <title id="v2Title">Premium-Produktentwurf des intelligenten Becherhalters</title>
+ <desc id="v2Description">Ein normal proportionierter Glasbecher sitzt tief in einem kompakten anthrazitfarbenen Tischgerät. Eine runde Aufnahme, zwei integrierte thermische Seitenmodule, ein bündiges OLED, vier Taster und eine seitliche Lüftungsöffnung bilden ein geschlossenes Produkt.</desc>
+ <style>.part-placeholder{opacity:0}.callout-anchors circle{opacity:0}.callout-anchors circle.active{opacity:.32}</style>
  <defs>
-  <linearGradient id="shellTop" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#626a65"/><stop offset=".32" stop-color="#353b37"/><stop offset="1" stop-color="#1b201d"/></linearGradient>
-  <linearGradient id="shellFront" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#303632"/><stop offset="1" stop-color="#151917"/></linearGradient>
-  <linearGradient id="shellSide" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#252a27"/><stop offset="1" stop-color="#101311"/></linearGradient>
-  <linearGradient id="glassBody" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#738783" stop-opacity=".32"/><stop offset=".2" stop-color="#e5efeb" stop-opacity=".64"/><stop offset=".48" stop-color="#91a6a1" stop-opacity=".2"/><stop offset=".82" stop-color="#f2f6f3" stop-opacity=".52"/><stop offset="1" stop-color="#5d716d" stop-opacity=".28"/></linearGradient>
-  <linearGradient id="amber" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#d69155"/><stop offset=".42" stop-color="#a45c39"/><stop offset="1" stop-color="#612e22"/></linearGradient>
-  <linearGradient id="aluminium" x1="0" y1="0" x2="1" y2=".3"><stop stop-color="#5e6762"/><stop offset=".25" stop-color="#c2c8c3"/><stop offset=".5" stop-color="#747c77"/><stop offset=".76" stop-color="#d8dcd7"/><stop offset="1" stop-color="#4b534f"/></linearGradient>
-  <linearGradient id="ceramic" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f2f1e9"/><stop offset=".58" stop-color="#c3c7c1"/><stop offset="1" stop-color="#7f8782"/></linearGradient>
-  <linearGradient id="board" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#245e48"/><stop offset="1" stop-color="#0b3024"/></linearGradient>
-  <radialGradient id="heatGlow"><stop stop-color="#ed8549" stop-opacity=".34"/><stop offset="1" stop-color="#ed8549" stop-opacity="0"/></radialGradient>
-  <filter id="productShadow" x="-25%" y="-25%" width="150%" height="180%"><feDropShadow dx="0" dy="18" stdDeviation="17" flood-color="#000" flood-opacity=".46"/></filter>
-  <filter id="partShadow" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="6" stdDeviation="5" flood-color="#000" flood-opacity=".34"/></filter>
+  <linearGradient id="v2Glass" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#73827e" stop-opacity=".48"/><stop offset=".18" stop-color="#eaf0ed" stop-opacity=".72"/><stop offset=".42" stop-color="#9aa8a4" stop-opacity=".28"/><stop offset=".76" stop-color="#e6ece9" stop-opacity=".56"/><stop offset="1" stop-color="#5d6a66" stop-opacity=".42"/></linearGradient>
+  <linearGradient id="v2Drink" x1="0" y1="0" x2=".65" y2="1"><stop stop-color="#d58a50"/><stop offset=".48" stop-color="#ae623c"/><stop offset="1" stop-color="#713724"/></linearGradient>
+  <linearGradient id="v2Top" x1=".1" y1="0" x2=".9" y2="1"><stop stop-color="#565e59"/><stop offset=".36" stop-color="#3a413c"/><stop offset="1" stop-color="#252b27"/></linearGradient>
+  <linearGradient id="v2Front" x1="0" y1="0" x2=".72" y2="1"><stop stop-color="#424a45"/><stop offset=".45" stop-color="#303632"/><stop offset="1" stop-color="#202521"/></linearGradient>
+  <linearGradient id="v2Right" x1="0" y1="0" x2="1" y2=".8"><stop stop-color="#333a35"/><stop offset="1" stop-color="#181d1a"/></linearGradient>
+  <linearGradient id="v2Module" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#4e5651"/><stop offset=".55" stop-color="#393f3b"/><stop offset="1" stop-color="#292f2b"/></linearGradient>
+  <linearGradient id="v2Metal" x1="0" y1="0" x2="1" y2=".2"><stop stop-color="#747d78"/><stop offset=".28" stop-color="#c3c9c5"/><stop offset=".5" stop-color="#7e8782"/><stop offset=".76" stop-color="#d3d7d3"/><stop offset="1" stop-color="#59615d"/></linearGradient>
+  <radialGradient id="v2Ambient"><stop stop-color="#59635c" stop-opacity=".2"/><stop offset="1" stop-color="#111410" stop-opacity="0"/></radialGradient>
+  <filter id="v2ContactShadow" x="-30%" y="-30%" width="160%" height="180%"><feGaussianBlur stdDeviation="7"/></filter>
+  <clipPath id="v2CupClip"><path d="M328 129Q454 99 580 129L560 389Q554 435 454 443Q354 435 348 389Z"/></clipPath>
  </defs>
 
- <ellipse class="ground-shadow" cx="500" cy="671" rx="318" ry="28"/>
+ <ellipse cx="460" cy="390" rx="340" ry="310" fill="url(#v2Ambient)"/>
+ <ellipse class="v2-ground-shadow" cx="454" cy="706" rx="222" ry="22" fill="#050706" opacity=".43" filter="url(#v2ContactShadow)"/>
 
- <!-- A: a calm, complete premium product. -->
- <g class="art-variant variant-a" data-art-variant="a" filter="url(#productShadow)">
-  <g class="cup-assembly" data-focus="cup" tabindex="0" role="button" aria-label="Becher und Bechererkennung anzeigen">
-   <path d="M397 113h238l-25 292c-5 58-43 86-94 86s-89-28-94-86Z" fill="url(#glassBody)"/>
-   <path d="M417 164h198l-20 235c-4 44-36 66-79 66s-75-22-79-66Z" fill="url(#amber)" opacity=".78"/>
-   <ellipse cx="516" cy="164" rx="99" ry="24" fill="#c77d49"/><ellipse cx="516" cy="164" rx="82" ry="16" fill="#754027" opacity=".68"/>
-   <ellipse cx="516" cy="113" rx="119" ry="29" fill="#a8bdb8" fill-opacity=".14" stroke="#e2e9e5" stroke-width="5"/><ellipse cx="516" cy="116" rx="105" ry="22" fill="none" stroke="#91a19d" stroke-width="1.5"/>
-   <path d="M432 151c-1 111 4 214 14 262" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".19"/><path d="M438 411c19 14 137 14 156 0" fill="none" stroke="#d9e2de" stroke-width="1.5" opacity=".48"/>
+ <g class="product-v2-exterior">
+  <!-- Phase B: a broad, lightly tapered beverage glass and one liquid body. -->
+  <g class="v2-cup component-part" data-part="cup" data-focus="cup" tabindex="0" role="button" aria-label="Becher und Bechererkennung anzeigen">
+   <g class="part-solid">
+   <path d="M328 129Q454 99 580 129L560 389Q554 435 454 443Q354 435 348 389Z" fill="url(#v2Glass)"/>
+   <g clip-path="url(#v2CupClip)"><path d="M345 181Q454 155 563 181L548 389Q542 418 454 426Q366 418 360 389Z" fill="url(#v2Drink)" opacity=".84"/><ellipse cx="454" cy="181" rx="109" ry="24" fill="#d48a50"/><ellipse cx="454" cy="183" rx="89" ry="16" fill="#884628" opacity=".63"/></g>
+   <ellipse cx="454" cy="129" rx="126" ry="29" fill="#cbd6d2" fill-opacity=".1" stroke="#d8dfdb" stroke-width="3"/>
+   <path d="M352 151Q355 278 368 383" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".15"/>
+   </g>
+   <path class="part-placeholder" d="M328 129Q454 99 580 129L560 389Q554 435 454 443Q354 435 348 389Z"/>
   </g>
-  <g class="premium-shell">
-   <path d="M260 342 512 279 759 342 703 605 510 660 311 603Z" fill="url(#shellTop)"/>
-   <path d="M311 434 510 489v171L311 603Z" fill="url(#shellFront)"/>
-   <path d="M510 489 703 434v171l-193 55Z" fill="url(#shellSide)"/>
-   <path d="M280 350 512 292l227 58-46 91-183 52-188-52Z" fill="#202522"/>
-   <ellipse cx="512" cy="345" rx="161" ry="45" fill="#111512"/><ellipse cx="512" cy="340" rx="158" ry="44" fill="none" stroke="#5e6862" stroke-width="22"/>
+
+  <!-- Phase A: one compact housing with an intentionally simple silhouette. -->
+  <g class="v2-housing">
+   <path d="M226 391Q234 354 284 337Q367 307 445 306Q555 305 648 336Q688 350 695 384L670 433Q552 476 430 484Q327 475 244 444Z" fill="url(#v2Top)"/>
+   <path d="M244 433Q337 475 430 484Q546 476 670 423L650 616Q642 661 430 688Q267 664 256 620Z" fill="url(#v2Front)"/>
+   <path d="M430 484Q552 476 670 423L650 616Q642 648 430 688Z" fill="url(#v2Right)" opacity=".97"/>
+   <path d="M257 614Q347 644 430 655Q543 644 650 611L648 639Q621 673 430 699Q282 677 257 643Z" fill="#151a17" opacity=".95"/>
+   <path d="M430 486Q552 477 670 426" fill="none" stroke="#68716b" stroke-width="1" opacity=".26"/>
+   <path d="M266 438Q274 566 286 620" fill="none" stroke="#aeb7b1" stroke-width="2" opacity=".08"/>
+   <path d="M651 445Q648 548 638 611" fill="none" stroke="#c6cec9" stroke-width="2" opacity=".1"/>
   </g>
-  <g class="component-part exterior-heater left-jaw" data-part="peltier1" data-focus="peltier1" tabindex="0" role="button" aria-label="Heizmodul links anzeigen"><path class="part-solid" d="M267 353 344 333l15 201-60-17Z" fill="#2b302d"/><path d="M281 369 331 356l10 157-40-11Z" fill="#3d4540"/><path class="heat-trim" d="M337 364c10 47 11 104 3 143" fill="none" stroke="#d07543" stroke-width="4" opacity=".62"/><path class="part-placeholder" d="M267 353 344 333l15 201-60-17Z"/></g>
-  <g class="component-part exterior-heater right-jaw" data-part="peltier2" data-focus="peltier2" tabindex="0" role="button" aria-label="Heizmodul rechts anzeigen"><path class="part-solid" d="M681 333 758 353l-32 164-60 17Z" fill="#242925"/><path d="M694 356 744 369l-20 133-40 11Z" fill="#353c38"/><path class="heat-trim" d="M687 364c-10 47-11 104-3 143" fill="none" stroke="#d07543" stroke-width="4" opacity=".62"/><path class="part-placeholder" d="M681 333 758 353l-32 164-60 17Z"/></g>
-  <g class="rgb-ring component-part" data-part="rgb" data-focus="rgb" tabindex="0" role="button" aria-label="RGB-Ring anzeigen"><ellipse cx="512" cy="340" rx="158" ry="44" fill="none" stroke="#323834" stroke-width="19"/><ellipse class="rgb-light" cx="512" cy="340" rx="158" ry="44" fill="none" stroke="#72c797" stroke-width="4" stroke-dasharray="3 24" stroke-linecap="round"/></g>
-  <g class="component-part front-console" data-part="oled" data-focus="oled" tabindex="0" role="button" aria-label="OLED anzeigen"><path class="part-solid" d="M355 484 489 521v83l-134-38Z" fill="#171b19"/><path d="m372 505 97 27v42l-97-27Z" fill="#071d21"/><text class="oled-temp" x="384" y="532" transform="rotate(15 384 532)">32.4 °C</text><path class="part-placeholder" d="M355 484 489 521v83l-134-38Z"/></g>
-  <g class="component-part physical-buttons" data-part="buttons" data-focus="buttons" tabindex="0" role="button" aria-label="Taster anzeigen"><g class="part-solid button-bank"><ellipse cx="377" cy="570" rx="10" ry="5"/><ellipse cx="405" cy="578" rx="10" ry="5"/><ellipse cx="433" cy="586" rx="10" ry="5"/><ellipse cx="461" cy="594" rx="10" ry="5"/></g><path class="part-placeholder" d="M363 558 478 590v22l-115-32Z"/></g>
-  <g class="component-part heatsink-part" data-part="fan" data-focus="fan" tabindex="0" role="button" aria-label="Integrierten Lüfter anzeigen"><g class="part-solid"><path d="m562 492 114-33v119l-114 33Z" fill="#171b19"/><path d="m576 505 86-25v84l-86 25Z" fill="#0b0e0c"/><g class="fan-rotor" transform="translate(619 534) skewY(-16)"><g class="fan-blades" fill="#4b534e"><path class="fan-blade" d="M-4-8C-5-28 9-35 19-27 24-19 14-10 3-4Z"/><path class="fan-blade" d="M-4-8C-5-28 9-35 19-27 24-19 14-10 3-4Z" transform="rotate(60)"/><path class="fan-blade" d="M-4-8C-5-28 9-35 19-27 24-19 14-10 3-4Z" transform="rotate(120)"/><path class="fan-blade" d="M-4-8C-5-28 9-35 19-27 24-19 14-10 3-4Z" transform="rotate(180)"/><path class="fan-blade" d="M-4-8C-5-28 9-35 19-27 24-19 14-10 3-4Z" transform="rotate(240)"/><path class="fan-blade" d="M-4-8C-5-28 9-35 19-27 24-19 14-10 3-4Z" transform="rotate(300)"/></g><circle r="10" fill="#737b76"/></g></g><path class="part-placeholder" d="m562 492 114-33v119l-114 33Z"/></g>
-  <g class="component-part light-sensor" data-part="light" data-focus="light" tabindex="0" role="button" aria-label="Lichtsensor anzeigen"><circle class="part-solid" cx="689" cy="574" r="5" fill="#9a7b53"/><circle class="part-placeholder" cx="689" cy="574" r="8"/></g>
-  <g class="internal-hint component-part sensor-one" data-part="temp1" data-focus="temp1" tabindex="0" role="button" aria-label="Sensor 1 anzeigen"><g class="part-solid to92" transform="translate(446 445)"><path d="M0 12V5a9 9 0 0 1 18 0v7Z"/><path d="M4 12v24m5-24v24m5-24v24"/></g><path class="part-placeholder" d="M440 440h30v45h-30Z"/></g>
-  <g class="internal-hint component-part sensor-two" data-part="temp2" data-focus="temp2" tabindex="0" role="button" aria-label="Sensor 2 anzeigen"><g class="part-solid to92" transform="translate(664 407)"><path d="M0 12V5a9 9 0 0 1 18 0v7Z"/><path d="M4 12v24m5-24v24m5-24v24"/></g><path class="part-placeholder" d="M658 401h30v45h-30Z"/></g>
-  <g class="internal-hint pcb-assembly component-part" data-part="pico" data-focus="pico" tabindex="0" role="button" aria-label="PCB und Pico anzeigen"><g class="part-solid"><path d="m392 522 119 33-2 75-119-34Z" fill="url(#board)"/><path class="pico-module" d="m409 542 67 18-2 43-67-19Z" fill="#177480"/><path d="m417 547 19 5-1 11-19-5Z" fill="#c4cccf"/></g><path class="part-placeholder" d="m392 522 119 33-2 75-119-34Z"/></g>
-  <g class="internal-hint component-part" data-part="current1" data-focus="current1"><path class="part-solid" d="m476 566 22 6-1 19-22-6Z" fill="#171a18"/><path class="part-placeholder" d="m473 562 30 8-2 26-30-8Z"/></g>
-  <g class="component-part cup-detect" data-part="cup" data-focus="cup"><circle class="part-solid" cx="512" cy="469" r="5" fill="#75afc4"/></g>
- </g>
 
- <!-- B: controlled 2.5D technical cutaway with the thermal chain exposed. -->
- <g class="art-variant variant-b" data-art-variant="b" filter="url(#productShadow)">
-  <g class="cup-assembly" data-focus="cup"><path d="M408 115h220l-24 289c-5 57-38 82-86 82s-81-25-86-82Z" fill="url(#glassBody)"/><path d="M427 163h182l-19 231c-4 43-31 62-72 62s-68-19-72-62Z" fill="url(#amber)" opacity=".72"/><ellipse cx="518" cy="163" rx="91" ry="22" fill="#bd7444"/><ellipse cx="518" cy="115" rx="110" ry="27" fill="none" stroke="#dde6e2" stroke-width="4"/></g>
-  <g class="cutaway-shell"><path d="M258 350 516 285 763 350 706 604 515 659 309 603Z" fill="url(#shellFront)" opacity=".32"/><path d="M309 444 515 500v159l-206-56Z" fill="#202521" opacity=".72"/><path d="M515 500 706 444v160l-191 55Z" fill="#151a17" opacity=".42"/><ellipse cx="516" cy="347" rx="164" ry="45" fill="none" stroke="#59625c" stroke-width="18" opacity=".7"/></g>
-  <g class="thermal-module component-part left-jaw" data-part="peltier1" data-focus="peltier1"><g class="part-solid"><path class="contact-face" d="M370 334c32 34 34 145 4 184l26-7c27-46 25-137-3-185Z" fill="url(#aluminium)"/><path d="m330 341 28-7 15 184-28 8Z" fill="url(#ceramic)"/><path d="m316 345 14-4 15 185-14 4Z" fill="#262c28"/></g><path class="part-placeholder" d="m311 334 90-23 8 214-85 23Z"/></g>
-  <g class="thermal-module component-part right-jaw" data-part="peltier2" data-focus="peltier2"><g class="part-solid"><path class="contact-face" d="M666 326c-28 48-30 139-3 185l26 7c-30-39-28-150 4-184Z" fill="url(#aluminium)"/><path d="m705 334 28 7-15 185-28-8Z" fill="url(#ceramic)"/><path d="m733 341 14 4-15 185-14-4Z" fill="#262c28"/></g><path class="part-placeholder" d="m663 311 90 23-13 214-85-23Z"/></g>
-  <g class="rgb-ring component-part" data-part="rgb" data-focus="rgb"><ellipse cx="516" cy="347" rx="164" ry="45" fill="none" stroke="#343b37" stroke-width="18"/><ellipse class="rgb-light" cx="516" cy="347" rx="164" ry="45" fill="none" stroke="#72c797" stroke-width="4" stroke-dasharray="3 24"/></g>
-  <g class="component-part sensor-one" data-part="temp1" data-focus="temp1"><g class="part-solid to92" transform="translate(426 447)"><path d="M0 15V6a11 11 0 0 1 22 0v9Z"/><path d="M5 15v29m6-29v29m6-29v29"/></g><path class="part-placeholder" d="M419 440h38v58h-38Z"/></g>
-  <g class="component-part sensor-two" data-part="temp2" data-focus="temp2"><g class="part-solid to92" transform="translate(665 390)"><path d="M0 15V6a11 11 0 0 1 22 0v9Z"/><path d="M5 15v29m6-29v29m6-29v29"/></g><path class="part-placeholder" d="M658 383h38v58h-38Z"/></g>
-  <g class="electronics-window"><path d="m332 516 194 52-6 94-194-54Z" fill="#0b0f0c"/><path d="m340 525 177 48-5 78-177-49Z" fill="#16201b"/></g>
-  <g class="pcb-assembly component-part" data-part="pico" data-focus="pico"><g class="part-solid"><path d="m347 532 164 44-4 68-164-45Z" fill="url(#board)"/><path class="pico-module" d="m363 544 88 24-3 49-88-24Z" fill="#177480"/><path d="m374 550 22 6-1 12-22-6Z" fill="#c7d0d2"/><g fill="#d4b762"><circle cx="369" cy="579" r="2"/><circle cx="379" cy="582" r="2"/><circle cx="389" cy="585" r="2"/><circle cx="399" cy="588" r="2"/><circle cx="438" cy="570" r="2"/><circle cx="436" cy="581" r="2"/><circle cx="434" cy="592" r="2"/></g><path d="m458 577 32 9-2 26-32-9Z" fill="#151917"/></g><path class="part-placeholder" d="m337 515 194 52-6 91-194-53Z"/></g>
-  <g class="component-part" data-part="current1" data-focus="current1"><path class="part-solid" d="m462 580 24 7-2 23-24-7Z" fill="#121513"/><path class="part-placeholder" d="m457 574 35 10-3 32-35-10Z"/></g>
-  <g class="component-part front-console cutaway-console" data-part="oled" data-focus="oled"><g class="part-solid"><path d="M278 526 348 545v74l-70-20Z" fill="#181c1a"/><path d="m288 540 50 14v34l-50-14Z" fill="#092127"/><text class="oled-temp" x="293" y="560" transform="rotate(15 293 560)">32.4</text></g><path class="part-placeholder" d="M278 526 348 545v74l-70-20Z"/></g>
-  <g class="component-part physical-buttons cutaway-buttons" data-part="buttons" data-focus="buttons"><g class="part-solid button-bank"><ellipse cx="291" cy="590" rx="7" ry="4"/><ellipse cx="308" cy="595" rx="7" ry="4"/><ellipse cx="325" cy="600" rx="7" ry="4"/><ellipse cx="342" cy="605" rx="7" ry="4"/></g><path class="part-placeholder" d="m280 581 72 20v19l-72-20Z"/></g>
-  <g class="component-part heatsink-part" data-part="fan" data-focus="fan"><g class="part-solid"><path d="m548 506 142-41v124l-142 41Z" fill="url(#aluminium)"/><g fill="#4c544f"><path d="m557 507 9-3v113l-9 3Z"/><path d="m574 502 9-3v113l-9 3Z"/><path d="m591 497 9-3v113l-9 3Z"/><path d="m608 492 9-3v113l-9 3Z"/></g><path d="m620 486 92-27v104l-92 27Z" fill="#111412"/><g class="fan-rotor" transform="translate(665 525) skewY(-16)"><g class="fan-blades" fill="#4b534e"><path class="fan-blade" d="M-4-8C-5-28 9-35 19-27 24-19 14-10 3-4Z"/><path class="fan-blade" d="M-4-8C-5-28 9-35 19-27 24-19 14-10 3-4Z" transform="rotate(60)"/><path class="fan-blade" d="M-4-8C-5-28 9-35 19-27 24-19 14-10 3-4Z" transform="rotate(120)"/><path class="fan-blade" d="M-4-8C-5-28 9-35 19-27 24-19 14-10 3-4Z" transform="rotate(180)"/><path class="fan-blade" d="M-4-8C-5-28 9-35 19-27 24-19 14-10 3-4Z" transform="rotate(240)"/><path class="fan-blade" d="M-4-8C-5-28 9-35 19-27 24-19 14-10 3-4Z" transform="rotate(300)"/></g><circle r="10" fill="#707872"/></g></g><path class="part-placeholder" d="m544 457 174-50v189l-174 50Z"/></g>
-  <g class="component-part light-sensor" data-part="light" data-focus="light"><circle class="part-solid" cx="700" cy="587" r="5" fill="#9a7b53"/></g><g class="component-part cup-detect" data-part="cup" data-focus="cup"><circle class="part-solid" cx="516" cy="474" r="5" fill="#76aec4"/></g>
- </g>
+  <!-- The cup sits behind this collar and therefore visibly inside the appliance. -->
+  <g class="v2-collar">
+   <ellipse cx="454" cy="382" rx="150" ry="31" fill="#080b09" opacity=".48" filter="url(#v2ContactShadow)"/>
+   <ellipse cx="454" cy="359" rx="166" ry="44" fill="#222824"/>
+   <ellipse cx="454" cy="356" rx="162" ry="42" fill="none" stroke="url(#v2Metal)" stroke-width="10" opacity=".64"/>
+   <ellipse cx="454" cy="358" rx="139" ry="32" fill="#1b211d"/>
+   <ellipse cx="454" cy="369" rx="126" ry="23" fill="#343b36" opacity=".9"/>
+   <path d="M337 370Q454 405 571 370" fill="none" stroke="#0b0e0c" stroke-width="5" opacity=".72"/>
+   <path d="M350 368Q454 392 558 368" fill="none" stroke="#69716c" stroke-width="2" opacity=".35"/>
+   <g class="component-part" data-part="rgb" data-focus="rgb" tabindex="0" role="button" aria-label="RGB-Ring anzeigen"><ellipse class="v2-rgb rgb-light part-solid" cx="454" cy="356" rx="156" ry="39" fill="none" stroke="#a9633f" stroke-width="2" stroke-dasharray="2 24" stroke-linecap="round" opacity=".42"/></g>
+  </g>
 
- <g class="mount-silhouettes" aria-hidden="true"><path class="mount-silhouette" data-silhouette="temp1" d="M425 430h50v70h-50Z"/><path class="mount-silhouette" data-silhouette="temp2" d="M645 380h55v75h-55Z"/><path class="mount-silhouette" data-silhouette="peltier1" d="M260 325h110v220H260Z"/><path class="mount-silhouette" data-silhouette="peltier2" d="M650 325h110v220H650Z"/><path class="mount-silhouette" data-silhouette="fan" d="M540 455h190v175H540Z"/><path class="mount-silhouette" data-silhouette="oled" d="M340 480h165v145H340Z"/><path class="mount-silhouette" data-silhouette="buttons" d="M350 550h145v75H350Z"/><ellipse class="mount-silhouette" data-silhouette="rgb" cx="515" cy="340" rx="170" ry="54"/><path class="mount-silhouette" data-silhouette="light" d="M665 550h45v45h-45Z"/><path class="mount-silhouette" data-silhouette="cup" d="M390 90h250v410H390Z"/><path class="mount-silhouette" data-silhouette="pico" d="M350 500h180v145H350Z"/><path class="mount-silhouette" data-silhouette="current1" d="M455 540h60v65h-60Z"/></g>
- <g class="callout-anchors" aria-hidden="true"><circle data-callout-anchor="temp1" cx="452" cy="458" r="2"/><circle data-callout-anchor="temp2" cx="674" cy="418" r="2"/><circle data-callout-anchor="peltier1" cx="320" cy="412" r="2"/><circle data-callout-anchor="peltier2" cx="704" cy="412" r="2"/><circle data-callout-anchor="fan" cx="619" cy="535" r="2"/><circle data-callout-anchor="oled" cx="421" cy="545" r="2"/><circle data-callout-anchor="buttons" cx="420" cy="587" r="2"/><circle data-callout-anchor="rgb" cx="515" cy="340" r="2"/><circle data-callout-anchor="light" cx="689" cy="574" r="2"/><circle data-callout-anchor="cup" cx="515" cy="464" r="2"/><circle data-callout-anchor="pico" cx="431" cy="564" r="2"/><circle data-callout-anchor="current1" cx="485" cy="576" r="2"/></g>
+  <!-- Phase D: symmetric thermal pods are flush with the housing. -->
+  <g class="v2-side-modules">
+   <g class="component-part" data-part="peltier1" data-focus="peltier1" tabindex="0" role="button" aria-label="Heizmodul links anzeigen"><g class="part-solid"><path d="M231 391Q239 359 281 343L301 364L291 487Q280 505 251 506Z" fill="url(#v2Module)"/><path d="M248 385Q254 366 278 356L286 372L279 478Q271 490 259 487Z" fill="#69716c" opacity=".25"/><path d="M290 390Q292 427 287 462" fill="none" stroke="#b8734d" stroke-width="4" stroke-linecap="round" opacity=".42"/><path d="M248 503Q271 520 293 493" fill="none" stroke="#171c19" stroke-width="8" opacity=".48"/></g><path class="part-placeholder" d="M231 391Q239 359 281 343L301 364L291 487Q280 505 251 506Z"/></g>
+   <g class="component-part" data-part="peltier2" data-focus="peltier2" tabindex="0" role="button" aria-label="Heizmodul rechts anzeigen"><g class="part-solid"><path d="M686 386Q680 355 647 343L625 365L635 485Q646 504 671 503Z" fill="url(#v2Module)"/><path d="M669 382Q664 365 647 357L638 372L645 477Q653 488 663 486Z" fill="#69716c" opacity=".22"/><path d="M631 389Q629 426 634 460" fill="none" stroke="#b8734d" stroke-width="4" stroke-linecap="round" opacity=".42"/><path d="M632 491Q650 516 672 500" fill="none" stroke="#171c19" stroke-width="8" opacity=".48"/></g><path class="part-placeholder" d="M686 386Q680 355 647 343L625 365L635 485Q646 504 671 503Z"/></g>
+  </g>
+
+  <!-- Phase C: one recessed, centered control module. -->
+  <g class="v2-front-panel">
+   <path d="M321 506Q426 530 531 510L524 633Q425 651 329 630Z" fill="#151a17"/>
+   <g class="component-part" data-part="oled" data-focus="oled" tabindex="0" role="button" aria-label="OLED anzeigen">
+   <g class="part-solid">
+   <path d="M343 528Q426 545 509 529L506 586Q426 600 346 584Z" fill="#060a09"/>
+   <path d="M356 536Q426 549 496 537L494 577Q426 588 358 577Z" fill="#0c282c"/>
+   <text x="376" y="567" fill="#c7ece8" font-family="Segoe UI, sans-serif" font-size="24" font-weight="500">32.4°</text>
+   <text x="465" y="566" fill="#82a5a5" font-family="Segoe UI, sans-serif" font-size="9" font-weight="600">45.0°</text>
+   </g><path class="part-placeholder" d="M343 528Q426 545 509 529L506 586Q426 600 346 584Z"/></g>
+   <g class="component-part" data-part="buttons" data-focus="buttons" tabindex="0" role="button" aria-label="Taster anzeigen"><g class="part-solid">
+   <g fill="#141815" opacity=".95"><ellipse cx="363" cy="608" rx="12" ry="6"/><ellipse cx="405" cy="614" rx="12" ry="6"/><ellipse cx="447" cy="614" rx="12" ry="6"/><ellipse cx="489" cy="608" rx="12" ry="6"/></g>
+   <g class="v2-buttons" fill="#68716c" stroke="#929b95" stroke-width="1"><circle cx="363" cy="604" r="9"/><circle cx="405" cy="610" r="9"/><circle cx="447" cy="610" r="9"/><circle cx="489" cy="604" r="9"/></g>
+   <g fill="#a9b2ac" font-family="Segoe UI, sans-serif" font-size="6.5" font-weight="600" text-anchor="middle"><text x="363" y="627">MODE</text><text x="405" y="634">DOWN</text><text x="447" y="634">OK</text><text x="489" y="627">UP</text></g>
+   </g><path class="part-placeholder" d="M344 590Q426 604 508 589L505 637Q426 650 347 635Z"/></g>
+  </g>
+
+  <!-- Exterior cooling is communicated by a quiet side vent, never a bare fan. -->
+  <g class="v2-side-vent component-part" data-part="fan" data-focus="fan" tabindex="0" role="button" aria-label="Integrierten Lüfter anzeigen" opacity=".86">
+   <g class="part-solid">
+   <path d="M557 530Q606 520 650 497L643 599Q602 615 558 622Z" fill="#0b0e0c"/>
+   <path d="M568 545Q603 537 635 521L630 585Q599 597 567 603Z" fill="#1b211d" stroke="#59615c" stroke-width="1"/>
+   <g fill="none" stroke="#77807a" stroke-width="4" stroke-linecap="round"><path d="M578 548 575 594"/><path d="M590 545 587 591"/><path d="M602 541 598 587"/><path d="M614 536 609 582"/><path d="M626 530 620 577"/></g>
+   </g><path class="part-placeholder" d="M557 530Q606 520 650 497L643 599Q602 615 558 622Z"/>
+  </g>
+
+  <g class="component-part" data-part="light" data-focus="light" tabindex="0" role="button" aria-label="Lichtsensor anzeigen"><circle class="part-solid" cx="537" cy="622" r="4" fill="#b08b58"/><circle class="part-placeholder" cx="537" cy="622" r="8"/></g>
+
+  <!-- Phase E: sparse studio highlights, no per-component glow. -->
+  <path d="M278 455Q303 568 397 631" fill="none" stroke="#fff" stroke-width="3" opacity=".045"/>
+  <path d="M646 446Q627 481 615 504" fill="none" stroke="#cdd5d0" stroke-width="2" opacity=".07"/>
+ </g>
+ <g class="callout-anchors" aria-hidden="true"><circle data-callout-anchor="temp1" cx="386" cy="390" r="2"/><circle data-callout-anchor="temp2" cx="518" cy="391" r="2"/><circle data-callout-anchor="peltier1" cx="275" cy="418" r="2"/><circle data-callout-anchor="peltier2" cx="650" cy="417" r="2"/><circle data-callout-anchor="fan" cx="603" cy="557" r="2"/><circle data-callout-anchor="oled" cx="426" cy="558" r="2"/><circle data-callout-anchor="buttons" cx="426" cy="611" r="2"/><circle data-callout-anchor="rgb" cx="454" cy="356" r="2"/><circle data-callout-anchor="light" cx="537" cy="622" r="2"/><circle data-callout-anchor="cup" cx="454" cy="272" r="2"/><circle data-callout-anchor="pico" cx="424" cy="554" r="2"/><circle data-callout-anchor="current1" cx="493" cy="548" r="2"/></g>
 </svg>
+</div>
+    <div class="product-v2-view" data-product-illustration="build"><svg class="product-illustration product-v2-illustration product-v2-cutaway" id="productV2Cutaway" viewBox="175 72 570 666" role="img" aria-labelledby="v2CutTitle v2CutDescription" xmlns="http://www.w3.org/2000/svg">
+ <title id="v2CutTitle">Technische Schnittansicht des intelligenten Becherhalters</title>
+ <desc id="v2CutDescription">Dieselbe kompakte Produktform mit dezent geöffneter Front. Sichtbar sind Kontaktplatte, zwei Peltier-Heizelemente, zwei Temperaturfühler, Pico-Steuerung, Leiterplatte und der hinter der Seitenlüftung sitzende Lüfter.</desc>
+ <style>.callout-anchors circle{opacity:0}.callout-anchors circle.active{opacity:.32}</style>
+ <defs>
+  <linearGradient id="cutGlass" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#71807b" stop-opacity=".45"/><stop offset=".18" stop-color="#edf2ef" stop-opacity=".68"/><stop offset=".48" stop-color="#899792" stop-opacity=".24"/><stop offset=".8" stop-color="#e8eeeb" stop-opacity=".5"/><stop offset="1" stop-color="#58645f" stop-opacity=".4"/></linearGradient>
+  <linearGradient id="cutDrink" x1="0" y1="0" x2=".65" y2="1"><stop stop-color="#d58a50"/><stop offset=".48" stop-color="#ae623c"/><stop offset="1" stop-color="#713724"/></linearGradient>
+  <linearGradient id="cutShell" x1="0" y1="0" x2=".85" y2="1"><stop stop-color="#56605a" stop-opacity=".72"/><stop offset=".46" stop-color="#343b36" stop-opacity=".55"/><stop offset="1" stop-color="#171c19" stop-opacity=".76"/></linearGradient>
+  <linearGradient id="cutMetal" x1="0" y1="0" x2="1" y2=".25"><stop stop-color="#6d7771"/><stop offset=".27" stop-color="#d3d9d5"/><stop offset=".5" stop-color="#7a8580"/><stop offset=".78" stop-color="#bbc3be"/><stop offset="1" stop-color="#515a55"/></linearGradient>
+  <linearGradient id="cutPeltier" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e9f1ee"/><stop offset=".45" stop-color="#9fcbd0"/><stop offset=".52" stop-color="#477f88"/><stop offset=".6" stop-color="#f0c4a6"/><stop offset="1" stop-color="#b65b3c"/></linearGradient>
+  <linearGradient id="cutBoard" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#357568"/><stop offset="1" stop-color="#153e38"/></linearGradient>
+  <radialGradient id="cutAmbient"><stop stop-color="#59635c" stop-opacity=".2"/><stop offset="1" stop-color="#111410" stop-opacity="0"/></radialGradient>
+  <filter id="cutShadow" x="-30%" y="-30%" width="160%" height="180%"><feGaussianBlur stdDeviation="7"/></filter>
+  <clipPath id="cutCupClip"><path d="M328 129Q454 99 580 129L560 389Q554 435 454 443Q354 435 348 389Z"/></clipPath>
+  <clipPath id="cutShellWindow"><path d="M239 409Q335 465 430 474Q548 466 674 413L650 625Q545 671 430 689Q318 672 255 631Z"/></clipPath>
+ </defs>
 
+ <ellipse cx="460" cy="390" rx="340" ry="310" fill="url(#cutAmbient)"/>
+ <ellipse class="v2-ground-shadow" cx="454" cy="706" rx="222" ry="22" fill="#050706" opacity=".43" filter="url(#cutShadow)"/>
+
+ <g class="v2-cutaway-product">
+  <!-- Same approved cup proportions and placement as the exterior. -->
+  <g class="v2-cut-cup component-part" data-part="cup" data-focus="cup" tabindex="0" role="button" aria-label="Becher und Bechererkennung anzeigen">
+   <path d="M328 129Q454 99 580 129L560 389Q554 435 454 443Q354 435 348 389Z" fill="url(#cutGlass)"/>
+   <g clip-path="url(#cutCupClip)"><path d="M345 181Q454 155 563 181L548 389Q542 418 454 426Q366 418 360 389Z" fill="url(#cutDrink)" opacity=".82"/><ellipse cx="454" cy="181" rx="109" ry="24" fill="#d48a50"/><ellipse cx="454" cy="183" rx="89" ry="16" fill="#884628" opacity=".63"/></g>
+   <ellipse cx="454" cy="129" rx="126" ry="29" fill="#cbd6d2" fill-opacity=".1" stroke="#d8dfdb" stroke-width="3"/>
+   <path d="M352 151Q355 278 368 383" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".14"/>
+  </g>
+
+  <!-- Rear shell keeps the cutaway recognizably inside the same closed product. -->
+  <g class="v2-cut-shell-rear">
+   <path d="M226 391Q234 354 284 337Q367 307 445 306Q555 305 648 336Q688 350 695 384L670 433Q552 476 430 484Q327 475 244 444Z" fill="url(#cutShell)"/>
+   <path d="M244 433Q337 475 430 484Q546 476 670 423L650 616Q642 661 430 688Q267 664 256 620Z" fill="#1c221e" opacity=".48"/>
+   <path d="M430 484Q552 476 670 423L650 616Q642 648 430 688Z" fill="#121714" opacity=".42"/>
+  </g>
+
+  <!-- Thermal cup interface: one spreader and two opposed contact jaws. -->
+  <g class="v2-thermal-interface">
+   <ellipse cx="454" cy="431" rx="128" ry="28" fill="#101512" opacity=".72"/>
+   <ellipse cx="454" cy="418" rx="122" ry="25" fill="url(#cutMetal)"/>
+   <ellipse cx="454" cy="414" rx="105" ry="18" fill="#303833" stroke="#aab4ae" stroke-width="2"/>
+   <path d="M326 377Q341 349 366 350L374 414Q355 432 333 423Z" fill="url(#cutMetal)"/>
+   <path d="M582 377Q567 349 542 350L534 414Q553 432 575 423Z" fill="url(#cutMetal)"/>
+   <path d="M340 378Q349 365 361 365L366 402Q355 411 344 406Z" fill="#b8734d" opacity=".82"/>
+   <path d="M568 378Q559 365 547 365L542 402Q553 411 564 406Z" fill="#b8734d" opacity=".82"/>
+  </g>
+
+  <!-- Two heating-only Peltier modules, mechanically captured beside the cup. -->
+  <g class="v2-peltier-pair">
+   <g class="component-part" data-part="peltier1" data-focus="peltier1" tabindex="0" role="button" aria-label="Peltier-Heizmodul links anzeigen"><path d="M284 401 326 383 331 430 289 450Z" fill="#121714" stroke="#69736d" stroke-width="3"/><path d="M291 403 320 391 324 425 295 438Z" fill="url(#cutPeltier)"/><path d="M324 409 342 399" fill="none" stroke="#d18a5c" stroke-width="5" stroke-linecap="round"/></g>
+   <g class="component-part" data-part="peltier2" data-focus="peltier2" tabindex="0" role="button" aria-label="Peltier-Heizmodul rechts anzeigen"><path d="M582 383 625 401 619 450 577 430Z" fill="#121714" stroke="#69736d" stroke-width="3"/><path d="M589 391 618 403 614 438 585 425Z" fill="url(#cutPeltier)"/><path d="M584 409 566 399" fill="none" stroke="#d18a5c" stroke-width="5" stroke-linecap="round"/></g>
+  </g>
+
+  <!-- Temperature probes stay close to the regulated mass. -->
+  <g class="v2-temperature-probes">
+   <g class="component-part" data-part="temp1" data-focus="temp1" tabindex="0" role="button" aria-label="Temperatursensor 1 anzeigen"><path d="M375 431Q377 404 385 386" fill="none" stroke="#d9ae55" stroke-width="3" stroke-linecap="round"/><rect x="379" y="378" width="12" height="18" rx="5" fill="#e9c96f" stroke="#6e5725" stroke-width="2"/></g>
+   <g class="component-part" data-part="temp2" data-focus="temp2" tabindex="0" role="button" aria-label="Temperatursensor 2 anzeigen"><path d="M525 432Q523 405 516 388" fill="none" stroke="#d9ae55" stroke-width="3" stroke-linecap="round"/><rect x="510" y="380" width="12" height="18" rx="5" fill="#e9c96f" stroke="#6e5725" stroke-width="2"/></g>
+  </g>
+
+  <!-- One organized electronics deck; no exploded parts or cable cloud. -->
+  <g class="v2-electronics-deck component-part" data-part="pico" data-focus="pico" tabindex="0" role="button" aria-label="PCB und Pico W anzeigen">
+   <path d="M324 487Q433 516 554 488L548 609Q432 634 331 608Z" fill="#0d1210" stroke="#66716a" stroke-width="3"/>
+   <path d="M345 501Q433 524 532 502L527 588Q433 608 350 588Z" fill="url(#cutBoard)"/>
+   <g fill="none" stroke="#8db8ad" stroke-width="2" opacity=".65"><path d="M364 525Q400 537 431 531L464 520"/><path d="M377 568Q414 580 455 569L503 555"/><path d="M473 518 469 576"/></g>
+   <g fill="#dbc176"><circle cx="366" cy="522" r="3"/><circle cx="379" cy="567" r="3"/><circle cx="502" cy="554" r="3"/><circle cx="472" cy="519" r="3"/></g>
+   <path d="M380 523Q423 536 468 523L465 570Q422 582 382 569Z" fill="#2f7e80" stroke="#9bc8c5" stroke-width="2"/>
+   <rect x="406" y="535" width="30" height="22" rx="3" fill="#172522"/>
+   <g fill="#c5d6ce"><rect x="389" y="534" width="9" height="5" rx="1"/><rect x="390" y="547" width="9" height="5" rx="1"/><rect x="450" y="533" width="9" height="5" rx="1"/><rect x="450" y="546" width="9" height="5" rx="1"/></g>
+   <g class="component-part" data-part="current1" data-focus="current1" tabindex="0" role="button" aria-label="Strommessung anzeigen"><rect x="481" y="520" width="27" height="22" rx="3" fill="#202825" stroke="#9aa9a1" stroke-width="1.5"/></g>
+   <path d="M332 464Q351 479 366 501M574 462Q551 480 527 502" fill="none" stroke="#b0815c" stroke-width="3" opacity=".74"/>
+  </g>
+
+  <!-- Cooling fan is only visible because the right shell is cut open. -->
+  <g class="v2-cut-fan fan-rotor component-part" data-part="fan" data-focus="fan" tabindex="0" role="button" aria-label="Lüfter anzeigen">
+   <ellipse cx="601" cy="552" rx="40" ry="48" fill="#0c100e" stroke="#68736c" stroke-width="4"/>
+   <ellipse cx="601" cy="552" rx="31" ry="38" fill="#202722"/>
+   <g fill="#78827b" opacity=".82" transform="translate(601 552) scale(.86)">
+    <g class="fan-blades"><path d="M0-7Q7-38 25-32Q33-24 12-3Z"/><path d="M6 2Q37 8 32 27Q23 36 3 12Z"/><path d="M-5 5Q-13 37-31 29Q-38 20-11-5Z"/><path d="M-6-4Q-34-13-27-31Q-16-38 5-12Z"/></g>
+   </g>
+   <ellipse cx="601" cy="552" rx="8" ry="10" fill="#303833" stroke="#9ca7a0" stroke-width="2"/>
+   <path d="M638 522Q650 549 634 582" fill="none" stroke="#82a69d" stroke-width="3" stroke-linecap="round" opacity=".65"/>
+  </g>
+
+  <!-- Translucent front shell and one crisp cut edge preserve product form. -->
+  <g class="v2-cut-shell-front" clip-path="url(#cutShellWindow)">
+   <path d="M244 433Q337 475 430 484Q546 476 670 423L650 616Q642 661 430 688Q267 664 256 620Z" fill="url(#cutShell)" opacity=".29"/>
+   <path d="M257 614Q347 644 430 655Q543 644 650 611L648 639Q621 673 430 699Q282 677 257 643Z" fill="#151a17" opacity=".7"/>
+  </g>
+  <path d="M312 476Q369 505 430 512Q508 507 564 482" fill="none" stroke="#9ba59f" stroke-width="3" opacity=".7"/>
+  <path d="M312 476 326 621Q375 641 430 648M564 482 548 620Q492 641 430 648" fill="none" stroke="#6f7973" stroke-width="2" opacity=".52"/>
+
+  <!-- Exterior identity remains: collar, side modules, OLED/buttons and vent. -->
+  <g class="v2-cut-collar">
+   <ellipse cx="454" cy="359" rx="166" ry="44" fill="#222824" opacity=".72"/>
+   <ellipse cx="454" cy="356" rx="162" ry="42" fill="none" stroke="url(#cutMetal)" stroke-width="10" opacity=".66"/>
+   <path d="M337 370Q454 405 571 370" fill="none" stroke="#0b0e0c" stroke-width="5" opacity=".72"/>
+   <g class="component-part" data-part="rgb" data-focus="rgb" tabindex="0" role="button" aria-label="RGB-Ring anzeigen"><ellipse class="rgb-light" cx="454" cy="356" rx="156" ry="39" fill="none" stroke="#a9633f" stroke-width="2" stroke-dasharray="2 24" stroke-linecap="round" opacity=".42"/></g>
+  </g>
+  <g class="v2-cut-side-modules">
+   <path d="M231 391Q239 359 281 343L301 364L291 487Q280 505 251 506Z" fill="#424a45" opacity=".82"/>
+   <path d="M686 386Q680 355 647 343L625 365L635 485Q646 504 671 503Z" fill="#353c37" opacity=".82"/>
+   <path d="M290 390Q292 427 287 462" fill="none" stroke="#b8734d" stroke-width="4" stroke-linecap="round" opacity=".55"/>
+   <path d="M631 389Q629 426 634 460" fill="none" stroke="#b8734d" stroke-width="4" stroke-linecap="round" opacity=".55"/>
+  </g>
+  <g class="v2-cut-controls">
+   <path d="M321 506Q426 530 531 510L524 633Q425 651 329 630Z" fill="#151a17" opacity=".23" stroke="#69736d" stroke-width="2"/>
+   <g class="component-part" data-part="oled" data-focus="oled" tabindex="0" role="button" aria-label="OLED anzeigen">
+   <path d="M343 528Q426 545 509 529L506 586Q426 600 346 584Z" fill="#060a09" opacity=".54"/>
+   <path d="M356 536Q426 549 496 537L494 577Q426 588 358 577Z" fill="#0c282c" opacity=".62"/>
+   <text x="376" y="567" fill="#c7ece8" font-family="Segoe UI, sans-serif" font-size="24" font-weight="500">32.4°</text>
+   <text x="465" y="566" fill="#82a5a5" font-family="Segoe UI, sans-serif" font-size="9" font-weight="600">45.0°</text>
+   </g><g class="component-part" data-part="buttons" data-focus="buttons" tabindex="0" role="button" aria-label="Taster anzeigen"><g fill="#68716c" stroke="#929b95" stroke-width="1" opacity=".7"><circle cx="363" cy="604" r="9"/><circle cx="405" cy="610" r="9"/><circle cx="447" cy="610" r="9"/><circle cx="489" cy="604" r="9"/></g></g>
+  </g>
+  <g class="v2-cut-vent" opacity=".58">
+   <path d="M557 530Q606 520 650 497L643 599Q602 615 558 622Z" fill="#0b0e0c"/>
+   <g fill="none" stroke="#7b857f" stroke-width="4" stroke-linecap="round"><path d="M578 548 575 594"/><path d="M590 545 587 591"/><path d="M602 541 598 587"/><path d="M614 536 609 582"/><path d="M626 530 620 577"/></g>
+  </g>
+  <g class="component-part" data-part="light" data-focus="light" tabindex="0" role="button" aria-label="Lichtsensor anzeigen"><circle cx="537" cy="622" r="4" fill="#b08b58"/></g>
+ </g>
+ <g class="callout-anchors" aria-hidden="true"><circle data-callout-anchor="temp1" cx="385" cy="386" r="2"/><circle data-callout-anchor="temp2" cx="516" cy="388" r="2"/><circle data-callout-anchor="peltier1" cx="306" cy="414" r="2"/><circle data-callout-anchor="peltier2" cx="601" cy="414" r="2"/><circle data-callout-anchor="fan" cx="601" cy="552" r="2"/><circle data-callout-anchor="oled" cx="426" cy="558" r="2"/><circle data-callout-anchor="buttons" cx="426" cy="611" r="2"/><circle data-callout-anchor="rgb" cx="454" cy="356" r="2"/><circle data-callout-anchor="light" cx="537" cy="622" r="2"/><circle data-callout-anchor="cup" cx="454" cy="272" r="2"/><circle data-callout-anchor="pico" cx="423" cy="548" r="2"/><circle data-callout-anchor="current1" cx="495" cy="531" r="2"/></g>
+</svg>
+</div>
    </div>
    <svg class="callout-lines" id="calloutLines" aria-hidden="true"><g id="calloutPaths"></g></svg>
    <aside class="product-panel">
@@ -295,7 +442,7 @@ function focus(id){id=aliases[id]||id;if(configurable.indexOf(id)<0)return;activ
 function previewFocus(id){hoverId=aliases[id]||id;applyFocus();}
 function visibleLineIds(){var id=hoverId||activeId;return id?[id]:[];}
 function setProductView(view){productView=view==="build"?"build":"exterior";document.body.dataset.productView=productView;all("[data-product-view]").forEach(function(button){button.setAttribute("aria-pressed",String(button.dataset.productView===productView));});requestAnimationFrame(drawLines);}
-function drawLines(){var layout=document.querySelector(".product-layout"),stage=byId("visualStage"),svg=byId("calloutLines"),host=byId("calloutPaths");if(!layout||!stage||!svg||!host)return;host.innerHTML="";if(innerWidth<=900)return;var box=layout.getBoundingClientRect(),stageBox=stage.getBoundingClientRect();if(!box.width||!box.height)return;svg.setAttribute("viewBox","0 0 "+box.width+" "+box.height);visibleLineIds().forEach(function(id){var row=document.querySelector('[data-configure="'+id+'"]'),anchor=document.querySelector('[data-callout-anchor="'+id+'"]');if(!row||!anchor)return;var rr=row.getBoundingClientRect(),ar=anchor.getBoundingClientRect(),sx=rr.left-box.left-7,sy=rr.top-box.top+rr.height/2,tx=ar.left-box.left+ar.width/2,ty=ar.top-box.top+ar.height/2,gutter=stageBox.right-box.left+10,path=document.createElementNS(svg.namespaceURI,"path"),dot=document.createElementNS(svg.namespaceURI,"circle"),route="M"+sx+" "+sy+"H"+gutter+"V"+ty+"H"+tx;path.setAttribute("d",route);path.dataset.calloutPath=id;path.classList.toggle("line-flash",flashId===id);dot.setAttribute("cx",tx);dot.setAttribute("cy",ty);dot.setAttribute("r","4");dot.dataset.calloutDot=id;host.appendChild(path);host.appendChild(dot);});}
+function drawLines(){var layout=document.querySelector(".product-layout"),stage=byId("visualStage"),svg=byId("calloutLines"),host=byId("calloutPaths");if(!layout||!stage||!svg||!host)return;host.innerHTML="";if(innerWidth<=900)return;var box=layout.getBoundingClientRect(),stageBox=stage.getBoundingClientRect(),visibleView=document.querySelector('[data-product-illustration="'+productView+'"]');if(!box.width||!box.height||!visibleView)return;svg.setAttribute("viewBox","0 0 "+box.width+" "+box.height);visibleLineIds().forEach(function(id){var row=document.querySelector('[data-configure="'+id+'"]'),anchor=visibleView.querySelector('[data-callout-anchor="'+id+'"]');if(!row||!anchor)return;var rr=row.getBoundingClientRect(),ar=anchor.getBoundingClientRect(),sx=rr.left-box.left-7,sy=rr.top-box.top+rr.height/2,tx=ar.left-box.left+ar.width/2,ty=ar.top-box.top+ar.height/2,gutter=stageBox.right-box.left+10,path=document.createElementNS(svg.namespaceURI,"path"),dot=document.createElementNS(svg.namespaceURI,"circle"),route="M"+sx+" "+sy+"H"+gutter+"V"+ty+"H"+tx;path.setAttribute("d",route);path.dataset.calloutPath=id;path.classList.toggle("line-flash",flashId===id);dot.setAttribute("cx",tx);dot.setAttribute("cy",ty);dot.setAttribute("r","4");dot.dataset.calloutDot=id;host.appendChild(path);host.appendChild(dot);});}
 function update(status,isOnline){current=status;online=!!isOnline;if(!preview){connected.clear();components.forEach(function(item){var live=item.live(current,online);if(online&&live.tone!=="neutral"&&live.tone!=="unknown"&&live.tone!=="configured")connected.add(item.id);});}components.forEach(function(item){var live=liveFor(item);all('[data-part="'+item.id+'"]').forEach(function(part){part.classList.toggle("component-fault",live.tone==="fault");});});syncAll(false);}
 function bindParts(){all("[data-focus]").forEach(function(node){function select(){focus(node.dataset.focus);}node.addEventListener("click",select);node.addEventListener("mouseenter",function(){previewFocus(node.dataset.focus);});node.addEventListener("mouseleave",function(){previewFocus("");});node.addEventListener("keydown",function(event){if(event.key==="Enter"||event.key===" "){event.preventDefault();select();}});});addEventListener("resize",drawLines,{passive:true});}
 function initialise(options){preview=!!(options&&options.preview);if(preview)components.forEach(function(item){connected.add(item.id);});var requested=new URLSearchParams(location.search);buildConfiguration();bindParts();all("[data-product-view]").forEach(function(button){button.addEventListener("click",function(){setProductView(button.dataset.productView);});});setProductView(requested.get("view"));var selected=requested.get("component");if(selected&&component(selected))focus(selected);else drawLines();}

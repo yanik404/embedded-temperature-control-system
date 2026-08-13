@@ -11,13 +11,14 @@ find_package(Python3 REQUIRED COMPONENTS Interpreter)
 
 set(DASHBOARD_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/ui-v3/src/index.html
-    ${CMAKE_CURRENT_LIST_DIR}/ui-v3/src/product.svg
     ${CMAKE_CURRENT_LIST_DIR}/ui-v3/src/experience.css
     ${CMAKE_CURRENT_LIST_DIR}/ui-v3/src/experience.js
     ${CMAKE_CURRENT_LIST_DIR}/ui-v3/src/preview.js
     ${CMAKE_CURRENT_LIST_DIR}/ui-v4/src/component-model.js
     ${CMAKE_CURRENT_LIST_DIR}/ui-v4/src/digital-twin.js
     ${CMAKE_CURRENT_LIST_DIR}/ui-v4/src/digital-twin.css
+    ${CMAKE_CURRENT_LIST_DIR}/ui-v5/src/product-v2-exterior.svg
+    ${CMAKE_CURRENT_LIST_DIR}/ui-v5/src/product-v2-cutaway.svg
     ${CMAKE_CURRENT_LIST_DIR}/tools/build_ui.py
 )
 

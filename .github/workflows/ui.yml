@@ -24,3 +24,4 @@ jobs:
           python tests/test_lwip_pbuf_contract.py
           python tests/test_web_auth_contract.py
           python tests/test_svg_configurator_browser.py
+          python tests/test_product_v2_responsive.py

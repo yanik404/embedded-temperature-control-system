@@ -37,7 +37,7 @@ jobs:
       - name: Test web authorization contract
         run: python tests/test_web_auth_contract.py
       - name: Check embedded dashboard asset
-        run: python tests/test_dashboard_static.py && python tests/test_v3_visual_contract.py && python tests/test_v4_digital_twin.py
+        run: python tests/test_dashboard_static.py && python tests/test_v3_visual_contract.py && python tests/test_v4_digital_twin.py && python tests/test_product_v2_responsive.py
       - name: Upload UF2
         uses: actions/upload-artifact@v4
         with:

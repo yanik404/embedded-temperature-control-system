@@ -1,0 +1,81 @@
+"""Validate both Product V2 views at the presentation viewport contract."""
+
+from __future__ import annotations
+
+import json
+import subprocess
+import sys
+import tempfile
+import time
+import urllib.request
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "tools"))
+import capture_ui_review as review  # noqa: E402
+
+
+VIEWPORTS = ((1920, 1080), (1440, 900), (1366, 768), (768, 1024), (390, 844))
+browser = next((candidate for candidate in review.CHROME if candidate.exists()), None)
+if browser is None:
+    print("Product V2 responsive test skipped: Chrome/Chromium not found")
+    raise SystemExit(0)
+
+with tempfile.TemporaryDirectory(prefix="becherhalter-product-v2-", ignore_cleanup_errors=True) as profile:
+    port = review.free_port()
+    process = subprocess.Popen(
+        [str(browser), "--headless=new", f"--remote-debugging-port={port}",
+         "--remote-allow-origins=*", f"--user-data-dir={profile}", "--no-first-run",
+         "--no-default-browser-check", "--hide-scrollbars", "about:blank"],
+        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+    )
+    try:
+        targets = None
+        for _ in range(80):
+            try:
+                with urllib.request.urlopen(f"http://127.0.0.1:{port}/json", timeout=.3) as response:
+                    targets = json.load(response)
+                if targets:
+                    break
+            except OSError:
+                time.sleep(.1)
+        assert targets, "browser DevTools endpoint did not start"
+        page = next(target for target in targets if target.get("type") == "page")
+        cdp = review.DevTools(page["webSocketDebuggerUrl"])
+        cdp.call("Page.enable")
+
+        for width, height in VIEWPORTS:
+            cdp.call("Emulation.setDeviceMetricsOverride", {
+                "width": width, "height": height, "deviceScaleFactor": 1,
+                "mobile": width <= 430, "screenWidth": width, "screenHeight": height,
+            })
+            cdp.call("Page.navigate", {"url": (ROOT / "preview.html").as_uri() + "?scenario=heating"})
+            time.sleep(.35)
+            for view in ("exterior", "build"):
+                expression = f"""(()=>{{
+                    window.V4Twin.setProductView('{view}');
+                    const expected=document.querySelector('[data-product-illustration="{view}"]');
+                    const other=document.querySelector('[data-product-illustration="{'build' if view == 'exterior' else 'exterior'}"]');
+                    const svg=expected.querySelector('svg');
+                    const rect=svg.getBoundingClientRect();
+                    const ids=[...document.querySelectorAll('[id]')].map(node=>node.id);
+                    return{{expected:getComputedStyle(expected).display,other:getComputedStyle(other).display,
+                        width:rect.width,height:rect.height,left:rect.left,right:rect.right,
+                        overflow:document.documentElement.scrollWidth-document.documentElement.clientWidth,
+                        duplicateIds:ids.length-new Set(ids).size,view:document.body.dataset.productView}};
+                }})()"""
+                result = cdp.call("Runtime.evaluate", {"expression": expression, "returnByValue": True})
+                metrics = result["result"]["value"]
+                assert metrics["expected"] != "none" and metrics["other"] == "none", (width, height, view, metrics)
+                assert metrics["view"] == view and metrics["duplicateIds"] == 0, (width, height, view, metrics)
+                assert metrics["width"] > 240 and metrics["height"] > 280, (width, height, view, metrics)
+                assert metrics["overflow"] <= 1, (width, height, view, metrics)
+        cdp.call("Browser.close")
+    finally:
+        try:
+            process.wait(timeout=3)
+        except subprocess.TimeoutExpired:
+            process.terminate()
+
+print("Product V2 responsive test passed: exterior/build at 1920, 1440, 1366, 768 and 390 px")
