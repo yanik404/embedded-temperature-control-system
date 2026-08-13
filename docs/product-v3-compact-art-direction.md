@@ -221,3 +221,19 @@ Before/After:
 42. Mobilegrafik ohne Mikrotexte und Lüftung vereinfacht.
 43. sämtliche technische Innenkomponenten aus der Außenansicht ferngehalten.
 44. sämtliche Callout-/Komponenten-Metadaten aus der Außenansicht ferngehalten.
+
+## Regression und Build
+
+Die generierte Produktion umfasst 91.591 Byte, bleibt vollständig lokal und
+wird deterministisch in `include/web_assets.h` eingebettet. Bestanden haben:
+
+- UI-Reproduzierbarkeit und statischer Dashboard-Vertrag
+- Product-V3- und Digital-Twin-Verträge
+- Responsive-Browsertest bei 1920, 1440, 1366, 768 und 390 Pixeln
+- Browserinteraktion für Ansicht, Konfiguration und Tastatur
+- HTTP-Großantwort, lwIP-pbuf-Ownership und Web-Auth
+- Host-C-Tests für PI-Regler, Status-LEDs und Web-Auth
+- vollständiger Pico-W-Release-Build
+
+Erzeugte Firmware:
+`build/vscode/temperature_control.uf2`.
