@@ -6,7 +6,9 @@ Dieser Lauf entwickelt ausschließlich eine neue, geschlossene Außenansicht.
 Interne Technik, Aufbauansicht, Sensoren, Kabel, Peltier-Innenleben, Fan-Rotor,
 PCB, Pico, ADC und technische Labels sind ausdrücklich nicht Bestandteil.
 
-Die neue Illustration beginnt auf einem leeren Artboard unter `ui-v6/src/`.
+Diese inzwischen verworfene Illustration begann auf einem leeren Artboard
+unter `ui-v6/src/` und liegt heute als unveränderter Fallback unter
+`ui-v6/src/product-v3-rejected-fallback.svg`.
 Keine Pfade, ViewBoxen, Proportionen oder Geometriegruppen der bestehenden
 Illustrationen werden als geometrische Basis verwendet.
 
@@ -139,8 +141,9 @@ untergeordnete Produktdetails lesbar.
 
 ## Integration und responsive Schlussabnahme
 
-Die freigegebene Außenansicht wird erst nach Abschluss der vier Formphasen aus
-`ui-v6/src/product-v3-exterior.svg` in die bestehende Seite eingebettet. Die
+Die damalige Außenansicht wurde erst nach Abschluss der vier Formphasen aus
+der heute als `ui-v6/src/product-v3-rejected-fallback.svg` erhaltenen Datei in
+die bestehende Seite eingebettet. Die
 V2-Außenansicht bleibt bytegenau als Fallback erhalten; die vorhandene
 technische Bestandsansicht bleibt funktional, wurde in diesem Lauf aber weder
 neu gezeichnet noch erweitert. Die neue Außenansicht enthält keine

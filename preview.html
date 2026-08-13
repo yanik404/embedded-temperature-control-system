@@ -32,14 +32,14 @@
 
 /* Two deliberate product views: a complete exterior and one controlled cutaway. */
 .product-view-switch{position:absolute;z-index:8;top:18px;left:50%;display:flex;align-items:center;gap:10px;transform:translateX(-50%);padding:5px;border:1px solid #3a413c;border-radius:999px;background:#111511d9;box-shadow:0 8px 28px #0005;backdrop-filter:blur(8px)}.product-view-switch button{min-height:28px;padding:0 12px;border:0;border-radius:999px;background:transparent;color:#858c86;font-size:9px;font-weight:700;letter-spacing:.09em;cursor:pointer}.product-view-switch button[aria-pressed="true"]{background:#313833;color:#f1f1ea}.product-view-switch button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}.product-view-switch i{width:1px;height:15px;background:#414843}.product-view{display:none}.product-view[data-product-illustration="exterior"]{display:block}body[data-product-view="build"] .product-view[data-product-illustration="exterior"]{display:none}body[data-product-view="build"] .product-view[data-product-illustration="build"]{display:block}.product-v3-illustration,.product-v2-illustration{width:100%;max-height:710px}.internal-hint{opacity:0;pointer-events:none}.internal-hint.focused{opacity:1;pointer-events:auto}.heat-trim{transition:opacity .4s}body[data-state="AUS"] .heat-trim,body[data-state="BEREIT"] .heat-trim{opacity:.15}.button-bank ellipse{fill:#59615c;stroke:#8d958f}.product-illustration .pico-module{stroke:#65aeb8;stroke-width:1.5}.product-illustration .to92 path:first-child{fill:#111513;stroke:#8c958f;stroke-width:1.5}.product-illustration .to92 path:last-child{fill:none;stroke:#aeb5af;stroke-width:1.5}
-.product-v3-illustration{max-height:850px;transform:translateY(-24px)}
+.product-v3-illustration{width:86%;max-height:710px;margin:0 auto;transform:translateY(-10px)}.product-v3-illustration .p3-oled-primary{fill:#c8e5e1;font-size:10px;letter-spacing:0}.product-v3-illustration .p3-oled-secondary{fill:#82a4a2;font-size:7px;letter-spacing:0}.product-v3-illustration .p3-key-labels text{fill:#828b85;font-size:3px;letter-spacing:0}@media(min-width:901px){.product-view-switch{right:18px;left:auto;transform:none}}
 
 /* Five main control-loop points; comparison and sensor stay subordinate. */
 .simple-loop{grid-template-columns:minmax(118px,1fr) minmax(100px,.7fr) minmax(118px,1fr) 38px minmax(130px,1fr) 38px minmax(130px,1fr) minmax(90px,.65fr) minmax(125px,1fr)}.loop-connector{position:relative;display:flex;min-width:0;align-items:center;justify-content:center}.loop-connector>.flow-arrow{width:100%}.compare-connector>span{position:absolute;display:grid;min-width:72px;place-items:center;padding:5px 7px;background:#0e100e;color:var(--muted);text-align:center}.compare-connector b{display:grid;width:25px;height:25px;place-items:center;border:1px solid #4b524d;border-radius:50%;font-size:13px}.compare-connector em{color:#d9ddd7;font-size:13px;font-style:normal}.compare-connector small{font-size:9px}.sensor-connector .loop-sensor{position:absolute;width:21px;height:29px;padding:3px;background:#0e100e}.feedback-route{left:6.8%;right:5.7%}
 @media(max-width:1180px){.simple-loop{grid-template-columns:minmax(95px,1fr) minmax(75px,.65fr) minmax(95px,1fr) 25px minmax(105px,1fr) 25px minmax(105px,1fr) minmax(70px,.6fr) minmax(105px,1fr)}}
 @media(max-width:900px){.product-view-switch{top:8px}.simple-loop{grid-template-columns:1fr}.loop-connector{width:1px;height:38px;justify-self:center}.loop-connector>.flow-arrow{width:1px;height:100%}.compare-connector>span{left:12px;min-width:70px}.sensor-connector .loop-sensor{left:12px}.feedback-route{left:auto;right:9px}}
-@media(max-width:900px){.product-v3-illustration{max-height:650px;transform:none}}
-@media(max-width:600px){.product-view-switch{top:4px}.product-view-switch button{padding:0 9px;font-size:8px}.product-v3-illustration{max-height:none}}
+@media(max-width:900px){.product-view[data-product-illustration="exterior"]{padding-top:34px}.product-v3-illustration{width:90%;max-height:650px;transform:none}}
+@media(max-width:600px){.product-view-switch{top:4px}.product-view-switch button{padding:0 9px;font-size:8px}.product-v3-illustration{width:112%;max-width:none;max-height:none;margin-left:-6%}.product-v3-illustration .p3-key-labels,.product-v3-illustration #product-v3-vent{display:none}}
 
 
 .product-layout{position:relative}
@@ -100,84 +100,79 @@
   <div class="product-layout">
    <div class="product-stage" id="visualStage">
     <div class="product-view-switch" role="group" aria-label="Produktansicht"><button type="button" data-product-view="exterior" aria-pressed="true">AUSSENANSICHT</button><i></i><button type="button" data-product-view="build" aria-pressed="false">AUFBAU</button></div>
-    <div class="product-view" data-product-illustration="exterior"><svg id="productIllustration" class="product-illustration product-v3-illustration" viewBox="205 75 500 680" role="img" aria-labelledby="v3ProductTitle v3ProductDesc" xmlns="http://www.w3.org/2000/svg">
- <title id="v3ProductTitle">Kompakter intelligenter Becherhalter</title>
- <desc id="v3ProductDesc">Ein breiter Glasbecher mit amberfarbenem Getränk sitzt tief in einem geschlossenen matten Graphitgehäuse mit Aluminiumaufnahme, kleinem Bedienfeld und flachem Produktfuß.</desc>
+    <div class="product-view" data-product-illustration="exterior"><svg id="productIllustration" class="product-illustration product-v3-illustration" viewBox="150 76 340 480" role="img" aria-labelledby="productV3Title productV3Desc" xmlns="http://www.w3.org/2000/svg">
+ <title id="productV3Title">Kompakter intelligenter Becherhalter</title>
+ <desc id="productV3Desc">Ein normaler Trinkbecher mit warmem Getränk steht in einem niedrigen Haltering auf einer flachen ovalen Basis.</desc>
  <defs>
-  <linearGradient id="matGlass" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#5d6863" stop-opacity=".48"/><stop offset=".16" stop-color="#eef2ef" stop-opacity=".64"/><stop offset=".36" stop-color="#a9b1ad" stop-opacity=".26"/><stop offset=".7" stop-color="#dce2de" stop-opacity=".5"/><stop offset="1" stop-color="#505a55" stop-opacity=".45"/></linearGradient>
-  <linearGradient id="matDrink" x1=".12" y1="0" x2=".78" y2="1"><stop stop-color="#df985c"/><stop offset=".34" stop-color="#bf7448"/><stop offset=".72" stop-color="#9b5639"/><stop offset="1" stop-color="#673728"/></linearGradient>
-  <linearGradient id="matBody" x1=".05" y1="0" x2=".94" y2="1"><stop stop-color="#5a625d"/><stop offset=".22" stop-color="#474e49"/><stop offset=".56" stop-color="#373d39"/><stop offset=".82" stop-color="#2d332f"/><stop offset="1" stop-color="#252a27"/></linearGradient>
-  <linearGradient id="matSide" x1="0" y1="0" x2="1" y2=".82"><stop stop-color="#3d443f"/><stop offset=".58" stop-color="#2b312d"/><stop offset="1" stop-color="#202521"/></linearGradient>
-  <linearGradient id="matBase" x1=".1" y1="0" x2=".8" y2="1"><stop stop-color="#343a36"/><stop offset=".65" stop-color="#202521"/><stop offset="1" stop-color="#151916"/></linearGradient>
-  <linearGradient id="matAluminium" x1="0" y1="0" x2="1" y2=".16"><stop stop-color="#626c66"/><stop offset=".2" stop-color="#969f99"/><stop offset=".4" stop-color="#737d77"/><stop offset=".64" stop-color="#a8b0ab"/><stop offset=".84" stop-color="#6d7771"/><stop offset="1" stop-color="#4f5853"/></linearGradient>
-  <radialGradient id="matAmbient"><stop stop-color="#667069" stop-opacity=".13"/><stop offset=".68" stop-color="#303631" stop-opacity=".045"/><stop offset="1" stop-color="#101310" stop-opacity="0"/></radialGradient>
-  <clipPath id="matCupClip"><path d="M338 139Q454 113 570 139L557 367Q553 405 454 411Q355 405 351 367Z"/></clipPath>
-  <filter id="matGroundBlur" x="-20%" y="-80%" width="140%" height="260%"><feGaussianBlur stdDeviation="8"/></filter>
-  <filter id="matContactBlur" x="-30%" y="-80%" width="160%" height="260%"><feGaussianBlur stdDeviation="4"/></filter>
+  <linearGradient id="p3Glass" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#707a75" stop-opacity=".48"/><stop offset=".18" stop-color="#edf0ed" stop-opacity=".48"/><stop offset=".43" stop-color="#aab2ad" stop-opacity=".18"/><stop offset=".78" stop-color="#d7dcd8" stop-opacity=".38"/><stop offset="1" stop-color="#59635e" stop-opacity=".46"/></linearGradient>
+  <linearGradient id="p3Drink" x1=".08" y1="0" x2=".86" y2="1"><stop stop-color="#d1854e"/><stop offset=".45" stop-color="#b36440"/><stop offset="1" stop-color="#7b402e"/></linearGradient>
+  <linearGradient id="p3Base" x1=".08" y1="0" x2=".9" y2="1"><stop stop-color="#4b524e"/><stop offset=".46" stop-color="#373d39"/><stop offset="1" stop-color="#242925"/></linearGradient>
+  <linearGradient id="p3BaseTop" x1="0" y1="0" x2="1" y2=".28"><stop stop-color="#626a65"/><stop offset=".5" stop-color="#414743"/><stop offset="1" stop-color="#303632"/></linearGradient>
+  <linearGradient id="p3Metal" x1="0" y1="0" x2="1" y2=".18"><stop stop-color="#5e6862"/><stop offset=".22" stop-color="#7f8983"/><stop offset=".52" stop-color="#59635d"/><stop offset=".78" stop-color="#737d77"/><stop offset="1" stop-color="#48524c"/></linearGradient>
+  <radialGradient id="p3Ambient"><stop stop-color="#626b65" stop-opacity=".12"/><stop offset=".72" stop-color="#2b302c" stop-opacity=".035"/><stop offset="1" stop-color="#101310" stop-opacity="0"/></radialGradient>
+  <clipPath id="p3CupClip"><path d="M215 91Q320 65 425 91L411 381Q407 417 320 422Q233 417 229 381Z"/></clipPath>
+  <filter id="p3GroundBlur" x="-20%" y="-100%" width="140%" height="300%"><feGaussianBlur stdDeviation="7"/></filter>
+  <filter id="p3ContactBlur" x="-20%" y="-120%" width="140%" height="340%"><feGaussianBlur stdDeviation="3"/></filter>
  </defs>
 
- <ellipse cx="438" cy="398" rx="235" ry="282" fill="url(#matAmbient)"/>
- <ellipse cx="454" cy="731" rx="187" ry="15" fill="#050706" opacity=".42" filter="url(#matGroundBlur)"/>
+ <g id="product-v3">
+  <ellipse cx="320" cy="313" rx="160" ry="220" fill="url(#p3Ambient)"/>
+  <ellipse cx="320" cy="535" rx="124" ry="8" fill="#050706" opacity=".38" filter="url(#p3GroundBlur)"/>
 
- <g class="v3-material-cup">
-  <path d="M338 139Q454 113 570 139L557 367Q553 405 454 411Q355 405 351 367Z" fill="url(#matGlass)" opacity=".88"/>
-  <g clip-path="url(#matCupClip)"><path d="M353 187Q454 165 555 187L545 366Q541 391 454 397Q367 391 363 366Z" fill="url(#matDrink)" opacity=".88"/><ellipse cx="454" cy="187" rx="101" ry="22" fill="#d58b51"/><ellipse cx="454" cy="189" rx="83" ry="14" fill="#7a432e" opacity=".56"/></g>
-  <ellipse cx="454" cy="139" rx="116" ry="26" fill="#d8dfdb" fill-opacity=".055" stroke="#c5ccc8" stroke-width="2.4" opacity=".9"/>
-  <path d="M355 157Q356 258 367 357" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".13"/>
-  <path d="M366 372Q454 398 542 372Q538 405 454 411Q370 405 366 372Z" fill="#7d8882" opacity=".18"/>
- </g>
+  <g id="product-v3-base" transform="matrix(1 0 0 .82 0 78)">
+   <ellipse cx="320" cy="446" rx="147" ry="29" fill="url(#p3BaseTop)"/>
+   <path d="M174 446Q187 430 227 425Q320 413 420 424Q458 429 468 446L465 497Q459 521 414 532Q321 555 222 531Q183 522 176 500Z" fill="url(#p3Base)"/>
+   <path d="M320 420Q391 416 420 424Q458 429 468 446L465 497Q459 521 414 532Q367 544 320 544Z" fill="#171b18" opacity=".18"/>
+   <path d="M177 491Q234 513 320 516Q406 513 465 491L465 508Q454 529 414 540Q321 563 222 540Q187 531 176 510Z" fill="#171b18" opacity=".82"/>
+   <path d="M216 521Q263 536 320 537Q380 535 426 522" fill="none" stroke="#77807a" stroke-width="1.2" opacity=".075"/>
+  </g>
 
- <g class="v3-material-base">
-  <path d="M267 568Q306 550 354 557Q424 570 493 563Q566 557 619 553Q647 552 660 570L656 637Q647 673 582 696Q507 718 438 718Q354 715 294 692Q266 680 258 650Z" fill="url(#matBase)"/>
-  <path d="M438 564Q535 558 619 553Q647 552 660 570L656 637Q647 673 582 696Q507 718 438 718Z" fill="#181d1a" opacity=".46"/>
-  <path d="M263 643Q331 678 437 682Q543 679 653 639L652 657Q633 685 579 703Q506 724 438 724Q356 720 298 698Q271 688 262 669Z" fill="#141916" opacity=".82"/>
-  <path d="M292 690Q360 714 438 716Q518 713 584 694" fill="none" stroke="#707974" stroke-width="2" opacity=".08"/>
- </g>
+  <g id="product-v3-holder">
+   <g id="product-v3-side-left">
+    <path d="M204 410Q209 395 228 389L238 394L236 444Q232 457 216 460Q205 453 203 442Z" fill="#353b37"/>
+    <path d="M213 413Q217 404 227 400L232 403L230 435Q228 444 220 447Q215 443 213 436Z" fill="url(#p3Metal)" opacity=".42"/>
+   </g>
+   <g id="product-v3-side-right">
+    <path d="M436 410Q431 395 412 389L402 394L404 444Q408 457 424 460Q435 453 437 442Z" fill="#292f2b"/>
+    <path d="M427 413Q423 404 413 400L408 403L410 435Q412 444 420 447Q425 443 427 436Z" fill="url(#p3Metal)" opacity=".34"/>
+   </g>
+  </g>
 
- <g class="v3-material-housing">
-  <path d="M276 385Q294 348 346 332Q397 316 454 316Q527 316 587 337Q625 350 640 382L626 565Q620 606 565 629Q509 652 438 652Q367 649 316 627Q274 607 269 565Z" fill="url(#matBody)"/>
-  <path d="M438 339Q520 329 587 348Q625 360 640 392L626 565Q620 606 565 629Q509 652 438 652Z" fill="url(#matSide)" opacity=".7"/>
-  <path d="M276 385Q294 348 346 332Q389 319 438 317L438 651Q370 649 318 628Q276 608 269 565Z" fill="#dce1dd" opacity=".026"/>
-  <path d="M291 386Q314 360 354 347" fill="none" stroke="#e1e5e2" stroke-width="3" stroke-linecap="round" opacity=".055"/>
-  <path d="M626 403Q629 477 616 546" fill="none" stroke="#d9dfdb" stroke-width="2.5" stroke-linecap="round" opacity=".07"/>
- </g>
+  <g id="product-v3-thermal-covers">
+   <path d="M208 413Q212 403 222 399L226 402L225 432Q222 440 217 443Q213 440 212 433Z" fill="#6f7973" opacity=".36"/>
+   <path d="M432 413Q428 403 418 399L414 402L415 432Q418 440 423 443Q427 440 428 433Z" fill="#68726c" opacity=".28"/>
+   <path d="M226 406Q228 417 226 428" fill="none" stroke="#a96543" stroke-width="1.5" stroke-linecap="round" opacity=".24"/>
+   <path d="M414 406Q412 417 414 428" fill="none" stroke="#a96543" stroke-width="1.5" stroke-linecap="round" opacity=".2"/>
+  </g>
 
- <!-- Closed side covers sit flush with the housing. -->
- <g class="v3-thermal-covers">
-  <path d="M279 405Q293 377 324 359Q338 352 349 360L344 464Q335 493 307 501Q289 498 279 483Z" fill="#373e39"/>
-  <path d="M292 410Q303 389 325 377Q333 372 339 377L335 453Q329 474 313 481Q302 479 295 469Z" fill="#626b65" opacity=".23"/>
-  <path d="M632 405Q620 378 591 360Q577 353 566 361L571 461Q579 489 604 497Q621 495 631 480Z" fill="#2b312d"/>
-  <path d="M619 411Q609 391 590 378Q582 373 576 378L580 451Q586 472 601 478Q612 476 618 467Z" fill="#59625c" opacity=".2"/>
-  <path d="M343 383Q345 410 341 436" fill="none" stroke="#b86f4b" stroke-width="3" stroke-linecap="round" opacity=".24"/>
-  <path d="M567 383Q565 410 569 435" fill="none" stroke="#b86f4b" stroke-width="3" stroke-linecap="round" opacity=".24"/>
- </g>
+  <g id="product-v3-cup" transform="matrix(1 0 0 .92 0 24)">
+   <path d="M215 91Q320 65 425 91L411 381Q407 417 320 422Q233 417 229 381Z" fill="url(#p3Glass)" opacity=".82"/>
+   <g clip-path="url(#p3CupClip)"><path d="M231 140Q320 120 409 140L398 376Q394 402 320 407Q246 402 242 376Z" fill="url(#p3Drink)" opacity=".84"/><ellipse cx="320" cy="140" rx="89" ry="19" fill="#d1844d"/><ellipse cx="320" cy="142" rx="74" ry="11" fill="#80432f" opacity=".48"/></g>
+   <ellipse cx="320" cy="91" rx="105" ry="26" fill="#d7ddda" fill-opacity=".025" stroke="#828b86" stroke-width="1.2" opacity=".54"/>
+   <path d="M232 112Q233 252 243 366" fill="none" stroke="#eef1ee" stroke-width="2" stroke-linecap="round" opacity=".08"/>
+   <path d="M233 379Q320 406 407 379Q402 418 320 422Q238 418 233 379Z" fill="#79827d" opacity=".18"/>
+  </g>
 
- <!-- A quiet recessed side vent completes the exterior. -->
- <g class="v3-exterior-vent" opacity=".68">
-  <path d="M573 500Q598 494 620 481L617 548Q596 558 575 562Z" fill="#151a17"/>
-  <path d="M580 510Q597 505 612 496L610 538Q595 545 580 548Z" fill="#252b27"/>
-  <g fill="none" stroke="#68716b" stroke-width="3" stroke-linecap="round"><path d="M586 514 584 542"/><path d="M594 512 592 540"/><path d="M602 508 599 537"/><path d="M609 503 606 533"/></g>
- </g>
+  <ellipse cx="320" cy="407" rx="100" ry="8" fill="#050706" opacity=".25" filter="url(#p3ContactBlur)"/>
+  <g id="product-v3-holder-ring">
+   <path d="M197 395A123 33 0 1 0 443 395A123 33 0 1 0 197 395M219 395A101 22 0 1 1 421 395A101 22 0 1 1 219 395" fill="url(#p3Metal)" fill-rule="evenodd" opacity=".9"/>
+   <path d="M208 400Q320 431 432 400" fill="none" stroke="#272d29" stroke-width="3.5" opacity=".55"/>
+   <path d="M235 402Q320 419 405 402" fill="none" stroke="#101411" stroke-width="2.5" opacity=".38"/>
+  </g>
 
- <!-- Phase 3: one integrated recess containing a small OLED and four physical keys. -->
- <g class="v3-control-panel">
-  <path d="M343 513Q391 527 438 528Q485 527 529 514L525 619Q482 632 438 633Q392 632 347 618Z" fill="#252b27"/>
-  <path d="M357 531Q397 542 438 543Q478 542 516 532L513 585Q476 596 438 597Q397 596 360 585Z" fill="#111613"/>
-  <path d="M368 540Q403 549 438 550Q472 549 504 541L502 577Q470 585 438 586Q403 585 370 577Z" fill="#0a2529"/>
-  <text x="387" y="571" fill="#c8e8e5" font-family="Segoe UI, sans-serif" font-size="20" font-weight="500">32.4 °C</text>
-  <text x="464" y="570" fill="#7fa0a0" font-family="Segoe UI, sans-serif" font-size="7.5" font-weight="600">SOLL 45.0</text>
-  <g fill="#111512" opacity=".8"><ellipse cx="375" cy="609" rx="10" ry="5"/><ellipse cx="417" cy="614" rx="10" ry="5"/><ellipse cx="459" cy="614" rx="10" ry="5"/><ellipse cx="501" cy="609" rx="10" ry="5"/></g>
-  <g fill="#48504b" stroke="#667069" stroke-width="1"><circle cx="375" cy="605" r="8"/><circle cx="417" cy="610" r="8"/><circle cx="459" cy="610" r="8"/><circle cx="501" cy="605" r="8"/></g>
-  <g fill="#9ca49f" font-family="Segoe UI, sans-serif" font-size="6" font-weight="600" text-anchor="middle"><text x="375" y="626">MODE</text><text x="417" y="632">DOWN</text><text x="459" y="632">OK</text><text x="501" y="626">UP</text></g>
- </g>
-
- <ellipse cx="454" cy="383" rx="140" ry="25" fill="#080b09" opacity=".36" filter="url(#matContactBlur)"/>
- <g class="v3-material-collar">
-  <ellipse cx="454" cy="365" rx="157" ry="42" fill="#181d1a"/>
-  <ellipse cx="454" cy="359" rx="151" ry="39" fill="none" stroke="url(#matAluminium)" stroke-width="9" opacity=".88"/>
-  <ellipse cx="454" cy="359" rx="133" ry="31" fill="#171c19"/>
-  <ellipse cx="454" cy="370" rx="113" ry="22" fill="#424a45"/>
-  <path d="M350 372Q454 395 558 372" fill="none" stroke="#080b09" stroke-width="6" opacity=".72"/>
+  <g id="product-v3-front">
+   <path d="M273 465Q320 473 367 465L365 491Q320 499 275 491Z" fill="#141b18" opacity=".88"/>
+   <path d="M280 471Q320 477 360 471L359 486Q320 492 281 486Z" fill="#092226"/>
+   <text class="p3-oled-primary" x="289" y="486" fill="#c8e5e1" font-family="Segoe UI, sans-serif" font-size="10" font-weight="550">32.4°</text>
+   <text class="p3-oled-secondary" x="342" y="486" fill="#82a4a2" font-family="Segoe UI, sans-serif" font-size="7" font-weight="550">45.0°</text>
+   <g fill="#515a54" stroke="#747d77" stroke-width=".7"><circle cx="280" cy="505" r="3.2"/><circle cx="307" cy="508" r="3.2"/><circle cx="334" cy="508" r="3.2"/><circle cx="361" cy="505" r="3.2"/></g>
+   <g class="p3-key-labels" fill="#828b85" font-family="Segoe UI, sans-serif" font-size="3" font-weight="600" text-anchor="middle"><text x="280" y="513">MODE</text><text x="307" y="516">DOWN</text><text x="334" y="516">OK</text><text x="361" y="513">UP</text></g>
+  </g>
+  <g id="product-v3-vent" fill="#68716b" opacity=".48">
+   <rect x="421" y="483" width="2" height="12" rx="1" transform="rotate(8 422 489)"/>
+   <rect x="428" y="481" width="2" height="12" rx="1" transform="rotate(8 429 487)"/>
+   <rect x="435" y="479" width="2" height="12" rx="1" transform="rotate(8 436 485)"/>
+  </g>
  </g>
 </svg>
 </div>

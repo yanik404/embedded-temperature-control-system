@@ -135,3 +135,89 @@ Kontaktflächen erneut, flacht die Flüssigkeitsellipse ab, dämpft Glas- und
 Amberkontrast und hellt die rechte Basisfacette an. Displayglas und Labels
 werden ruhiger; die Lüftung wandert nach innen und die untere Fuge wird um
 28 Einheiten verkürzt.
+
+## Qualitätsabnahme und Integration
+
+Die Schlussfassung besteht die vier isolierten Lesbarkeitstests:
+
+- 20 Prozent:
+  `build/ui-review/compact-v3-quality-scale20/1920x1080.png`
+- schwarze Silhouette:
+  `build/ui-review/compact-v3-quality-silhouette/1920x1080.png`
+- Graustufen:
+  `build/ui-review/compact-v3-quality-grayscale/1920x1080.png`
+- Blur:
+  `build/ui-review/compact-v3-quality-blur/1920x1080.png`
+
+Die aktive Grafik wird erst nach diesen Prüfungen aus
+`ui-v7/src/product-v3-exterior.svg` in den bestehenden Generator eingebunden.
+Die Außenansicht enthält keine Callout-, Fokus- oder Komponentenmetadaten. Auf
+Mobile entfallen die kleinsten Tasterlabels und Lüftungsschlitze; Becher,
+Halter, Basis, OLED und physische Taster bleiben erhalten.
+
+Pflichtscreenshots:
+
+- Produkt allein 1920 × 1080:
+  `build/ui-review/compact-v3-product-final/1920x1080.png`
+- Produkt allein 1440 × 900:
+  `build/ui-review/compact-v3-product-final/1440x900.png`
+- Aufbau-Screen 1920 × 1080:
+  `build/ui-review/compact-v3-integrated-final2/1920x1080.png`
+- Tablet 768 × 1024:
+  `build/ui-review/compact-v3-integrated-final2/768x1024.png`
+- Mobile 390 × 844:
+  `build/ui-review/compact-v3-integrated-final2/390x844.png`
+
+Before/After:
+
+- verworfene Maschinenform:
+  `build/ui-review/compact-v3-before/1920x1080.png`
+- neue kompakte Außenansicht:
+  `build/ui-review/compact-v3-product-final/1920x1080.png`
+
+## Konsolidierte Änderungen
+
+1. V6-Maschinenform als unveränderten Fallback ausgelagert.
+2. neues leeres V7-Artboard angelegt.
+3. neue ViewBox `150 76 340 480` definiert.
+4. Becher als verbindliche Referenzbreite festgelegt.
+5. Halter auf 117 % der Becherbreite begrenzt.
+6. Basis auf 141 % der Becherbreite begrenzt.
+7. Fuß auf 33 % der sichtbaren Becherhöhe abgeflacht.
+8. Becherhöhe während der Reviews zusätzlich um acht Prozent reduziert.
+9. Becher neu und leicht konisch gezeichnet.
+10. klare obere Becheröffnung geschaffen.
+11. eindeutigen gewölbten Becherboden ergänzt.
+12. nur eine ruhige Flüssigkeitsform verwendet.
+13. Flüssigkeitsellipse abgeflacht.
+14. Amber-Sättigung reduziert.
+15. Glastransparenz ohne Durchblick auf Technik aufgebaut.
+16. Glasrandkontrast in zwei Stufen reduziert.
+17. Glasreflexion verkürzt und abgedunkelt.
+18. Halter als echter durchbrochener Ring statt Plattform konstruiert.
+19. Ringfront verschlankt.
+20. Ringmetall abgedunkelt.
+21. Kontaktschatten verkleinert.
+22. linke Kontaktzone verkürzt und verschmälert.
+23. rechte Kontaktzone verkürzt und verschmälert.
+24. thermische Metallflächen innerhalb der Kontakte gekapselt.
+25. Orange auf zwei kurze matte Fugen begrenzt.
+26. Basis als flache ovale Consumer-Form neu aufgebaut.
+27. rechte Basisfacette aufgehellt.
+28. unteren Sockelstreifen abgeflacht.
+29. untere Gehäusefuge verkürzt.
+30. Bodenschatten verkleinert und enger gesetzt.
+31. Ambientlicht fokussiert.
+32. OLED auf 31,8 % der Produktbreite begrenzt.
+33. OLED ohne zusätzlichen großen Panelrahmen integriert.
+34. Anzeige auf `32.4°` und `45.0°` reduziert.
+35. vier Taster auf Radius 3,2 Einheiten verkleinert.
+36. Tasterlabels in Kontrast und Größe reduziert.
+37. Lüftung auf drei kleine rückseitige Schlitze beschränkt.
+38. Lüftung vom Rand nach innen verschoben.
+39. Ansichtsumschalter auf Desktop aus der Becheröffnung verlegt.
+40. Desktopgröße mit seitlichem Freiraum neu kalibriert.
+41. Tabletansicht mit eigenem Abstand oberhalb des Bechers versehen.
+42. Mobilegrafik ohne Mikrotexte und Lüftung vereinfacht.
+43. sämtliche technische Innenkomponenten aus der Außenansicht ferngehalten.
+44. sämtliche Callout-/Komponenten-Metadaten aus der Außenansicht ferngehalten.

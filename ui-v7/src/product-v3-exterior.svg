@@ -61,10 +61,10 @@
   <g id="product-v3-front">
    <path d="M273 465Q320 473 367 465L365 491Q320 499 275 491Z" fill="#141b18" opacity=".88"/>
    <path d="M280 471Q320 477 360 471L359 486Q320 492 281 486Z" fill="#092226"/>
-   <text x="289" y="486" fill="#c8e5e1" font-family="Segoe UI, sans-serif" font-size="10" font-weight="550">32.4°</text>
-   <text x="342" y="486" fill="#82a4a2" font-family="Segoe UI, sans-serif" font-size="7" font-weight="550">45.0°</text>
+   <text class="p3-oled-primary" x="289" y="486" fill="#c8e5e1" font-family="Segoe UI, sans-serif" font-size="10" font-weight="550">32.4°</text>
+   <text class="p3-oled-secondary" x="342" y="486" fill="#82a4a2" font-family="Segoe UI, sans-serif" font-size="7" font-weight="550">45.0°</text>
    <g fill="#515a54" stroke="#747d77" stroke-width=".7"><circle cx="280" cy="505" r="3.2"/><circle cx="307" cy="508" r="3.2"/><circle cx="334" cy="508" r="3.2"/><circle cx="361" cy="505" r="3.2"/></g>
-   <g fill="#828b85" font-family="Segoe UI, sans-serif" font-size="3" font-weight="600" text-anchor="middle"><text x="280" y="513">MODE</text><text x="307" y="516">DOWN</text><text x="334" y="516">OK</text><text x="361" y="513">UP</text></g>
+   <g class="p3-key-labels" fill="#828b85" font-family="Segoe UI, sans-serif" font-size="3" font-weight="600" text-anchor="middle"><text x="280" y="513">MODE</text><text x="307" y="516">DOWN</text><text x="334" y="516">OK</text><text x="361" y="513">UP</text></g>
   </g>
   <g id="product-v3-vent" fill="#68716b" opacity=".48">
    <rect x="421" y="483" width="2" height="12" rx="1" transform="rotate(8 422 489)"/>
