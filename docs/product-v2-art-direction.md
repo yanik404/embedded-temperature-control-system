@@ -114,3 +114,20 @@ die tiefe Aufnahme, das bündige Bedienfeld, die beiden integrierten
 Thermikmodule und die rechte Lüftungsfläche bleiben für die Innenansicht
 verbindlich. Erst ab diesem freigegebenen Stand werden technische Bauteile
 innerhalb derselben Produktform ergänzt.
+
+## Aufbauansicht
+
+Referenz: `build/ui-review/art-direction-v2-cutaway/1920x1080.png`
+
+Die technische Ebene verwendet dieselbe `175 72 570 666`-ViewBox, dieselbe
+Silhouette, Perspektive und Becherposition. Geöffnet wird ausschließlich die
+vordere Gehäusehaut. Sichtbar sind eine zentrale metallische Kontaktplatte,
+zwei gegenüberliegende Heizbacken, zwei Peltiermodule, zwei TMP36-nahe
+Messstellen, eine gemeinsame Elektronikplattform mit Pico, die
+Strommess-Elektronik und der Lüfter hinter der rechten Außenlüftung. Kurze,
+geordnete Verbindungen ersetzen frei liegende Kabel.
+
+Der erste Schnitt-Render zeigte PCB und Lüfter noch zu stark hinter OLED und
+Lüftung. Für die Freigabe wurde das Elektronikdeck angehoben, die Frontblende
+als transparente Schnittabdeckung zurückgenommen und der Lüfter verkleinert
+und tiefer hinter die Lamellen gesetzt.
