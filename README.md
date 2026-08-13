@@ -109,6 +109,7 @@ Statusfarben bleiben bewusst sparsam: Orange zeigt Heizenergie, Grün einen best
 Die bewährte Render-, API- und Chart-Basis liegt unter `ui-v3/src/`; die V4-Digital-Twin-Schicht liegt getrennt unter `ui-v4/src/`. `ui/src/` bleibt als jederzeit wiederherstellbare Observatory-V2-Basis im Repository:
 
 - `index.html` – semantische Oberfläche und SVG-Systemdarstellungen
+- `product.svg` – mechanisch zusammenhängende 2.5D-Produktillustration, die der Generator inline einbettet
 - `experience.css` – vierstufige Simple-Digital-Twin-Komposition und responsive Layouts
 - `experience.js` – Read-only-Live-API, Token-Bedienung, Chart und technische Details
 - `preview.js` – ausschließlich lokale Simulation
@@ -116,7 +117,7 @@ Die bewährte Render-, API- und Chart-Basis liegt unter `ui-v3/src/`; die V4-Dig
 - `ui-v4/src/digital-twin.js` – direkte SVG-Komponenteninteraktion, ehrliche Live-Zustände und Preview-Konfigurator
 - `ui-v4/src/digital-twin.css` – SVG-Komponentenstatus und Fokusdarstellung
 
-Die ausführbaren Vergleiche unter `ui-v3/prototypes/` enthalten einen echten Three.js-Prototyp, einen Custom-WebGL-Prototyp und drei funktionierende Sollwert-Bedienkonzepte. V3-Technologieentscheidung und V4-Digital-Twin-Architektur stehen in `docs/ui-v3-architecture.md` und `docs/ui-v4-architecture.md`.
+Die stabilisierte Produktion verwendet ausschließlich die leichtgewichtige Inline-SVG-/DOM-/Canvas-Architektur. Frühere WebGL-, X-Ray-, Scroll-Mode- und Bedienlabor-Prototypen wurden nach Abschluss der Technologieentscheidung entfernt. Die aktuelle Architektur steht in `docs/ui-v3-architecture.md` und `docs/ui-v4-architecture.md`.
 
 `tools/build_ui.py` erzeugt daraus `preview.html`, die minifizierte Single-File-Produktion unter `ui/dist/dashboard.production.html`, Größenstatistiken und `include/web_assets.h`. Die Produktion enthält keine Simulation, keine externen URLs, keine CDN-Abhängigkeit und benötigt für Assets keinen weiteren HTTP-Request. Die CMake-Firmware hängt vom Generator ab; manuell lässt er sich mit dem im CMake-Cache erkannten Python ausführen:
 
@@ -125,7 +126,7 @@ python tools/build_ui.py
 python tools/build_ui.py --check
 ```
 
-`powershell -ExecutionPolicy Bypass -File tools/capture_ui_review.ps1 -Round manual` rendert die sieben Referenz-Viewports automatisiert mit exakt gesetzten Chrome-/Edge-DevTools-Gerätemetriken nach `build/ui-review/manual/`. `python tools/audit_ui_layout.py` prüft AUFBAU, REGELKREIS und LIVE bei denselben sieben Viewports auf sichtbare Kollisionen und horizontalen Overflow. Der SVG-Qualitätslauf mit drei Screenshot-Runden und über 30 konkreten Verbesserungen ist in `docs/product-explainer-review.md` dokumentiert.
+`powershell -ExecutionPolicy Bypass -File tools/capture_ui_review.ps1 -Round manual` rendert die sieben Referenz-Viewports automatisiert mit exakt gesetzten Chrome-/Edge-DevTools-Gerätemetriken nach `build/ui-review/manual/`. `python tools/audit_ui_layout.py` prüft AUFBAU, REGELKREIS und LIVE bei denselben sieben Viewports auf sichtbare Kollisionen und horizontalen Overflow. Ausgangsstand, zwei Review-Runden, mechanische/thermische Plausibilität und die finalen Screenshotpfade stehen in `docs/product-quality-review.md`.
 
 ## Softwarearchitektur
 

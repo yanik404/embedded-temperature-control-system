@@ -1,125 +1,64 @@
-# V3 — Interactive Product Experience
+# V3/V4 product interface architecture
 
-## Secured baseline
+## Scope and baseline
 
-- Branch: `feature`
-- Restorable Observatory V2 commit: `e24098c97c19e75cfdfd0950487a0701772ff0b3`
-- Local and `origin/feature` matched before V3 work began.
-- The working tree was clean.
+The current interface continues on branch `feature` from stable baseline
+`d29a6e55de549aaf733330dd6208564b62290b58`. It does not alter firmware state,
+networking, API routes, authentication or safety decisions.
 
-V3 is developed under `ui-v3/` until its generated preview and embedded asset pass the
-existing dashboard, lwIP, controller and LED regressions. No firmware, API, network or
-safety module is part of the visual rewrite.
-
-## Product direction
-
-V3 treats the physical heater as the interface. A controlled 3/4 product view occupies the
-viewport; `w(t)`, comparator, PI, `u(t)`, Peltier, thermal plant, TMP36 and `y(t)` form a
-spatial loop around the actual components. The lower horizon is the live timeline. Controls
-are instruments embedded into this scene, not form widgets in cards.
-
-Modes alter one scene rather than navigate between dashboard pages:
-
-- **Overview:** essential process values, integrated loop and control.
-- **Thermal:** heat field, energy transfer, sensor scan and live timeline receive emphasis.
-- **Engineering:** exploded product, electronic nodes, power/sensor signal routes and PI
-  decomposition.
-- **Presentation:** full-screen product, loop and timeline with restrained supporting data.
-
-## Technology experiments
-
-Three executable comparisons live under `ui-v3/prototypes/`.
-
-| Criterion | Three.js prototype | Custom WebGL prototype | SVG/Canvas continuation |
-|---|---|---|---|
-| Product depth | Excellent | Excellent for controlled camera | Good pseudo-3D |
-| Lighting/materials | Rich PBR abstractions | Purpose-built analytical light | Authored gradients |
-| Postprocessing | Easy but expensive | Single integrated shader pass | CSS/SVG filters |
-| Preview size | Large external module | Small authored engine | Smallest |
-| Pico flash | Poor unless heavily bundled | Good | Excellent |
-| Draw-call control | Indirect | Exact | Not GPU-mesh based |
-| Maintenance | Library/API upgrades | Small project-specific API | Familiar but complex SVG |
-| Preview/production parity | Weak | Exact | Exact |
-
-The Three.js experiment uses a real `Scene`, `PerspectiveCamera`, `WebGLRenderer`, physical
-materials, multiple lights, fog, transparency and an exploded-state transition. It is not a
-mock-up. The custom experiment creates the product from generated mesh primitives with a
-small shader, controlled light/fog and exact draw-call accounting. The SVG/Canvas baseline is
-represented by Observatory V2 and remains the no-WebGL fallback.
-
-## Selected production direction
-
-**Custom WebGL product renderer + DOM/SVG signal layer + Canvas timeline.**
-
-Reasons:
-
-1. The fixed product camera needs only a small mesh/material subset, not a general scene
-   framework.
-2. Preview and Pico can use the same renderer and authored shaders.
-3. There is no CDN, npm runtime or second visual implementation.
-4. Product state, exploded view and thermal energy can be expressed with exact shader
-   uniforms and transforms.
-5. SVG remains the clearest medium for control-theory notation and feedback paths.
-6. Canvas remains appropriate for a data-heavy, continuously changing timeline.
-
-Three.js remains a committed design/engineering benchmark, not production code. The latest
-prototype reference during exploration was Three.js 0.185.1. No external library is shipped
-to the Pico.
-
-### Postprocessing experiment
-
-`three-product.html` now contains a real `EffectComposer` comparison. Query `?fx=bloom`,
-`?fx=ssao`, `?fx=dof` or `?fx=all` selects Unreal Bloom, screen-space AO, depth of field or the
-combined restrained study. ACES filmic tone mapping and soft shadows are always active.
-
-- Subtle bloom improved the heating plate but higher strength clipped the material, so the test
-  strength was reduced to 0.16.
-- AO materially improved part contact and was retained as a cheaper two-distance calculation in
-  the custom production shader.
-- Depth of field reduced the engineering legibility and remains an opt-in prototype comparison.
-- Chromatic aberration was evaluated against the product goals and rejected: it adds no control
-  or physical meaning and degrades fine technical text.
-- ACES-like highlight compression, fog and vignette are retained in the custom shader without a
-  multi-pass framebuffer chain.
-
-## Rendering architecture
+## Rendering stack
 
 ```text
-/api/status or preview simulator
-                │
-          normalized model
-     ┌──────────┼───────────┐
- custom WebGL   SVG/DOM     Canvas
- product scene  control loop timeline
-     └──────────┼───────────┘
-           shared state/motion
+/api/status or local preview simulator
+                |
+         normalized live state
+      +---------+----------+
+      |         |          |
+ inline SVG   DOM/SVG    Canvas 2D
+ product      control     timeline
+      +---------+----------+
+                |
+       one generated HTML file
 ```
 
-- Product canvas: DPR capped, 60 FPS preview target, 30 FPS embedded/low-power target.
-- WebGL fallback: authored SVG product scene, always present below the canvas.
-- Control loop: SVG paths and semantic DOM values remain keyboard/screen-reader legible.
-- Timeline: retained-mode data, one scheduled draw per status update.
-- No response-sized buffers are added to the Pico.
+- `ui-v3/src/index.html` owns semantic sections, values and command controls.
+- `ui-v3/src/product.svg` owns the readable product artwork. The build generator
+  embeds it inline; it is not a second HTTP asset.
+- `ui-v3/src/experience.css` owns the quiet four-section composition and the seven
+  required responsive layouts.
+- `ui-v3/src/experience.js` owns live rendering, charting and authenticated commands.
+- `ui-v3/src/preview.js` owns demo data only and is excluded from production.
+- `ui-v4/src/component-model.js` maps the nineteen real hardware concepts to API data.
+- `ui-v4/src/digital-twin.js` provides direct SVG selection and preview-only add/remove.
 
-## Control experiment
+There is no WebGL, Three.js, fake-3D canvas, X-Ray mode, scroll mode or remote asset.
+The first frame is complete without JavaScript; JavaScript only adds live values,
+component state, fan motion and interaction.
 
-Three live controls are compared in `control-lab.html`:
+## Product model
 
-1. Rotary thermal arc.
-2. Vertical temperature rail.
-3. Direct large plus/minus control.
+The authored 2.5D projection uses one light direction and one material vocabulary:
 
-The selected V3 control combines the directness of large ± targets with a spatial orbital
-arc. Pure drag is not the only path: keyboard arrows and a numeric input remain available.
-The vertical rail is excellent on mobile but weaker in the 3/4 desktop composition; it is
-therefore used as a compact mobile adaptation, not the primary desktop instrument.
+- translucent, slightly conical drinks cup with a separate liquid surface;
+- dark structural base, curved guides, upper ring and recessed lower support;
+- thin ceramic Peltier stacks with dark intermediate layers;
+- curved aluminium contact jaws at cup-wall height;
+- two clipped TO-92 sensors with three routed leads each;
+- tray-mounted project PCB with Pico W, USB shell, TLA2024, drivers, connectors,
+  capacitors, traces, mounting holes and status LEDs;
+- integrated OLED module and four physical front buttons;
+- six-fin aluminium sink and screwed six-blade fan housing.
 
-## Safety and data contracts
+The heat state uses only restrained orange contact gradients. The fan rotates slowly only
+when live data reports fan power. Reduced-motion clients receive static product state.
 
-- START remains enabled only from the server-provided `start_allowed` state.
-- The UI never predicts or grants safety.
-- STOP remains available whenever the live API is reachable.
-- Missing hardware renders as neutral/unavailable, never fabricated OK.
-- ERROR removes thermal output visually and shows the server fault reason.
-- OFFLINE freezes data, disables commands and preserves the product/history context.
-- API endpoints and polling interval remain unchanged.
+## Interaction and safety
+
+Preview mode exposes six direct component controls: Sensor 1/2, Peltier 1/2, Display and
+Fan. Missing components show a faint dashed installation silhouette and a small plus at the
+real mounting position. The 44 px accessible hit area surrounds a 20–24 px visible marker.
+A single click adds or removes the local illustration state.
+
+Production never simulates hardware. It consumes only real API state. START and setpoint
+remain protected by the Pico-issued token. STOP remains deliberately available without a
+token whenever the live API is reachable. Firmware remains the sole safety authority.
