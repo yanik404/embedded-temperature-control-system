@@ -142,6 +142,7 @@ def minify_javascript(source: str) -> str:
 
 def compose(*, preview: bool, minified: bool) -> tuple[str, str, str]:
     template = read("index.html")
+    template = template.replace("<!--__PRODUCT_SVG__-->", read("product.svg"))
     css = "\n\n".join([read("experience.css"), read_v4("digital-twin.css")])
     scripts = [read_v4("component-model.js"), read_v4("digital-twin.js")]
     if preview:

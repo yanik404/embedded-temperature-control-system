@@ -13,8 +13,26 @@
 .fan-rotor{animation:none!important}.fan-blades{transform-origin:0 0}.product-stage.fan-active .fan-blades{animation:fanBladeTurn var(--fan-period,3s) linear infinite}@keyframes fanBladeTurn{to{transform:rotate(360deg)}}@media(prefers-reduced-motion:reduce){.fan-blades{animation:none!important}}
 .component-part.component-fault{filter:drop-shadow(0 0 7px #eb686899)}
 
+/* Mechanical product quality pass. These rules deliberately refine the existing quiet SVG layout. */
+.product-section{padding-top:calc(var(--header) + 42px);background:radial-gradient(circle at 39% 48%,#252b26 0,transparent 48%)}
+.product-section .section-heading{max-width:620px}.product-section .section-heading h1{font-size:clamp(34px,3.35vw,54px)}
+.product-layout{grid-template-columns:minmax(720px,2.7fr) minmax(280px,1fr);gap:28px;max-width:1540px;margin-top:4px}.product-stage{min-height:660px}.product-illustration{max-height:710px}
+.product-panel{padding:14px 0}.product-summary{padding-bottom:18px}.product-summary>p{margin:12px 0 0;font-size:13px}.product-summary dl{margin-top:14px}.product-summary dl div{padding:9px 0}.component-focus{min-height:168px;padding:18px 0}.component-focus h2{font-size:21px}.component-focus>p{font-size:13px;line-height:1.45}.simple-states{margin-top:13px}.simple-states span{padding:7px}.component-list-section{padding-top:17px}.component-list{gap:5px;margin-top:9px}.component-item{min-height:40px;padding:6px 9px}.component-list-section>p{font-size:11px}
+.component-control{width:44px;height:44px;border:0;background:transparent;box-shadow:none;font-size:0}.component-control:before{content:"+";display:grid;width:24px;height:24px;place-items:center;border:1px solid #adb4ae;border-radius:50%;background:#151815eb;color:#f0f1eb;font-size:16px;box-shadow:0 4px 12px #0008}.component-control.connected:before{content:"✓";width:20px;height:20px;border-color:#67927a;background:#203129;color:#a9d5b8;font-size:12px}.component-control:hover,.component-control:focus-visible,.component-control.active{border:0;color:var(--heat)}.component-control:hover:before,.component-control:focus-visible:before,.component-control.active:before{border-color:var(--heat);color:var(--heat)}.component-control span{top:39px;font-size:10px}
+.product-illustration .button-bank ellipse{fill:#626a65;stroke:#aeb5b0}.product-illustration .button-bank path{fill:#353b37;stroke:#78807b}.product-illustration .physical-buttons text{font-size:7px;fill:#cdd2cd}.product-illustration .to92 path:first-child{fill:#111513;stroke:#818a84;stroke-width:2}.product-illustration .to92 path:last-child,.product-illustration .sensor-wire path{fill:none;stroke:#a5ada7;stroke-width:2}.product-illustration .contact-face{transition:fill .6s}.heat-wash{mix-blend-mode:screen}body[data-state="AUFHEIZEN"] .contact-face,body[data-state="HALTEN"] .contact-face{fill:#bf7c59}.oled-temp{font-size:16px!important}.oled-target{font-size:7px!important}.status-leds circle{fill:var(--state)}
 
-.component-item.active{border-color:var(--heat);color:#ffd0b4}.component-item:not(.connected){color:var(--muted)}.component-item:not(.connected) b{background:#252925;color:#c2c6c0}.preview-mode .component-control.connected{opacity:0}.preview-mode .component-control:not(.connected),.preview-mode .component-control.connected:hover,.preview-mode .component-control.connected:focus-visible,.preview-mode .component-control.connected.active{opacity:1}body:not(.preview-mode) .component-control{opacity:0}body:not(.preview-mode) .product-stage:hover .component-control{opacity:.18}body:not(.preview-mode) .component-control:hover,body:not(.preview-mode) .component-control:focus-visible,body:not(.preview-mode) .component-control.active{opacity:1}
+.loop-section{min-height:780px}.simple-loop{grid-template-columns:minmax(105px,1fr) 38px minmax(120px,1fr) 38px minmax(110px,1fr) 38px minmax(120px,1fr) 38px minmax(190px,1.4fr) 38px minmax(130px,1fr);max-width:1380px;margin-top:76px;padding-bottom:116px}.loop-step{min-height:150px}.loop-step em{min-height:31px;font-size:23px}.compare-step,.controller-step{gap:2px}.compare-symbol,.pi-symbol{display:grid;width:39px;height:39px;place-items:center;margin-bottom:4px;border:1px solid #4b524d;border-radius:50%;color:#d8dcd6;font-size:19px}.pi-symbol{width:48px;border-radius:4px;font-weight:700}.plant-step{min-width:0}.loop-product{width:80px;height:48px;margin-bottom:5px;overflow:visible}.loop-product .loop-jaw{fill:#eee9df;stroke:#8b918d}.loop-product .loop-cup{fill:#a16748;fill-opacity:.68;stroke:#dae3df}.loop-product .loop-rim{fill:none;stroke:#e9efec}.plant-step small b{color:var(--heat);font-weight:600}.plant-step>i{margin-top:3px;color:var(--muted);font-size:10px;font-style:normal}.loop-sensor{width:25px;height:34px;margin-bottom:4px}.loop-sensor path:first-child{fill:#151918;stroke:var(--blue);stroke-width:2}.loop-sensor path:last-child{fill:none;stroke:var(--blue);stroke-width:2}.sensor-step em{font-size:20px}.feedback-route{left:11.2%;right:4.7%;bottom:44px}.feedback-route span{bottom:-11px}.feedback-route span{font-size:10px}
+
+.live-overview{max-width:1040px;margin-top:62px;margin-bottom:72px;gap:70px}.live-facts{column-gap:46px}.live-facts div{padding:20px 0}.live-facts div:nth-child(odd){padding-right:0}.timeline-layer{max-width:1240px}.timeline-layer header{min-height:72px}#timelineCanvas{height:310px}.control-panel,.safety-summary{max-width:1040px}.control-lock h3{margin:0;font-size:18px}.control-lock p{font-size:13px}.control-lock>span{font-size:22px}
+
+@media(max-width:1180px){.product-layout{grid-template-columns:minmax(580px,2.15fr) minmax(280px,1fr)}.product-stage{min-height:570px}.product-illustration{max-height:610px}.simple-loop{grid-template-columns:minmax(85px,1fr) 24px minmax(100px,1fr) 24px minmax(90px,1fr) 24px minmax(100px,1fr) 24px minmax(150px,1.25fr) 24px minmax(105px,1fr)}}
+@media(max-width:900px){.product-layout{grid-template-columns:1fr}.product-stage{min-height:0}.product-illustration{max-height:650px}.product-panel{grid-template-columns:1fr 1fr}.simple-loop{grid-template-columns:1fr;max-width:470px;margin-top:54px;padding:0 45px 34px}.loop-step{min-height:114px}.feedback-route{left:auto;right:9px;top:64px;bottom:64px}.live-overview{gap:40px}}
+@media(max-width:600px){.product-section .section-heading h1{font-size:34px}.product-stage{margin:18px -18px 0}.product-panel{display:block}.component-focus{min-height:0}.component-list{grid-template-columns:1fr 1fr}.product-illustration{max-height:none}.simple-loop{padding-right:39px;padding-left:25px}.loop-product{width:72px}.live-overview{gap:34px}.temperature-hero strong{font-size:82px}.live-facts{column-gap:16px}.timeline-layer header{gap:8px}.timeline-layer button{padding:0 10px}}
+.controller-step #piNodeState{color:var(--muted);font-size:11px;text-transform:none}.controller-step>strong{margin-top:5px}
+@media(max-width:600px){.product-stage{overflow:hidden}.product-illustration{width:122%;max-width:none;margin-left:-11%}}
+
+
+.component-item.active{border-color:var(--heat);color:#ffd0b4}.component-item:not(.connected){color:var(--muted)}.component-item:not(.connected) b{background:#252925;color:#c2c6c0}.preview-mode .component-control.connected{opacity:0}.preview-mode .component-control:not(.connected),.preview-mode .component-control.connected:hover,.preview-mode .component-control.connected:focus-visible,.preview-mode .component-control.connected.active{opacity:1}body:not(.preview-mode) .component-control{opacity:0}body:not(.preview-mode) .product-stage:hover .component-control{opacity:.12}body:not(.preview-mode) .component-control:hover,body:not(.preview-mode) .component-control:focus-visible,body:not(.preview-mode) .component-control.active{opacity:1}
 </style>
 </head>
 <body data-state="AUS" data-live="false">
@@ -27,160 +45,134 @@
 
 <main>
  <section class="page-section product-section" id="aufbau" aria-labelledby="aufbauTitle">
-  <header class="section-heading"><span>01</span><div><p>AUFBAU</p><h1 id="aufbauTitle">Ein Becherhalter. Ein System.</h1><small>Tippe direkt auf ein Bauteil, um seine Aufgabe zu verstehen.</small></div></header>
+  <header class="section-heading"><span>01</span><div><p>AUFBAU</p><h1 id="aufbauTitle">Baue und prüfe den Becherhalter.</h1></div></header>
   <div class="product-layout">
    <div class="product-stage" id="visualStage">
-    <svg class="product-illustration" id="productIllustration" viewBox="0 0 1000 720" role="img" aria-labelledby="productTitle productDescription">
-     <title id="productTitle">Technische Produktillustration des Becherhalters</title>
-     <desc id="productDescription">Ein Getränkebecher sitzt in einer Halterung. Zwei seitliche Peltiermodule, Kontaktbacken, Temperatursensoren, Kühlkörper, Lüfter, Platine, Display und Taster bilden ein gemeinsames Gerät.</desc>
-     <defs>
-      <linearGradient id="caseTop" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#59605b"/><stop offset=".5" stop-color="#313633"/><stop offset="1" stop-color="#1c201e"/></linearGradient>
-      <linearGradient id="caseFront" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#303532"/><stop offset="1" stop-color="#171a18"/></linearGradient>
-      <linearGradient id="metalTop" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#eef0ea"/><stop offset=".32" stop-color="#9da49f"/><stop offset=".7" stop-color="#59605c"/><stop offset="1" stop-color="#c7cbc5"/></linearGradient>
-      <linearGradient id="metalSide" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#424946"/><stop offset=".5" stop-color="#929994"/><stop offset="1" stop-color="#343a37"/></linearGradient>
-      <linearGradient id="glass" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#a9c4c4" stop-opacity=".12"/><stop offset=".25" stop-color="#e9f5f1" stop-opacity=".52"/><stop offset=".55" stop-color="#bfd5d3" stop-opacity=".2"/><stop offset=".8" stop-color="#f2faf7" stop-opacity=".42"/><stop offset="1" stop-color="#72908d" stop-opacity=".1"/></linearGradient>
-      <linearGradient id="drink" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#c97d47"/><stop offset=".45" stop-color="#8e4d2e"/><stop offset="1" stop-color="#54281e"/></linearGradient>
-      <linearGradient id="ceramic" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#faf9f2"/><stop offset=".55" stop-color="#cfd3cc"/><stop offset="1" stop-color="#8c938e"/></linearGradient>
-      <linearGradient id="pcb" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#174735"/><stop offset=".5" stop-color="#0d3528"/><stop offset="1" stop-color="#09271e"/></linearGradient>
-      <radialGradient id="heat"><stop stop-color="#f08343" stop-opacity=".46"/><stop offset="1" stop-color="#f08343" stop-opacity="0"/></radialGradient>
-      <filter id="shadow" x="-30%" y="-30%" width="160%" height="180%"><feDropShadow dx="0" dy="18" stdDeviation="16" flood-color="#000" flood-opacity=".45"/></filter>
-      <filter id="softShadow" x="-30%" y="-30%" width="160%" height="180%"><feDropShadow dx="0" dy="7" stdDeviation="6" flood-color="#000" flood-opacity=".38"/></filter>
-     </defs>
+    <svg class="product-illustration" id="productIllustration" viewBox="0 0 1100 760" role="img" aria-labelledby="productTitle productDescription">
+ <title id="productTitle">Technische Produktillustration des Becherhalters</title>
+ <desc id="productDescription">Ein konischer Getränkebecher sitzt mechanisch geführt auf einer Bodenauflage. Zwei dünne seitliche Peltiermodule, gebogene Aluminium-Kontaktbacken, zwei TMP36-Fühler, Kühlkörper, Lüfter, Hauptplatine, Pico W, OLED und vier Taster bilden einen gemeinsamen Prototyp.</desc>
+ <defs>
+  <linearGradient id="caseTop" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#707873"/><stop offset=".18" stop-color="#424944"/><stop offset=".64" stop-color="#292e2b"/><stop offset="1" stop-color="#181c1a"/></linearGradient>
+  <linearGradient id="caseFront" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#353b37"/><stop offset="1" stop-color="#171b19"/></linearGradient>
+  <linearGradient id="metalTop" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f0f2ee"/><stop offset=".2" stop-color="#b9bfba"/><stop offset=".55" stop-color="#656d68"/><stop offset=".82" stop-color="#939a95"/><stop offset="1" stop-color="#d5d8d3"/></linearGradient>
+  <linearGradient id="metalSide" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#3e4541"/><stop offset=".42" stop-color="#b7bdb8"/><stop offset=".68" stop-color="#68706b"/><stop offset="1" stop-color="#292f2c"/></linearGradient>
+  <linearGradient id="glass" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#75908d" stop-opacity=".12"/><stop offset=".18" stop-color="#edf7f3" stop-opacity=".38"/><stop offset=".46" stop-color="#b8ccca" stop-opacity=".12"/><stop offset=".78" stop-color="#f7fbf8" stop-opacity=".32"/><stop offset="1" stop-color="#607b78" stop-opacity=".14"/></linearGradient>
+  <linearGradient id="drink" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#c67843"/><stop offset=".55" stop-color="#914b2e"/><stop offset="1" stop-color="#54261d"/></linearGradient>
+  <linearGradient id="ceramic" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fffef8"/><stop offset=".52" stop-color="#d8dcd6"/><stop offset="1" stop-color="#969d98"/></linearGradient>
+  <linearGradient id="pcb" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#195441"/><stop offset=".5" stop-color="#0e3b2e"/><stop offset="1" stop-color="#07261d"/></linearGradient>
+  <radialGradient id="heat"><stop stop-color="#f18443" stop-opacity=".42"/><stop offset=".55" stop-color="#df6c35" stop-opacity=".14"/><stop offset="1" stop-color="#df6c35" stop-opacity="0"/></radialGradient>
+  <filter id="shadow" x="-30%" y="-30%" width="160%" height="190%"><feDropShadow dx="0" dy="18" stdDeviation="15" flood-color="#000" flood-opacity=".5"/></filter>
+  <filter id="softShadow" x="-30%" y="-30%" width="160%" height="180%"><feDropShadow dx="0" dy="7" stdDeviation="5" flood-color="#000" flood-opacity=".42"/></filter>
+  <filter id="contactShadow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="5"/></filter>
+ </defs>
 
-     <ellipse class="ground-shadow" cx="510" cy="665" rx="390" ry="34"/>
-     <g class="device-base" filter="url(#shadow)">
-      <path d="M185 500 500 423 833 502 518 594Z" fill="url(#caseTop)" stroke="#777e79"/>
-      <path d="M185 500v83l333 91v-80Z" fill="#222724" stroke="#535a56"/>
-      <path d="M518 594v80l315-91v-81Z" fill="url(#caseFront)" stroke="#4c534f"/>
-      <path d="M213 509 500 440l300 70-286 82Z" fill="#151917" stroke="#3d4540"/>
-      <circle cx="237" cy="565" r="7" fill="#090b0a" stroke="#777"/><circle cx="781" cy="552" r="7" fill="#090b0a" stroke="#777"/>
-     </g>
+ <ellipse class="ground-shadow" cx="545" cy="701" rx="430" ry="34"/>
+ <g class="rear-frame" filter="url(#softShadow)">
+  <path d="M228 410 286 390v230l-58 20Z" fill="#252a27" stroke="#59615c" stroke-width="3"/><path d="M812 390 870 410v230l-58-20Z" fill="#1c211e" stroke="#59615c" stroke-width="3"/>
+  <path d="M248 421 300 404M248 454l52-17M248 487l52-17M248 520l52-17M248 553l52-17M248 586l52-17" stroke="#838b86" stroke-width="9"/><path d="M850 421 798 404M850 454l-52-17M850 487l-52-17M850 520l-52-17M850 553l-52-17M850 586l-52-17" stroke="#747c77" stroke-width="9"/>
+  <path d="M286 422 324 409v176l-38 14ZM812 422l-38-13v176l38 14Z" fill="#141816" stroke="#636b66"/>
+ </g>
 
-     <g class="rgb-ring component-part" data-part="rgb" data-focus="rgb" tabindex="0" role="button" aria-label="RGB-Statusring anzeigen">
-      <ellipse cx="505" cy="390" rx="190" ry="67" fill="none" stroke="#49504c" stroke-width="24"/>
-      <ellipse class="rgb-light" cx="505" cy="390" rx="190" ry="67" fill="none" stroke="#72c797" stroke-width="7" stroke-dasharray="4 34" stroke-linecap="round"/>
-     </g>
+ <g class="device-base" filter="url(#shadow)">
+  <path d="M178 529 534 440 895 529 541 633Z" fill="url(#caseTop)" stroke="#78807b" stroke-width="2"/><path d="M178 529v91l363 105v-92Z" fill="#222724" stroke="#515954" stroke-width="2"/><path d="M541 633v92l354-105v-91Z" fill="url(#caseFront)" stroke="#4d5550" stroke-width="2"/>
+  <path d="M209 536 534 458l329 80-322 92Z" fill="#131715" stroke="#444b47" stroke-width="3"/><path d="M262 511 307 500v110l-45 13ZM807 500l44 11v112l-44-13Z" fill="#343a36" stroke="#68706b"/>
+  <circle cx="224" cy="596" r="8" fill="#090b0a" stroke="#7d857f"/><circle cx="850" cy="586" r="8" fill="#090b0a" stroke="#7d857f"/>
+ </g>
 
-     <g class="holder-assembly">
-      <path d="M304 370 350 328v181l-46 43Z" fill="#282d2a" stroke="#777e79"/>
-      <path d="M706 370 658 328v181l48 43Z" fill="#202522" stroke="#646b67"/>
-      <path d="M336 510 505 466l169 44-169 54Z" fill="url(#metalTop)" stroke="#bcc1bb"/>
-      <path d="M336 510v31l169 54v-31Z" fill="#4b514e"/><path d="M505 564v31l169-54v-31Z" fill="#303633"/>
-      <ellipse cx="505" cy="495" rx="104" ry="31" fill="#171b19" stroke="#838a85" stroke-width="6"/>
-     </g>
+ <g class="component-part contact-jaw left-jaw" data-part="peltier1" data-focus="peltier1" tabindex="0" role="button" aria-label="Peltier 1 anzeigen">
+  <g class="part-solid"><path d="M320 305 350 295v176l-30 13Z" fill="#eaece7" stroke="#fffef7" stroke-width="2"/><path d="M311 308 320 305v179l-9 4Z" fill="#252927" stroke="#626964"/><path d="M300 312 311 308v180l-11 5Z" fill="url(#ceramic)" stroke="#f7f6ef" stroke-width="2"/><path d="M350 295 402 281v195l-52-5Z" fill="url(#metalSide)" stroke="#b5bbb6" stroke-width="2"/><path class="contact-face" d="M402 281c25 25 31 161 0 195l-18-7c21-38 19-139 0-179Z" fill="#b8bdb8" stroke="#e1e4df" stroke-width="2"/><path d="M301 392h-28c-9 0-15 6-18 17" fill="none" stroke="#c15e3f" stroke-width="4"/><path d="M301 404h-25c-7 0-12 4-15 12" fill="none" stroke="#3c5962" stroke-width="4"/></g>
+  <path class="part-placeholder" d="M296 305 405 274v208l-109 20Z"/>
+ </g>
+ <g class="component-part contact-jaw right-jaw" data-part="peltier2" data-focus="peltier2" tabindex="0" role="button" aria-label="Peltier 2 anzeigen">
+  <g class="part-solid"><path d="M748 295 778 305v179l-30-13Z" fill="#eaece7" stroke="#fffef7" stroke-width="2"/><path d="M778 305 787 308v180l-9-4Z" fill="#252927" stroke="#626964"/><path d="M787 308 798 312v181l-11-5Z" fill="url(#ceramic)" stroke="#f7f6ef" stroke-width="2"/><path d="M696 281 748 295v176l-52 5Z" fill="url(#metalSide)" stroke="#b5bbb6" stroke-width="2"/><path class="contact-face" d="M696 281c-25 25-31 161 0 195l18-7c-21-38-19-139 0-179Z" fill="#b8bdb8" stroke="#e1e4df" stroke-width="2"/><path d="M797 392h28c9 0 15 6 18 17" fill="none" stroke="#c15e3f" stroke-width="4"/><path d="M797 404h25c7 0 12 4 15 12" fill="none" stroke="#3c5962" stroke-width="4"/></g>
+  <path class="part-placeholder" d="M693 274 802 305v197l-109-20Z"/>
+ </g>
 
-     <g class="heat-wash" aria-hidden="true"><ellipse cx="505" cy="326" rx="192" ry="245" fill="url(#heat)"/></g>
+ <g class="heat-wash" aria-hidden="true"><ellipse cx="411" cy="376" rx="86" ry="143" fill="url(#heat)"/><ellipse cx="687" cy="376" rx="86" ry="143" fill="url(#heat)"/><path d="M347 386c45-8 61-4 91 8M751 386c-45-8-61-4-91 8" fill="none" stroke="#ef884d" stroke-width="7" stroke-linecap="round" opacity=".52"/></g>
 
-     <g class="cup-assembly" data-focus="cup" tabindex="0" role="button" aria-label="Becher und Bechererkennung anzeigen" filter="url(#softShadow)">
-      <path d="M395 154h220l-15 285c-4 69-49 99-95 99s-91-30-95-99Z" fill="url(#drink)" opacity=".84"/>
-      <ellipse cx="505" cy="154" rx="110" ry="27" fill="#c67b47"/><ellipse cx="505" cy="158" rx="91" ry="19" fill="#7f4028" opacity=".72"/>
-      <path d="M374 112h262l-18 331c-6 92-59 126-113 126s-107-34-113-126Z" fill="url(#glass)" stroke="#dfeae6" stroke-width="3"/>
-      <ellipse cx="505" cy="112" rx="131" ry="32" fill="#b9cdca" fill-opacity=".16" stroke="#edf5f1" stroke-width="5"/>
-      <ellipse cx="505" cy="117" rx="113" ry="23" fill="none" stroke="#93aaa6" stroke-width="2"/>
-      <path d="M410 430c23 16 166 16 190 0" fill="none" stroke="#e3ece8" stroke-width="2" opacity=".7"/>
-      <path d="M416 174c-1 102 0 196 11 250" fill="none" stroke="#fff" stroke-width="7" opacity=".19" stroke-linecap="round"/>
-     </g>
+ <g class="holder-assembly" filter="url(#softShadow)">
+  <path d="M366 360c11-53 43-88 72-102l8 25c-24 17-39 45-45 82l-13 154-35 7Z" fill="#2b302d" stroke="#6e7671" stroke-width="3"/><path d="M732 360c-11-53-43-88-72-102l-8 25c24 17 39 45 45 82l13 154 35 7Z" fill="#232825" stroke="#656d68" stroke-width="3"/>
+  <path d="M397 493 549 454 701 493 549 542Z" fill="url(#metalTop)" stroke="#d1d5d0" stroke-width="2"/><path d="M397 493v31l152 49v-31Z" fill="#59605c"/><path d="M549 542v31l152-49v-31Z" fill="#353b38"/>
+  <ellipse class="cup-seat-shadow" cx="549" cy="488" rx="90" ry="27" fill="#090b0a" opacity=".72"/><ellipse cx="549" cy="482" rx="84" ry="24" fill="url(#metalTop)" stroke="#cbd0ca" stroke-width="4"/><ellipse cx="549" cy="479" rx="65" ry="17" fill="#171b19" stroke="#767f79" stroke-width="2"/>
+ </g>
 
-     <g class="component-part contact-jaw left-jaw" data-part="peltier1" data-focus="peltier1" tabindex="0" role="button" aria-label="Peltier 1 anzeigen">
-      <g class="part-solid">
-       <path d="M285 278 342 252v186l-57 37Z" fill="url(#metalSide)" stroke="#aeb4af" stroke-width="2"/>
-       <path d="M258 291 285 278v197l-27 14Z" fill="url(#ceramic)" stroke="#f4f3eb" stroke-width="3"/>
-       <path d="M248 300 258 295v185l-10 6Z" fill="#be5f40"/><path d="M258 388h-26" stroke="#bd5f43" stroke-width="3"/>
-       <path d="M342 272c24 24 35 132 0 150" fill="none" stroke="#f08343" stroke-width="5" opacity=".55"/>
-      </g>
-      <path class="part-placeholder" d="M258 291 342 252v186l-84 51Z"/>
-     </g>
-     <g class="component-part contact-jaw right-jaw" data-part="peltier2" data-focus="peltier2" tabindex="0" role="button" aria-label="Peltier 2 anzeigen">
-      <g class="part-solid">
-       <path d="M668 252 726 278v197l-58-37Z" fill="url(#metalSide)" stroke="#aeb4af" stroke-width="2"/>
-       <path d="M726 278 754 291v198l-28-14Z" fill="url(#ceramic)" stroke="#f4f3eb" stroke-width="3"/>
-       <path d="M754 295 765 300v186l-11-6Z" fill="#be5f40"/><path d="M754 388h29" stroke="#bd5f43" stroke-width="3"/>
-       <path d="M668 272c-24 24-35 132 0 150" fill="none" stroke="#f08343" stroke-width="5" opacity=".55"/>
-      </g>
-      <path class="part-placeholder" d="M668 252 754 291v198l-86-51Z"/>
-     </g>
+ <g class="rgb-ring component-part" data-part="rgb" data-focus="rgb" tabindex="0" role="button" aria-label="RGB-Statusring anzeigen"><ellipse cx="549" cy="356" rx="171" ry="52" fill="none" stroke="#343a36" stroke-width="19"/><ellipse class="rgb-light" cx="549" cy="356" rx="171" ry="52" fill="none" stroke="#72c797" stroke-width="5" stroke-dasharray="3 28" stroke-linecap="round"/><path d="M380 356c3-19 14-38 31-52M718 356c-3-19-14-38-31-52" fill="none" stroke="#737b76" stroke-width="7"/></g>
 
-     <g class="component-part sensor-part sensor-one" data-part="temp1" data-focus="temp1" tabindex="0" role="button" aria-label="Temperatursensor 1 anzeigen">
-      <g class="sensor-wire part-solid"><path d="M418 516C342 555 316 592 303 617"/><path d="M426 518C356 563 336 598 324 621"/></g>
-      <g class="to92 part-solid" transform="translate(401 481) rotate(-12)"><path d="M0 18V6A15 15 0 0 1 30 6v12Z"/><path d="M7 18v30m8-30v30m8-30v30"/></g>
-      <path class="part-placeholder" d="M398 480h36v52h-36Z"/>
-     </g>
-     <g class="component-part sensor-part sensor-two" data-part="temp2" data-focus="temp2" tabindex="0" role="button" aria-label="Temperatursensor 2 anzeigen">
-      <g class="sensor-wire part-solid"><path d="M650 334c70 43 80 171 36 225"/><path d="M657 337c68 49 70 170 42 224"/></g>
-      <g class="to92 part-solid" transform="translate(634 303) rotate(20)"><path d="M0 18V6A15 15 0 0 1 30 6v12Z"/><path d="M7 18v30m8-30v30m8-30v30"/></g>
-      <path class="part-placeholder" d="M630 301h42v54h-42Z"/>
-     </g>
+ <ellipse cx="549" cy="490" rx="78" ry="18" fill="#000" opacity=".32" filter="url(#contactShadow)"/>
+ <g class="cup-assembly" data-focus="cup" tabindex="0" role="button" aria-label="Becher und Bechererkennung anzeigen" filter="url(#softShadow)">
+  <path d="M447 176h204l-24 258c-5 52-36 76-78 76s-73-24-78-76Z" fill="url(#drink)" opacity=".84"/><ellipse cx="549" cy="176" rx="102" ry="25" fill="#c97c46"/><ellipse cx="549" cy="179" rx="86" ry="18" fill="#713622" opacity=".78"/>
+  <path d="M425 133h248l-29 300c-6 69-44 101-95 101s-89-32-95-101Z" fill="url(#glass)" stroke="#e2ebe7" stroke-width="3"/><ellipse cx="549" cy="133" rx="124" ry="31" fill="#c8d9d6" fill-opacity=".12" stroke="#eff5f2" stroke-width="5"/><ellipse cx="549" cy="137" rx="108" ry="23" fill="none" stroke="#91a8a4" stroke-width="2"/>
+  <path d="M468 419c17 14 145 14 162 0" fill="none" stroke="#e1eae6" stroke-width="2" opacity=".65"/><path d="M462 198c0 83 3 164 12 216" fill="none" stroke="#fff" stroke-width="6" opacity=".18" stroke-linecap="round"/><ellipse cx="549" cy="496" rx="73" ry="20" fill="#afc0bd" fill-opacity=".12" stroke="#cbd8d4" stroke-width="2"/>
+ </g>
 
-     <g class="component-part cup-detect" data-part="cup" data-focus="cup" tabindex="0" role="button" aria-label="Bechererkennung anzeigen">
-      <g class="part-solid"><rect x="482" y="509" width="46" height="19" rx="6" fill="#1d2320" stroke="#93a09a"/><circle cx="505" cy="514" r="5" fill="#76b9d0"/><path d="M505 529v31" stroke="#303d39" stroke-width="3"/></g>
-     </g>
+ <g class="component-part sensor-part sensor-one" data-part="temp1" data-focus="temp1" tabindex="0" role="button" aria-label="Temperatursensor 1 anzeigen">
+  <g class="part-solid"><path d="M472 487 454 493v38l36 10v-19" fill="#343a36" stroke="#717a74"/><g class="sensor-wire"><path d="M468 498c-30 15-62 49-93 89M476 501c-27 18-50 50-75 93M483 504c-22 21-39 48-57 91"/></g><g class="to92" transform="translate(453 462) rotate(-9)"><path d="M0 17V7A13 13 0 0 1 26 7v10Z"/><path d="M6 17v32m7-32v32m7-32v32"/></g></g><path class="part-placeholder" d="M447 456h47v91h-47Z"/>
+ </g>
+ <g class="component-part sensor-part sensor-two" data-part="temp2" data-focus="temp2" tabindex="0" role="button" aria-label="Temperatursensor 2 anzeigen">
+  <g class="part-solid"><path d="M675 353 699 360v38l-29 7" fill="#343a36" stroke="#717a74"/><g class="sensor-wire"><path d="M689 383c48 35 52 123 25 165M697 380c48 42 51 120 31 165M704 378c48 47 49 113 38 162"/></g><g class="to92" transform="translate(674 326) rotate(15)"><path d="M0 17V7A13 13 0 0 1 26 7v10Z"/><path d="M6 17v32m7-32v32m7-32v32"/></g></g><path class="part-placeholder" d="M668 318h47v92h-47Z"/>
+ </g>
 
-     <g class="component-part heatsink-part" data-part="fan" data-focus="fan" tabindex="0" role="button" aria-label="Kühlkörper und Lüfter anzeigen">
-      <g class="part-solid">
-       <path d="M718 418 842 450v132l-124-36Z" fill="#343a37" stroke="#8d9590"/>
-       <g class="sink-fins" fill="none" stroke="#9ca39e" stroke-width="7"><path d="m728 426 2 111"/><path d="m746 431 2 112"/><path d="m764 436 2 112"/><path d="m782 440 2 113"/><path d="m800 445 2 113"/><path d="m818 449 2 113"/><path d="m836 454 2 113"/></g>
-       <g class="fan-housing"><path d="m746 442 119 31v121l-119-34Z" fill="#171b19" fill-opacity=".92" stroke="#6d7570" stroke-width="6"/><path d="m759 457 91 24v96l-91-26Z" fill="#0a0c0b" stroke="#414844" stroke-width="3"/><g class="fan-rotor" transform="translate(804 517) skewY(14)"><g class="fan-blades"><path d="M0-14C8-39 27-33 22-15 42-7 36 13 17 15 10 39-10 38-17 18-41 15-42-6-22-15-23-38-4-42 0-14Z" fill="#555d58" stroke="#858d88"/></g><circle r="16" fill="#6e7571"/><circle r="8" fill="#252a27"/></g></g>
-      </g>
-      <path class="part-placeholder" d="m718 418 147 45v131l-147-48Z"/>
-     </g>
+ <g class="component-part cup-detect" data-part="cup" data-focus="cup" tabindex="0" role="button" aria-label="Bechererkennung anzeigen"><g class="part-solid"><path d="M525 495 549 489l25 6-25 8Z" fill="#1b211e" stroke="#8c9992"/><circle cx="549" cy="496" r="4" fill="#76b9d0"/><path d="M549 503v27" stroke="#34413d" stroke-width="3"/></g></g>
 
-     <g class="pcb-assembly" data-focus="pico" tabindex="0" role="button" aria-label="Leiterplatte und Pico W anzeigen" filter="url(#softShadow)">
-      <path d="m140 436 221 54-4 149-221-61Z" fill="url(#pcb)" stroke="#4f8a70" stroke-width="3"/>
-      <circle cx="158" cy="463" r="7" fill="#101512" stroke="#9ab5a7"/><circle cx="334" cy="510" r="7" fill="#101512" stroke="#9ab5a7"/><circle cx="330" cy="611" r="7" fill="#101512" stroke="#9ab5a7"/><circle cx="155" cy="558" r="7" fill="#101512" stroke="#9ab5a7"/>
-      <g class="pcb-traces" fill="none" stroke="#6ca486" stroke-width="2" opacity=".55"><path d="m163 482 40 11 21 30 54 14"/><path d="m162 542 64 17 28-16 68 20"/><path d="m185 578 58 16 19-30 65 18"/><path d="m180 516 31 8 32-17 91 23"/></g>
-      <g class="pico-module"><path d="m177 465 72 18-3 99-72-20Z" fill="#166a75" stroke="#78adb2" stroke-width="2"/><path d="m188 477 49 12-1 25-49-12Z" fill="#b2bbc0"/><rect x="192" y="522" width="34" height="27" transform="rotate(14 209 535)" fill="#25302f"/><g fill="#d7bc63"><circle cx="178" cy="481" r="2"/><circle cx="177" cy="492" r="2"/><circle cx="176" cy="503" r="2"/><circle cx="175" cy="514" r="2"/><circle cx="244" cy="497" r="2"/><circle cx="244" cy="508" r="2"/><circle cx="243" cy="519" r="2"/><circle cx="243" cy="530" r="2"/></g></g>
-      <g class="adc-chip component-part" data-part="adc" data-focus="adc"><path d="m275 504 35 9-1 31-36-10Z" fill="#151917" stroke="#929993"/><path d="m269 510-11-3m11 10-11-3m11 10-11-3m55-1 11 3m-11 6 11 3m-11 6 11 3" stroke="#b8bcb6" stroke-width="2"/></g>
-      <g class="drivers" fill="#252b28" stroke="#7d847f"><path class="component-part" data-part="current1" data-focus="current1" d="m265 556 31 8-1 25-32-9Z"/><path class="component-part" data-part="current2" data-focus="current2" d="m303 566 31 8-1 25-32-9Z"/></g>
-      <g class="connectors" fill="#202522" stroke="#8d958f"><path d="m143 485 20 5-1 31-20-5Z"/><path d="m314 486 32 8-1 15-32-8Z"/><path d="m137 533 22 6-1 29-22-6Z"/></g>
-      <text x="183" y="569" transform="rotate(14 183 569)">PICO W</text><text x="272" y="546" transform="rotate(14 272 546)">TLA2024</text>
-      <g class="status-leds component-part" data-part="leds" data-focus="leds"><circle cx="269" cy="612" r="4"/><circle cx="281" cy="615" r="4"/><circle cx="293" cy="618" r="4"/><circle cx="305" cy="621" r="4"/><circle cx="317" cy="624" r="4"/></g>
-      <g class="power-jack component-part" data-part="power" data-focus="power"><path d="m111 525 32 8-1 38-32-9Z" fill="#151817" stroke="#777e79"/><ellipse cx="117" cy="544" rx="7" ry="11" fill="#060706" stroke="#a3aaa5"/></g>
-     </g>
+ <g class="pcb-tray" filter="url(#softShadow)"><path d="M230 548 430 499l118 31-198 59Z" fill="#1b201d" stroke="#4e5651" stroke-width="3"/><path d="m230 548 120 34v58l-120-35Z" fill="#181c1a" stroke="#444b47"/></g>
+ <g class="pcb-assembly" data-focus="pico" tabindex="0" role="button" aria-label="Leiterplatte und Pico W anzeigen">
+  <path d="M250 535 399 499q16-4 31 0l88 23-15 72-160 47-112-33 7-34Z" fill="url(#pcb)" stroke="#559078" stroke-width="3"/><g fill="#0d1410" stroke="#abc0b6"><circle cx="266" cy="553" r="6"/><circle cx="410" cy="515" r="6"/><circle cx="486" cy="541" r="6"/><circle cx="350" cy="621" r="6"/></g>
+  <g class="pcb-traces" fill="none" stroke="#65a084" stroke-width="1.6" opacity=".62"><path d="m268 572 62-14 42 11 80-22"/><path d="m276 600 55-15 45 14 88-25"/><path d="m346 614 24-33 78-20"/><path d="m302 540 37 11 21-20 75 19"/></g>
+  <g class="pico-module"><path d="m276 544 87-20 63 17-10 57-88 25-62-19Z" fill="#167281" stroke="#72b3bc" stroke-width="2"/><path d="m276 544 24-6 22 6-25 8Z" fill="#b9c1c4" stroke="#e0e3e4"/><path d="m330 557 43-11 25 7-5 27-42 12-25-8Z" fill="#263331"/><g fill="#d7bd69"><circle cx="282" cy="558" r="2"/><circle cx="292" cy="561" r="2"/><circle cx="302" cy="564" r="2"/><circle cx="312" cy="567" r="2"/><circle cx="401" cy="548" r="2"/><circle cx="399" cy="558" r="2"/><circle cx="397" cy="568" r="2"/><circle cx="395" cy="578" r="2"/></g></g>
+  <g class="adc-chip component-part" data-part="adc" data-focus="adc"><path d="m425 522 33 8-4 27-34-9Z" fill="#141816" stroke="#929993"/><path d="m420 526-10-3m9 10-10-3m9 10-10-3m50 0 10 3m-11 5 10 3m-11 5 10 3" stroke="#c2c6c1" stroke-width="2"/></g>
+  <g class="drivers" fill="#252b28" stroke="#858c87"><path class="component-part" data-part="current1" data-focus="current1" d="m438 571 27 7-4 22-28-8Z"/><path class="component-part" data-part="current2" data-focus="current2" d="m471 562 26 7-4 22-27-7Z"/></g>
+  <g class="connectors" fill="#202522" stroke="#8d958f"><path d="m238 568 22-5 17 5-3 25-23 6-16-5Z"/><path d="m378 606 48-14 25 7-3 14-48 14Z"/></g><g class="capacitors" fill="#29302c" stroke="#8c948f"><ellipse cx="298" cy="606" rx="9" ry="5"/><path d="m289 606 2-22c1-6 16-6 16 0l-1 22Z"/><ellipse cx="322" cy="612" rx="9" ry="5"/><path d="m313 612 2-22c1-6 16-6 16 0l-1 22Z"/></g>
+  <text x="321" y="610" transform="rotate(-15 321 610)">PICO W</text><text x="423" y="555" transform="rotate(14 423 555)">TLA2024</text>
+  <g class="status-leds component-part" data-part="leds" data-focus="leds"><circle cx="356" cy="626" r="3"/><circle cx="366" cy="623" r="3"/><circle cx="376" cy="620" r="3"/><circle cx="386" cy="617" r="3"/><circle cx="396" cy="614" r="3"/></g><g class="power-jack component-part" data-part="power" data-focus="power"><path d="m230 584 24 7-2 29-24-7Z" fill="#121513" stroke="#737a76"/><ellipse cx="233" cy="598" rx="7" ry="10" fill="#050605" stroke="#a3aaa5"/></g>
+ </g>
 
-     <g class="component-part front-console" data-part="oled" data-focus="oled" tabindex="0" role="button" aria-label="OLED-Display anzeigen" filter="url(#softShadow)">
-      <g class="part-solid"><path d="m646 516 136-38v112l-136 41Z" fill="#242a27" stroke="#727a75" stroke-width="3"/><path d="m667 524 91-25v52l-91 27Z" fill="#12373d" stroke="#53858a" stroke-width="3"/><text class="oled-temp" x="681" y="543" transform="rotate(-15 681 543)">32.4°</text><text class="oled-target" x="707" y="558" transform="rotate(-15 707 558)">45.0°</text></g>
-      <path class="part-placeholder" d="m646 516 136-38v112l-136 41Z"/>
-     </g>
-     <g class="component-part physical-buttons" data-part="buttons" data-focus="buttons" tabindex="0" role="button" aria-label="Bedientaster anzeigen">
-      <g class="part-solid"><g transform="skewY(-15)"><rect x="655" y="584" width="25" height="20" rx="5"/><rect x="687" y="584" width="25" height="20" rx="5"/><rect x="719" y="584" width="25" height="20" rx="5"/><rect x="751" y="584" width="25" height="20" rx="5"/></g><text x="655" y="621">MODE</text><text x="690" y="612">−</text><text x="723" y="603">OK</text><text x="756" y="594">+</text></g>
-      <path class="part-placeholder" d="m650 576 131-38v66l-131 39Z"/>
-     </g>
+ <g class="component-part front-console" data-part="oled" data-focus="oled" tabindex="0" role="button" aria-label="OLED-Display anzeigen" filter="url(#softShadow)">
+  <g class="part-solid"><path d="M604 568 790 515v124l-186 56Z" fill="#222825" stroke="#69716c" stroke-width="3"/><path d="M627 578 755 541v68l-128 39Z" fill="#102328" stroke="#41666c" stroke-width="3"/><path d="M636 586 746 554v46l-110 34Z" fill="#123a42" stroke="#4d8790"/><text class="oled-temp" x="650" y="604" transform="rotate(-16 650 604)">32.4 °C</text><text class="oled-target" x="689" y="619" transform="rotate(-16 689 619)">SOLL 45.0 °C</text><g class="oled-pins" fill="#d3b862"><circle cx="769" cy="537" r="2"/><circle cx="775" cy="535" r="2"/><circle cx="781" cy="533" r="2"/><circle cx="787" cy="531" r="2"/></g></g><path class="part-placeholder" d="M604 568 790 515v124l-186 56Z"/>
+ </g>
+ <g class="component-part physical-buttons" data-part="buttons" data-focus="buttons" tabindex="0" role="button" aria-label="Bedientaster anzeigen">
+  <g class="part-solid"><g class="button-bank"><g transform="translate(626 659)"><ellipse rx="13" ry="7"/><path d="M-13 0v8c1 9 25 9 26 0V0"/><ellipse cy="8" rx="13" ry="7"/></g><g transform="translate(665 648)"><ellipse rx="13" ry="7"/><path d="M-13 0v8c1 9 25 9 26 0V0"/><ellipse cy="8" rx="13" ry="7"/></g><g transform="translate(704 637)"><ellipse rx="13" ry="7"/><path d="M-13 0v8c1 9 25 9 26 0V0"/><ellipse cy="8" rx="13" ry="7"/></g><g transform="translate(743 626)"><ellipse rx="13" ry="7"/><path d="M-13 0v8c1 9 25 9 26 0V0"/><ellipse cy="8" rx="13" ry="7"/></g></g><text x="612" y="687">MODE</text><text x="652" y="676">DOWN</text><text x="697" y="664">OK</text><text x="735" y="652">UP</text></g><path class="part-placeholder" d="M606 638 772 591v74l-166 50Z"/>
+ </g>
 
-     <g class="component-part light-sensor" data-part="light" data-focus="light" tabindex="0" role="button" aria-label="Lichtsensor anzeigen"><g class="part-solid"><circle cx="813" cy="413" r="15" fill="#161a18" stroke="#8d9690" stroke-width="4"/><path d="m806 411 7-8 8 6-6 11Z" fill="#9a7657"/><path d="M797 397l-10-10m27 8 3-14m8 24 14-4" stroke="#76b9d0" stroke-width="2"/></g><circle class="part-placeholder" cx="813" cy="413" r="18"/></g>
-    </svg>
+ <g class="component-part heatsink-part" data-part="fan" data-focus="fan" tabindex="0" role="button" aria-label="Kühlkörper und Lüfter anzeigen">
+  <g class="part-solid"><path d="M820 420 948 453v147l-128-37Z" fill="#353c38" stroke="#87908a" stroke-width="2"/><g class="sink-fins" fill="#6f7772" stroke="#a5aca7"><path d="m826 427 11 3v126l-11-3Z"/><path d="m845 432 11 3v126l-11-3Z"/><path d="m864 437 11 3v126l-11-3Z"/><path d="m883 442 11 3v126l-11-3Z"/><path d="m902 447 11 3v126l-11-3Z"/><path d="m921 452 11 3v126l-11-3Z"/></g><path d="M787 439 831 420v143l-44 19Z" fill="#242a27" stroke="#68716b" stroke-width="3"/>
+   <g class="fan-housing"><path d="m842 434 137 36v142l-137-39Z" fill="#171b19" stroke="#737b76" stroke-width="6"/><path d="m857 451 107 28v113l-107-31Z" fill="#080a09" stroke="#444b47" stroke-width="3"/><g fill="#111412" stroke="#909892"><circle cx="856" cy="449" r="6"/><circle cx="965" cy="477" r="6"/><circle cx="855" cy="563" r="6"/><circle cx="964" cy="592" r="6"/></g><ellipse cx="910" cy="522" rx="51" ry="56" fill="#0d100e" stroke="#323834" stroke-width="3"/><g class="fan-rotor" transform="translate(910 522)"><g class="fan-blades" fill="#4f5752" stroke="#7c8580"><path class="fan-blade" d="M-5-12C-5-41 13-49 25-38 32-28 19-15 4-6Z"/><path class="fan-blade" d="M-5-12C-5-41 13-49 25-38 32-28 19-15 4-6Z" transform="rotate(60)"/><path class="fan-blade" d="M-5-12C-5-41 13-49 25-38 32-28 19-15 4-6Z" transform="rotate(120)"/><path class="fan-blade" d="M-5-12C-5-41 13-49 25-38 32-28 19-15 4-6Z" transform="rotate(180)"/><path class="fan-blade" d="M-5-12C-5-41 13-49 25-38 32-28 19-15 4-6Z" transform="rotate(240)"/><path class="fan-blade" d="M-5-12C-5-41 13-49 25-38 32-28 19-15 4-6Z" transform="rotate(300)"/></g><ellipse rx="17" ry="19" fill="#69716c"/><ellipse rx="8" ry="9" fill="#252a27"/></g></g>
+  </g><path class="part-placeholder" d="M785 415 982 465v151l-197-48Z"/>
+ </g>
+
+ <g class="component-part light-sensor" data-part="light" data-focus="light" tabindex="0" role="button" aria-label="Lichtsensor anzeigen"><g class="part-solid"><path d="M803 561 829 554l18 5-26 8Z" fill="#1a1e1c" stroke="#818a84"/><ellipse cx="823" cy="558" rx="8" ry="4" fill="#876c4d"/><path d="m809 550-9-7m26 7 4-11m8 15 12-4" stroke="#76b9d0" stroke-width="2"/></g></g>
+</svg>
+
     <div class="component-hotspots" id="componentHotspots" aria-label="Komponenten direkt konfigurieren"></div>
    </div>
-
    <aside class="product-panel">
-    <div class="product-summary"><div class="state-mark"><i></i><span><small>SYSTEMSTATUS</small><strong id="systemState">Wird geladen</strong></span></div><p id="stateNarrative">Das Gerät wird mit dem Pico synchronisiert.</p><dl><div><dt>Temperatur</dt><dd><b id="overviewTemperature">—</b> °C</dd></div><div><dt>Heizleistung</dt><dd id="overviewPower">—</dd></div></dl></div>
+    <div class="product-summary"><div class="state-mark"><i></i><span><small>SYSTEMSTATUS</small><strong id="systemState">Wird geladen</strong></span></div><dl><div><dt>Isttemperatur</dt><dd><b id="overviewTemperature">—</b> °C</dd></div><div><dt>Heizleistung</dt><dd id="overviewPower">—</dd></div></dl><p id="stateNarrative">Das Gerät wird mit dem Pico synchronisiert.</p></div>
     <section class="component-focus" id="componentLens" aria-live="polite">
      <small id="componentGroup">BAUTEIL</small><h2 id="componentName">Komponente auswählen</h2><p id="componentRole">Tippe auf ein Bauteil oder auf ein Plus direkt in der Illustration.</p>
      <div class="simple-states"><span><small>GEPLANT</small><strong id="componentPlanned">Ja</strong></span><span><small>ANGESCHLOSSEN</small><strong id="componentConnected">—</strong></span><span><small>LIVE</small><strong id="componentLive">—</strong><b id="componentMeasurement">—</b></span></div>
     </section>
-    <section class="component-list-section"><header><small>PREVIEW: DIREKT HINZUFÜGEN</small><strong>KOMPONENTEN</strong></header><div class="component-list" id="configurationList"></div><p id="configurationHint"></p></section>
+    <section class="component-list-section"><header><small>PREVIEW · DIREKT HINZUFÜGEN</small><strong>KOMPONENTEN</strong></header><div class="component-list" id="configurationList"></div><p id="configurationHint"></p></section>
    </aside>
   </div>
  </section>
 
  <section class="page-section loop-section" id="regelkreis" aria-labelledby="loopTitle">
-  <header class="section-heading"><span>02</span><div><p>REGELKREIS</p><h2 id="loopTitle">So hält das System die Temperatur.</h2><small>Der Regler vergleicht Soll- und Isttemperatur und passt die Heizleistung automatisch an.</small></div></header>
+  <header class="section-heading"><span>02</span><div><p>REGELKREIS</p><h2 id="loopTitle">So hält das System die Temperatur.</h2><small>Soll und Ist werden verglichen. Der PI-Regler passt die Heizleistung automatisch an.</small></div></header>
   <div class="simple-loop" id="simpleLoop">
    <div class="loop-step setpoint-step"><em id="loopSetpoint">—</em><strong>SOLL</strong><small>Sollwert · w(t)</small></div><i class="flow-arrow"></i>
-   <div class="loop-step"><em id="loopDeviation">—</em><strong>VERGLEICH</strong><small>Abweichung · e(t)</small></div><i class="flow-arrow"></i>
-   <div class="loop-step"><em id="piNodeState">inaktiv</em><strong>PI-REGLER</strong><small>berechnet</small></div><i class="flow-arrow"></i>
+   <div class="loop-step compare-step"><span class="compare-symbol" aria-hidden="true">Σ</span><em id="loopDeviation">—</em><strong>VERGLEICH</strong><small>Fehler · e(t)</small></div><i class="flow-arrow"></i>
+   <div class="loop-step controller-step"><span class="pi-symbol" aria-hidden="true">PI</span><strong>REGLER</strong><small id="piNodeState">inaktiv</small></div><i class="flow-arrow"></i>
    <div class="loop-step heat-step"><em id="loopOutput">—</em><strong>HEIZLEISTUNG</strong><small>Stellgröße · u(t)</small></div><i class="flow-arrow"></i>
-   <div class="loop-step peltier-step"><span class="peltier-symbol">P1 · P2</span><strong>PELTIER</strong><small>heizt seitlich</small></div><i class="flow-arrow"></i>
-   <div class="loop-step plant-step"><span class="cup-symbol">▱</span><strong>BECHER</strong><small id="plantState">Regelstrecke</small></div><i class="flow-arrow"></i>
-   <div class="loop-step sensor-step"><em id="loopSensor">—</em><strong>SENSOR</strong><small>Istwert · y(t)</small></div>
-   <div class="feedback-route"><span>ISTWERT ZURÜCK ZUM VERGLEICH</span></div>
+   <div class="loop-step plant-step"><svg class="loop-product" viewBox="0 0 92 55" aria-hidden="true"><path class="loop-jaw" d="M4 17h16v28H4zm68 0h16v28H72z"/><path class="loop-cup" d="M28 5h36l-4 37c-1 8-7 11-14 11s-13-3-14-11Z"/><path class="loop-rim" d="M27 5c0-5 38-5 38 0s-38 5-38 0"/></svg><strong>PELTIER + BECHER</strong><small><b>Aktor</b> · Regelstrecke G(s)</small><i id="plantState">wird erwärmt</i></div><i class="flow-arrow"></i>
+   <div class="loop-step sensor-step"><svg class="loop-sensor" viewBox="0 0 34 45" aria-hidden="true"><path d="M6 18V8a11 11 0 0 1 22 0v10Z"/><path d="M10 18v26m7-26v26m7-26v26"/></svg><em id="loopSensor">—</em><strong>SENSOR · IST</strong><small>Messwert · y(t)</small></div>
+   <div class="feedback-route"><span>RÜCKFÜHRUNG · y(t)</span></div>
   </div>
  </section>
 
  <section class="page-section live-section" id="live" aria-labelledby="liveTitle">
-  <header class="section-heading"><span>03</span><div><p>LIVE</p><h2 id="liveTitle">Das passiert gerade.</h2><small>Temperatur, Sollwert, Leistung und Zustand auf einen Blick.</small></div></header>
+  <header class="section-heading"><span>03</span><div><p>LIVE</p><h2 id="liveTitle">Das passiert gerade.</h2></div></header>
   <div class="live-overview"><div class="temperature-hero"><small>ISTTEMPERATUR</small><div><strong id="actualTemperature">—</strong><em>°C</em></div><span id="sensorQuality">Messwert wird erwartet</span></div><dl class="live-facts"><div><dt>SOLL</dt><dd><b id="liveSetpoint">—</b> °C</dd></div><div><dt>HEIZLEISTUNG</dt><dd id="powerOutput">—</dd></div><div><dt>LÜFTER</dt><dd id="fanRpm">—</dd></div><div><dt>STATUS</dt><dd id="liveSystemState">—</dd></div></dl></div>
   <section class="timeline-layer" aria-labelledby="timelineTitle"><header><div><small>VERLAUF</small><strong id="timelineTitle">TEMPERATUR UND LEISTUNG</strong></div><div class="primary-signals"><button class="active actual" data-signal="temperature" type="button">IST</button><button class="active target" data-signal="target" type="button">SOLL</button><button class="active power" data-signal="power" type="button">HEIZLEISTUNG</button></div><button id="moreSignalsButton" type="button" aria-expanded="false">Mehr Messwerte</button></header><div class="more-signals" id="moreSignals" hidden><button data-signal="temperature2" type="button">TEMP 2</button><button data-signal="current1" type="button">STROM 1</button><button data-signal="current2" type="button">STROM 2</button><button data-signal="fan" type="button">LÜFTER</button><button data-signal="light" type="button">LICHT</button><span class="time-range"><button type="button" class="active" data-range="60">1 min</button><button type="button" data-range="300">5 min</button><button type="button" data-range="900">15 min</button></span></div><canvas id="timelineCanvas" role="img" aria-label="Live-Verlauf von Isttemperatur, Solltemperatur und Heizleistung"></canvas></section>
-  <section class="control-panel" aria-labelledby="controlTitle"><div class="control-lock"><span id="lockIcon">🔒</span><div><small>BEDIENRECHTE</small><h3 id="controlTitle">Steuerung gesperrt</h3><p id="controlMessage">Live-Werte bleiben ohne PIN sichtbar.</p></div><button id="unlockButton" type="button">Mit PIN freigeben</button><button id="stopButton" class="stop-always" type="button">STOPP</button></div><div class="control-actions" id="controlActions" aria-hidden="true"><div class="setpoint-control"><button id="targetDown" type="button" aria-label="Solltemperatur senken">−</button><label><small>Solltemperatur</small><input id="targetInput" type="text" inputmode="decimal" value="45,0"><span>°C</span></label><button id="targetUp" type="button" aria-label="Solltemperatur erhöhen">+</button><button id="setpointButton" type="button">Speichern</button></div><div class="heat-actions"><button id="startButton" type="button">Heizen starten</button></div></div></section>
+  <section class="control-panel" aria-labelledby="controlTitle"><div class="control-lock"><span id="lockIcon">🔒</span><div><h3 id="controlTitle">Steuerung gesperrt</h3><p id="controlMessage">Live-Werte bleiben ohne PIN sichtbar.</p></div><button id="unlockButton" type="button">ENTSPERREN</button><button id="stopButton" class="stop-always" type="button">STOPP</button></div><div class="control-actions" id="controlActions" aria-hidden="true"><div class="setpoint-control"><button id="targetDown" type="button" aria-label="Solltemperatur senken">−</button><label><small>Solltemperatur</small><input id="targetInput" type="text" inputmode="decimal" value="45,0"><span>°C</span></label><button id="targetUp" type="button" aria-label="Solltemperatur erhöhen">+</button><button id="setpointButton" type="button">SETZEN</button></div><div class="heat-actions"><button id="startButton" type="button">START</button></div></div></section>
   <section class="safety-summary" id="safetySummary"><i>✓</i><div><small>SICHERHEIT</small><strong id="safetyTitle">System wird geprüft</strong><p id="safetyReason">Safety-Freigaben kommen direkt vom Pico.</p></div><button id="safetyDetailsButton" type="button" aria-expanded="false">Details</button><div id="safetyDetails" hidden></div></section>
  </section>
 
@@ -240,8 +232,8 @@ window.V4_COMPONENTS=[
 "use strict";
 var components=window.V4_COMPONENTS||[],preview=false,current=null,online=false,activeId="",connected=new Set();
 var groups={physical:"GERÄT",thermal:"WÄRMEWEG",sensors:"SENSORIK",power:"LEISTUNG",control:"STEUERUNG",interface:"BEDIENUNG",auxiliary:"UMGEBUNG",connectivity:"VERBINDUNG"};
-var configurable=["temp1","temp2","peltier1","peltier2","fan","light","oled","buttons","rgb","cup","adc","current1","current2","leds","power"];
-var positions={temp1:[42,70],temp2:[66,43],peltier1:[27,52],peltier2:[77,52],fan:[84,70],light:[82,54],oled:[72,74],buttons:[74,85],rgb:[51,52],cup:[51,73],adc:[29,73],current1:[27,82],current2:[32,84],leds:[30,88],power:[11,78]};
+var configurable=["temp1","temp2","peltier1","peltier2","oled","fan"];
+var positions={temp1:[43,65],temp2:[63,47],peltier1:[31,49],peltier2:[72,49],oled:[65,81],fan:[84,68]};
 function byId(id){return document.getElementById(id);}function all(selector){return Array.prototype.slice.call(document.querySelectorAll(selector));}function component(id){return components.find(function(item){return item.id===id;});}function create(tag,className,text){var node=document.createElement(tag);if(className)node.className=className;if(text!==undefined)node.textContent=text;return node;}
 function liveFor(item){if(preview&&!connected.has(item.id))return{state:"NICHT ANGESCHLOSSEN",tone:"neutral",value:"—"};if(!current||!online)return{state:"NICHT VERFÜGBAR",tone:"unknown",value:"—"};return item.live(current,online);}
 function connectedState(item,live){if(preview)return connected.has(item.id)?"JA":"NEIN";if(!online)return"NICHT VERFÜGBAR";if(live.tone==="valid"||live.tone==="detected"||live.tone==="active"||live.tone==="fault")return"JA";if(live.tone==="neutral")return"NICHT ANGESCHLOSSEN";return"NICHT DIREKT ÜBERWACHT";}
@@ -256,7 +248,7 @@ function focus(id){var item=component(id);if(!item)return;activeId=id;all("[data
 function renderLens(item){var live=liveFor(item);byId("componentGroup").textContent=groups[item.group]||"BAUTEIL";byId("componentName").textContent=item.name;byId("componentRole").textContent=item.role;byId("componentPlanned").textContent="JA";byId("componentConnected").textContent=connectedState(item,live);byId("componentLive").textContent=simpleLive(live);byId("componentMeasurement").textContent=live.value||"—";}
 function update(status,isOnline){current=status;online=!!isOnline;components.forEach(function(item){var live=liveFor(item);all('[data-part="'+item.id+'"]').forEach(function(part){part.classList.toggle("component-fault",live.tone==="fault");});if(!preview&&configurable.indexOf(item.id)>=0){var enabled=connectedState(item,live)!=="NICHT ANGESCHLOSSEN";if(enabled)connected.add(item.id);else connected.delete(item.id);setVisualState(item.id,enabled,false);}});if(activeId)renderLens(component(activeId));}
 function bindParts(){all("[data-focus]").forEach(function(node){function select(){focus(node.dataset.focus);}node.addEventListener("click",select);node.addEventListener("keydown",function(event){if(event.key==="Enter"||event.key===" "){event.preventDefault();select();}});});}
-function initialise(options){preview=!!(options&&options.preview);buildDirectControls();buildConfiguration();bindParts();focus("cup");var selected=new URLSearchParams(location.search).get("component");if(selected&&component(selected))focus(selected);}
+function initialise(options){preview=!!(options&&options.preview);buildDirectControls();buildConfiguration();bindParts();var selected=new URLSearchParams(location.search).get("component");if(selected&&component(selected))focus(selected);}
 window.V4Twin={initialise:initialise,update:update,focus:focus,setConnected:setConnected,connected:connected};
 })();
 
@@ -318,7 +310,7 @@ async function command(path,requiresToken){if(!runtime.online||(requiresToken!==
 function adjust(delta){var value=clamp(number(String(byId("targetInput").value).replace(",","."),45)+delta,20,60);byId("targetInput").value=fixed(value);}function setpoint(){var value=clamp(number(String(byId("targetInput").value).replace(",","."),45),20,60);command("setpoint?value="+value.toFixed(1),true);}
 function addHistory(status){var now=Date.now();history.push({time:now,temperature:status.temperature,temperature2:status.temperature2,target:status.setpoint,power:status.power,current1:status.current1,current2:status.current2,fan:status.fan_rpm,light:status.light_level,valid:status.sensor_ok===true,valid2:status.temp2_ok===true,validTarget:status.setpoint_supplied,validPower:status.power_supplied,validCurrent1:status.current1_ok===true,validCurrent2:status.current2_ok===true,validFan:status.fan_supplied,validLight:status.light_ok===true});while(history.length&&now-history[0].time>MAX_HISTORY_SECONDS*1000)history.shift();scheduleChart();}
 function scheduleChart(){if(runtime.drawQueued)return;runtime.drawQueued=true;requestAnimationFrame(function(){runtime.drawQueued=false;drawChart();});}
-function drawChart(){var canvas=byId("timelineCanvas"),rect=canvas.getBoundingClientRect(),scale=Math.min(devicePixelRatio||1,2),width=Math.max(320,Math.round(rect.width)),height=Math.max(220,Math.round(rect.height));if(canvas.width!==width*scale||canvas.height!==height*scale){canvas.width=width*scale;canvas.height=height*scale;}var context=canvas.getContext("2d");context.setTransform(scale,0,0,scale,0,0);context.clearRect(0,0,width,height);var pad={left:48,right:42,top:24,bottom:32},plotW=width-pad.left-pad.right,plotH=height-pad.top-pad.bottom,now=Date.now(),start=now-runtime.range*1000,points=history.filter(function(point){return point.time>=start;});context.strokeStyle="#303631";context.lineWidth=1;context.fillStyle="#878d87";context.font="11px Segoe UI";for(var i=0;i<=4;i++){var y=pad.top+plotH*i/4;context.beginPath();context.moveTo(pad.left,y);context.lineTo(width-pad.right,y);context.stroke();context.fillText(String(60-i*15)+"°",8,y+4);}function draw(key,valid,color,min,max){if(!runtime.signals[key]||points.length<2)return;context.beginPath();var started=false;points.forEach(function(point){if(!point[valid]||!Number.isFinite(point[key])){started=false;return;}var x=pad.left+clamp((point.time-start)/(runtime.range*1000),0,1)*plotW,y=pad.top+(1-clamp((point[key]-min)/(max-min),0,1))*plotH;if(!started){context.moveTo(x,y);started=true;}else context.lineTo(x,y);});context.strokeStyle=color;context.lineWidth=2;context.stroke();}draw("temperature","valid","#76aec4",0,60);draw("target","validTarget","#d8ddd6",0,60);draw("power","validPower","#ed8549",0,100);draw("temperature2","valid2","#7bb1a0",0,60);draw("current1","validCurrent1","#d2a66d",0,8);draw("current2","validCurrent2","#b58cc2",0,8);draw("fan","validFan","#8b93ce",0,5000);draw("light","validLight","#d3c769",0,1);context.fillStyle="#878d87";context.fillText("−"+Math.round(runtime.range/60)+" min",pad.left,height-9);context.textAlign="right";context.fillText("jetzt",width-pad.right,height-9);context.textAlign="left";}
+function drawChart(){var canvas=byId("timelineCanvas"),rect=canvas.getBoundingClientRect(),scale=Math.min(devicePixelRatio||1,2),width=Math.max(320,Math.round(rect.width)),height=Math.max(220,Math.round(rect.height));if(canvas.width!==width*scale||canvas.height!==height*scale){canvas.width=width*scale;canvas.height=height*scale;}var context=canvas.getContext("2d");context.setTransform(scale,0,0,scale,0,0);context.clearRect(0,0,width,height);var pad={left:48,right:42,top:24,bottom:32},plotW=width-pad.left-pad.right,plotH=height-pad.top-pad.bottom,now=Date.now(),start=now-runtime.range*1000,points=history.filter(function(point){return point.time>=start;});context.strokeStyle="#303631";context.lineWidth=1;context.fillStyle="#878d87";context.font="11px Segoe UI";for(var i=0;i<=4;i++){var y=pad.top+plotH*i/4;context.beginPath();context.moveTo(pad.left,y);context.lineTo(width-pad.right,y);context.stroke();context.fillText(String(60-i*15)+"°",8,y+4);}function draw(key,valid,color,min,max,dash){if(!runtime.signals[key]||points.length<2)return;context.beginPath();var started=false;points.forEach(function(point){if(!point[valid]||!Number.isFinite(point[key])){started=false;return;}var x=pad.left+clamp((point.time-start)/(runtime.range*1000),0,1)*plotW,y=pad.top+(1-clamp((point[key]-min)/(max-min),0,1))*plotH;if(!started){context.moveTo(x,y);started=true;}else context.lineTo(x,y);});context.strokeStyle=color;context.lineWidth=2;context.setLineDash(dash||[]);context.stroke();context.setLineDash([]);}draw("temperature","valid","#76aec4",0,60);draw("target","validTarget","#d8ddd6",0,60,[7,6]);draw("power","validPower","#ed8549",0,100);draw("temperature2","valid2","#7bb1a0",0,60);draw("current1","validCurrent1","#d2a66d",0,8);draw("current2","validCurrent2","#b58cc2",0,8);draw("fan","validFan","#8b93ce",0,5000);draw("light","validLight","#d3c769",0,1);context.fillStyle="#878d87";context.fillText("−"+Math.round(runtime.range/60)+" min",pad.left,height-9);context.textAlign="right";context.fillText("jetzt",width-pad.right,height-9);context.textAlign="left";}
 function interactions(){byId("moreSignalsButton").addEventListener("click",function(){var open=byId("moreSignals").hidden;byId("moreSignals").hidden=!open;this.setAttribute("aria-expanded",String(open));this.textContent=open?"Weniger Messwerte":"Mehr Messwerte";});byId("safetyDetailsButton").addEventListener("click",function(){var open=byId("safetyDetails").hidden;byId("safetyDetails").hidden=!open;this.setAttribute("aria-expanded",String(open));});all("[data-signal]").forEach(function(button){button.addEventListener("click",function(){var key=button.dataset.signal;runtime.signals[key]=!runtime.signals[key];button.classList.toggle("active",runtime.signals[key]);scheduleChart();});});all("[data-range]").forEach(function(button){button.addEventListener("click",function(){runtime.range=number(button.dataset.range,60);all("[data-range]").forEach(function(item){item.classList.toggle("active",item===button);});scheduleChart();});});byId("unlockButton").addEventListener("click",function(){text("pinError","");byId("pinInput").value="";byId("unlockDialog").showModal();setTimeout(function(){byId("pinInput").focus();},50);});byId("unlockClose").addEventListener("click",function(){byId("unlockDialog").close();});byId("unlockForm").addEventListener("submit",async function(event){event.preventDefault();try{await unlock(byId("pinInput").value);byId("unlockDialog").close();if(runtime.current)render(runtime.current,{record:false});}catch(error){text("pinError",error.message);}});byId("targetDown").addEventListener("click",function(){adjust(-.5);});byId("targetUp").addEventListener("click",function(){adjust(.5);});byId("setpointButton").addEventListener("click",setpoint);byId("startButton").addEventListener("click",function(){command("start",true);});byId("stopButton").addEventListener("click",function(){command("stop",false);});addEventListener("resize",scheduleChart,{passive:true});}
 function boot(){interactions();if(window.V4Twin)window.V4Twin.initialise({preview:PREVIEW});if(PREVIEW&&window.PreviewDriver){document.body.classList.add("preview-mode");window.PreviewDriver.start();}else{poll();setInterval(poll,POLL_MS);}if("scrollRestoration" in window.history)window.history.scrollRestoration="manual";setInterval(function(){if(!hasUnlock()&&document.body.classList.contains("control-unlocked"))setUnlock(false);},1000);}
 addEventListener("load",function(){var review=new URLSearchParams(location.search).get("review"),id={product:"aufbau",loop:"regelkreis",live:"live"}[review];if(id)setTimeout(function(){var old=document.documentElement.style.scrollBehavior;document.documentElement.style.scrollBehavior="auto";scrollTo(0,byId(id).offsetTop);document.documentElement.style.scrollBehavior=old;},460);},{once:true});

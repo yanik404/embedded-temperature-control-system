@@ -17,160 +17,41 @@
 
 <main>
  <section class="page-section product-section" id="aufbau" aria-labelledby="aufbauTitle">
-  <header class="section-heading"><span>01</span><div><p>AUFBAU</p><h1 id="aufbauTitle">Ein Becherhalter. Ein System.</h1><small>Tippe direkt auf ein Bauteil, um seine Aufgabe zu verstehen.</small></div></header>
+  <header class="section-heading"><span>01</span><div><p>AUFBAU</p><h1 id="aufbauTitle">Baue und prüfe den Becherhalter.</h1></div></header>
   <div class="product-layout">
    <div class="product-stage" id="visualStage">
-    <svg class="product-illustration" id="productIllustration" viewBox="0 0 1000 720" role="img" aria-labelledby="productTitle productDescription">
-     <title id="productTitle">Technische Produktillustration des Becherhalters</title>
-     <desc id="productDescription">Ein Getränkebecher sitzt in einer Halterung. Zwei seitliche Peltiermodule, Kontaktbacken, Temperatursensoren, Kühlkörper, Lüfter, Platine, Display und Taster bilden ein gemeinsames Gerät.</desc>
-     <defs>
-      <linearGradient id="caseTop" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#59605b"/><stop offset=".5" stop-color="#313633"/><stop offset="1" stop-color="#1c201e"/></linearGradient>
-      <linearGradient id="caseFront" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#303532"/><stop offset="1" stop-color="#171a18"/></linearGradient>
-      <linearGradient id="metalTop" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#eef0ea"/><stop offset=".32" stop-color="#9da49f"/><stop offset=".7" stop-color="#59605c"/><stop offset="1" stop-color="#c7cbc5"/></linearGradient>
-      <linearGradient id="metalSide" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#424946"/><stop offset=".5" stop-color="#929994"/><stop offset="1" stop-color="#343a37"/></linearGradient>
-      <linearGradient id="glass" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#a9c4c4" stop-opacity=".12"/><stop offset=".25" stop-color="#e9f5f1" stop-opacity=".52"/><stop offset=".55" stop-color="#bfd5d3" stop-opacity=".2"/><stop offset=".8" stop-color="#f2faf7" stop-opacity=".42"/><stop offset="1" stop-color="#72908d" stop-opacity=".1"/></linearGradient>
-      <linearGradient id="drink" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#c97d47"/><stop offset=".45" stop-color="#8e4d2e"/><stop offset="1" stop-color="#54281e"/></linearGradient>
-      <linearGradient id="ceramic" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#faf9f2"/><stop offset=".55" stop-color="#cfd3cc"/><stop offset="1" stop-color="#8c938e"/></linearGradient>
-      <linearGradient id="pcb" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#174735"/><stop offset=".5" stop-color="#0d3528"/><stop offset="1" stop-color="#09271e"/></linearGradient>
-      <radialGradient id="heat"><stop stop-color="#f08343" stop-opacity=".46"/><stop offset="1" stop-color="#f08343" stop-opacity="0"/></radialGradient>
-      <filter id="shadow" x="-30%" y="-30%" width="160%" height="180%"><feDropShadow dx="0" dy="18" stdDeviation="16" flood-color="#000" flood-opacity=".45"/></filter>
-      <filter id="softShadow" x="-30%" y="-30%" width="160%" height="180%"><feDropShadow dx="0" dy="7" stdDeviation="6" flood-color="#000" flood-opacity=".38"/></filter>
-     </defs>
-
-     <ellipse class="ground-shadow" cx="510" cy="665" rx="390" ry="34"/>
-     <g class="device-base" filter="url(#shadow)">
-      <path d="M185 500 500 423 833 502 518 594Z" fill="url(#caseTop)" stroke="#777e79"/>
-      <path d="M185 500v83l333 91v-80Z" fill="#222724" stroke="#535a56"/>
-      <path d="M518 594v80l315-91v-81Z" fill="url(#caseFront)" stroke="#4c534f"/>
-      <path d="M213 509 500 440l300 70-286 82Z" fill="#151917" stroke="#3d4540"/>
-      <circle cx="237" cy="565" r="7" fill="#090b0a" stroke="#777"/><circle cx="781" cy="552" r="7" fill="#090b0a" stroke="#777"/>
-     </g>
-
-     <g class="rgb-ring component-part" data-part="rgb" data-focus="rgb" tabindex="0" role="button" aria-label="RGB-Statusring anzeigen">
-      <ellipse cx="505" cy="390" rx="190" ry="67" fill="none" stroke="#49504c" stroke-width="24"/>
-      <ellipse class="rgb-light" cx="505" cy="390" rx="190" ry="67" fill="none" stroke="#72c797" stroke-width="7" stroke-dasharray="4 34" stroke-linecap="round"/>
-     </g>
-
-     <g class="holder-assembly">
-      <path d="M304 370 350 328v181l-46 43Z" fill="#282d2a" stroke="#777e79"/>
-      <path d="M706 370 658 328v181l48 43Z" fill="#202522" stroke="#646b67"/>
-      <path d="M336 510 505 466l169 44-169 54Z" fill="url(#metalTop)" stroke="#bcc1bb"/>
-      <path d="M336 510v31l169 54v-31Z" fill="#4b514e"/><path d="M505 564v31l169-54v-31Z" fill="#303633"/>
-      <ellipse cx="505" cy="495" rx="104" ry="31" fill="#171b19" stroke="#838a85" stroke-width="6"/>
-     </g>
-
-     <g class="heat-wash" aria-hidden="true"><ellipse cx="505" cy="326" rx="192" ry="245" fill="url(#heat)"/></g>
-
-     <g class="cup-assembly" data-focus="cup" tabindex="0" role="button" aria-label="Becher und Bechererkennung anzeigen" filter="url(#softShadow)">
-      <path d="M395 154h220l-15 285c-4 69-49 99-95 99s-91-30-95-99Z" fill="url(#drink)" opacity=".84"/>
-      <ellipse cx="505" cy="154" rx="110" ry="27" fill="#c67b47"/><ellipse cx="505" cy="158" rx="91" ry="19" fill="#7f4028" opacity=".72"/>
-      <path d="M374 112h262l-18 331c-6 92-59 126-113 126s-107-34-113-126Z" fill="url(#glass)" stroke="#dfeae6" stroke-width="3"/>
-      <ellipse cx="505" cy="112" rx="131" ry="32" fill="#b9cdca" fill-opacity=".16" stroke="#edf5f1" stroke-width="5"/>
-      <ellipse cx="505" cy="117" rx="113" ry="23" fill="none" stroke="#93aaa6" stroke-width="2"/>
-      <path d="M410 430c23 16 166 16 190 0" fill="none" stroke="#e3ece8" stroke-width="2" opacity=".7"/>
-      <path d="M416 174c-1 102 0 196 11 250" fill="none" stroke="#fff" stroke-width="7" opacity=".19" stroke-linecap="round"/>
-     </g>
-
-     <g class="component-part contact-jaw left-jaw" data-part="peltier1" data-focus="peltier1" tabindex="0" role="button" aria-label="Peltier 1 anzeigen">
-      <g class="part-solid">
-       <path d="M285 278 342 252v186l-57 37Z" fill="url(#metalSide)" stroke="#aeb4af" stroke-width="2"/>
-       <path d="M258 291 285 278v197l-27 14Z" fill="url(#ceramic)" stroke="#f4f3eb" stroke-width="3"/>
-       <path d="M248 300 258 295v185l-10 6Z" fill="#be5f40"/><path d="M258 388h-26" stroke="#bd5f43" stroke-width="3"/>
-       <path d="M342 272c24 24 35 132 0 150" fill="none" stroke="#f08343" stroke-width="5" opacity=".55"/>
-      </g>
-      <path class="part-placeholder" d="M258 291 342 252v186l-84 51Z"/>
-     </g>
-     <g class="component-part contact-jaw right-jaw" data-part="peltier2" data-focus="peltier2" tabindex="0" role="button" aria-label="Peltier 2 anzeigen">
-      <g class="part-solid">
-       <path d="M668 252 726 278v197l-58-37Z" fill="url(#metalSide)" stroke="#aeb4af" stroke-width="2"/>
-       <path d="M726 278 754 291v198l-28-14Z" fill="url(#ceramic)" stroke="#f4f3eb" stroke-width="3"/>
-       <path d="M754 295 765 300v186l-11-6Z" fill="#be5f40"/><path d="M754 388h29" stroke="#bd5f43" stroke-width="3"/>
-       <path d="M668 272c-24 24-35 132 0 150" fill="none" stroke="#f08343" stroke-width="5" opacity=".55"/>
-      </g>
-      <path class="part-placeholder" d="M668 252 754 291v198l-86-51Z"/>
-     </g>
-
-     <g class="component-part sensor-part sensor-one" data-part="temp1" data-focus="temp1" tabindex="0" role="button" aria-label="Temperatursensor 1 anzeigen">
-      <g class="sensor-wire part-solid"><path d="M418 516C342 555 316 592 303 617"/><path d="M426 518C356 563 336 598 324 621"/></g>
-      <g class="to92 part-solid" transform="translate(401 481) rotate(-12)"><path d="M0 18V6A15 15 0 0 1 30 6v12Z"/><path d="M7 18v30m8-30v30m8-30v30"/></g>
-      <path class="part-placeholder" d="M398 480h36v52h-36Z"/>
-     </g>
-     <g class="component-part sensor-part sensor-two" data-part="temp2" data-focus="temp2" tabindex="0" role="button" aria-label="Temperatursensor 2 anzeigen">
-      <g class="sensor-wire part-solid"><path d="M650 334c70 43 80 171 36 225"/><path d="M657 337c68 49 70 170 42 224"/></g>
-      <g class="to92 part-solid" transform="translate(634 303) rotate(20)"><path d="M0 18V6A15 15 0 0 1 30 6v12Z"/><path d="M7 18v30m8-30v30m8-30v30"/></g>
-      <path class="part-placeholder" d="M630 301h42v54h-42Z"/>
-     </g>
-
-     <g class="component-part cup-detect" data-part="cup" data-focus="cup" tabindex="0" role="button" aria-label="Bechererkennung anzeigen">
-      <g class="part-solid"><rect x="482" y="509" width="46" height="19" rx="6" fill="#1d2320" stroke="#93a09a"/><circle cx="505" cy="514" r="5" fill="#76b9d0"/><path d="M505 529v31" stroke="#303d39" stroke-width="3"/></g>
-     </g>
-
-     <g class="component-part heatsink-part" data-part="fan" data-focus="fan" tabindex="0" role="button" aria-label="Kühlkörper und Lüfter anzeigen">
-      <g class="part-solid">
-       <path d="M718 418 842 450v132l-124-36Z" fill="#343a37" stroke="#8d9590"/>
-       <g class="sink-fins" fill="none" stroke="#9ca39e" stroke-width="7"><path d="m728 426 2 111"/><path d="m746 431 2 112"/><path d="m764 436 2 112"/><path d="m782 440 2 113"/><path d="m800 445 2 113"/><path d="m818 449 2 113"/><path d="m836 454 2 113"/></g>
-       <g class="fan-housing"><path d="m746 442 119 31v121l-119-34Z" fill="#171b19" fill-opacity=".92" stroke="#6d7570" stroke-width="6"/><path d="m759 457 91 24v96l-91-26Z" fill="#0a0c0b" stroke="#414844" stroke-width="3"/><g class="fan-rotor" transform="translate(804 517) skewY(14)"><g class="fan-blades"><path d="M0-14C8-39 27-33 22-15 42-7 36 13 17 15 10 39-10 38-17 18-41 15-42-6-22-15-23-38-4-42 0-14Z" fill="#555d58" stroke="#858d88"/></g><circle r="16" fill="#6e7571"/><circle r="8" fill="#252a27"/></g></g>
-      </g>
-      <path class="part-placeholder" d="m718 418 147 45v131l-147-48Z"/>
-     </g>
-
-     <g class="pcb-assembly" data-focus="pico" tabindex="0" role="button" aria-label="Leiterplatte und Pico W anzeigen" filter="url(#softShadow)">
-      <path d="m140 436 221 54-4 149-221-61Z" fill="url(#pcb)" stroke="#4f8a70" stroke-width="3"/>
-      <circle cx="158" cy="463" r="7" fill="#101512" stroke="#9ab5a7"/><circle cx="334" cy="510" r="7" fill="#101512" stroke="#9ab5a7"/><circle cx="330" cy="611" r="7" fill="#101512" stroke="#9ab5a7"/><circle cx="155" cy="558" r="7" fill="#101512" stroke="#9ab5a7"/>
-      <g class="pcb-traces" fill="none" stroke="#6ca486" stroke-width="2" opacity=".55"><path d="m163 482 40 11 21 30 54 14"/><path d="m162 542 64 17 28-16 68 20"/><path d="m185 578 58 16 19-30 65 18"/><path d="m180 516 31 8 32-17 91 23"/></g>
-      <g class="pico-module"><path d="m177 465 72 18-3 99-72-20Z" fill="#166a75" stroke="#78adb2" stroke-width="2"/><path d="m188 477 49 12-1 25-49-12Z" fill="#b2bbc0"/><rect x="192" y="522" width="34" height="27" transform="rotate(14 209 535)" fill="#25302f"/><g fill="#d7bc63"><circle cx="178" cy="481" r="2"/><circle cx="177" cy="492" r="2"/><circle cx="176" cy="503" r="2"/><circle cx="175" cy="514" r="2"/><circle cx="244" cy="497" r="2"/><circle cx="244" cy="508" r="2"/><circle cx="243" cy="519" r="2"/><circle cx="243" cy="530" r="2"/></g></g>
-      <g class="adc-chip component-part" data-part="adc" data-focus="adc"><path d="m275 504 35 9-1 31-36-10Z" fill="#151917" stroke="#929993"/><path d="m269 510-11-3m11 10-11-3m11 10-11-3m55-1 11 3m-11 6 11 3m-11 6 11 3" stroke="#b8bcb6" stroke-width="2"/></g>
-      <g class="drivers" fill="#252b28" stroke="#7d847f"><path class="component-part" data-part="current1" data-focus="current1" d="m265 556 31 8-1 25-32-9Z"/><path class="component-part" data-part="current2" data-focus="current2" d="m303 566 31 8-1 25-32-9Z"/></g>
-      <g class="connectors" fill="#202522" stroke="#8d958f"><path d="m143 485 20 5-1 31-20-5Z"/><path d="m314 486 32 8-1 15-32-8Z"/><path d="m137 533 22 6-1 29-22-6Z"/></g>
-      <text x="183" y="569" transform="rotate(14 183 569)">PICO W</text><text x="272" y="546" transform="rotate(14 272 546)">TLA2024</text>
-      <g class="status-leds component-part" data-part="leds" data-focus="leds"><circle cx="269" cy="612" r="4"/><circle cx="281" cy="615" r="4"/><circle cx="293" cy="618" r="4"/><circle cx="305" cy="621" r="4"/><circle cx="317" cy="624" r="4"/></g>
-      <g class="power-jack component-part" data-part="power" data-focus="power"><path d="m111 525 32 8-1 38-32-9Z" fill="#151817" stroke="#777e79"/><ellipse cx="117" cy="544" rx="7" ry="11" fill="#060706" stroke="#a3aaa5"/></g>
-     </g>
-
-     <g class="component-part front-console" data-part="oled" data-focus="oled" tabindex="0" role="button" aria-label="OLED-Display anzeigen" filter="url(#softShadow)">
-      <g class="part-solid"><path d="m646 516 136-38v112l-136 41Z" fill="#242a27" stroke="#727a75" stroke-width="3"/><path d="m667 524 91-25v52l-91 27Z" fill="#12373d" stroke="#53858a" stroke-width="3"/><text class="oled-temp" x="681" y="543" transform="rotate(-15 681 543)">32.4°</text><text class="oled-target" x="707" y="558" transform="rotate(-15 707 558)">45.0°</text></g>
-      <path class="part-placeholder" d="m646 516 136-38v112l-136 41Z"/>
-     </g>
-     <g class="component-part physical-buttons" data-part="buttons" data-focus="buttons" tabindex="0" role="button" aria-label="Bedientaster anzeigen">
-      <g class="part-solid"><g transform="skewY(-15)"><rect x="655" y="584" width="25" height="20" rx="5"/><rect x="687" y="584" width="25" height="20" rx="5"/><rect x="719" y="584" width="25" height="20" rx="5"/><rect x="751" y="584" width="25" height="20" rx="5"/></g><text x="655" y="621">MODE</text><text x="690" y="612">−</text><text x="723" y="603">OK</text><text x="756" y="594">+</text></g>
-      <path class="part-placeholder" d="m650 576 131-38v66l-131 39Z"/>
-     </g>
-
-     <g class="component-part light-sensor" data-part="light" data-focus="light" tabindex="0" role="button" aria-label="Lichtsensor anzeigen"><g class="part-solid"><circle cx="813" cy="413" r="15" fill="#161a18" stroke="#8d9690" stroke-width="4"/><path d="m806 411 7-8 8 6-6 11Z" fill="#9a7657"/><path d="M797 397l-10-10m27 8 3-14m8 24 14-4" stroke="#76b9d0" stroke-width="2"/></g><circle class="part-placeholder" cx="813" cy="413" r="18"/></g>
-    </svg>
+    <!--__PRODUCT_SVG__-->
     <div class="component-hotspots" id="componentHotspots" aria-label="Komponenten direkt konfigurieren"></div>
    </div>
-
    <aside class="product-panel">
-    <div class="product-summary"><div class="state-mark"><i></i><span><small>SYSTEMSTATUS</small><strong id="systemState">Wird geladen</strong></span></div><p id="stateNarrative">Das Gerät wird mit dem Pico synchronisiert.</p><dl><div><dt>Temperatur</dt><dd><b id="overviewTemperature">—</b> °C</dd></div><div><dt>Heizleistung</dt><dd id="overviewPower">—</dd></div></dl></div>
+    <div class="product-summary"><div class="state-mark"><i></i><span><small>SYSTEMSTATUS</small><strong id="systemState">Wird geladen</strong></span></div><dl><div><dt>Isttemperatur</dt><dd><b id="overviewTemperature">—</b> °C</dd></div><div><dt>Heizleistung</dt><dd id="overviewPower">—</dd></div></dl><p id="stateNarrative">Das Gerät wird mit dem Pico synchronisiert.</p></div>
     <section class="component-focus" id="componentLens" aria-live="polite">
      <small id="componentGroup">BAUTEIL</small><h2 id="componentName">Komponente auswählen</h2><p id="componentRole">Tippe auf ein Bauteil oder auf ein Plus direkt in der Illustration.</p>
      <div class="simple-states"><span><small>GEPLANT</small><strong id="componentPlanned">Ja</strong></span><span><small>ANGESCHLOSSEN</small><strong id="componentConnected">—</strong></span><span><small>LIVE</small><strong id="componentLive">—</strong><b id="componentMeasurement">—</b></span></div>
     </section>
-    <section class="component-list-section"><header><small>PREVIEW: DIREKT HINZUFÜGEN</small><strong>KOMPONENTEN</strong></header><div class="component-list" id="configurationList"></div><p id="configurationHint"></p></section>
+    <section class="component-list-section"><header><small>PREVIEW · DIREKT HINZUFÜGEN</small><strong>KOMPONENTEN</strong></header><div class="component-list" id="configurationList"></div><p id="configurationHint"></p></section>
    </aside>
   </div>
  </section>
 
  <section class="page-section loop-section" id="regelkreis" aria-labelledby="loopTitle">
-  <header class="section-heading"><span>02</span><div><p>REGELKREIS</p><h2 id="loopTitle">So hält das System die Temperatur.</h2><small>Der Regler vergleicht Soll- und Isttemperatur und passt die Heizleistung automatisch an.</small></div></header>
+  <header class="section-heading"><span>02</span><div><p>REGELKREIS</p><h2 id="loopTitle">So hält das System die Temperatur.</h2><small>Soll und Ist werden verglichen. Der PI-Regler passt die Heizleistung automatisch an.</small></div></header>
   <div class="simple-loop" id="simpleLoop">
    <div class="loop-step setpoint-step"><em id="loopSetpoint">—</em><strong>SOLL</strong><small>Sollwert · w(t)</small></div><i class="flow-arrow"></i>
-   <div class="loop-step"><em id="loopDeviation">—</em><strong>VERGLEICH</strong><small>Abweichung · e(t)</small></div><i class="flow-arrow"></i>
-   <div class="loop-step"><em id="piNodeState">inaktiv</em><strong>PI-REGLER</strong><small>berechnet</small></div><i class="flow-arrow"></i>
+   <div class="loop-step compare-step"><span class="compare-symbol" aria-hidden="true">Σ</span><em id="loopDeviation">—</em><strong>VERGLEICH</strong><small>Fehler · e(t)</small></div><i class="flow-arrow"></i>
+   <div class="loop-step controller-step"><span class="pi-symbol" aria-hidden="true">PI</span><strong>REGLER</strong><small id="piNodeState">inaktiv</small></div><i class="flow-arrow"></i>
    <div class="loop-step heat-step"><em id="loopOutput">—</em><strong>HEIZLEISTUNG</strong><small>Stellgröße · u(t)</small></div><i class="flow-arrow"></i>
-   <div class="loop-step peltier-step"><span class="peltier-symbol">P1 · P2</span><strong>PELTIER</strong><small>heizt seitlich</small></div><i class="flow-arrow"></i>
-   <div class="loop-step plant-step"><span class="cup-symbol">▱</span><strong>BECHER</strong><small id="plantState">Regelstrecke</small></div><i class="flow-arrow"></i>
-   <div class="loop-step sensor-step"><em id="loopSensor">—</em><strong>SENSOR</strong><small>Istwert · y(t)</small></div>
-   <div class="feedback-route"><span>ISTWERT ZURÜCK ZUM VERGLEICH</span></div>
+   <div class="loop-step plant-step"><svg class="loop-product" viewBox="0 0 92 55" aria-hidden="true"><path class="loop-jaw" d="M4 17h16v28H4zm68 0h16v28H72z"/><path class="loop-cup" d="M28 5h36l-4 37c-1 8-7 11-14 11s-13-3-14-11Z"/><path class="loop-rim" d="M27 5c0-5 38-5 38 0s-38 5-38 0"/></svg><strong>PELTIER + BECHER</strong><small><b>Aktor</b> · Regelstrecke G(s)</small><i id="plantState">wird erwärmt</i></div><i class="flow-arrow"></i>
+   <div class="loop-step sensor-step"><svg class="loop-sensor" viewBox="0 0 34 45" aria-hidden="true"><path d="M6 18V8a11 11 0 0 1 22 0v10Z"/><path d="M10 18v26m7-26v26m7-26v26"/></svg><em id="loopSensor">—</em><strong>SENSOR · IST</strong><small>Messwert · y(t)</small></div>
+   <div class="feedback-route"><span>RÜCKFÜHRUNG · y(t)</span></div>
   </div>
  </section>
 
  <section class="page-section live-section" id="live" aria-labelledby="liveTitle">
-  <header class="section-heading"><span>03</span><div><p>LIVE</p><h2 id="liveTitle">Das passiert gerade.</h2><small>Temperatur, Sollwert, Leistung und Zustand auf einen Blick.</small></div></header>
+  <header class="section-heading"><span>03</span><div><p>LIVE</p><h2 id="liveTitle">Das passiert gerade.</h2></div></header>
   <div class="live-overview"><div class="temperature-hero"><small>ISTTEMPERATUR</small><div><strong id="actualTemperature">—</strong><em>°C</em></div><span id="sensorQuality">Messwert wird erwartet</span></div><dl class="live-facts"><div><dt>SOLL</dt><dd><b id="liveSetpoint">—</b> °C</dd></div><div><dt>HEIZLEISTUNG</dt><dd id="powerOutput">—</dd></div><div><dt>LÜFTER</dt><dd id="fanRpm">—</dd></div><div><dt>STATUS</dt><dd id="liveSystemState">—</dd></div></dl></div>
   <section class="timeline-layer" aria-labelledby="timelineTitle"><header><div><small>VERLAUF</small><strong id="timelineTitle">TEMPERATUR UND LEISTUNG</strong></div><div class="primary-signals"><button class="active actual" data-signal="temperature" type="button">IST</button><button class="active target" data-signal="target" type="button">SOLL</button><button class="active power" data-signal="power" type="button">HEIZLEISTUNG</button></div><button id="moreSignalsButton" type="button" aria-expanded="false">Mehr Messwerte</button></header><div class="more-signals" id="moreSignals" hidden><button data-signal="temperature2" type="button">TEMP 2</button><button data-signal="current1" type="button">STROM 1</button><button data-signal="current2" type="button">STROM 2</button><button data-signal="fan" type="button">LÜFTER</button><button data-signal="light" type="button">LICHT</button><span class="time-range"><button type="button" class="active" data-range="60">1 min</button><button type="button" data-range="300">5 min</button><button type="button" data-range="900">15 min</button></span></div><canvas id="timelineCanvas" role="img" aria-label="Live-Verlauf von Isttemperatur, Solltemperatur und Heizleistung"></canvas></section>
-  <section class="control-panel" aria-labelledby="controlTitle"><div class="control-lock"><span id="lockIcon">🔒</span><div><small>BEDIENRECHTE</small><h3 id="controlTitle">Steuerung gesperrt</h3><p id="controlMessage">Live-Werte bleiben ohne PIN sichtbar.</p></div><button id="unlockButton" type="button">Mit PIN freigeben</button><button id="stopButton" class="stop-always" type="button">STOPP</button></div><div class="control-actions" id="controlActions" aria-hidden="true"><div class="setpoint-control"><button id="targetDown" type="button" aria-label="Solltemperatur senken">−</button><label><small>Solltemperatur</small><input id="targetInput" type="text" inputmode="decimal" value="45,0"><span>°C</span></label><button id="targetUp" type="button" aria-label="Solltemperatur erhöhen">+</button><button id="setpointButton" type="button">Speichern</button></div><div class="heat-actions"><button id="startButton" type="button">Heizen starten</button></div></div></section>
+  <section class="control-panel" aria-labelledby="controlTitle"><div class="control-lock"><span id="lockIcon">🔒</span><div><h3 id="controlTitle">Steuerung gesperrt</h3><p id="controlMessage">Live-Werte bleiben ohne PIN sichtbar.</p></div><button id="unlockButton" type="button">ENTSPERREN</button><button id="stopButton" class="stop-always" type="button">STOPP</button></div><div class="control-actions" id="controlActions" aria-hidden="true"><div class="setpoint-control"><button id="targetDown" type="button" aria-label="Solltemperatur senken">−</button><label><small>Solltemperatur</small><input id="targetInput" type="text" inputmode="decimal" value="45,0"><span>°C</span></label><button id="targetUp" type="button" aria-label="Solltemperatur erhöhen">+</button><button id="setpointButton" type="button">SETZEN</button></div><div class="heat-actions"><button id="startButton" type="button">START</button></div></div></section>
   <section class="safety-summary" id="safetySummary"><i>✓</i><div><small>SICHERHEIT</small><strong id="safetyTitle">System wird geprüft</strong><p id="safetyReason">Safety-Freigaben kommen direkt vom Pico.</p></div><button id="safetyDetailsButton" type="button" aria-expanded="false">Details</button><div id="safetyDetails" hidden></div></section>
  </section>
 

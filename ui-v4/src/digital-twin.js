@@ -2,8 +2,8 @@
 "use strict";
 var components=window.V4_COMPONENTS||[],preview=false,current=null,online=false,activeId="",connected=new Set();
 var groups={physical:"GERÄT",thermal:"WÄRMEWEG",sensors:"SENSORIK",power:"LEISTUNG",control:"STEUERUNG",interface:"BEDIENUNG",auxiliary:"UMGEBUNG",connectivity:"VERBINDUNG"};
-var configurable=["temp1","temp2","peltier1","peltier2","fan","light","oled","buttons","rgb","cup","adc","current1","current2","leds","power"];
-var positions={temp1:[42,70],temp2:[66,43],peltier1:[27,52],peltier2:[77,52],fan:[84,70],light:[82,54],oled:[72,74],buttons:[74,85],rgb:[51,52],cup:[51,73],adc:[29,73],current1:[27,82],current2:[32,84],leds:[30,88],power:[11,78]};
+var configurable=["temp1","temp2","peltier1","peltier2","oled","fan"];
+var positions={temp1:[43,65],temp2:[63,47],peltier1:[31,49],peltier2:[72,49],oled:[65,81],fan:[84,68]};
 function byId(id){return document.getElementById(id);}function all(selector){return Array.prototype.slice.call(document.querySelectorAll(selector));}function component(id){return components.find(function(item){return item.id===id;});}function create(tag,className,text){var node=document.createElement(tag);if(className)node.className=className;if(text!==undefined)node.textContent=text;return node;}
 function liveFor(item){if(preview&&!connected.has(item.id))return{state:"NICHT ANGESCHLOSSEN",tone:"neutral",value:"—"};if(!current||!online)return{state:"NICHT VERFÜGBAR",tone:"unknown",value:"—"};return item.live(current,online);}
 function connectedState(item,live){if(preview)return connected.has(item.id)?"JA":"NEIN";if(!online)return"NICHT VERFÜGBAR";if(live.tone==="valid"||live.tone==="detected"||live.tone==="active"||live.tone==="fault")return"JA";if(live.tone==="neutral")return"NICHT ANGESCHLOSSEN";return"NICHT DIREKT ÜBERWACHT";}
@@ -18,6 +18,6 @@ function focus(id){var item=component(id);if(!item)return;activeId=id;all("[data
 function renderLens(item){var live=liveFor(item);byId("componentGroup").textContent=groups[item.group]||"BAUTEIL";byId("componentName").textContent=item.name;byId("componentRole").textContent=item.role;byId("componentPlanned").textContent="JA";byId("componentConnected").textContent=connectedState(item,live);byId("componentLive").textContent=simpleLive(live);byId("componentMeasurement").textContent=live.value||"—";}
 function update(status,isOnline){current=status;online=!!isOnline;components.forEach(function(item){var live=liveFor(item);all('[data-part="'+item.id+'"]').forEach(function(part){part.classList.toggle("component-fault",live.tone==="fault");});if(!preview&&configurable.indexOf(item.id)>=0){var enabled=connectedState(item,live)!=="NICHT ANGESCHLOSSEN";if(enabled)connected.add(item.id);else connected.delete(item.id);setVisualState(item.id,enabled,false);}});if(activeId)renderLens(component(activeId));}
 function bindParts(){all("[data-focus]").forEach(function(node){function select(){focus(node.dataset.focus);}node.addEventListener("click",select);node.addEventListener("keydown",function(event){if(event.key==="Enter"||event.key===" "){event.preventDefault();select();}});});}
-function initialise(options){preview=!!(options&&options.preview);buildDirectControls();buildConfiguration();bindParts();focus("cup");var selected=new URLSearchParams(location.search).get("component");if(selected&&component(selected))focus(selected);}
+function initialise(options){preview=!!(options&&options.preview);buildDirectControls();buildConfiguration();bindParts();var selected=new URLSearchParams(location.search).get("component");if(selected&&component(selected))focus(selected);}
 window.V4Twin={initialise:initialise,update:update,focus:focus,setConnected:setConnected,connected:connected};
 })();

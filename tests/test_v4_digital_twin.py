@@ -15,6 +15,8 @@ for behavior in ("buildDirectControls","toggleConnection","setConnected","setVis
     assert behavior in twin
 assert "configuration-drawer" not in preview and "projectHotspots" not in twin and "ProductScene" not in twin
 assert 'class="component-hotspots"' in preview and "component-control" in preview
+assert 'var configurable=["temp1","temp2","peltier1","peltier2","oled","fan"]' in twin
+assert twin.count("var positions=")==1
 assert "/api/" not in twin
 assert "useProfile(profiles" in preview and "useProfile(profiles" not in production
 assert len(production.encode("utf-8"))<128*1024
