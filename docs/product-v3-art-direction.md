@@ -104,3 +104,35 @@ Referenz: `build/ui-review/product-v3-phase3-front/1920x1080.png`
   Panelunterkante ruhiger an den Sockel angebunden.
 - Die noch sehr glatten Seiten erhalten erst in Phase 4 geschlossene,
   gehäusebündige Thermikabdeckungen.
+
+## Phase 4 – Außenmodulreview
+
+Referenz: `build/ui-review/product-v3-phase4-exterior/1920x1080.png`
+
+- Die geschlossenen Abdeckungen zeigen die thermischen Zonen ohne nackte
+  Peltierplatten oder Innenleben.
+- Ihre erste Fassung ist noch zu lang und durch den hellen Mittelstreifen zu
+  griffähnlich.
+- Die Abdeckungen werden flacher, kürzer und tonaler näher an das Gehäuse
+  gelegt; Orange bleibt nur eine sehr kurze, matte Fuge.
+- Die Lüftungsfläche sitzt noch zu tief und wie ein separates Modul. Sie wird
+  kleiner und bündig in die rechte Gehäusefacette verschoben.
+- OLED-Texte und Taster bleiben unverändert ruhig; es werden keine weiteren
+  technischen Details ergänzt.
+
+Die korrigierte Schlussfassung liegt unter
+`build/ui-review/product-v3-exterior-final/1920x1080.png`. Sie zeigt nur
+geschlossene Außenflächen; weder Rotor noch Peltierplatten, Sensoren, PCB,
+Pico, ADC oder Kabel sind sichtbar.
+
+## No-UI-Qualitätsfreigabe
+
+- 20 Prozent: `build/ui-review/product-v3-quality-scale20/1920x1080.png`
+- schwarze Silhouette: `build/ui-review/product-v3-quality-silhouette/1920x1080.png`
+- Blur: `build/ui-review/product-v3-quality-blur/1920x1080.png`
+- Graustufen: `build/ui-review/product-v3-quality-grayscale/1920x1080.png`
+
+Alle vier Darstellungen erhalten die Hierarchie Becher, Aufnahme, Halter und
+flacher Fuß. Der Fünf-Sekunden-Befund lautet „kompakter intelligenter
+Becherhalter“; Display, Lüftung und seitliche Thermikzonen bleiben als
+untergeordnete Produktdetails lesbar.

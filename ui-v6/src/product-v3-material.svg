@@ -40,15 +40,32 @@
   <path d="M626 403Q629 477 616 546" fill="none" stroke="#d9dfdb" stroke-width="2.5" stroke-linecap="round" opacity=".07"/>
  </g>
 
+ <!-- Phase 4: closed thermal covers, flush with the housing; no naked technology. -->
+ <g class="v3-thermal-covers">
+  <path d="M279 405Q293 377 324 359Q338 352 349 360L344 464Q335 493 307 501Q289 498 279 483Z" fill="#373e39"/>
+  <path d="M292 410Q303 389 325 377Q333 372 339 377L335 453Q329 474 313 481Q302 479 295 469Z" fill="#626b65" opacity=".23"/>
+  <path d="M632 405Q620 378 591 360Q577 353 566 361L571 461Q579 489 604 497Q621 495 631 480Z" fill="#2b312d"/>
+  <path d="M619 411Q609 391 590 378Q582 373 576 378L580 451Q586 472 601 478Q612 476 618 467Z" fill="#59625c" opacity=".2"/>
+  <path d="M343 383Q345 410 341 436" fill="none" stroke="#b86f4b" stroke-width="3" stroke-linecap="round" opacity=".24"/>
+  <path d="M567 383Q565 410 569 435" fill="none" stroke="#b86f4b" stroke-width="3" stroke-linecap="round" opacity=".24"/>
+ </g>
+
+ <!-- The cooling system remains hidden; only a quiet recessed side vent is visible. -->
+ <g class="v3-exterior-vent" opacity=".68">
+  <path d="M573 500Q598 494 620 481L617 548Q596 558 575 562Z" fill="#151a17"/>
+  <path d="M580 510Q597 505 612 496L610 538Q595 545 580 548Z" fill="#252b27"/>
+  <g fill="none" stroke="#68716b" stroke-width="3" stroke-linecap="round"><path d="M586 514 584 542"/><path d="M594 512 592 540"/><path d="M602 508 599 537"/><path d="M609 503 606 533"/></g>
+ </g>
+
  <!-- Phase 3: one integrated recess containing a small OLED and four physical keys. -->
  <g class="v3-control-panel">
-  <path d="M343 513Q391 527 438 528Q485 527 529 514L525 623Q481 639 438 640Q390 638 347 622Z" fill="#252b27"/>
+  <path d="M343 513Q391 527 438 528Q485 527 529 514L525 619Q482 632 438 633Q392 632 347 618Z" fill="#252b27"/>
   <path d="M357 531Q397 542 438 543Q478 542 516 532L513 585Q476 596 438 597Q397 596 360 585Z" fill="#111613"/>
   <path d="M368 540Q403 549 438 550Q472 549 504 541L502 577Q470 585 438 586Q403 585 370 577Z" fill="#0a2529"/>
   <text x="387" y="571" fill="#c8e8e5" font-family="Segoe UI, sans-serif" font-size="20" font-weight="500">32.4 °C</text>
   <text x="464" y="570" fill="#7fa0a0" font-family="Segoe UI, sans-serif" font-size="7.5" font-weight="600">SOLL 45.0</text>
   <g fill="#111512" opacity=".8"><ellipse cx="375" cy="609" rx="10" ry="5"/><ellipse cx="417" cy="614" rx="10" ry="5"/><ellipse cx="459" cy="614" rx="10" ry="5"/><ellipse cx="501" cy="609" rx="10" ry="5"/></g>
-  <g fill="#4e5751" stroke="#727c75" stroke-width="1"><circle cx="375" cy="605" r="8"/><circle cx="417" cy="610" r="8"/><circle cx="459" cy="610" r="8"/><circle cx="501" cy="605" r="8"/></g>
+  <g fill="#48504b" stroke="#667069" stroke-width="1"><circle cx="375" cy="605" r="8"/><circle cx="417" cy="610" r="8"/><circle cx="459" cy="610" r="8"/><circle cx="501" cy="605" r="8"/></g>
   <g fill="#9ca49f" font-family="Segoe UI, sans-serif" font-size="6" font-weight="600" text-anchor="middle"><text x="375" y="626">MODE</text><text x="417" y="632">DOWN</text><text x="459" y="632">OK</text><text x="501" y="626">UP</text></g>
  </g>
 
