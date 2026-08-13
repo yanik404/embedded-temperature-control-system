@@ -28,10 +28,14 @@ jobs:
         run: cc -std=c11 -Wall -Wextra -Werror -Iinclude tests/test_controller.c src/controller.c -lm -o controller_tests && ./controller_tests
       - name: Test status LED mapping on host
         run: cc -std=c11 -Wall -Wextra -Werror -Iinclude tests/test_status_led_logic.c src/status_led_logic.c -o status_led_tests && ./status_led_tests
+      - name: Test web control authorization on host
+        run: cc -std=c11 -Wall -Wextra -Werror -Iinclude tests/test_web_auth.c src/web_auth.c -o web_auth_tests && ./web_auth_tests
       - name: Test lwIP receive ownership contract
         run: python tests/test_lwip_pbuf_contract.py
       - name: Test large HTTP response chunking
         run: python tests/test_http_large_response.py
+      - name: Test web authorization contract
+        run: python tests/test_web_auth_contract.py
       - name: Check embedded dashboard asset
         run: python tests/test_dashboard_static.py && python tests/test_v3_visual_contract.py && python tests/test_v4_digital_twin.py
       - name: Upload UF2

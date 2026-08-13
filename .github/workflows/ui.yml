@@ -22,3 +22,4 @@ jobs:
           python tests/test_v4_digital_twin.py
           python tests/test_http_large_response.py
           python tests/test_lwip_pbuf_contract.py
+          python tests/test_web_auth_contract.py

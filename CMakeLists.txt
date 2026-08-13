@@ -60,6 +60,7 @@ add_executable(temperature_control
     src/status_leds.c
     src/safety.c
     src/webserver.c
+    src/web_auth.c
 )
 
 add_dependencies(temperature_control dashboard_assets)
@@ -74,6 +75,7 @@ target_compile_options(temperature_control PRIVATE -Wall -Wextra)
 target_link_libraries(temperature_control
     pico_stdlib
     pico_cyw43_arch_lwip_threadsafe_background
+    pico_rand
     hardware_adc
     hardware_i2c
     hardware_pwm

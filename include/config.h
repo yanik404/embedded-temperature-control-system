@@ -41,6 +41,9 @@
 #define WIFI_CONNECT_TIMEOUT_MS 15000u
 #define WIFI_RETRY_DELAY_MS      5000u
 
+/* Local dashboard control authorization. Safety checks remain independent. */
+#define WEB_CONTROL_SESSION_MS   300000u
+
 /* TLA2024 channels. */
 #define TLA_CH_PEL1_CS      0u
 #define TLA_CH_PEL2_CS      1u

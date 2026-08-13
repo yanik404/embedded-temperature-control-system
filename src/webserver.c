@@ -9,9 +9,11 @@
 #include "lwip/pbuf.h"
 #include "lwip/tcp.h"
 #include "pico/cyw43_arch.h"
+#include "pico/rand.h"
 #include "pico/stdlib.h"
 #include "safety.h"
 #include "web_assets.h"
+#include "web_auth.h"
 
 #define HTTP_REQUEST_BUFFER_SIZE 1536u
 #define HTTP_CLIENT_COUNT 4u
@@ -40,6 +42,7 @@ static bool first_connection_attempt = true;
 static int previous_link_status = CYW43_LINK_DOWN;
 static uint32_t connection_started_ms;
 static uint32_t retry_due_ms;
+static web_auth_t control_auth;
 
 static uint32_t milliseconds(void) {
     return to_ms_since_boot(get_absolute_time());
@@ -120,6 +123,80 @@ static const char *start_block_reason(void) {
     if (!s->cup_detected) return "Kein Becher erkannt";
     if (!s->power_5v_ok) return "5V-Leistungsversorgung fehlt";
     return "Start ist freigegeben";
+}
+
+static const char *request_body(const char *request) {
+    const char *body = strstr(request, "\r\n\r\n");
+    if (body != NULL) return body + 4u;
+    body = strstr(request, "\n\n");
+    return body != NULL ? body + 2u : NULL;
+}
+
+static size_t request_header_length(const char *request) {
+    const char *body = strstr(request, "\r\n\r\n");
+    if (body != NULL) return (size_t)(body + 4u - request);
+    body = strstr(request, "\n\n");
+    return body != NULL ? (size_t)(body + 2u - request) : 0u;
+}
+
+static size_t request_content_length(const char *request) {
+    static const char name[] = "content-length";
+    const char *line = strchr(request, '\n');
+    while (line != NULL && *++line != '\0' && *line != '\r' && *line != '\n') {
+        size_t i = 0u;
+        while (i < sizeof(name) - 1u) {
+            char value = line[i];
+            if (value >= 'A' && value <= 'Z') value = (char)(value + ('a' - 'A'));
+            if (value != name[i]) break;
+            ++i;
+        }
+        if (i == sizeof(name) - 1u && line[i] == ':') {
+            return (size_t)strtoul(line + i + 1u, NULL, 10);
+        }
+        line = strchr(line, '\n');
+    }
+    return 0u;
+}
+
+static bool form_value(const char *body, const char *name, char *value, size_t value_size) {
+    if (body == NULL || name == NULL || value == NULL || value_size == 0u) return false;
+    const size_t name_length = strlen(name);
+    const char *cursor = body;
+    while (*cursor != '\0') {
+        if ((cursor == body || cursor[-1] == '&') && strncmp(cursor, name, name_length) == 0 &&
+            cursor[name_length] == '=') {
+            cursor += name_length + 1u;
+            size_t written = 0u;
+            while (*cursor != '\0' && *cursor != '&' && written + 1u < value_size) {
+                value[written++] = *cursor++;
+            }
+            value[written] = '\0';
+            return true;
+        }
+        cursor = strchr(cursor, '&');
+        if (cursor == NULL) break;
+        ++cursor;
+    }
+    value[0] = '\0';
+    return false;
+}
+
+static bool request_token(const char *request, char *token, size_t token_size) {
+    return form_value(request_body(request), "token", token, token_size);
+}
+
+static bool request_authorized(const char *request) {
+    char token[WEB_AUTH_TOKEN_LENGTH + 1u];
+    return request_token(request, token, sizeof(token)) &&
+           web_auth_validate(&control_auth, token, milliseconds());
+}
+
+static err_t send_response(http_client_t *context, struct tcp_pcb *client,
+                           const char *status, const char *type, const char *body);
+
+static err_t send_unauthorized(http_client_t *context, struct tcp_pcb *client) {
+    return send_response(context, client, "401 Unauthorized", "application/json",
+                         "{\"ok\":false,\"reason\":\"Steuerung gesperrt\"}");
 }
 
 static err_t send_response_data(http_client_t *context, struct tcp_pcb *client);
@@ -267,7 +344,8 @@ static void status_json(char *buffer, size_t buffer_size) {
         "\"tla2024_ok\":%s,\"light_ok\":%s,\"display_initialized\":%s,\"leds_initialized\":%s,"
         "\"cup\":%s,\"power_good\":%s,\"wifi\":%s,\"webserver_ready\":%s,"
         "\"wifi_ssid\":\"%s\",\"wifi_ip\":\"%s\",\"night\":%s,"
-        "\"start_allowed\":%s,\"start_block_reason\":\"%s\"}",
+        "\"start_allowed\":%s,\"start_block_reason\":\"%s\","
+        "\"control_unlock_available\":true}",
         system_state_name(s->state), error_name(s->error), error_description(s->error),
         s->temperature_c, s->temperature_1_c, s->temperature_2_c,
         s->setpoint_c, s->control_error_c, s->peltier_power_percent, s->fan_rpm,
@@ -307,7 +385,25 @@ static err_t process_http_request(http_client_t *context, struct tcp_pcb *client
         status_json(context->data, sizeof(context->data));
         return send_response(context, client, "200 OK", "application/json", context->data);
     }
+    if (strncmp(text, "POST /api/unlock ", 17u) == 0) {
+        char pin[16];
+        char token[WEB_AUTH_TOKEN_LENGTH + 1u];
+        if (!form_value(request_body(text), "pin", pin, sizeof(pin)) ||
+            !web_auth_unlock(&control_auth, pin, WEB_CONTROL_PIN, milliseconds(),
+                             WEB_CONTROL_SESSION_MS, get_rand_64(), token, sizeof(token))) {
+            printf("[HTTP] Bedienfreigabe abgelehnt\n");
+            return send_response(context, client, "403 Forbidden", "application/json",
+                                 "{\"ok\":false,\"reason\":\"PIN falsch\"}");
+        }
+        snprintf(context->data, sizeof(context->data),
+                 "{\"ok\":true,\"token\":\"%s\",\"expires_in_ms\":%u}",
+                 token, WEB_CONTROL_SESSION_MS);
+        printf("[HTTP] Bedienfreigabe fuer %u Sekunden erteilt\n",
+               (unsigned)(WEB_CONTROL_SESSION_MS / 1000u));
+        return send_response(context, client, "200 OK", "application/json", context->data);
+    }
     if (strncmp(text, "POST /api/start ", 16u) == 0) {
+        if (!request_authorized(text)) return send_unauthorized(context, client);
         if (start_allowed()) {
             server_config.start();
             return send_response(context, client, "200 OK", "application/json", "{\"ok\":true}");
@@ -317,11 +413,13 @@ static err_t process_http_request(http_client_t *context, struct tcp_pcb *client
         return send_response(context, client, "409 Conflict", "application/json", context->data);
     }
     if (strncmp(text, "POST /api/stop ", 15u) == 0) {
+        if (!request_authorized(text)) return send_unauthorized(context, client);
         server_config.stop();
         return send_response(context, client, "200 OK", "application/json", "{\"ok\":true}");
     }
     static const char setpoint_prefix[] = "POST /api/setpoint?value=";
     if (strncmp(text, setpoint_prefix, sizeof(setpoint_prefix) - 1u) == 0) {
+        if (!request_authorized(text)) return send_unauthorized(context, client);
         const float value = strtof(text + sizeof(setpoint_prefix) - 1u, NULL);
         if (value >= SETPOINT_MIN_C && value <= SETPOINT_MAX_C) {
             server_config.set_setpoint(value);
@@ -336,7 +434,9 @@ static err_t process_http_request(http_client_t *context, struct tcp_pcb *client
 }
 
 static bool request_is_complete(const char *request) {
-    return strstr(request, "\r\n\r\n") != NULL || strstr(request, "\n\n") != NULL;
+    const size_t header_length = request_header_length(request);
+    if (header_length == 0u) return false;
+    return strlen(request) >= header_length + request_content_length(request);
 }
 
 static void client_error(void *arg, err_t error) {
@@ -413,6 +513,7 @@ bool webserver_init(const webserver_config_t *config) {
         config->stop == NULL || config->set_setpoint == NULL) return false;
     server_config = *config;
     memset(http_clients, 0, sizeof(http_clients));
+    web_auth_init(&control_auth);
     const int init_result = cyw43_arch_init();
     if (init_result != 0) {
         printf("[WLAN] Verbindungsfehler bei Initialisierung (Fehlercode %d)\n", init_result);
