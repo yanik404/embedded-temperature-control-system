@@ -89,35 +89,34 @@ UP/DOWN ändern den Sollwert in 0,5-°C-Schritten. OK startet oder stoppt; im Fe
 
 ## Weboberfläche
 
-Der Pico W liefert die responsive V4 **Configurator / Digital Twin Experience** direkt aus dem Flash unter `http://<PICO-IP>` aus. Der Becherhalter ist die Oberfläche: Ein eigener WebGL-Raymarcher modelliert ein leicht konisches Trinkglas mit Inhalt, zwei seitlich kontaktierte TMP36, Metallplatte, zwei Peltiermodule, Lamellenkühlkörper, Frontlüfter, befestigte Pico-/TLA2024-Platine sowie Bedienmodul in kontrollierter 3/4-Perspektive. Beleuchtung, Tiefennebel, Wärmematerial, Luft-/Energiefluss und die Explosionsdarstellung reagieren auf reale API-Werte. Ohne WebGL bleibt automatisch dieselbe mechanische Anordnung als semantische SVG-Produktrückfallebene sichtbar.
+Die aktuelle Oberfläche folgt dem Prinzip **Simple Digital Twin** und erklärt das System in dieser Reihenfolge:
 
-Der geschlossene Regelkreis läuft räumlich um das Produkt: `w(t)` → Vergleich → PI → `u(t)` → Peltier → Becher/Strecke → TMP36 `y(t)` → Rückführung. Ein transparenter Canvas-Zeithorizont aktualisiert Istwert, Sollwert, zweite Temperatur und Stellgröße alle 500 ms ohne Seitenreload; die Zeitfenster 1, 5 und 15 Minuten verwenden ausschließlich browserlokale Historie. Die minimale Randzeile zeigt SSID, aktuelle DHCP-IP, Live/Offline und Zeit des letzten Signals.
+1. **Aufbau:** kompletter Becherhalter mit Glas, Sensoren, Heizplatte, zwei Peltiers, Kühlkörper, Lüfter, PCB/Pico W, Display und Tastern. Wenige Hotspots führen zu den Zuständen `GEPLANT`, `ANGESCHLOSSEN` und `LIVE`; weitere Komponenten und der logisch explodierte Aufbau sind optional einblendbar.
+2. **Regelkreis:** einfache, geschlossene Darstellung von Solltemperatur über Vergleich und PI-Regler zu Peltier, realem Becher und Sensor mit Rückführung.
+3. **Live:** Isttemperatur, Solltemperatur, Heizleistung, Lüfter, Zustand und der Verlauf von IST, SOLL und HEIZLEISTUNG. Weitere Messreihen sind zunächst eingeklappt.
+4. **Technik:** optionale Details zu GPIO, Messwerten, PI-Parametern, WLAN, IP und Firmwarestatus.
 
-Die Ansichten `PRODUKT`, `REGELUNG`, `THERMISCH` und `ENGINEERING` beantworten bewusst verschiedene Fragen. PRODUCT erklärt das Gerät, CONTROL macht den geschlossenen Kreis verständlich, THERMAL zeigt den Wärmeweg und ENGINEERING fährt den Aufbau auseinander. Die zusätzlichen Linsen `PRODUCT`, `X-RAY` und `SIGNALS` wechseln zwischen ruhigem Produktbild, transparentem technischem Aufbau und elektrischen Signalpfaden. Eine durchgehende Scroll-Story führt vom physischen System über Regelkreis, Live-Control und Analyse bis zu Safety und Engineering, ohne das Produkt als sichtbare Regelstrecke zu ersetzen.
+Live-Daten sind ohne Anmeldung lesbar. START, STOP und Sollwertänderungen sind dagegen zunächst gesperrt. Über **Mit PIN freigeben** wird die Präsentations-PIN `1234` an `POST /api/unlock` gesendet und ausschließlich auf dem Pico geprüft. Bei Erfolg erzeugt der Pico ein zufälliges, flüchtiges Token mit fünf Minuten Gültigkeit. Jeder Schreibbefehl muss dieses Token mitsenden; danach gelten unverändert sämtliche Sensor-, Becher-, Versorgungs-, Lüfter-, Strom- und Temperaturfreigaben der Firmware. Die PIN ist eine lokale Bedienfreigabe im vertrauenswürdigen Präsentationsnetz, keine verschlüsselte Benutzerverwaltung.
 
-Elegante `+`-Hotspots fokussieren eine Komponente, ihren Signalweg, Pin/Kanal und den realen Live-Wert. Ihre Positionen entstehen aus den 3D-Weltkoordinaten und derselben Kamera wie das Produkt; sie bleiben dadurch auch bei Kamerabewegung und Explosionsansicht am Bauteil. Die Detailansicht trennt `KONFIGURATION`, `VERBINDUNG`, `LIVE` und `MESSWERT`. Der Digital Twin unterscheidet dabei strikt `VORGESEHEN`, `ANGESCHLOSSEN`, `ERKANNT`, `AKTIV`, `MESSUNG GÜLTIG`, `NICHT ERKANNT`, `NICHT DIREKT ÜBERWACHT`, `NICHT VERFÜGBAR` und `FEHLER`. Nicht angeschlossene optionale Hardware wird nicht automatisch als Systemfehler ausgegeben. `SYSTEM ERKLÄREN` führt in sechs animierten Schritten durch Messung, Vergleich, PI-Regler, Aktor, Regelstrecke und Rückführung.
+Der Pico W liefert die responsive Single-Page-Oberfläche direkt aus dem Flash unter `http://<PICO-IP>`. Der bestehende WebGL-Raymarcher zeichnet den mechanischen Aufbau; ohne WebGL erscheint sofort dieselbe Anordnung als SVG. Hotspots werden aus Modellkoordinaten projiziert und bleiben dadurch auch beim logisch explodierten Aufbau am Bauteil. Das Live-Diagramm aktualisiert sich alle 500 ms und hält bis zu 30 Minuten Verlauf ausschließlich im Browser. Die Produktion benötigt keine CDN-, Font- oder sonstigen Asset-Requests.
 
-Der interaktive Analysehorizont kann `TEMP 1`, `TEMP 2`, `SOLL`, `u(t)`, `I1`, `I2`, `FAN` und `LIGHT` ein- oder ausblenden. Nicht sinnvoll verfügbare Signale werden nicht angeboten. Ein PI-Fokus zeigt Kp, Ki, P-/I-Anteil und Anti-Windup read-only. Der Vollbild-Präsentationsmodus priorisiert Produkt, Regelkreis und Live-Verlauf. Bei ausbleibenden API-Antworten bleiben Szene und letzter Verlauf sichtbar, während alle Aktionen gesperrt werden. START, STOP und Sollwert bleiben auf PC, Tablet und Smartphone bedienbar. Die Safety-Entscheidung bleibt immer serverseitig.
-
-Der Hardwarestatus unterscheidet bewusst zwischen `OK`, `AKTIV`, `AUS`, `FEHLER`, `NICHT VERBUNDEN`, `NICHT VERFÜGBAR` und `UNBEKANNT`. Ein grüner Status wird nur angezeigt, wenn die Firmware die Initialisierung, einen plausiblen Messwert oder einen beobachtbaren Betriebswert bestätigen kann. Die Startfreigabe nennt bei einer Sperre den konkreten Grund, beispielsweise einen fehlenden Becher, eine ungültige Strommessung oder fehlendes Power-Good.
-
-Die Statusfarben bedeuten: Grün = bestätigt/aktiv, Blau = normal/bereit, Orange = Warnung oder unbekannt, Rot = Fehler und Grau = aus oder nicht verfügbar.
+Statusfarben bleiben bewusst sparsam: Orange zeigt Heizenergie, Grün einen bestätigten sicheren Zustand, Rot einen echten Fehler, Blau Information und Grau einen unbekannten oder nicht angeschlossenen Zustand.
 
 ### Lokale Designvorschau
 
-`preview.html` direkt im Browser öffnen, um exakt dieselbe Oberfläche ohne Pico und WLAN mit animierten Demo-Daten anzusehen. START, STOP und SOLLWERT ÜBERTRAGEN verändern dort ausschließlich den lokalen Demo-Zustand. `SYSTEMAUFBAU` öffnet den lokalen Konfigurator: Alle 19 Komponenten bleiben als geplante Systemkonfiguration sichtbar; nur ihr simulierter Anschlusszustand wird verändert. Das führt niemals einen Hardware- oder API-Befehl aus. Die Preview-Profile `FULL SYSTEM`, `MINIMAL SYSTEM`, `PARTIAL HARDWARE` und `NO SENSORS` demonstrieren die Trennung von `VORGESEHEN`, `NICHT ANGESCHLOSSEN` und Live-Erkennung. Die Szenarien `READY`, `HEATING`, `HOLDING`, `ERROR`, `OFFLINE`, `RECONNECT`, `SENSOR ERROR`, `FAN ERROR`, `POWER ERROR` und `30 MIN DEMO` prüfen Betriebszustände sowie einen vollständigen Aufheiz-/Halteverlauf von 22 auf 50 °C.
+`preview.html` direkt im Browser öffnen, um dieselbe Oberfläche ohne Pico und WLAN mit animierten Demo-Daten anzusehen. Der Konfigurator kann Bauteile sichtbar an ihre reale Modellposition einsetzen oder wieder entfernen. Die simulierte PIN ist ebenfalls `1234`; START, STOP und Sollwert verändern ausschließlich den lokalen Demo-Zustand und senden niemals Hardware- oder API-Befehle. Die vorhandenen Profile und Fehlerszenarien prüfen vollständige, minimale und teilweise bestückte Systeme sowie den Aufheiz-/Halteverlauf.
 
 Die bewährte Render-, API- und Chart-Basis liegt unter `ui-v3/src/`; die V4-Digital-Twin-Schicht liegt getrennt unter `ui-v4/src/`. `ui/src/` bleibt als jederzeit wiederherstellbare Observatory-V2-Basis im Repository:
 
 - `index.html` – semantische Oberfläche und SVG-Systemdarstellungen
-- `experience.css` – räumliche Komposition, Zustände, Responsive- und Motion-System
+- `experience.css` – vierstufige Simple-Digital-Twin-Komposition und responsive Layouts
 - `product-scene.js` – eigener 3D-SDF/WebGL-Renderer mit einem Draw Call
 - `thermal-overlay.js` – dezente Wärme-, Partikel- und Luftstromebene
-- `experience.js` – reale API, Bedienung, Chart und technische Ansichten
+- `experience.js` – Read-only-Live-API, Token-Bedienung, Chart und technische Details
 - `preview.js` – ausschließlich lokale Simulation
 - `ui-v4/src/component-model.js` – vollständiger Hardwarekatalog und ehrliche Live-Discovery-Abbildung
-- `ui-v4/src/digital-twin.js` – Hotspots, Komponentenfokus, Konfigurator, Scroll-Story und Guided Journey
-- `ui-v4/src/digital-twin.css` – produktzentrierte V4-Komposition für Desktop, Tablet und Mobile
+- `ui-v4/src/digital-twin.js` – Hotspots, einfacher Komponentenfokus und Preview-Konfigurator
+- `ui-v4/src/digital-twin.css` – ergänzende Hotspot-Zustände und Einsetzanimation
 
 Die ausführbaren Vergleiche unter `ui-v3/prototypes/` enthalten einen echten Three.js-Prototyp, einen Custom-WebGL-Prototyp und drei funktionierende Sollwert-Bedienkonzepte. V3-Technologieentscheidung und V4-Digital-Twin-Architektur stehen in `docs/ui-v3-architecture.md` und `docs/ui-v4-architecture.md`.
 
@@ -128,7 +127,7 @@ python tools/build_ui.py
 python tools/build_ui.py --check
 ```
 
-`powershell -ExecutionPolicy Bypass -File tools/capture_ui_review.ps1 -Round manual` rendert die sieben Referenz-Viewports automatisiert mit exakt gesetzten Chrome-/Edge-DevTools-Gerätemetriken nach `build/ui-review/manual/`. `python tools/audit_ui_layout.py` prüft zusätzlich alle acht Ansichten bei denselben sieben Viewports auf sichtbare Text-/Hotspot-Kollisionen, abgeschnittene Bedienelemente und horizontalen Overflow. Konzeptentscheidung, visuelle Reviews, Persona-/Anti-Card-Audit und Performancewerte sind unter `docs/` dokumentiert.
+`powershell -ExecutionPolicy Bypass -File tools/capture_ui_review.ps1 -Round manual` rendert die sieben Referenz-Viewports automatisiert mit exakt gesetzten Chrome-/Edge-DevTools-Gerätemetriken nach `build/ui-review/manual/`. `python tools/audit_ui_layout.py` prüft AUFBAU, REGELKREIS und LIVE bei denselben sieben Viewports auf sichtbare Kollisionen und horizontalen Overflow. Die drei Reduktions- und Responsive-Reviews stehen in `docs/simple-digital-twin-review.md`.
 
 ## Softwarearchitektur
 
