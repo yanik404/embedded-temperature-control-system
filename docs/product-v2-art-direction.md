@@ -131,3 +131,50 @@ Der erste Schnitt-Render zeigte PCB und Lüfter noch zu stark hinter OLED und
 Lüftung. Für die Freigabe wurde das Elektronikdeck angehoben, die Frontblende
 als transparente Schnittabdeckung zurückgenommen und der Lüfter verkleinert
 und tiefer hinter die Lamellen gesetzt.
+
+## Finaler visueller Nachweis
+
+### Before / After
+
+- Before, unveränderter Fallback: `build/ui-review/art-direction-v2-before/1920x1080.png`
+- After, neue Außenansicht isoliert: `build/ui-review/art-direction-v2-exterior-final/1920x1080.png`
+- After, neue Außenansicht im Dashboard: `build/ui-review/product-v2-integrated-exterior/1920x1080.png`
+- After, neue Aufbauansicht im Dashboard: `build/ui-review/product-v2-integrated-build-final/1920x1080.png`
+
+### Pflichtgrößen
+
+Die isolierte Außenansicht liegt unter
+`build/ui-review/product-v2-responsive-exterior-final/`, die Aufbauansicht
+unter `build/ui-review/product-v2-responsive-cutaway/`. Für beide wurden
+`1920x1080`, `1440x900`, `1366x768`, `768x1024` und `390x844` erzeugt.
+Dashboard-Referenzen für Desktop, Tablet und Mobil liegen zusätzlich unter
+`build/ui-review/product-v2-dashboard-exterior/` und
+`build/ui-review/product-v2-dashboard-build/`.
+
+### Lesbarkeitstests
+
+- 20-Prozent-Test: `build/ui-review/art-direction-v2-tests-scale20/1920x1080.png`
+- Graustufen-Test: `build/ui-review/art-direction-v2-tests-grayscale/1920x1080.png`
+- Unschärfe-Test: `build/ui-review/art-direction-v2-tests-blur/1920x1080.png`
+- Silhouetten-Test: `build/ui-review/art-direction-v2-tests-silhouette/1920x1080.png`
+
+Der Fünf-Sekunden-Test ergibt ohne Begleittext: breiter Becher in einer
+kompakten elektrischen Halterung, seitliche Thermikmodule, Frontbedienung und
+integrierte Kühlung. Die Außenansicht bleibt dabei als fertiges Produkt und
+nicht als offene Maschine lesbar.
+
+### Layout, Performance und Regression
+
+- Layout-Audit: 21 Kombinationen aus AUFBAU, REGELKREIS und LIVE über sieben
+  Viewports, jeweils null Kollisionen und null horizontaler Overflow.
+- Produktionsgröße: `94.614 B`, theoretisch gzip `26.033 B`.
+- Externe Bibliotheken: `0 B`; zusätzliche Asset-Requests: `0`; WebGL: `0`.
+- Große HTTP-Antwort: 65 lwIP-Sendechunks bei `TCP_SND_BUF=29.200 B`.
+- Alle UI-, Digital-Twin-, HTTP-, pbuf-, Auth- und Browser-Verträge bestanden.
+- Controller-, Status-LED- und Web-Auth-C-Tests mit `-Wall -Wextra -Werror`
+  bestanden.
+- Pico-W-Release-Build erfolgreich; UF2-Größe `933.888 B`.
+
+Der Fallback `ui-v3/src/product.svg` blieb während des gesamten Laufs
+bytegenau unverändert. Sein abschließend erneut geprüfter SHA-256 lautet
+`16A61414E53C56D95675070C9203A597D02351C56D344B71A5F6AADFBF95BE15`.
