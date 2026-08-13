@@ -23,6 +23,9 @@ CHROME = (
     Path(r"C:\Program Files\Google\Chrome\Application\chrome.exe"),
     Path(r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"),
     Path(r"C:\Program Files\Microsoft\Edge\Application\msedge.exe"),
+    Path("/usr/bin/google-chrome"),
+    Path("/usr/bin/chromium"),
+    Path("/usr/bin/chromium-browser"),
 )
 
 
@@ -141,7 +144,7 @@ def capture(browser: Path, output: Path, width: int, height: int, url: str, prof
             "expression": (
                 "new Promise(resolve => {"
                 "const started=performance.now();"
-                "const ready=()=>{if(document.body&&document.body.classList.contains('ui-ready'))"
+                "const ready=()=>{if(document.readyState==='complete'&&document.getElementById('productIllustration'))"
                 "setTimeout(resolve," + str(delay_ms) + ");"
                 "else if(performance.now()-started>3000)resolve();else requestAnimationFrame(ready)};"
                 "if(document.readyState==='complete')ready();else addEventListener('load',ready,{once:true});"

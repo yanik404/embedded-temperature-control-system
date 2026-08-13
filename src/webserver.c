@@ -413,7 +413,8 @@ static err_t process_http_request(http_client_t *context, struct tcp_pcb *client
         return send_response(context, client, "409 Conflict", "application/json", context->data);
     }
     if (strncmp(text, "POST /api/stop ", 15u) == 0) {
-        if (!request_authorized(text)) return send_unauthorized(context, client);
+        /* STOP is deliberately always available: authentication must never
+           prevent a user on the local network from requesting a safe stop. */
         server_config.stop();
         return send_response(context, client, "200 OK", "application/json", "{\"ok\":true}");
     }
