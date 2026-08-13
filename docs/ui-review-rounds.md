@@ -44,12 +44,72 @@ Round-one outcome: the desktop hero reads as one product/process scene, tablet r
 two-focus composition, and mobile becomes a vertical technical narrative with no classic
 card stack.
 
-## Round 2 — pending
+## Round 2 — product and persona review
 
-The second capture, persona evaluation and anti-generic-design audit are recorded here after
-the responsive and production pipeline review.
+The second complete render was followed by the five-persona and anti-generic-design audit in
+`ui-persona-review.md`. Ten additional findings were implemented:
 
-## Round 3 — pending
+1. Short 1366×768 screens cut through the heater/fan assembly — hero, process orbit and
+   rotary dimensions now react to viewport height as well as width.
+2. German values were shown with decimal commas but the control used a decimal point — the
+   input now presents a comma and accepts both comma and point.
+3. Browser-native number spinners duplicated the authored ± interaction — the control is
+   now a numeric touch text field with explicit bounds and accessible naming.
+4. English chapter labels weakened the project identity — all main section markers are now
+   concise German engineering language.
+5. The graph began as an empty instrument in a local presentation — preview boot now seeds
+   five minutes of physically plausible history.
+6. The reduced-motion shader still scheduled empty animation frames — it now cancels the
+   loop and renders only when live state changes.
+7. Review captures included a developer scenario bar — deterministic review mode removes
+   that bar without altering the normal preview.
+8. Phone header live/IP tracks still relied on intrinsic text width — they now use explicit
+   viewport-bounded flex and grid geometry.
+9. Mobile annotations repeated physical labels and escaped the scene — only the current pair
+   remains adjacent; sensor, fan and plate meaning is carried by the drawing and live block.
+10. Preview URLs could not deterministically open a non-default state — `scenario=` now
+    selects READY, HOLDING, ERROR, DISCONNECT, RECOVERY or the 30-minute run at startup.
 
-The final product, presentation, performance and embedded-stability polish is recorded here
-after the second screenshot set.
+The deliberate non-change is equally important: the mobile interface was not converted into
+a tabbed card application. It remains a vertical spatial narrative with control immediately
+after the product/state scene.
+
+## Round 3 — final product polish
+
+The third seven-viewport set was rendered after the persona pass. The final review found and
+resolved ten product-level issues:
+
+1. The narrow phone header still clipped the IPv4 value. Live network identity and IP are
+   now two explicit rows, so the actual DHCP address remains readable at 390 px.
+2. The fifth state marker could leave the phone viewport. The state spine now becomes a
+   five-column instrument at phone width, guaranteeing OFF through ERROR stay visible.
+3. The remaining mobile current annotation had lost its physical meaning after label
+   reduction. A compact `PELTIER 1 / 2` label is retained next to the currents.
+4. API strings entered several engineering rows through HTML templates. All dynamic values
+   are now escaped before insertion, including SSID, IP and fault detail.
+5. An open Engineering drawer left controls behind it keyboard-focusable. Main scene and
+   header now become inert until the drawer is closed.
+6. A WebGL compile failure after context creation could also deny a 2D context. The final
+   fallback adds a static CSS thermal field even in that rare dual-context failure.
+7. Presentation mode could preserve an arbitrary previous scroll position. It now returns
+   to the product scene before entering the full-screen composition.
+8. Presentation and engineering review states were difficult to reproduce automatically.
+   Deterministic query switches now support screenshot/product inspection without changing
+   the user-facing controls.
+9. Deep-section screenshot positioning used an offset relative to `main`, not the document.
+   It now resolves document coordinates from the live bounding rectangle.
+10. No objective browser-ready marker existed. The first completed real/simulated render now
+    records `data-ui-ready-ms`, allowing repeatable local load measurements without a
+    framework or telemetry service.
+
+### Final review questions
+
+- **Visible beyond a normal dashboard?** Yes: the first viewport is one instrumented
+  physical thermal system and permission horizon, not a card grid.
+- **Credible in a high-end product?** Yes: state color and motion carry process meaning,
+  controls are restrained, technical details disclose progressively, and failure/offline
+  behavior is deliberate.
+- **Strong on a projector?** Yes: presentation mode preserves only the large product scene,
+  essential control values, signal chain and chart with high-contrast tabular numerals.
+- **Stable as a Pico asset?** Confirmed by byte synchronization, 128 KiB asset budget,
+  lwIP pbuf ownership test, 61-chunk large-response test and full Pico W link.

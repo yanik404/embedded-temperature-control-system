@@ -141,11 +141,32 @@
     window.ThermalUI.acceptStatus(demo, true);
   }
 
+  function prefillHistory() {
+    if (!window.ThermalUI || window.ThermalUI.history.length) return;
+    const now = Date.now();
+    for (let secondsAgo = 300; secondsAgo > 0; secondsAgo -= 2) {
+      const progress = (300 - secondsAgo) / 300;
+      const temperature = 37.1 + progress * 5.5 + Math.sin(progress * 13) * .05;
+      window.ThermalUI.history.push({
+        time: now - secondsAgo * 1000,
+        temperature,
+        temperature2: temperature - .45,
+        target: 50,
+        power: 82 - progress * 14,
+        valid: true,
+        valid2: true
+      });
+    }
+  }
+
   window.PreviewDriver = {
     start() {
       document.querySelectorAll("[data-scenario]").forEach(button => button.addEventListener("click", () => applyScenario(button.dataset.scenario)));
+      prefillHistory();
       updateDerived();
-      if (window.ThermalUI) window.ThermalUI.acceptStatus(demo, true);
+      const requested = new URLSearchParams(location.search).get("scenario");
+      if (["ready", "heating", "holding", "error", "disconnected", "recovery", "demo30"].includes(requested)) applyScenario(requested);
+      else if (window.ThermalUI) window.ThermalUI.acceptStatus(demo, true);
       requestAnimationFrame(tick);
     },
     command,

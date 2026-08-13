@@ -104,6 +104,10 @@
   function drawFallback() {
     resize();
     const ctx = context2d;
+    if (!ctx) {
+      canvas.style.background = "radial-gradient(circle at 43% 62%, rgba(255,152,84,.09), transparent 58%), #050b11";
+      return;
+    }
     const width = canvas.width;
     const height = canvas.height;
     const color = stateColors[state] || stateColors.AUS;
@@ -119,9 +123,8 @@
   }
 
   function render(now) {
-    frame = requestAnimationFrame(render);
+    frame = lowMotion ? 0 : requestAnimationFrame(render);
     if (document.hidden || (!lowMotion && now - lastFrame < 33)) return;
-    if (lowMotion && lastFrame) return;
     lastFrame = now;
     resize();
     if (!gl) return drawFallback();
@@ -159,8 +162,10 @@
       if (lowMotion) { lastFrame = 0; requestAnimationFrame(render); }
     },
     setLowMotion(enabled) {
+      cancelAnimationFrame(frame);
       lowMotion = Boolean(enabled);
       lastFrame = 0;
+      frame = requestAnimationFrame(render);
     }
   };
 }());

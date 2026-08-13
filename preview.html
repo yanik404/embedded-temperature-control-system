@@ -49,6 +49,9 @@ body.presentation{--header-h:74px}.presentation .system-header{padding-top:12px;
 .history-legend .power:before{border-color:var(--green)}
 .preview-mode .thermal-hero{padding-bottom:165px}
 .preview-mode .safety-interlock{bottom:82px}
+.visual-review .preview-console{display:none}
+.visual-review.preview-mode .thermal-hero{padding-bottom:110px}
+.visual-review.preview-mode .safety-interlock{bottom:27px}
 
 @media(max-width:700px){
  :root{--header-h:174px}
@@ -70,6 +73,36 @@ body.presentation{--header-h:74px}.presentation .system-header{padding-top:12px;
  .preview-mode .thermal-hero{padding-bottom:245px}
  .preview-mode .safety-interlock{bottom:78px}
  .presentation .assembly-stage{height:58vh;min-height:430px}
+}
+
+@media(max-width:700px){
+ :root{--header-h:194px}
+ .system-header{display:flex;flex-wrap:wrap;align-content:center}
+ .identity{flex:0 0 calc(100vw - 154px)}
+ .header-actions{flex:0 0 114px;order:2}
+ .connection-readout{flex:0 0 calc(100vw - 28px);width:calc(100vw - 28px);grid-template-columns:10px minmax(0,1fr);grid-template-rows:auto auto;gap:3px 10px;order:3}
+ .connection-pulse{grid-column:1;grid-row:1}
+ .connection-readout>span:not(.network-address){grid-column:2;grid-row:1}
+ .connection-readout .network-address{grid-column:2;grid-row:2;display:flex;align-items:baseline;gap:8px;padding:0;border:0}
+ .network-address strong{margin-top:0}
+ .state-spine{width:auto;margin-left:0;margin-right:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));text-align:center}
+ .state-spine span{padding:0}
+ .assembly-annotation i{display:none}
+ .assembly-annotation.sensor,.assembly-annotation.plate,.assembly-annotation.fan{display:none}
+ .assembly-annotation.peltier{left:3%;top:88%}
+ .assembly-annotation.peltier span{display:inline;font-size:6px}
+ .visual-review.preview-mode .thermal-hero{padding-bottom:190px}
+ .visual-review.preview-mode .safety-interlock{bottom:25px}
+}
+
+@media(min-width:701px) and (max-height:850px){
+ .thermal-hero{padding-top:18px}
+ .assembly-stage{height:550px;min-height:0}
+ .process-orbit{min-height:550px;padding-top:12px}
+ .setpoint-dial{width:235px;height:235px;margin-top:20px}
+ .dial-center{inset:45px}
+ .dial-center input{font-size:37px}
+ .process-action{min-height:64px}
 }
 </style>
 </head>
@@ -150,7 +183,7 @@ body.presentation{--header-h:74px}.presentation .system-header{padding-top:12px;
    <div class="orbit-heading"><span>SYSTEMZUSTAND</span><strong id="systemState">VERBINDUNG</strong><small id="stateDescription">Live-System wird gesucht</small></div>
    <div class="setpoint-dial" id="setpointDial" style="--set-angle:200deg;--output:0">
     <svg viewBox="0 0 220 220" aria-hidden="true"><circle class="dial-track" cx="110" cy="110" r="91"/><circle class="dial-progress" cx="110" cy="110" r="91" pathLength="100"/><path class="dial-tick" d="M110 8v15"/></svg>
-    <div class="dial-center"><span>SOLLWERT / w(t)</span><label><input id="targetInput" type="number" inputmode="decimal" min="20" max="60" step="0.5" value="45.0" disabled><b>°C</b></label><small>20 — 60 °C</small></div>
+    <div class="dial-center"><span>SOLLWERT / w(t)</span><label><input id="targetInput" type="text" inputmode="decimal" value="45,0" aria-label="Solltemperatur in Grad Celsius" disabled><b>°C</b></label><small>20 — 60 °C</small></div>
     <button id="targetDown" type="button" aria-label="Sollwert um 0,5 Grad senken" disabled>−</button>
     <button id="targetUp" type="button" aria-label="Sollwert um 0,5 Grad erhöhen" disabled>+</button>
    </div>
@@ -168,7 +201,7 @@ body.presentation{--header-h:74px}.presentation .system-header{padding-top:12px;
  </section>
 
  <section class="signal-landscape" id="controlLoop" aria-labelledby="loopTitle">
-  <header class="section-intro"><span>01 / CLOSED LOOP</span><h2 id="loopTitle">Der Regelkreis als lebendes Signal</h2><p>Messung, Entscheidung und Wärmeeintrag sind ein zusammenhängender Prozess – nicht sieben getrennte Kästen.</p></header>
+  <header class="section-intro"><span>01 · Geschlossener Regelkreis</span><h2 id="loopTitle">Der Regelkreis als lebendes Signal</h2><p>Messung, Entscheidung und Wärmeeintrag sind ein zusammenhängender Prozess – nicht sieben getrennte Kästen.</p></header>
   <div class="loop-visual" id="loopVisual">
    <svg class="loop-path" viewBox="0 0 1400 470" preserveAspectRatio="none" aria-hidden="true">
     <path class="forward-base" d="M70 170H1280"/><path class="forward-signal" id="forwardSignal" d="M70 170H1280"/>
@@ -187,14 +220,14 @@ body.presentation{--header-h:74px}.presentation .system-header{padding-top:12px;
  </section>
 
  <section class="signal-history" id="signalHistory" aria-labelledby="historyTitle">
-  <header class="history-heading"><span>02 / SIGNAL HISTORY</span><h2 id="historyTitle">Thermischer Verlauf</h2><div class="range-control" role="group" aria-label="Diagrammzeitraum"><button class="range-button active" type="button" data-range="60">1 MIN</button><button class="range-button" type="button" data-range="300">5 MIN</button><button class="range-button" type="button" data-range="900">15 MIN</button></div></header>
+  <header class="history-heading"><span>02 · Signalverlauf</span><h2 id="historyTitle">Thermischer Verlauf</h2><div class="range-control" role="group" aria-label="Diagrammzeitraum"><button class="range-button active" type="button" data-range="60">1 MIN</button><button class="range-button" type="button" data-range="300">5 MIN</button><button class="range-button" type="button" data-range="900">15 MIN</button></div></header>
   <div class="history-stage"><canvas id="historyCanvas" role="img" aria-label="Zeitlicher Verlauf von Isttemperatur, Sollwert, Sensor 2 und Stellgröße">Ihr Browser unterstützt Canvas nicht.</canvas><div class="live-cursor" id="liveCursor"><i></i><span>LIVE</span></div><div class="history-offline"><strong>SIGNAL UNTERBROCHEN</strong><span>Der letzte Verlauf bleibt als historische Aufnahme sichtbar.</span></div></div>
   <div class="history-legend"><span class="actual">ISTTEMPERATUR</span><span class="target">SOLLWERT</span><span class="secondary">SENSOR 2</span><span class="power">STELLGRÖSSE</span></div>
   <div class="session-metrics"><span><small>MAX. ABWEICHUNG</small><strong id="maxError">—</strong></span><span><small>TEMPERATURANSTIEG</small><strong id="temperatureRise">—</strong></span><span><small>dT / dt</small><strong id="temperatureRate">—</strong></span><span><small>SEIT HEIZSTART</small><strong id="heatingTime">—</strong></span><span><small>IM HALTEN</small><strong id="holdingTime">—</strong></span></div>
  </section>
 
  <section class="hardware-observatory" id="hardwareMap" aria-labelledby="hardwareTitle">
-  <header class="section-intro"><span>03 / EMBEDDED ASSEMBLY</span><h2 id="hardwareTitle">Hardware als verbundenes System</h2><p>Der Pico W steht im Zentrum. Sensorik, Aktorik, Versorgung und Bedienung erscheinen dort, wo sie im System wirken.</p></header>
+  <header class="section-intro"><span>03 · Embedded System</span><h2 id="hardwareTitle">Hardware als verbundenes System</h2><p>Der Pico W steht im Zentrum. Sensorik, Aktorik, Versorgung und Bedienung erscheinen dort, wo sie im System wirken.</p></header>
   <div class="hardware-map">
    <svg class="hardware-links" viewBox="0 0 1400 720" preserveAspectRatio="none" aria-hidden="true"><path d="M700 360C510 360 490 140 275 140M700 360C510 360 490 295 275 295M700 360C510 360 490 500 275 500M700 360C890 360 910 140 1125 140M700 360C890 360 910 295 1125 295M700 360C890 360 910 500 1125 500M700 360V640"/></svg>
    <div class="pico-core"><span>RP2040</span><strong>Raspberry Pi<br>Pico W</strong><small id="picoCoreStatus">SYSTEM ONLINE</small><i></i></div>
@@ -210,7 +243,7 @@ body.presentation{--header-h:74px}.presentation .system-header{padding-top:12px;
  </section>
 
  <section class="event-rail" id="eventRail" aria-labelledby="eventTitle">
-  <header><span>04 / EVENT SIGNAL</span><h2 id="eventTitle">Systemereignisse</h2><p>Browserlokal aus echten Zustandsänderungen abgeleitet.</p></header>
+  <header><span>04 · Ereignissignal</span><h2 id="eventTitle">Systemereignisse</h2><p>Browserlokal aus echten Zustandsänderungen abgeleitet.</p></header>
   <ol id="eventTimeline" aria-live="polite"></ol>
  </section>
 </main>
@@ -338,6 +371,10 @@ body.presentation{--header-h:74px}.presentation .system-header{padding-top:12px;
   function drawFallback() {
     resize();
     const ctx = context2d;
+    if (!ctx) {
+      canvas.style.background = "radial-gradient(circle at 43% 62%, rgba(255,152,84,.09), transparent 58%), #050b11";
+      return;
+    }
     const width = canvas.width;
     const height = canvas.height;
     const color = stateColors[state] || stateColors.AUS;
@@ -353,9 +390,8 @@ body.presentation{--header-h:74px}.presentation .system-header{padding-top:12px;
   }
 
   function render(now) {
-    frame = requestAnimationFrame(render);
+    frame = lowMotion ? 0 : requestAnimationFrame(render);
     if (document.hidden || (!lowMotion && now - lastFrame < 33)) return;
-    if (lowMotion && lastFrame) return;
     lastFrame = now;
     resize();
     if (!gl) return drawFallback();
@@ -393,8 +429,10 @@ body.presentation{--header-h:74px}.presentation .system-header{padding-top:12px;
       if (lowMotion) { lastFrame = 0; requestAnimationFrame(render); }
     },
     setLowMotion(enabled) {
+      cancelAnimationFrame(frame);
       lowMotion = Boolean(enabled);
       lastFrame = 0;
+      frame = requestAnimationFrame(render);
     }
   };
 }());
@@ -543,11 +581,32 @@ body.presentation{--header-h:74px}.presentation .system-header{padding-top:12px;
     window.ThermalUI.acceptStatus(demo, true);
   }
 
+  function prefillHistory() {
+    if (!window.ThermalUI || window.ThermalUI.history.length) return;
+    const now = Date.now();
+    for (let secondsAgo = 300; secondsAgo > 0; secondsAgo -= 2) {
+      const progress = (300 - secondsAgo) / 300;
+      const temperature = 37.1 + progress * 5.5 + Math.sin(progress * 13) * .05;
+      window.ThermalUI.history.push({
+        time: now - secondsAgo * 1000,
+        temperature,
+        temperature2: temperature - .45,
+        target: 50,
+        power: 82 - progress * 14,
+        valid: true,
+        valid2: true
+      });
+    }
+  }
+
   window.PreviewDriver = {
     start() {
       document.querySelectorAll("[data-scenario]").forEach(button => button.addEventListener("click", () => applyScenario(button.dataset.scenario)));
+      prefillHistory();
       updateDerived();
-      if (window.ThermalUI) window.ThermalUI.acceptStatus(demo, true);
+      const requested = new URLSearchParams(location.search).get("scenario");
+      if (["ready", "heating", "holding", "error", "disconnected", "recovery", "demo30"].includes(requested)) applyScenario(requested);
+      else if (window.ThermalUI) window.ThermalUI.acceptStatus(demo, true);
       requestAnimationFrame(tick);
     },
     command,
@@ -608,13 +667,16 @@ body.presentation{--header-h:74px}.presentation .system-header{padding-top:12px;
 
   const byId = id => document.getElementById(id);
   const all = selector => Array.from(document.querySelectorAll(selector));
-  const finite = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(value) : fallback;
+  const finite = (value, fallback = 0) => {
+    const number = typeof value === "string" ? Number(value.replace(",", ".")) : Number(value);
+    return Number.isFinite(number) ? number : fallback;
+  };
   const truth = (value, fallback = false) => typeof value === "boolean" ? value : fallback;
   const clamp = (value, minimum, maximum) => Math.max(minimum, Math.min(maximum, value));
   const fixed = (value, digits = 1) => Number.isFinite(Number(value)) ? Number(value).toFixed(digits).replace(".", ",") : "—";
   const setText = (id, value) => { const node = byId(id); if (node) node.textContent = value; };
   const available = (id, yes) => { const node = byId(id); if (node) node.classList.toggle("unavailable", !yes); };
-  const statusWord = value => value ? "OK" : "OFFEN";
+  const escapeHtml = value => String(value).replace(/[&<>"']/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]);
 
   function normalize(source) {
     source = source || {};
@@ -746,7 +808,7 @@ body.presentation{--header-h:74px}.presentation .system-header{padding-top:12px;
     const nodes = safetyDefinition.map(([key, label]) => {
       const node = document.createElement("span");
       node.className = `interlock-node ${states[key] ? "ok" : "bad"}`;
-      node.innerHTML = `<i></i><strong>${label}</strong><small>${states[key] ? "FREI" : "GESPERRT"}</small>`;
+      node.innerHTML = `<i></i><strong>${escapeHtml(label)}</strong><small>${states[key] ? "FREI" : "GESPERRT"}</small>`;
       return node;
     });
     byId("safetyInterlock").replaceChildren(...nodes);
@@ -809,7 +871,7 @@ body.presentation{--header-h:74px}.presentation .system-header{padding-top:12px;
     const inspection = values.map(value => {
       const node = document.createElement("article");
       node.className = `component ${value.ok ? "ok" : "bad"}`;
-      node.innerHTML = `<span>${value.group}</span><strong>${value.name}</strong><b>${value.state}</b><small>${value.detail}</small>`;
+      node.innerHTML = `<span>${escapeHtml(value.group)}</span><strong>${escapeHtml(value.name)}</strong><b>${escapeHtml(value.state)}</b><small>${escapeHtml(value.detail)}</small>`;
       return node;
     });
     byId("componentInspection").replaceChildren(...inspection);
@@ -829,7 +891,7 @@ body.presentation{--header-h:74px}.presentation .system-header{padding-top:12px;
     ];
     byId("technicalValues").replaceChildren(...values.map(([label, value]) => {
       const row = document.createElement("div");
-      row.innerHTML = `<span>${label}</span><strong>${value}</strong>`;
+      row.innerHTML = `<span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong>`;
       return row;
     }));
   }
@@ -951,7 +1013,7 @@ body.presentation{--header-h:74px}.presentation .system-header{padding-top:12px;
     const angle = 36 + clamp((status.setpoint - 20) / 40, 0, 1) * 288;
     byId("setpointDial").style.setProperty("--set-angle", `${angle}deg`);
     byId("setpointDial").style.setProperty("--output", status.power);
-    if (document.activeElement !== byId("targetInput")) byId("targetInput").value = status.setpoint.toFixed(1);
+    if (document.activeElement !== byId("targetInput")) byId("targetInput").value = fixed(status.setpoint);
     setText("errorValue", Number.isFinite(status.error) ? `${status.error >= 0 ? "+" : ""}${fixed(status.error)} K` : "—");
     available("errorValue", Number.isFinite(status.error));
     setText("powerValue", `${fixed(status.power, 0)} %`);
@@ -995,6 +1057,7 @@ body.presentation{--header-h:74px}.presentation .system-header{padding-top:12px;
       addHistory(status);
     }
     if (window.ThermalField) window.ThermalField.update(status.state, status.power, status.temperature);
+    if (!document.documentElement.dataset.uiReadyMs) document.documentElement.dataset.uiReadyMs = performance.now().toFixed(1);
     runtime.initial = false;
   }
 
@@ -1042,14 +1105,14 @@ body.presentation{--header-h:74px}.presentation .system-header{padding-top:12px;
 
   function setpointDelta(delta) {
     const input = byId("targetInput");
-    input.value = clamp(finite(input.value, 45) + delta, 20, 60).toFixed(1);
+    input.value = fixed(clamp(finite(input.value, 45) + delta, 20, 60));
     const angle = 36 + (finite(input.value) - 20) / 40 * 288;
     byId("setpointDial").style.setProperty("--set-angle", `${angle}deg`);
   }
 
   function setpointCommand() {
     const value = clamp(finite(byId("targetInput").value, 45), 20, 60);
-    byId("targetInput").value = value.toFixed(1);
+    byId("targetInput").value = fixed(value);
     command(`setpoint?value=${encodeURIComponent(value.toFixed(1))}`);
   }
 
@@ -1058,6 +1121,8 @@ body.presentation{--header-h:74px}.presentation .system-header{padding-top:12px;
     byId("engineeringDrawer").setAttribute("aria-hidden", String(!open));
     byId("engineeringOpen").setAttribute("aria-expanded", String(open));
     byId("drawerScrim").classList.toggle("visible", open);
+    document.querySelector("main").inert = open;
+    document.querySelector(".system-header").inert = open;
     if (open) byId("engineeringClose").focus(); else byId("engineeringOpen").focus();
   }
 
@@ -1066,6 +1131,7 @@ body.presentation{--header-h:74px}.presentation .system-header{padding-top:12px;
     document.body.classList.toggle("presentation", active);
     byId("presentationToggle").setAttribute("aria-pressed", String(active));
     setText("presentationLabel", active ? "PRÄSENTATION BEENDEN" : "PRÄSENTATION");
+    if (active) scrollTo({ top: 0, behavior: runtime.lowMotion ? "auto" : "smooth" });
     if (active && document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(() => {});
     if (!active && document.fullscreenElement) document.exitFullscreen().catch(() => {});
     scheduleChart();
@@ -1114,9 +1180,22 @@ body.presentation{--header-h:74px}.presentation .system-header{padding-top:12px;
       window.ThermalField.initialise(byId("thermalField"));
       window.ThermalField.setLowMotion(runtime.lowMotion);
     }
-    const skipIntro = runtime.lowMotion || new URLSearchParams(location.search).has("review");
+    const query = new URLSearchParams(location.search);
+    const reviewing = query.has("review");
+    const skipIntro = runtime.lowMotion || reviewing || query.has("scenario") || query.has("presentation") || query.has("engineering");
+    document.body.classList.toggle("visual-review", reviewing);
+    if (reviewing) document.documentElement.style.scrollBehavior = "auto";
+    if (query.has("presentation")) {
+      document.body.classList.add("presentation");
+      byId("presentationToggle").setAttribute("aria-pressed", "true");
+      setText("presentationLabel", "PRÄSENTATION BEENDEN");
+    }
     if (skipIntro) byId("bootSequence").classList.add("done");
     else setTimeout(() => byId("bootSequence").classList.add("done"), 1350);
+    const reviewSection = query.get("section");
+    const anchor = reviewSection ? byId(reviewSection) : location.hash ? document.querySelector(location.hash) : null;
+    if (anchor) setTimeout(() => scrollTo(0, anchor.getBoundingClientRect().top + scrollY), 300);
+    if (query.has("engineering")) setTimeout(() => openEngineering(true), 120);
     if (PREVIEW && window.PreviewDriver) window.PreviewDriver.start();
     else {
       poll();

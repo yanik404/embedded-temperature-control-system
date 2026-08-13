@@ -50,13 +50,16 @@
 
   const byId = id => document.getElementById(id);
   const all = selector => Array.from(document.querySelectorAll(selector));
-  const finite = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(value) : fallback;
+  const finite = (value, fallback = 0) => {
+    const number = typeof value === "string" ? Number(value.replace(",", ".")) : Number(value);
+    return Number.isFinite(number) ? number : fallback;
+  };
   const truth = (value, fallback = false) => typeof value === "boolean" ? value : fallback;
   const clamp = (value, minimum, maximum) => Math.max(minimum, Math.min(maximum, value));
   const fixed = (value, digits = 1) => Number.isFinite(Number(value)) ? Number(value).toFixed(digits).replace(".", ",") : "—";
   const setText = (id, value) => { const node = byId(id); if (node) node.textContent = value; };
   const available = (id, yes) => { const node = byId(id); if (node) node.classList.toggle("unavailable", !yes); };
-  const statusWord = value => value ? "OK" : "OFFEN";
+  const escapeHtml = value => String(value).replace(/[&<>"']/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]);
 
   function normalize(source) {
     source = source || {};
@@ -188,7 +191,7 @@
     const nodes = safetyDefinition.map(([key, label]) => {
       const node = document.createElement("span");
       node.className = `interlock-node ${states[key] ? "ok" : "bad"}`;
-      node.innerHTML = `<i></i><strong>${label}</strong><small>${states[key] ? "FREI" : "GESPERRT"}</small>`;
+      node.innerHTML = `<i></i><strong>${escapeHtml(label)}</strong><small>${states[key] ? "FREI" : "GESPERRT"}</small>`;
       return node;
     });
     byId("safetyInterlock").replaceChildren(...nodes);
@@ -251,7 +254,7 @@
     const inspection = values.map(value => {
       const node = document.createElement("article");
       node.className = `component ${value.ok ? "ok" : "bad"}`;
-      node.innerHTML = `<span>${value.group}</span><strong>${value.name}</strong><b>${value.state}</b><small>${value.detail}</small>`;
+      node.innerHTML = `<span>${escapeHtml(value.group)}</span><strong>${escapeHtml(value.name)}</strong><b>${escapeHtml(value.state)}</b><small>${escapeHtml(value.detail)}</small>`;
       return node;
     });
     byId("componentInspection").replaceChildren(...inspection);
@@ -271,7 +274,7 @@
     ];
     byId("technicalValues").replaceChildren(...values.map(([label, value]) => {
       const row = document.createElement("div");
-      row.innerHTML = `<span>${label}</span><strong>${value}</strong>`;
+      row.innerHTML = `<span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong>`;
       return row;
     }));
   }
@@ -393,7 +396,7 @@
     const angle = 36 + clamp((status.setpoint - 20) / 40, 0, 1) * 288;
     byId("setpointDial").style.setProperty("--set-angle", `${angle}deg`);
     byId("setpointDial").style.setProperty("--output", status.power);
-    if (document.activeElement !== byId("targetInput")) byId("targetInput").value = status.setpoint.toFixed(1);
+    if (document.activeElement !== byId("targetInput")) byId("targetInput").value = fixed(status.setpoint);
     setText("errorValue", Number.isFinite(status.error) ? `${status.error >= 0 ? "+" : ""}${fixed(status.error)} K` : "—");
     available("errorValue", Number.isFinite(status.error));
     setText("powerValue", `${fixed(status.power, 0)} %`);
@@ -437,6 +440,7 @@
       addHistory(status);
     }
     if (window.ThermalField) window.ThermalField.update(status.state, status.power, status.temperature);
+    if (!document.documentElement.dataset.uiReadyMs) document.documentElement.dataset.uiReadyMs = performance.now().toFixed(1);
     runtime.initial = false;
   }
 
@@ -484,14 +488,14 @@
 
   function setpointDelta(delta) {
     const input = byId("targetInput");
-    input.value = clamp(finite(input.value, 45) + delta, 20, 60).toFixed(1);
+    input.value = fixed(clamp(finite(input.value, 45) + delta, 20, 60));
     const angle = 36 + (finite(input.value) - 20) / 40 * 288;
     byId("setpointDial").style.setProperty("--set-angle", `${angle}deg`);
   }
 
   function setpointCommand() {
     const value = clamp(finite(byId("targetInput").value, 45), 20, 60);
-    byId("targetInput").value = value.toFixed(1);
+    byId("targetInput").value = fixed(value);
     command(`setpoint?value=${encodeURIComponent(value.toFixed(1))}`);
   }
 
@@ -500,6 +504,8 @@
     byId("engineeringDrawer").setAttribute("aria-hidden", String(!open));
     byId("engineeringOpen").setAttribute("aria-expanded", String(open));
     byId("drawerScrim").classList.toggle("visible", open);
+    document.querySelector("main").inert = open;
+    document.querySelector(".system-header").inert = open;
     if (open) byId("engineeringClose").focus(); else byId("engineeringOpen").focus();
   }
 
@@ -508,6 +514,7 @@
     document.body.classList.toggle("presentation", active);
     byId("presentationToggle").setAttribute("aria-pressed", String(active));
     setText("presentationLabel", active ? "PRÄSENTATION BEENDEN" : "PRÄSENTATION");
+    if (active) scrollTo({ top: 0, behavior: runtime.lowMotion ? "auto" : "smooth" });
     if (active && document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(() => {});
     if (!active && document.fullscreenElement) document.exitFullscreen().catch(() => {});
     scheduleChart();
@@ -556,9 +563,22 @@
       window.ThermalField.initialise(byId("thermalField"));
       window.ThermalField.setLowMotion(runtime.lowMotion);
     }
-    const skipIntro = runtime.lowMotion || new URLSearchParams(location.search).has("review");
+    const query = new URLSearchParams(location.search);
+    const reviewing = query.has("review");
+    const skipIntro = runtime.lowMotion || reviewing || query.has("scenario") || query.has("presentation") || query.has("engineering");
+    document.body.classList.toggle("visual-review", reviewing);
+    if (reviewing) document.documentElement.style.scrollBehavior = "auto";
+    if (query.has("presentation")) {
+      document.body.classList.add("presentation");
+      byId("presentationToggle").setAttribute("aria-pressed", "true");
+      setText("presentationLabel", "PRÄSENTATION BEENDEN");
+    }
     if (skipIntro) byId("bootSequence").classList.add("done");
     else setTimeout(() => byId("bootSequence").classList.add("done"), 1350);
+    const reviewSection = query.get("section");
+    const anchor = reviewSection ? byId(reviewSection) : location.hash ? document.querySelector(location.hash) : null;
+    if (anchor) setTimeout(() => scrollTo(0, anchor.getBoundingClientRect().top + scrollY), 300);
+    if (query.has("engineering")) setTimeout(() => openEngineering(true), 120);
     if (PREVIEW && window.PreviewDriver) window.PreviewDriver.start();
     else {
       poll();

@@ -84,7 +84,7 @@
    <div class="orbit-heading"><span>SYSTEMZUSTAND</span><strong id="systemState">VERBINDUNG</strong><small id="stateDescription">Live-System wird gesucht</small></div>
    <div class="setpoint-dial" id="setpointDial" style="--set-angle:200deg;--output:0">
     <svg viewBox="0 0 220 220" aria-hidden="true"><circle class="dial-track" cx="110" cy="110" r="91"/><circle class="dial-progress" cx="110" cy="110" r="91" pathLength="100"/><path class="dial-tick" d="M110 8v15"/></svg>
-    <div class="dial-center"><span>SOLLWERT / w(t)</span><label><input id="targetInput" type="number" inputmode="decimal" min="20" max="60" step="0.5" value="45.0" disabled><b>°C</b></label><small>20 — 60 °C</small></div>
+    <div class="dial-center"><span>SOLLWERT / w(t)</span><label><input id="targetInput" type="text" inputmode="decimal" value="45,0" aria-label="Solltemperatur in Grad Celsius" disabled><b>°C</b></label><small>20 — 60 °C</small></div>
     <button id="targetDown" type="button" aria-label="Sollwert um 0,5 Grad senken" disabled>−</button>
     <button id="targetUp" type="button" aria-label="Sollwert um 0,5 Grad erhöhen" disabled>+</button>
    </div>
@@ -102,7 +102,7 @@
  </section>
 
  <section class="signal-landscape" id="controlLoop" aria-labelledby="loopTitle">
-  <header class="section-intro"><span>01 / CLOSED LOOP</span><h2 id="loopTitle">Der Regelkreis als lebendes Signal</h2><p>Messung, Entscheidung und Wärmeeintrag sind ein zusammenhängender Prozess – nicht sieben getrennte Kästen.</p></header>
+  <header class="section-intro"><span>01 · Geschlossener Regelkreis</span><h2 id="loopTitle">Der Regelkreis als lebendes Signal</h2><p>Messung, Entscheidung und Wärmeeintrag sind ein zusammenhängender Prozess – nicht sieben getrennte Kästen.</p></header>
   <div class="loop-visual" id="loopVisual">
    <svg class="loop-path" viewBox="0 0 1400 470" preserveAspectRatio="none" aria-hidden="true">
     <path class="forward-base" d="M70 170H1280"/><path class="forward-signal" id="forwardSignal" d="M70 170H1280"/>
@@ -121,14 +121,14 @@
  </section>
 
  <section class="signal-history" id="signalHistory" aria-labelledby="historyTitle">
-  <header class="history-heading"><span>02 / SIGNAL HISTORY</span><h2 id="historyTitle">Thermischer Verlauf</h2><div class="range-control" role="group" aria-label="Diagrammzeitraum"><button class="range-button active" type="button" data-range="60">1 MIN</button><button class="range-button" type="button" data-range="300">5 MIN</button><button class="range-button" type="button" data-range="900">15 MIN</button></div></header>
+  <header class="history-heading"><span>02 · Signalverlauf</span><h2 id="historyTitle">Thermischer Verlauf</h2><div class="range-control" role="group" aria-label="Diagrammzeitraum"><button class="range-button active" type="button" data-range="60">1 MIN</button><button class="range-button" type="button" data-range="300">5 MIN</button><button class="range-button" type="button" data-range="900">15 MIN</button></div></header>
   <div class="history-stage"><canvas id="historyCanvas" role="img" aria-label="Zeitlicher Verlauf von Isttemperatur, Sollwert, Sensor 2 und Stellgröße">Ihr Browser unterstützt Canvas nicht.</canvas><div class="live-cursor" id="liveCursor"><i></i><span>LIVE</span></div><div class="history-offline"><strong>SIGNAL UNTERBROCHEN</strong><span>Der letzte Verlauf bleibt als historische Aufnahme sichtbar.</span></div></div>
   <div class="history-legend"><span class="actual">ISTTEMPERATUR</span><span class="target">SOLLWERT</span><span class="secondary">SENSOR 2</span><span class="power">STELLGRÖSSE</span></div>
   <div class="session-metrics"><span><small>MAX. ABWEICHUNG</small><strong id="maxError">—</strong></span><span><small>TEMPERATURANSTIEG</small><strong id="temperatureRise">—</strong></span><span><small>dT / dt</small><strong id="temperatureRate">—</strong></span><span><small>SEIT HEIZSTART</small><strong id="heatingTime">—</strong></span><span><small>IM HALTEN</small><strong id="holdingTime">—</strong></span></div>
  </section>
 
  <section class="hardware-observatory" id="hardwareMap" aria-labelledby="hardwareTitle">
-  <header class="section-intro"><span>03 / EMBEDDED ASSEMBLY</span><h2 id="hardwareTitle">Hardware als verbundenes System</h2><p>Der Pico W steht im Zentrum. Sensorik, Aktorik, Versorgung und Bedienung erscheinen dort, wo sie im System wirken.</p></header>
+  <header class="section-intro"><span>03 · Embedded System</span><h2 id="hardwareTitle">Hardware als verbundenes System</h2><p>Der Pico W steht im Zentrum. Sensorik, Aktorik, Versorgung und Bedienung erscheinen dort, wo sie im System wirken.</p></header>
   <div class="hardware-map">
    <svg class="hardware-links" viewBox="0 0 1400 720" preserveAspectRatio="none" aria-hidden="true"><path d="M700 360C510 360 490 140 275 140M700 360C510 360 490 295 275 295M700 360C510 360 490 500 275 500M700 360C890 360 910 140 1125 140M700 360C890 360 910 295 1125 295M700 360C890 360 910 500 1125 500M700 360V640"/></svg>
    <div class="pico-core"><span>RP2040</span><strong>Raspberry Pi<br>Pico W</strong><small id="picoCoreStatus">SYSTEM ONLINE</small><i></i></div>
@@ -144,7 +144,7 @@
  </section>
 
  <section class="event-rail" id="eventRail" aria-labelledby="eventTitle">
-  <header><span>04 / EVENT SIGNAL</span><h2 id="eventTitle">Systemereignisse</h2><p>Browserlokal aus echten Zustandsänderungen abgeleitet.</p></header>
+  <header><span>04 · Ereignissignal</span><h2 id="eventTitle">Systemereignisse</h2><p>Browserlokal aus echten Zustandsänderungen abgeleitet.</p></header>
   <ol id="eventTimeline" aria-live="polite"></ol>
  </section>
 </main>
