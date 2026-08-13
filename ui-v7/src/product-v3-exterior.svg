@@ -36,6 +36,13 @@
    </g>
   </g>
 
+  <g id="product-v3-thermal-covers">
+   <path d="M205 412Q209 400 222 395L227 399L226 435Q223 444 216 447Q211 443 210 436Z" fill="#6f7973" opacity=".44"/>
+   <path d="M435 412Q431 400 418 395L413 399L414 435Q417 444 424 447Q429 443 430 436Z" fill="#68726c" opacity=".34"/>
+   <path d="M226 406Q228 417 226 428" fill="none" stroke="#a96543" stroke-width="1.5" stroke-linecap="round" opacity=".24"/>
+   <path d="M414 406Q412 417 414 428" fill="none" stroke="#a96543" stroke-width="1.5" stroke-linecap="round" opacity=".2"/>
+  </g>
+
   <g id="product-v3-cup">
    <path d="M215 91Q320 65 425 91L411 381Q407 417 320 422Q233 417 229 381Z" fill="url(#p3Glass)" opacity=".82"/>
    <g clip-path="url(#p3CupClip)"><path d="M231 140Q320 120 409 140L398 376Q394 402 320 407Q246 402 242 376Z" fill="url(#p3Drink)" opacity=".9"/><ellipse cx="320" cy="140" rx="89" ry="20" fill="#d98a50"/><ellipse cx="320" cy="142" rx="72" ry="12" fill="#80432f" opacity=".52"/></g>
@@ -49,6 +56,20 @@
    <path d="M197 395A123 33 0 1 0 443 395A123 33 0 1 0 197 395M219 395A101 22 0 1 1 421 395A101 22 0 1 1 219 395" fill="url(#p3Metal)" fill-rule="evenodd" opacity=".9"/>
    <path d="M205 400Q320 434 435 400" fill="none" stroke="#272d29" stroke-width="6" opacity=".68"/>
    <path d="M232 402Q320 421 408 402" fill="none" stroke="#101411" stroke-width="3.5" opacity=".52"/>
+  </g>
+
+  <g id="product-v3-front">
+   <path d="M273 465Q320 473 367 465L365 491Q320 499 275 491Z" fill="#101512" opacity=".9"/>
+   <path d="M280 471Q320 477 360 471L359 486Q320 492 281 486Z" fill="#092226"/>
+   <text x="289" y="486" fill="#c8e5e1" font-family="Segoe UI, sans-serif" font-size="10" font-weight="550">32.4°</text>
+   <text x="342" y="486" fill="#82a4a2" font-family="Segoe UI, sans-serif" font-size="7" font-weight="550">45.0°</text>
+   <g fill="#515a54" stroke="#747d77" stroke-width=".7"><circle cx="280" cy="505" r="3.2"/><circle cx="307" cy="508" r="3.2"/><circle cx="334" cy="508" r="3.2"/><circle cx="361" cy="505" r="3.2"/></g>
+   <g fill="#8f9892" font-family="Segoe UI, sans-serif" font-size="3.4" font-weight="600" text-anchor="middle"><text x="280" y="514">MODE</text><text x="307" y="517">DOWN</text><text x="334" y="517">OK</text><text x="361" y="514">UP</text></g>
+  </g>
+  <g id="product-v3-vent" fill="#68716b" opacity=".48">
+   <rect x="430" y="482" width="2" height="14" rx="1" transform="rotate(8 431 489)"/>
+   <rect x="437" y="480" width="2" height="14" rx="1" transform="rotate(8 438 487)"/>
+   <rect x="444" y="478" width="2" height="14" rx="1" transform="rotate(8 445 485)"/>
   </g>
  </g>
 </svg>

@@ -61,3 +61,19 @@ hellen Ring, zu metallische Kontaktstützen, eine dominante Glasoberkante und
 einen zu breiten Bodenschatten. Die Freigabefassung dunkelt das Aluminium ab,
 verkürzt und verschmälert beide Kontakte, senkt den Glasrandkontrast und zieht
 den Schatten enger an den Fuß.
+
+## Phase 3 – kompakte Frontbedienung
+
+Das OLED ist 94 Einheiten breit und belegt damit 31,8 % der Produktbreite.
+Eine einzige flache Einlassfläche trägt ausschließlich `32.4°` und `45.0°`.
+Vier physische Taster mit 3,2 Einheiten Radius sitzen direkt darunter; ihre
+Beschriftung bleibt dem Bedienkontext untergeordnet. Es gibt keinen zweiten
+Panelrahmen und keine großen kreisförmigen UI-Elemente.
+
+## Phase 4 – thermische Außenmodule
+
+Die thermischen Zonen bleiben innerhalb der bereits vorhandenen schmalen
+Kontaktformen. Zwei tonale Metallflächen und jeweils eine kurze matte
+Amberfuge deuten Wärmeübertragung an, ohne Peltiers sichtbar zu machen. Drei
+kleine Schlitze sitzen hinten rechts in der Basis; es gibt weder einen Rotor
+noch ein Fan-Symbol, PCB, Sensoren, Kabel oder andere interne Technik.
