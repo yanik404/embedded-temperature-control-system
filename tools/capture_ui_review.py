@@ -112,7 +112,39 @@ def free_port() -> int:
         return candidate.getsockname()[1]
 
 
-def capture(browser: Path, output: Path, width: int, height: int, url: str, profile: Path, delay_ms: int) -> None:
+PRODUCT_TEST_CSS = {
+    "product": """
+        .site-header,.section-heading,.product-panel,.callout-lines,.preview-tools{display:none!important}
+        .page-section{min-height:100vh!important;padding:0!important;border:0!important}
+        .product-layout{display:block!important;width:100vw!important;height:100vh!important;margin:0!important}
+        .product-stage{display:grid!important;width:100%!important;height:100%!important;place-items:center!important}
+        .product-view-switch{display:none!important}.product-illustration{width:min(92vw,1100px)!important;max-height:94vh!important}
+    """,
+    "scale20": """
+        .site-header,.section-heading,.product-panel,.callout-lines,.preview-tools{display:none!important}
+        .page-section{min-height:100vh!important;padding:0!important;border:0!important}
+        .product-layout{display:block!important;width:100vw!important;height:100vh!important;margin:0!important}
+        .product-stage{display:grid!important;width:100%!important;height:100%!important;place-items:center!important}
+        .product-view-switch{display:none!important}.product-illustration{width:20vw!important;max-height:20vh!important}
+    """,
+    "grayscale": """
+        .site-header,.section-heading,.product-panel,.callout-lines,.preview-tools{display:none!important}
+        .page-section{min-height:100vh!important;padding:0!important;border:0!important}
+        .product-layout{display:block!important;width:100vw!important;height:100vh!important;margin:0!important}
+        .product-stage{display:grid!important;width:100%!important;height:100%!important;place-items:center!important;filter:grayscale(1)}
+        .product-view-switch{display:none!important}.product-illustration{width:min(92vw,1100px)!important;max-height:94vh!important}
+    """,
+    "silhouette": """
+        html,body,.product-section{background:#e7e7e2!important}.site-header,.section-heading,.product-panel,.callout-lines,.preview-tools{display:none!important}
+        .page-section{min-height:100vh!important;padding:0!important;border:0!important}.product-layout{display:block!important;width:100vw!important;height:100vh!important;margin:0!important}
+        .product-stage{display:grid!important;width:100%!important;height:100%!important;place-items:center!important}.product-view-switch{display:none!important}
+        .product-illustration{width:min(92vw,1100px)!important;max-height:94vh!important;filter:none!important}.product-illustration *{fill:#111!important;stroke:#111!important;opacity:1!important;filter:none!important}
+        .product-illustration .ground-shadow{display:none!important}
+    """,
+}
+
+
+def capture(browser: Path, output: Path, width: int, height: int, url: str, profile: Path, delay_ms: int, product_test: str = "") -> None:
     port = free_port()
     process = subprocess.Popen(
         [str(browser), "--headless=new", f"--remote-debugging-port={port}",
@@ -152,6 +184,10 @@ def capture(browser: Path, output: Path, width: int, height: int, url: str, prof
             ),
             "awaitPromise": True, "returnByValue": True,
         })
+        if product_test:
+            css = json.dumps(PRODUCT_TEST_CSS[product_test])
+            cdp.call("Runtime.evaluate", {"expression": f"(()=>{{const s=document.createElement('style');s.textContent={css};document.head.appendChild(s);return true}})()", "returnByValue": True})
+            time.sleep(.2)
         result = cdp.call("Page.captureScreenshot", {
             "format": "png", "fromSurface": True, "captureBeyondViewport": False,
         })
@@ -171,6 +207,7 @@ def main() -> int:
     parser.add_argument("--viewport", help="capture one viewport, for example 1920x1080")
     parser.add_argument("--delay-ms", type=int, default=4500, help="delay after the load event")
     parser.add_argument("--browser", type=Path, help="explicit Chrome/Edge executable")
+    parser.add_argument("--product-test", choices=tuple(PRODUCT_TEST_CSS), default="", help="isolate the product for visual quality checks")
     args = parser.parse_args()
     browser = args.browser if args.browser and args.browser.exists() else next((candidate for candidate in CHROME if candidate.exists()), None)
     if not browser:
@@ -184,7 +221,7 @@ def main() -> int:
         viewports = ((width, height),)
     for width, height in viewports:
         target = output / f"{width}x{height}.png"
-        capture(browser, target, width, height, url, output / f"profile-{width}x{height}", max(0, args.delay_ms))
+        capture(browser, target, width, height, url, output / f"profile-{width}x{height}", max(0, args.delay_ms), args.product_test)
         print(f"captured {width}x{height}: {target}")
     return 0
 
