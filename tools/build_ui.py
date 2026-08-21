@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import base64
 import gzip
 import json
 import re
@@ -58,6 +59,10 @@ def read_v5(name: str) -> str:
 
 def read_v7(name: str) -> str:
     return (V7_SOURCE / name).read_text(encoding="utf-8")
+
+
+def image_data(source: Path, mime: str = "image/webp") -> str:
+    return f"data:{mime};base64," + base64.b64encode(source.read_bytes()).decode("ascii")
 
 
 def minify_css(source: str) -> str:
@@ -154,8 +159,10 @@ def minify_javascript(source: str) -> str:
 
 def compose(*, preview: bool, minified: bool) -> tuple[str, str, str]:
     template = read("index.html")
-    template = template.replace("<!--__PRODUCT_V3_EXTERIOR__-->", read_v7("product-v3-exterior.svg"))
-    template = template.replace("<!--__PRODUCT_V2_CUTAWAY__-->", read_v5("product-v2-cutaway.svg"))
+    exterior = read_v7("product-v3-exterior.svg").replace("__STEP_EXTERIOR__", image_data(V7_SOURCE / "product-step-exterior.webp"))
+    cutaway = read_v5("product-v2-cutaway.svg").replace("__STEP_CUTAWAY__", image_data(V5_SOURCE / "product-step-cutaway.webp"))
+    template = template.replace("<!--__PRODUCT_V3_EXTERIOR__-->", exterior)
+    template = template.replace("<!--__PRODUCT_V2_CUTAWAY__-->", cutaway)
     css = "\n\n".join([read("experience.css"), read_v4("digital-twin.css")])
     scripts = [read_v4("component-model.js"), read_v4("digital-twin.js")]
     if preview:
