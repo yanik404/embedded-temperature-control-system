@@ -1,35 +1,35 @@
-<svg class="product-illustration product-v2-illustration product-v2-cutaway product-step-render" id="productV2Cutaway" viewBox="400 250 600 800" role="img" aria-labelledby="stepCutTitle stepCutDescription" xmlns="http://www.w3.org/2000/svg">
- <title id="stepCutTitle">ThermoCup MK I Innenansicht</title>
- <desc id="stepCutDescription">Das unveränderte finale Cutaway derselben STEP-Geometrie zeigt zwei seitliche Peltier-Module, zwei TMP36, genau einen Lüfter unter dem Becher, OLED, Taster, Lichtsensor, Bechererkennung und das originale Haupt-PCB.</desc>
- <image href="__STEP_CUTAWAY__" x="0" y="0" width="1100" height="1100" preserveAspectRatio="xMidYMid meet"/>
+<svg class="product-illustration product-v2-illustration product-v2-cutaway product-step-render" id="productV2Cutaway" viewBox="0 0 999 1100" role="img" aria-labelledby="productCutTitle productCutDescription" xmlns="http://www.w3.org/2000/svg">
+ <title id="productCutTitle">ThermoCup MK I Innenansicht</title>
+ <desc id="productCutDescription">Fotorealistische Schnittansicht derselben STEP-Gehäusegeometrie. Zwei Peltier-Kontakte, Sensorik, ein Lüfter und das Haupt-PCB sind sauber innerhalb des Gehäuses montiert.</desc>
+ <image href="__PRODUCT_CUTAWAY__" x="0" y="0" width="999" height="1100" preserveAspectRatio="xMidYMid meet"/>
 
  <g class="step-interaction-layer" fill="transparent" stroke="transparent">
-  <rect class="component-part step-hotspot" data-part="temp1" data-focus="temp1" x="782" y="442" width="54" height="62" rx="16" tabindex="0" role="button" aria-label="TMP36 Sensor 1 oben seitlich am Becher"/>
-  <rect class="component-part step-hotspot" data-part="temp2" data-focus="temp2" x="700" y="705" width="82" height="112" rx="20" tabindex="0" role="button" aria-label="TMP36 Sensor 2 mit Federkontakt unter dem Becher"/>
-  <rect class="component-part step-hotspot" data-part="peltier1" data-focus="peltier1" x="438" y="474" width="78" height="218" rx="10" tabindex="0" role="button" aria-label="Peltier links"/>
-  <rect class="component-part step-hotspot" data-part="peltier2" data-focus="peltier2" x="742" y="478" width="82" height="224" rx="10" tabindex="0" role="button" aria-label="Peltier rechts"/>
-  <circle class="component-part step-hotspot" data-part="fan" data-focus="fan" cx="740" cy="910" r="62" tabindex="0" role="button" aria-label="Einzelner Lüfter unter dem Becher"/>
-  <rect class="component-part step-hotspot" data-part="oled" data-focus="oled" x="570" y="532" width="112" height="72" rx="9" tabindex="0" role="button" aria-label="SSD1306 OLED"/>
-  <rect class="component-part step-hotspot" data-part="buttons" data-focus="buttons" x="570" y="595" width="116" height="52" rx="12" tabindex="0" role="button" aria-label="Taster MODE DOWN OK UP"/>
-  <ellipse class="component-part step-hotspot" data-part="rgb" data-focus="rgb" cx="740" cy="410" rx="138" ry="50" tabindex="0" role="button" aria-label="RGB-Statusring"/>
-  <circle class="component-part step-hotspot" data-part="light" data-focus="light" cx="716" cy="758" r="27" tabindex="0" role="button" aria-label="Lichtsensor im unteren Bereich"/>
-  <rect class="component-part step-hotspot" data-part="cup" data-focus="cup" x="795" y="548" width="78" height="72" rx="22" tabindex="0" role="button" aria-label="Seitliche Bechererkennung"/>
-  <ellipse class="component-part step-hotspot" data-part="pico" data-focus="pico" cx="590" cy="855" rx="148" ry="148" tabindex="0" role="button" aria-label="Originales 80 Millimeter Haupt-PCB"/>
-  <rect class="component-part step-hotspot" data-part="current1" data-focus="current1" x="635" y="780" width="90" height="125" rx="18" tabindex="0" role="button" aria-label="TLA2024 und Strommessung auf dem Haupt-PCB"/>
+  <rect class="component-part step-hotspot" data-part="temp1" data-focus="temp1" x="688" y="271" width="62" height="67" rx="16" tabindex="0" role="button" aria-label="TMP36 Sensor 1 oben seitlich am Becher"/>
+  <rect class="component-part step-hotspot" data-part="temp2" data-focus="temp2" x="447" y="664" width="86" height="70" rx="20" tabindex="0" role="button" aria-label="TMP36 Sensor 2 mit Federkontakt unter dem Becher"/>
+  <rect class="component-part step-hotspot" data-part="peltier1" data-focus="peltier1" x="416" y="275" width="105" height="367" rx="12" tabindex="0" role="button" aria-label="Peltier links"/>
+  <rect class="component-part step-hotspot" data-part="peltier2" data-focus="peltier2" x="628" y="255" width="100" height="384" rx="12" tabindex="0" role="button" aria-label="Peltier rechts"/>
+  <circle class="component-part step-hotspot" data-part="fan" data-focus="fan" cx="765" cy="923" r="78" tabindex="0" role="button" aria-label="Einzelner Lüfter im unteren Gehäuse"/>
+  <rect class="component-part step-hotspot" data-part="oled" data-focus="oled" x="270" y="345" width="205" height="174" rx="16" tabindex="0" role="button" aria-label="SSD1306 OLED"/>
+  <rect class="component-part step-hotspot" data-part="buttons" data-focus="buttons" x="292" y="508" width="190" height="74" rx="18" tabindex="0" role="button" aria-label="Taster MODE DOWN OK UP"/>
+  <ellipse class="component-part step-hotspot" data-part="rgb" data-focus="rgb" cx="500" cy="118" rx="286" ry="94" tabindex="0" role="button" aria-label="RGB-Statusring"/>
+  <circle class="component-part step-hotspot" data-part="light" data-focus="light" cx="575" cy="808" r="34" tabindex="0" role="button" aria-label="Lichtsensor im unteren Bereich"/>
+  <rect class="component-part step-hotspot" data-part="cup" data-focus="cup" x="706" y="386" width="76" height="88" rx="22" tabindex="0" role="button" aria-label="Seitliche Bechererkennung"/>
+  <ellipse class="component-part step-hotspot" data-part="pico" data-focus="pico" cx="560" cy="769" rx="217" ry="135" tabindex="0" role="button" aria-label="Haupt-PCB mit Raspberry Pi Pico W"/>
+  <rect class="component-part step-hotspot" data-part="current1" data-focus="current1" x="500" y="704" width="186" height="158" rx="24" tabindex="0" role="button" aria-label="TLA2024 und Strommessung auf dem Haupt-PCB"/>
  </g>
 
  <g class="callout-anchors" aria-hidden="true">
-  <circle data-callout-anchor="temp1" cx="809" cy="473" r="2"/>
-  <circle data-callout-anchor="temp2" cx="741" cy="761" r="2"/>
-  <circle data-callout-anchor="peltier1" cx="477" cy="583" r="2"/>
-  <circle data-callout-anchor="peltier2" cx="783" cy="590" r="2"/>
-  <circle data-callout-anchor="fan" cx="740" cy="910" r="2"/>
-  <circle data-callout-anchor="oled" cx="626" cy="568" r="2"/>
-  <circle data-callout-anchor="buttons" cx="628" cy="621" r="2"/>
-  <circle data-callout-anchor="rgb" cx="740" cy="410" r="2"/>
-  <circle data-callout-anchor="light" cx="716" cy="758" r="2"/>
-  <circle data-callout-anchor="cup" cx="834" cy="584" r="2"/>
-  <circle data-callout-anchor="pico" cx="590" cy="855" r="2"/>
-  <circle data-callout-anchor="current1" cx="680" cy="842" r="2"/>
+  <circle data-callout-anchor="temp1" cx="719" cy="304" r="2"/>
+  <circle data-callout-anchor="temp2" cx="490" cy="699" r="2"/>
+  <circle data-callout-anchor="peltier1" cx="469" cy="459" r="2"/>
+  <circle data-callout-anchor="peltier2" cx="678" cy="447" r="2"/>
+  <circle data-callout-anchor="fan" cx="765" cy="923" r="2"/>
+  <circle data-callout-anchor="oled" cx="373" cy="432" r="2"/>
+  <circle data-callout-anchor="buttons" cx="387" cy="545" r="2"/>
+  <circle data-callout-anchor="rgb" cx="500" cy="118" r="2"/>
+  <circle data-callout-anchor="light" cx="575" cy="808" r="2"/>
+  <circle data-callout-anchor="cup" cx="744" cy="430" r="2"/>
+  <circle data-callout-anchor="pico" cx="560" cy="769" r="2"/>
+  <circle data-callout-anchor="current1" cx="593" cy="783" r="2"/>
  </g>
 </svg>

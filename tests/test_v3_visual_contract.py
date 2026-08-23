@@ -14,18 +14,23 @@ source = index + exterior + cutaway
 for token in ("AUFBAU", "REGELKREIS", "LIVE", "TECHNISCHE DETAILS", "PRODUCTILLUSTRATION"):
     assert token in production.upper()
 
-# These hashes identify the final files from ThermoCup_Codex_Ready.zip. The
-# dashboard embeds the supplied renders byte-for-byte, never a redraw.
+# The active transparent WebP files are finished-product renders derived from
+# the supplied STEP references and remain compact enough for Pico flash.
+assert hashlib.sha256(Path("ui-v7/src/product-finished-exterior.webp").read_bytes()).hexdigest().upper() == "443E385CACAD073A0EA656E49B6C93B2BD8AFB3F8476095DBF2979BB267AE926"
+assert hashlib.sha256(Path("ui-v5/src/product-finished-cutaway.webp").read_bytes()).hexdigest().upper() == "A408487E05EBA5D3ACA1D9104DFEFEA7904F983F96B92394C99153A5D23AA408"
+assert Path("ui-v7/src/product-finished-exterior.webp").stat().st_size == 74560
+assert Path("ui-v5/src/product-finished-cutaway.webp").stat().st_size == 107528
+
+# Exact delivered STEP artwork stays byte-for-byte available as fallback.
 assert hashlib.sha256(Path("ui-v7/src/product-step-exterior.webp").read_bytes()).hexdigest().upper() == "41036BD0F2D5ED0AD315EB8C17F1E5E5E4E5DFA20861DEEB4AA8DB8E813DAD66"
 assert hashlib.sha256(Path("ui-v5/src/product-step-cutaway.webp").read_bytes()).hexdigest().upper() == "3C15E2C3C1E2042746ACEA181CE4076A9C9F7247115B2E2CAAF1C5D83A9A3B5B"
-assert Path("ui-v7/src/product-step-exterior.webp").stat().st_size == 59266
-assert Path("ui-v5/src/product-step-cutaway.webp").stat().st_size == 129264
 
-assert "__STEP_EXTERIOR__" in exterior and "__STEP_CUTAWAY__" in cutaway
+assert "__PRODUCT_EXTERIOR__" in exterior and "__PRODUCT_CUTAWAY__" in cutaway
 assert exterior.count("<image ") == 1 and cutaway.count("<image ") == 1
 assert production.count("data:image/webp;base64,") == 2
-assert 'viewBox="400 250 600 800"' in exterior and 'viewBox="400 250 600 800"' in cutaway
+assert 'viewBox="0 0 1070 1100"' in exterior and 'viewBox="0 0 999 1100"' in cutaway
 assert '<svg class="product-illustration product-v3-illustration product-step-render" id="productIllustration"' in exterior
+assert 'id="product-v3"' in exterior
 assert "data-part=" not in exterior and "data-focus=" not in exterior and "data-callout-anchor=" not in exterior
 
 # Only transparent interaction geometry may sit above the supplied cutaway.
@@ -56,4 +61,4 @@ assert 'fetchWithTimeout("/api/unlock"' in production and 'method:"POST"' in pro
 assert 'href="http' not in production and 'src="http' not in production
 assert "getContext(\"webgl\"" not in production
 
-print("final STEP exterior/cutaway asset and interaction contract checks passed")
+print("finished-product exterior/cutaway asset and interaction contract checks passed")

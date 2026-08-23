@@ -91,7 +91,7 @@ UP/DOWN ändern den Sollwert in 0,5-°C-Schritten. OK startet oder stoppt; im Fe
 
 Die aktuelle Oberfläche folgt dem Prinzip **Simple Digital Twin** und erklärt das System in dieser Reihenfolge:
 
-1. **Aufbau:** hochwertige, sofort sichtbare 2.5D-SVG-Illustration eines geschlossenen Geräts. **AUSSENANSICHT** zeigt das fertige Produkt ohne Kabel und Innenleben; **AUFBAU** öffnet kontrolliert Hülle und Basis für Peltiers, Kontaktbacken, TMP36-Sensoren, PCB/Pico und das integrierte Kühlmodul. Fünf kompakte Gruppen ordnen zwölf Montagebeziehungen; beim Fokussieren führt genau eine dezente Linie zum realen Einbauort. Auf Mobilgeräten stehen Produkt und Legende untereinander, ohne Callout-Linien. Die Illustration benötigt weder WebGL noch externe Assets.
+1. **Aufbau:** hochwertige, sofort sichtbare Produktvisualisierung auf Basis der gelieferten STEP-Geometrie. **AUSSEN** zeigt das glaubwürdig fertig montierte Gerät mit mattem Gehäuse, tief eingesetztem Becher, kleinem OLED und vier physischen Tastern. **INNEN** öffnet die Hülle kontrolliert und zeigt Peltiers, Sensorik, Haupt-PCB/Pico und genau einen integrierten Lüfter an ihren Einbauorten statt als schwebende Explosionsbauteile. Fünf kompakte Gruppen ordnen zwölf Montagebeziehungen; beim Fokussieren führt genau eine dezente Linie zum realen Einbauort. Auf Mobilgeräten stehen Produkt und Legende untereinander, ohne Callout-Linien. Die Visualisierung benötigt weder WebGL noch externe Assets.
 2. **Regelkreis:** dunkle, linienbasierte Darstellung der fünf Hauptpunkte SOLL → PI → HEIZEN → BECHER → IST. Vergleich und Sensor bleiben kleine Zwischenelemente; eine einzige blaue Linie zeigt die Rückführung.
 3. **Live:** eine dominante Isttemperatur, darunter Zustand sowie eine kompakte Zeile für Sollwert, Heizleistung und Lüfter. Es folgt unmittelbar der Verlauf von IST, SOLL und HEIZLEISTUNG; weitere Messreihen sind zunächst eingeklappt.
 4. **Technik:** optionale Details zu GPIO, Messwerten, PI-Parametern, WLAN, IP und Firmwarestatus.
@@ -104,9 +104,9 @@ Statusfarben bleiben bewusst sparsam: Orange zeigt Heizenergie, Grün einen best
 
 ### Lokale Designvorschau
 
-`preview.html` direkt im Browser öffnen, um dieselbe Oberfläche ohne Pico und WLAN mit animierten Demo-Daten anzusehen. Die Komponentenliste und die transparenten Hotspots bleiben interaktiv; Hinzufügen und **Aus Vorschau entfernen** ändern ausschließlich den lokalen Demo-Status, während die verbindlichen STEP-Renderings als unveränderte Konstruktionsreferenz sichtbar bleiben. Die Szenarien sind standardmäßig verborgen und öffnen sich über **DEMO TOOLS** oder `Alt+D`; in der Produktionsdatei werden diese Werkzeuge nicht erzeugt. Die simulierte PIN ist ebenfalls `1234`; START, STOP und Sollwert verändern ausschließlich den lokalen Demo-Zustand und senden niemals Hardware- oder API-Befehle.
+`preview.html` direkt im Browser öffnen, um dieselbe Oberfläche ohne Pico und WLAN mit animierten Demo-Daten anzusehen. Die Komponentenliste und die transparenten Hotspots bleiben interaktiv; Hinzufügen und **Aus Vorschau entfernen** ändern ausschließlich den lokalen Demo-Status. Außen- und Innenansicht verwenden die neuen fotorealistischen, transparent freigestellten Produktdarstellungen derselben STEP-Grundgeometrie. Die Szenarien sind standardmäßig verborgen und öffnen sich über **DEMO TOOLS** oder `Alt+D`; in der Produktionsdatei werden diese Werkzeuge nicht erzeugt. Die simulierte PIN ist ebenfalls `1234`; START, STOP und Sollwert verändern ausschließlich den lokalen Demo-Zustand und senden niemals Hardware- oder API-Befehle.
 
-Die bewährte Render-, API- und Chart-Basis liegt unter `ui-v3/src/`; die V4-Digital-Twin-Schicht liegt getrennt unter `ui-v4/src/`. Außen- und Innenansicht verwenden die final gelieferten Renderings derselben STEP-Geometrie. `ui/src/` bleibt als jederzeit wiederherstellbare Observatory-V2-Basis im Repository:
+Die bewährte Render-, API- und Chart-Basis liegt unter `ui-v3/src/`; die V4-Digital-Twin-Schicht liegt getrennt unter `ui-v4/src/`. Außen- und Innenansicht verwenden zwei fertigungsnahe Produkt-Renderings derselben STEP-Grundgeometrie. Die gelieferten technischen STEP-Bilder bleiben als Legacy-Fallback erhalten. `ui/src/` bleibt als jederzeit wiederherstellbare Observatory-V2-Basis im Repository:
 
 - `index.html` – semantische Oberfläche und SVG-Systemdarstellungen
 - `ui-v3/src/product.svg` – unveränderter visueller Fallback; wird vom aktuellen Generator nicht eingebettet
@@ -116,14 +116,16 @@ Die bewährte Render-, API- und Chart-Basis liegt unter `ui-v3/src/`; die V4-Dig
 - `ui-v4/src/component-model.js` – vollständiger Hardwarekatalog und ehrliche Live-Discovery-Abbildung
 - `ui-v4/src/digital-twin.js` – Callout-Legende, SVG-Montageanker, ehrliche Live-Zustände und Preview-Konfigurator
 - `ui-v4/src/digital-twin.css` – orthogonale Zuordnungslinien, Statussemantik und Inline-Fokusdarstellung
-- `ui-v7/src/product-step-exterior.webp` – unverändertes finales Außen-Rendering aus `ThermoCup_Codex_Ready.zip`
+- `ui-v7/src/product-finished-exterior.webp` – aktive transparente Außenansicht mit realistischen Materialien und Licht
+- `ui-v7/src/product-step-exterior.webp` – unveränderte technische STEP-Referenz aus `ThermoCup_Codex_Ready.zip`
 - `ui-v7/src/product-v3-exterior.svg` – schlanker, responsiver Einbettungsrahmen für die Außenansicht
 - `ui-v6/src/product-v3-rejected-fallback.svg` – unveränderter Fallback der verworfenen großen Maschinenform
 - `ui-v5/src/product-v2-exterior.svg` – unveränderter visueller Legacy-Fallback
-- `ui-v5/src/product-step-cutaway.webp` – unverändertes finales Cutaway mit originalem 80-mm-PCB und genau einem Lüfter
+- `ui-v5/src/product-finished-cutaway.webp` – aktive kontrollierte Schnittansicht mit intern montierten Komponenten
+- `ui-v5/src/product-step-cutaway.webp` – unveränderte technische Cutaway-Referenz mit originalem 80-mm-PCB und genau einem Lüfter
 - `ui-v5/src/product-v2-cutaway.svg` – Einbettungsrahmen mit transparenten, am Placement Guide ausgerichteten Hotspots
 
-Die stabilisierte Produktion bettet beide WebP-Dateien als Data-URLs in die bestehende SVG-/DOM-/Canvas-Architektur ein. Dadurch bleibt das Dashboard eine einzelne Flash-Datei ohne zusätzliche HTTP-Asset-Requests. Frühere WebGL-, X-Ray-, Scroll-Mode- und Bedienlabor-Prototypen wurden nach Abschluss der Technologieentscheidung entfernt. Die aktuelle Architektur steht in `docs/ui-v3-architecture.md` und `docs/ui-v4-architecture.md`.
+Die stabilisierte Produktion bettet die beiden optimierten, transparenten WebP-Dateien als Data-URLs in die bestehende SVG-/DOM-/Canvas-Architektur ein. Dadurch bleibt das Dashboard eine einzelne Flash-Datei ohne zusätzliche HTTP-Asset-Requests. Frühere WebGL-, X-Ray-, Scroll-Mode- und Bedienlabor-Prototypen wurden nach Abschluss der Technologieentscheidung entfernt. Die aktuelle Architektur steht in `docs/ui-v3-architecture.md` und `docs/ui-v4-architecture.md`.
 
 `tools/build_ui.py` erzeugt daraus `preview.html`, die minifizierte Single-File-Produktion unter `ui/dist/dashboard.production.html`, Größenstatistiken und `include/web_assets.h`. Die Produktion enthält keine Simulation, keine externen URLs, keine CDN-Abhängigkeit und benötigt für Assets keinen weiteren HTTP-Request. Die CMake-Firmware hängt vom Generator ab; manuell lässt er sich mit dem im CMake-Cache erkannten Python ausführen:
 
@@ -132,7 +134,7 @@ python tools/build_ui.py
 python tools/build_ui.py --check
 ```
 
-`powershell -ExecutionPolicy Bypass -File tools/capture_ui_review.ps1 -Round manual` rendert die sieben Referenz-Viewports automatisiert mit exakt gesetzten Chrome-/Edge-DevTools-Gerätemetriken nach `build/ui-review/manual/`. `python tools/audit_ui_layout.py` prüft AUFBAU, REGELKREIS und LIVE bei denselben sieben Viewports auf sichtbare Kollisionen und horizontalen Overflow. Mit `tools/capture_ui_review.py --product-test product|scale20|grayscale|blur|silhouette` lässt sich die Produktgrafik reproduzierbar isolieren. `tests/test_v3_visual_contract.py` fixiert die SHA-256-Hashes der gelieferten Renderings und schließt zusätzliche Kühlkörper oder Lüfter-Overlays aus; `tests/test_product_v2_responsive.py` prüft AUSSEN und INNEN automatisiert bei 1920, 1440, 1366, 768 und 390 Pixeln.
+`powershell -ExecutionPolicy Bypass -File tools/capture_ui_review.ps1 -Round manual` rendert die sieben Referenz-Viewports automatisiert mit exakt gesetzten Chrome-/Edge-DevTools-Gerätemetriken nach `build/ui-review/manual/`. `python tools/audit_ui_layout.py` prüft AUFBAU, REGELKREIS und LIVE bei denselben sieben Viewports auf sichtbare Kollisionen und horizontalen Overflow. Mit `tools/capture_ui_review.py --product-test product|scale20|grayscale|blur|silhouette` lässt sich die Produktgrafik reproduzierbar isolieren. `tests/test_v3_visual_contract.py` fixiert die SHA-256-Hashes der aktiven Produkt-Assets und der erhaltenen STEP-Fallbacks; `tests/test_product_v2_responsive.py` prüft AUSSEN und INNEN automatisiert bei 1920, 1440, 1366, 768 und 390 Pixeln.
 
 ## Softwarearchitektur
 

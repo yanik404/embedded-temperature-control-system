@@ -159,8 +159,8 @@ def minify_javascript(source: str) -> str:
 
 def compose(*, preview: bool, minified: bool) -> tuple[str, str, str]:
     template = read("index.html")
-    exterior = read_v7("product-v3-exterior.svg").replace("__STEP_EXTERIOR__", image_data(V7_SOURCE / "product-step-exterior.webp"))
-    cutaway = read_v5("product-v2-cutaway.svg").replace("__STEP_CUTAWAY__", image_data(V5_SOURCE / "product-step-cutaway.webp"))
+    exterior = read_v7("product-v3-exterior.svg").replace("__PRODUCT_EXTERIOR__", image_data(V7_SOURCE / "product-finished-exterior.webp"))
+    cutaway = read_v5("product-v2-cutaway.svg").replace("__PRODUCT_CUTAWAY__", image_data(V5_SOURCE / "product-finished-cutaway.webp"))
     template = template.replace("<!--__PRODUCT_V3_EXTERIOR__-->", exterior)
     template = template.replace("<!--__PRODUCT_V2_CUTAWAY__-->", cutaway)
     css = "\n\n".join([read("experience.css"), read_v4("digital-twin.css")])
@@ -209,7 +209,7 @@ def build_stats(preview_html: str, production_html: str, css: str, javascript: s
         "external_library_bytes": 0,
         "runtime_http_requests_for_assets": 0,
         "webgl_draw_calls_per_frame": 0,
-        "product_rendering": "embedded_step_webp_with_svg_hotspots",
+        "product_rendering": "embedded_photoreal_webp_with_svg_hotspots",
         "history_max_seconds": 1800,
     }
 

@@ -1,4 +1,4 @@
-"""Validate the final STEP exterior and cutaway at all supported viewports."""
+"""Validate the finished-product exterior and cutaway at all viewports."""
 
 from __future__ import annotations
 
@@ -78,4 +78,4 @@ with tempfile.TemporaryDirectory(prefix="becherhalter-product-v3-", ignore_clean
         except subprocess.TimeoutExpired:
             process.terminate()
 
-print("final STEP views responsive test passed: exterior/interior at 1920, 1440, 1366, 768 and 390 px")
+print("finished-product views responsive test passed: exterior/interior at 1920, 1440, 1366, 768 and 390 px")
