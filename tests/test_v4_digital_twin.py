@@ -13,6 +13,8 @@ for group in ("TEMPERATUR","HEIZUNG","BEDIENUNG","SENSOREN","ELEKTRONIK"):
     assert group in twin
 for label in ("Temperatursensor 1","Temperatursensor 2","Peltier links","Peltier rechts","Lüfter","OLED","Taster","RGB-Ring","Lichtsensor","Becherschalter","Original-PCB / Pico W","Strommessung"):
     assert label in twin
+assert "3-pol. Hebel-Mikroschalter" in twin
+assert "3-poliger Hebel-Mikroschalter" in model
 for behavior in ("toggleConnection","setConnected","setPartState","drawLines","visibleLineIds","renderDetail","setProductView"):
     assert behavior in twin
 assert 'live.tone==="configured"' in twin and 'tone:"unmonitored"' in twin
