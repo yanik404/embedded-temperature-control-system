@@ -58,17 +58,35 @@ with tempfile.TemporaryDirectory(prefix="becherhalter-insights-", ignore_cleanup
         time.sleep(.45)
 
         setpoint_expression = """new Promise(resolve=>{
-          const input=document.getElementById('targetInput');input.value='48,0';
-          document.getElementById('setpointButton').click();setTimeout(()=>resolve({
-            unlocked:document.body.classList.contains('control-unlocked'),disabled:input.disabled,
-            target:document.getElementById('heroSetpoint').textContent,
-            message:document.getElementById('controlMessage').textContent
-          }),80);
+          PreviewDriver.apply('ready');
+          const input=document.getElementById('targetInput');
+          document.getElementById('targetUp').click();
+          document.getElementById('targetUp').click();
+          document.getElementById('targetUp').click();
+          document.getElementById('targetDown').click();
+          setTimeout(()=>{
+            const draft=input.value;
+            document.getElementById('setpointButton').click();
+            setTimeout(()=>{
+              const confirmed=document.getElementById('heroSetpoint').textContent;
+              document.getElementById('startButton').click();
+              setTimeout(()=>resolve({
+                unlocked:document.body.classList.contains('control-unlocked'),disabled:input.disabled,
+                draft,confirmed,input:input.value,target:document.getElementById('heroSetpoint').textContent,
+                state:document.getElementById('systemState').textContent,
+                runtimeTarget:V3UI.runtime.current.setpoint,
+                message:document.getElementById('controlMessage').textContent
+              }),350);
+            },100);
+          },350);
         })"""
         setpoint_state = cdp.call("Runtime.evaluate", {"expression": setpoint_expression, "awaitPromise": True,
                                                         "returnByValue": True})["result"]["value"]
         assert setpoint_state["unlocked"] and not setpoint_state["disabled"], setpoint_state
-        assert setpoint_state["target"] == "48,0" and "nur Demo-Daten" in setpoint_state["message"], setpoint_state
+        assert setpoint_state["draft"] == "46,0", setpoint_state
+        assert setpoint_state["confirmed"] == "46,0" and setpoint_state["input"] == "46,0", setpoint_state
+        assert setpoint_state["target"] == "46,0" and setpoint_state["runtimeTarget"] == 46, setpoint_state
+        assert setpoint_state["state"] == "AUFHEIZEN" and "nur Demo-Daten" in setpoint_state["message"], setpoint_state
 
         expression = """(()=>{
           const m=window.V3Metrics,now=Date.now();
@@ -146,4 +164,4 @@ with tempfile.TemporaryDirectory(prefix="becherhalter-insights-", ignore_cleanup
         except subprocess.TimeoutExpired:
             process.terminate()
 
-print("dashboard insight checks passed: controls, state colours, metrics, disconnect and recovery")
+print("dashboard insight checks passed: persistent setpoint controls, state colours, metrics and recovery")
