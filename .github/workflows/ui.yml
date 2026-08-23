@@ -18,6 +18,7 @@ jobs:
       - name: Run dashboard and lwIP contracts
         run: |
           python tests/test_dashboard_static.py
+          python tests/test_dashboard_insights.py
           python tests/test_v3_visual_contract.py
           python tests/test_v4_digital_twin.py
           python tests/test_http_large_response.py

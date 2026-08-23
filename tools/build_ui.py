@@ -34,8 +34,8 @@ PREVIEW_CONTROLS = """
  <button type="button" data-scenario="heating" class="active">HEATING</button>
  <button type="button" data-scenario="holding">HOLDING</button>
  <button type="button" data-scenario="error">ERROR</button>
- <button type="button" data-scenario="offline">OFFLINE</button>
- <button type="button" data-scenario="reconnect">RECONNECT</button>
+ <button type="button" data-scenario="disconnect">DISCONNECT</button>
+ <button type="button" data-scenario="recovery">RECOVERY</button>
  <button type="button" data-scenario="sensor-error">SENSOR ERROR</button>
  <button type="button" data-scenario="fan-error">FAN ERROR</button>
  <button type="button" data-scenario="power-error">POWER ERROR</button>
