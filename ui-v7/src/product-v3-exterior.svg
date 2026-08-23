@@ -2,4 +2,8 @@
  <title id="productExteriorTitle">ThermoCup MK I als fertiges Produkt</title>
  <desc id="productExteriorDescription">Fotorealistische Außenansicht der geschlossenen STEP-Gehäusegeometrie mit Peltierkontakt auf Becherhöhe sowie OLED und vier physischen Tastern in der unteren Frontaussparung.</desc>
  <g id="product-v3"><image href="__PRODUCT_EXTERIOR__" x="0" y="0" width="955" height="1100" preserveAspectRatio="xMidYMid meet"/></g>
+ <g class="product-v3-cup-state" aria-hidden="true" pointer-events="none">
+  <ellipse class="product-v3-liquid-tint" cx="523" cy="164" rx="169" ry="47"/>
+  <ellipse class="product-v3-liquid-rim" cx="523" cy="164" rx="169" ry="47" fill="none" stroke-width="3"/>
+ </g>
 </svg>

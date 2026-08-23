@@ -57,6 +57,19 @@ with tempfile.TemporaryDirectory(prefix="becherhalter-insights-", ignore_cleanup
         cdp.call("Page.navigate", {"url": (ROOT / "preview.html").as_uri() + "?scenario=heating"})
         time.sleep(.45)
 
+        setpoint_expression = """new Promise(resolve=>{
+          const input=document.getElementById('targetInput');input.value='48,0';
+          document.getElementById('setpointButton').click();setTimeout(()=>resolve({
+            unlocked:document.body.classList.contains('control-unlocked'),disabled:input.disabled,
+            target:document.getElementById('heroSetpoint').textContent,
+            message:document.getElementById('controlMessage').textContent
+          }),80);
+        })"""
+        setpoint_state = cdp.call("Runtime.evaluate", {"expression": setpoint_expression, "awaitPromise": True,
+                                                        "returnByValue": True})["result"]["value"]
+        assert setpoint_state["unlocked"] and not setpoint_state["disabled"], setpoint_state
+        assert setpoint_state["target"] == "48,0" and "nur Demo-Daten" in setpoint_state["message"], setpoint_state
+
         expression = """(()=>{
           const m=window.V3Metrics,now=Date.now();
           const status={temp1_ok:true,temp2_ok:true,temperature1:33.6,temperature2:32.4,
@@ -99,6 +112,20 @@ with tempfile.TemporaryDirectory(prefix="becherhalter-insights-", ignore_cleanup
         assert states["live"] == "true" and states["recovery"] is False, states
         assert states["hardware"] >= 17, states
 
+        colour_expression = """(()=>{
+          const colours={};
+          for(const scenario of ['ready','heating','holding','error']){
+            PreviewDriver.apply(scenario);
+            colours[scenario]=getComputedStyle(document.body).getPropertyValue('--cup-state-color').trim();
+          }
+          PreviewDriver.apply('ready');
+          return colours;
+        })()"""
+        colours = cdp.call("Runtime.evaluate", {"expression": colour_expression,
+                                                  "returnByValue": True})["result"]["value"]
+        assert colours == {"ready": "#76aec4", "heating": "#ed8549",
+                           "holding": "#71c393", "error": "#eb6868"}, colours
+
         viewport_expression = """new Promise(resolve=>{
           PreviewDriver.openViewport('mobile');setTimeout(()=>{
             const dialog=document.querySelector('.preview-viewport-dialog');
@@ -119,4 +146,4 @@ with tempfile.TemporaryDirectory(prefix="becherhalter-insights-", ignore_cleanup
         except subprocess.TimeoutExpired:
             process.terminate()
 
-print("dashboard insight checks passed: live metrics, step response, disconnect and recovery")
+print("dashboard insight checks passed: controls, state colours, metrics, disconnect and recovery")

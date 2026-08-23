@@ -106,6 +106,7 @@
   <path d="M203 142Q351 94 499 142L467 477Q460 524 351 538Q242 524 235 477Z" fill="url(#simpleCup)" stroke="#b9c3bd" stroke-width="4"/>
   <ellipse cx="351" cy="141" rx="149" ry="48" fill="#1b201d" stroke="#d3dad5" stroke-width="5"/>
   <ellipse cx="351" cy="147" rx="132" ry="37" fill="url(#simpleDrink)" stroke="#d7854d" stroke-width="3"/>
+  <ellipse class="cutaway-cup-state-tint" cx="351" cy="147" rx="129" ry="34"/>
   <path d="M246 471Q351 500 456 471" fill="none" stroke="#aeb7b1" stroke-width="3"/>
   <path d="M246 671v104M456 671v104" fill="none" stroke="#59635d" stroke-width="3" opacity=".55"/>
 
