@@ -56,6 +56,54 @@
    <div class="loop-step sensor-step"><em id="loopSensor">—</em><strong>SENSOR / IST</strong><small>y(t)</small></div>
    <div class="feedback-route"><span>RÜCKFÜHRUNG · y(t)</span></div>
   </div>
+  <section class="control-analysis" id="controllerAnalysis" aria-labelledby="analysisTitle">
+   <header class="analysis-heading"><div><small>REGLERANALYSE</small><h3 id="analysisTitle">Was der PI-Regler intern macht.</h3><p>Echte Live-Werte werden von erklärenden Modell- und Vergleichsgrafiken klar getrennt.</p></div><span class="analysis-truth"><i></i>LIVE + ERKLÄRMODELL</span></header>
+   <div class="control-analysis-grid">
+    <article class="analysis-card pi-analysis-card">
+     <header><span>01</span><div><small>ECHTE FIRMWARE</small><h4>PI-Regler in Echtzeit</h4></div><b id="analysisRegulatorState">PI · BEREIT</b></header>
+     <div class="pi-formula" aria-label="PI-Reglergleichung">u*(t) = K<sub>p</sub> · e(t) + K<sub>i</sub> ∫ e(t) dt</div>
+     <div class="pi-live-diagram" aria-label="Live-Signalweg durch den PI-Regler">
+      <div class="analysis-signal error-signal"><small>FEHLER e(t)</small><strong id="analysisError">—</strong><span>Soll − Ist</span></div><i class="analysis-arrow"></i>
+      <div class="pi-branch-stack"><div class="analysis-signal p-signal"><small>P-ANTEIL</small><strong id="analysisP">—</strong><span>Kp · e(t)</span></div><div class="analysis-signal i-signal"><small>I-ANTEIL</small><strong id="analysisI">—</strong><span>Ki · ∫e(t)dt</span></div></div>
+      <span class="analysis-sum" aria-hidden="true">Σ</span>
+      <div class="analysis-signal raw-signal"><small>ROH u*</small><strong id="analysisRaw">—</strong><span>P + I</span></div>
+      <div class="analysis-limiter"><small>BEGRENZUNG</small><strong>0 … 100 %</strong><span id="analysisLimitState">INAKTIV</span></div>
+      <div class="analysis-signal output-signal"><small>STELLGRÖSSE u(t)</small><strong id="analysisOutput">—</strong><span>nur Heizen</span></div>
+     </div>
+     <div class="controller-meters"><div><span><b>P</b><em id="analysisPMeterValue">—</em></span><i><u id="analysisPMeter"></u></i></div><div><span><b>I</b><em id="analysisIMeterValue">—</em></span><i><u id="analysisIMeter"></u></i></div><div><span><b>u</b><em id="analysisOutputMeterValue">—</em></span><i><u id="analysisOutputMeter"></u></i></div></div>
+     <dl class="analysis-live-facts"><div><dt>Kp</dt><dd id="analysisKp">—</dd></div><div><dt>Ki</dt><dd id="analysisKi">—</dd></div><div><dt>Anti-Windup</dt><dd id="analysisAntiWindup">—</dd></div><div><dt>Regelzyklus</dt><dd id="analysisCycle">—</dd></div></dl>
+    </article>
+
+    <article class="analysis-card plant-analysis-card">
+     <header><span>02</span><div><small>THERMISCHE STRECKE</small><h4>Ordnung als Modellannahme</h4></div><b>NICHT IDENTIFIZIERT</b></header>
+     <div class="plant-formula"><span>G(s) ≈</span><span class="plant-fraction"><b>K · e<sup>−Ls</sup></b><i></i><b>T · s + 1</b></span></div>
+     <div class="plant-model-chain"><div><small>EINGANG</small><strong>u(t)</strong><span>Heizleistung</span></div><i></i><div class="model-block"><small>STARTMODELL</small><strong>PT1 + Totzeit</strong><span>eine dominante Zeitkonstante T</span></div><i></i><div><small>AUSGANG</small><strong>y(t)</strong><span>Temperatur</span></div></div>
+     <div class="order-options"><div class="selected"><b>PT1</b><span>Ein dominanter thermischer Speicher</span><em>geeignetes Startmodell</em></div><div><b>PT2</b><span>Platte, Becher und Flüssigkeit getrennt</span><em>durch Messdaten zu prüfen</em></div></div>
+     <p class="model-honesty">K, T, L und die tatsächliche Streckenordnung werden erst aus einer gemessenen Sprungantwort bestimmt. Die Grafik behauptet deshalb keine bereits identifizierten Parameter.</p>
+    </article>
+
+    <article class="analysis-card comparison-analysis-card">
+     <header><span>03</span><div><small>LERNMODELL · NICHT LIVE</small><h4>P, PI und PID im Vergleich</h4></div><b>SIMULATION</b></header>
+     <svg class="controller-comparison" viewBox="0 0 620 260" role="img" aria-labelledby="comparisonTitle comparisonDescription">
+      <title id="comparisonTitle">Simulierter Vergleich von P-, PI- und PID-Reglern</title><desc id="comparisonDescription">P bleibt unter dem Sollwert, PI beseitigt die bleibende Abweichung, PID erreicht das Ziel in diesem Erklärmodell schneller.</desc>
+      <g class="comparison-grid"><path d="M48 28V222H600M48 76H600M48 125H600M48 174H600M186 28V222M324 28V222M462 28V222"/><text x="8" y="80">SOLL</text><text x="527" y="246">ZEIT →</text><text x="15" y="21">y(t)</text></g>
+      <path class="comparison-target" d="M48 76H600"/>
+      <path class="comparison-p" d="M48 214C92 205 109 145 158 111S295 102 600 102"/>
+      <path class="comparison-pi" d="M48 214C91 205 112 145 154 96S228 61 276 73S403 76 600 76"/>
+      <path class="comparison-pid" d="M48 214C76 195 88 122 127 85S190 76 600 76"/>
+      <circle class="comparison-now" cx="243" cy="70" r="5"/>
+     </svg>
+     <div class="comparison-legend"><span class="p"><i></i><b>P</b><small>bleibende Abweichung möglich</small></span><span class="pi"><i></i><b>PI · AKTUELL</b><small>Abweichung wird ausgeregelt</small></span><span class="pid"><i></i><b>PID · NUR VERGLEICH</b><small>D-Anteil reagiert auf Änderungen</small></span></div>
+    </article>
+
+    <article class="analysis-card structure-analysis-card">
+     <header><span>04</span><div><small>STRUKTUR</small><h4>Was „Ordnung“ bedeutet</h4></div></header>
+     <div class="structure-order"><section><small>REGLER</small><strong>PI</strong><b>1 Integrator</b><p>P reagiert sofort. I summiert die Regelabweichung und entfernt den bleibenden Fehler.</p></section><section><small>REGELSTRECKE</small><strong>PT1 / PT2</strong><b>noch zu identifizieren</b><p>Die Ordnung beschreibt die Anzahl wirksamer dynamischer Speicher im thermischen Modell.</p></section></div>
+     <ul><li><i></i><span><b>Kein D-Anteil in der Firmware</b><small>PID wird ausschließlich didaktisch verglichen.</small></span></li><li><i></i><span><b>Ausgang 0 … 100 %</b><small>Keine negative Leistung und kein Kühlen.</small></span></li><li><i></i><span><b>Anti-Windup</b><small>Schützt den Integrator bei Begrenzung.</small></span></li></ul>
+    </article>
+   </div>
+   <footer class="analysis-note"><b>ECHT</b> PI-Werte und Zustände stammen aus der Pico-API. <b>MODELL</b> PT1/PT2 und P/PI/PID-Kurven dienen der regelungstechnischen Erklärung.</footer>
+  </section>
  </section>
 
  <section class="page-section live-section" id="live" aria-labelledby="liveTitle">

@@ -15,6 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 MODES = {
     "product": "review=product",
     "control": "review=loop",
+    "analysis": "review=analysis",
     "live": "review=live",
 }
 
@@ -45,13 +46,13 @@ def audit(browser: Path, width: int, height: int, query: str, profile: Path) -> 
         cdp.call("Page.navigate", {"url": (ROOT / "preview.html").as_uri() + "?" + query})
         expression = """new Promise(resolve=>{const start=performance.now(),wait=()=>{
           if(document.readyState==='complete'&&document.getElementById('productIllustration'))setTimeout(()=>resolve((()=>{
-            const selectors='.section-heading,.product-summary,.component-legend,.callout-entry,.loop-step,.temperature-hero,.timeline-layer,.control-panel,.safety-summary,.technology-section summary';
+            const selectors='.section-heading,.product-summary,.component-legend,.callout-entry,.loop-step,.analysis-heading,.analysis-card,.temperature-hero,.timeline-layer,.control-panel,.safety-summary,.technology-section summary';
             const effectiveOpacity=n=>{let value=1;for(let p=n;p;p=p.parentElement){const s=getComputedStyle(p);if(s.display==='none'||s.visibility==='hidden')return 0;value*=Number(s.opacity);}return value};
             const nodes=[...document.querySelectorAll(selectors)].filter(n=>{const r=n.getBoundingClientRect();return effectiveOpacity(n)>.3&&r.width>2&&r.height>2&&r.bottom>0&&r.top<innerHeight&&r.right>0&&r.left<innerWidth});
             const rect=n=>{const r=n.getBoundingClientRect();return{x:r.x,y:r.y,w:r.width,h:r.height,name:n.dataset.component||n.id||n.className}};
             const boxes=nodes.map(rect),collisions=[];
             for(let i=0;i<boxes.length;i++)for(let j=i+1;j<boxes.length;j++){if(nodes[i].contains(nodes[j])||nodes[j].contains(nodes[i]))continue;const a=boxes[i],b=boxes[j],x=Math.min(a.x+a.w,b.x+b.w)-Math.max(a.x,b.x),y=Math.min(a.y+a.h,b.y+b.h)-Math.max(a.y,b.y);if(x>3&&y>3)collisions.push([a.name,b.name,Math.round(x*y)]);}
-            const overflow=[...document.querySelectorAll('.component-legend,.callout-entry,.loop-step,.timeline-layer,.control-panel')].filter(n=>{const s=getComputedStyle(n),r=n.getBoundingClientRect(),verticalPixels=Math.min(r.bottom,innerHeight)-Math.max(r.top,0),meaningfullyVisible=verticalPixels>Math.min(44,r.height*.35)&&r.right>0&&r.left<innerWidth;return meaningfullyVisible&&s.display!=='none'&&s.visibility!=='hidden'&&(r.left<0||r.right>innerWidth)}).map(n=>n.dataset.calloutEntry||n.id||n.className);
+            const overflow=[...document.querySelectorAll('.component-legend,.callout-entry,.loop-step,.analysis-card,.timeline-layer,.control-panel')].filter(n=>{const s=getComputedStyle(n),r=n.getBoundingClientRect(),verticalPixels=Math.min(r.bottom,innerHeight)-Math.max(r.top,0),meaningfullyVisible=verticalPixels>Math.min(44,r.height*.35)&&r.right>0&&r.left<innerWidth;return meaningfullyVisible&&s.display!=='none'&&s.visibility!=='hidden'&&(r.left<0||r.right>innerWidth)}).map(n=>n.dataset.calloutEntry||n.id||n.className);
             return{collisions,overflow,scrollY:Math.round(scrollY),readyMs:document.documentElement.dataset.uiReadyMs||null,scrollWidth:document.documentElement.scrollWidth};
           })()),250);else if(performance.now()-start>3500)resolve({timeout:true});else requestAnimationFrame(wait)};wait()})"""
         result = cdp.call("Runtime.evaluate", {"expression": expression, "awaitPromise": True, "returnByValue": True})["result"]["value"]
