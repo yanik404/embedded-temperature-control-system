@@ -42,5 +42,5 @@ assert 'getContext("2d"' in production and 'getContext("webgl"' not in preview+p
 assert "productCanvas" not in preview+production and "thermalCanvas" not in preview+production
 assert "requestAnimationFrame" in preview and "setInterval(poll,POLL_MS)" in production
 assert "onclick=" not in preview and "__PREVIEW_MODE__" not in preview+production
-assert len(production.encode("utf-8"))<128*1024
+assert len(production.encode("utf-8")) < 384 * 1024
 print(f"dashboard static checks passed: preview={len(preview.encode('utf-8'))} bytes, production={len(production.encode('utf-8'))} bytes, ids={len(production_ids)}")

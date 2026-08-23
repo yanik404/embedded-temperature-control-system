@@ -25,5 +25,5 @@ assert "configuration-drawer" not in preview and "projectHotspots" not in twin a
 assert "/api/" not in twin
 assert "useProfile(profiles" in preview and "useProfile(profiles" not in production
 assert "NICHT VERFÜGBAR" in model+twin and "NICHT DIREKT ÜBERWACHT" in model+twin
-assert len(production.encode("utf-8"))<128*1024
+assert len(production.encode("utf-8")) < 384 * 1024
 print(f"callout digital twin checks passed: components={len(ids)}, production={len(production.encode('utf-8'))} bytes")

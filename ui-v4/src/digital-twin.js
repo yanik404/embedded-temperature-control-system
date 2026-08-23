@@ -13,7 +13,7 @@ var labels={temp1:"Temperatursensor 1",temp2:"Temperatursensor 2",peltier1:"Pelt
 var rowParts={current1:["adc","current1","current2"]};
 var aliases={adc:"current1",current2:"current1",plate:"cup"};
 var detailType={temp1:"TMP36",temp2:"TMP36",peltier1:"Peltier",peltier2:"Peltier",fan:"4-Pin PWM",oled:"SSD1306",buttons:"4 Taster",rgb:"12 × RGB",light:"Lichtsensor",cup:"S_DETECT",pico:"Pico W",current1:"TLA2024"};
-var detailPlace={temp1:"Becherboden",temp2:"Seitenkontakt",peltier1:"Heizmodul links",peltier2:"Heizmodul rechts",fan:"Kühlmodul",oled:"Frontpanel",buttons:"Frontpanel",rgb:"Haltering",light:"Gehäusefront",cup:"Bodenauflage",pico:"Elektronikbasis",current1:"Leistungsstufe"};
+var detailPlace={temp1:"Oben seitlich",temp2:"Federkontakt unten",peltier1:"Heizmodul links",peltier2:"Heizmodul rechts",fan:"Innen unter Becher",oled:"Untere Frontaussparung",buttons:"Direkt unter OLED",rgb:"Oberer Ring",light:"Unterer Gehäusebereich",cup:"Seitliche Erkennung",pico:"Elektronik unten",current1:"Haupt-PCB"};
 function byId(id){return document.getElementById(id);}function all(selector){return Array.prototype.slice.call(document.querySelectorAll(selector));}function component(id){return components.find(function(item){return item.id===id;});}function create(tag,className,text){var node=document.createElement(tag);if(className)node.className=className;if(text!==undefined)node.textContent=text;return node;}
 function idsFor(id){return rowParts[id]||[id];}
 function liveFor(item){if(preview&&!rowConnected(item.id))return{state:"NICHT ANGESCHLOSSEN",tone:"neutral",value:"—"};if(!current||!online)return{state:"NICHT VERFÜGBAR",tone:"unknown",value:"—"};return item.live(current,online);}
