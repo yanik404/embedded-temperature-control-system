@@ -37,6 +37,9 @@ for scenario in ("full-system","minimal-system","partial-hardware","no-sensors",
 assert "data-scenario=" not in production
 assert '<div class="preview-tools">' in preview and '<div class="preview-tools">' not in production
 assert 'class="preview-deck" aria-label="Lokale Vorschau-Szenarien" hidden' in preview
+assert 'data-preview-viewport="desktop"' in preview and 'data-preview-viewport="mobile"' in preview
+assert 'data-preview-viewport=' not in production
+assert 'class="preview-viewport-dialog"' in preview and 'class="preview-viewport-dialog"' not in production
 assert "Obi W-lan Kenobi" not in production
 assert 'getContext("2d"' in production and 'getContext("webgl"' not in preview+production
 assert "productCanvas" not in preview+production and "thermalCanvas" not in preview+production

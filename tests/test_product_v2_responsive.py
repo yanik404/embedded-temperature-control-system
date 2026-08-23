@@ -60,10 +60,14 @@ with tempfile.TemporaryDirectory(prefix="becherhalter-product-v3-", ignore_clean
                     const svg=expected.querySelector('svg');
                     const rect=svg.getBoundingClientRect();
                     const ids=[...document.querySelectorAll('[id]')].map(node=>node.id);
+                    const panel=document.querySelector('.product-panel').getBoundingClientRect();
+                    const stage=document.querySelector('.product-stage').getBoundingClientRect();
+                    const stop=document.getElementById('stopButton').getBoundingClientRect();
                     return{{expected:getComputedStyle(expected).display,other:getComputedStyle(other).display,
                         width:rect.width,height:rect.height,left:rect.left,right:rect.right,
                         overflow:document.documentElement.scrollWidth-document.documentElement.clientWidth,
-                        duplicateIds:ids.length-new Set(ids).size,view:document.body.dataset.productView}};
+                        duplicateIds:ids.length-new Set(ids).size,view:document.body.dataset.productView,
+                        panelTop:panel.top,stageTop:stage.top,panelLeft:panel.left,stageLeft:stage.left,stopHeight:stop.height}};
                 }})()"""
                 result = cdp.call("Runtime.evaluate", {"expression": expression, "returnByValue": True})
                 metrics = result["result"]["value"]
@@ -71,6 +75,11 @@ with tempfile.TemporaryDirectory(prefix="becherhalter-product-v3-", ignore_clean
                 assert metrics["view"] == view and metrics["duplicateIds"] == 0, (width, height, view, metrics)
                 assert metrics["width"] > 240 and metrics["height"] > 280, (width, height, view, metrics)
                 assert metrics["overflow"] <= 1, (width, height, view, metrics)
+                if width <= 430:
+                    assert metrics["panelTop"] < metrics["stageTop"], (width, height, view, metrics)
+                    assert metrics["stopHeight"] >= 44, (width, height, view, metrics)
+                elif width >= 1200:
+                    assert metrics["stageLeft"] < metrics["panelLeft"], (width, height, view, metrics)
                 if view == "build":
                     for mode in ("all", "thermal", "sensors", "electronics"):
                         mode_expression = f"""(()=>{{window.V4Twin.setBuildMode('{mode}');const control=document.querySelector('.build-mode-switch').getBoundingClientRect(),button=document.querySelector('[data-build-mode="{mode}"]');return{{mode:document.body.dataset.buildMode,pressed:button.getAttribute('aria-pressed'),display:getComputedStyle(document.querySelector('.build-mode-switch')).display,left:control.left,right:control.right}}}})()"""

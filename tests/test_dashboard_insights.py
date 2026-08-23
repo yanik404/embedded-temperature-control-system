@@ -98,6 +98,20 @@ with tempfile.TemporaryDirectory(prefix="becherhalter-insights-", ignore_cleanup
         assert states["offline"]["live"] == "false" and states["offline"]["start"], states
         assert states["live"] == "true" and states["recovery"] is False, states
         assert states["hardware"] >= 17, states
+
+        viewport_expression = """new Promise(resolve=>{
+          PreviewDriver.openViewport('mobile');setTimeout(()=>{
+            const dialog=document.querySelector('.preview-viewport-dialog');
+            const frame=document.querySelector('.preview-viewport-frame');
+            const shell=document.querySelector('.preview-device-frame');
+            resolve({open:dialog.open,width:frame.style.width,height:frame.style.height,
+              mobile:shell.classList.contains('mobile'),title:document.querySelector('.preview-viewport-title').textContent});
+          },120);
+        })"""
+        viewport = cdp.call("Runtime.evaluate", {"expression": viewport_expression, "awaitPromise": True,
+                                                  "returnByValue": True})["result"]["value"]
+        assert viewport == {"open": True, "width": "390px", "height": "844px", "mobile": True,
+                            "title": "HANDY-ANSICHT · 390 × 844"}, viewport
         cdp.call("Browser.close")
     finally:
         try:

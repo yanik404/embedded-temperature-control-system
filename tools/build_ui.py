@@ -26,6 +26,11 @@ PREVIEW_CONTROLS = """
 <div class="preview-tools">
  <button class="preview-tools-toggle" type="button" aria-expanded="false">DEMO TOOLS</button>
  <div class="preview-deck" aria-label="Lokale Vorschau-Szenarien" hidden>
+ <div class="preview-view-switch" role="group" aria-label="Vorschaugröße">
+  <strong>ANSICHT</strong>
+  <button type="button" data-preview-viewport="desktop">PC · 1440 × 900</button>
+  <button type="button" data-preview-viewport="mobile">HANDY · 390 × 844</button>
+ </div>
  <button type="button" data-scenario="full-system">FULL SYSTEM</button>
  <button type="button" data-scenario="minimal-system">MINIMAL SYSTEM</button>
  <button type="button" data-scenario="partial-hardware">PARTIAL HARDWARE</button>
@@ -42,6 +47,13 @@ PREVIEW_CONTROLS = """
   <button type="button" data-scenario="demo30">30 MIN DEMO</button>
  </div>
 </div>
+<dialog class="preview-viewport-dialog" aria-label="Lokale responsive Vorschau">
+ <header><div><small>LOKALE RESPONSIVE VORSCHAU</small><strong class="preview-viewport-title">PC-ANSICHT · 1440 × 900</strong></div><nav class="preview-dialog-actions" aria-label="Vorschauansicht wechseln"><button type="button" data-preview-viewport="desktop">PC</button><button type="button" data-preview-viewport="mobile">HANDY</button><button class="preview-viewport-close" type="button" aria-label="Vorschau schließen">×</button></nav></header>
+ <div class="preview-viewport-stage"><div class="preview-device-frame"><iframe class="preview-viewport-frame" title="Responsive Dashboard-Vorschau"></iframe></div></div>
+</dialog>
+<style>
+.preview-view-switch{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px 0 7px;border-bottom:1px solid #394039}.preview-view-switch strong{grid-column:1/-1;padding:3px;color:#747d75;font-size:8px;letter-spacing:.12em}.preview-view-switch button{border:1px solid #394039!important;border-radius:3px;text-align:center!important}.preview-view-switch button.active{color:#fff;background:#243229}.preview-frame .preview-tools{display:none!important}.preview-viewport-dialog{width:min(1500px,calc(100vw - 20px));height:min(960px,calc(100vh - 20px));max-width:none;max-height:none;margin:auto;padding:0;border:1px solid #3a423c;border-radius:10px;background:#0c0f0d;color:#f2f1ea;overflow:hidden}.preview-viewport-dialog::backdrop{background:#050605e8;backdrop-filter:blur(7px)}.preview-viewport-dialog>header{display:flex;height:58px;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid #303631;background:#121512}.preview-viewport-dialog>header small,.preview-viewport-dialog>header strong{display:block}.preview-viewport-dialog>header small{color:#7f8881;font-size:8px;letter-spacing:.12em}.preview-viewport-dialog>header strong{margin-top:2px;font-size:13px}.preview-dialog-actions{display:flex;gap:5px}.preview-dialog-actions button{min-width:48px;height:34px;padding:0 10px;border:1px solid #3a423c;border-radius:5px;background:transparent;color:#aeb5af;font-size:9px;cursor:pointer}.preview-dialog-actions button.active{border-color:#667269;color:#fff;background:#263029}.preview-dialog-actions .preview-viewport-close{min-width:36px;padding:0;color:#dfe3dc;font-size:24px}.preview-viewport-stage{height:calc(100% - 58px);padding:16px;background:#080a08;overflow:auto}.preview-device-frame{position:relative;margin:0 auto;background:#111310;box-shadow:0 20px 70px #000b}.preview-device-frame.mobile{border:7px solid #292e2a;border-radius:28px;box-shadow:0 24px 80px #000}.preview-device-frame iframe{position:absolute;top:0;left:0;border:0;background:#111310;transform-origin:top left}.preview-device-frame.mobile iframe{border-radius:20px}
+</style>
 """.strip()
 
 
