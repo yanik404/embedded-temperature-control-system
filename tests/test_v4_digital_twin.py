@@ -21,8 +21,7 @@ assert 'productView=view==="build"?"build":"exterior"' in twin
 assert 'class="component-control"' not in preview and 'class="component-hotspots"' not in preview
 assert 'class="callout-lines"' in preview and "data-callout-entry" in twin
 assert "callout-detail" in preview and "callout-remove" in preview
-assert "component-form" in preview and "part-focused" in twin
-assert 'document.body.dataset.cup=' in twin
+assert "component-form" in preview
 assert "configuration-drawer" not in preview and "projectHotspots" not in twin and "ProductScene" not in twin
 assert "/api/" not in twin
 assert "useProfile(profiles" in preview and "useProfile(profiles" not in production

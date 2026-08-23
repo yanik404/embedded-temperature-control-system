@@ -34,19 +34,7 @@
 .component-part.disconnected .part-solid{opacity:0}
 .component-part.assembling{animation:partIn .48s cubic-bezier(.2,.9,.2,1)}
 
-/* Real component layers in the STEP-based interior view. */
-.component-real{transform-box:fill-box;transform-origin:center;transition:opacity .3s,filter .25s,transform .35s}
-.component-real.part-focused{filter:drop-shadow(0 0 10px #ed8549cc) brightness(1.18)}
-.real-peltier{opacity:.64}.real-peltier.part-focused{opacity:1}
-.real-original-pcb{isolation:isolate}
-.real-current-zones{opacity:.24}.real-current-zones.part-focused{opacity:1}
-.peltier-contact-face{transition:filter .45s}
-body[data-state="AUFHEIZEN"] .peltier-contact-face,body[data-state="HALTEN"] .peltier-contact-face{filter:brightness(1.09) sepia(.12)}
-.cup-detector-plunger{transform-box:fill-box;transform-origin:right center;transition:transform .32s ease}
-body[data-cup="present"] .cup-detector-plunger{transform:translateX(8px)}
-body[data-cup="absent"] .cup-detector-plunger{transform:translateX(-2px)}
-
-/* Each hardware-list entry gets a small physical-form key matching its exact layer. */
+/* Each hardware-list entry gets a small physical-form key matching its exact hotspot. */
 .callout-label{display:flex;min-width:0;align-items:center;gap:9px}
 .component-form{position:relative;display:inline-block;width:19px;height:16px;flex:0 0 19px;color:#7c857f}
 .component-form:before,.component-form:after{content:"";position:absolute;box-sizing:border-box}
@@ -67,5 +55,5 @@ body[data-cup="absent"] .cup-detector-plunger{transform:translateX(-2px)}
  .callout-lines{display:none}.callout-anchors circle{opacity:.18}.product-panel{display:block!important}.product-summary{margin-top:4px}.component-legend{margin-top:8px}
  .component-list{display:grid;grid-template-columns:1fr 1fr;gap:0 24px}.legend-group{break-inside:avoid}.callout-row{min-height:36px}.callout-name{font-size:13px}
 }
-@media(max-width:600px){.component-list{grid-template-columns:1fr}.callout-row{min-height:38px}.component-legend>header{padding-top:12px}.real-current-zones{display:none}.real-tmp36,.real-light-sensor,.real-cup-switch{filter:none}}
+@media(max-width:600px){.component-list{grid-template-columns:1fr}.callout-row{min-height:38px}.component-legend>header{padding-top:12px}}
 @media(prefers-reduced-motion:reduce){.callout-lines path,.mount-silhouette{transition:none}.component-part.assembling{animation:none}}
