@@ -14,8 +14,8 @@ source = index + exterior + cutaway
 for token in ("AUFBAU", "REGELKREIS", "LIVE", "TECHNISCHE DETAILS", "PRODUCTILLUSTRATION"):
     assert token in production.upper()
 
-# The active transparent WebP files are finished-product renders derived from
-# the supplied STEP references and remain compact enough for Pico flash.
+# The exterior remains the approved finished-product render. The former
+# photorealistic interior stays byte-for-byte available only as a fallback.
 assert hashlib.sha256(Path("ui-v7/src/product-finished-exterior-v2.webp").read_bytes()).hexdigest().upper() == "5685C47A2F0F453795E196A39B847B73E919B58C764D93793034C7806B60FE4A"
 assert hashlib.sha256(Path("ui-v5/src/product-finished-cutaway-v2.webp").read_bytes()).hexdigest().upper() == "98F0CE756EF9D828815F70EEC1EA20FBCA295D288A7032580A85857D831A1EAA"
 assert Path("ui-v7/src/product-finished-exterior-v2.webp").stat().st_size == 81046
@@ -27,35 +27,30 @@ assert hashlib.sha256(Path("ui-v5/src/product-step-cutaway.webp").read_bytes()).
 assert hashlib.sha256(Path("ui-v7/src/product-finished-exterior.webp").read_bytes()).hexdigest().upper() == "443E385CACAD073A0EA656E49B6C93B2BD8AFB3F8476095DBF2979BB267AE926"
 assert hashlib.sha256(Path("ui-v5/src/product-finished-cutaway.webp").read_bytes()).hexdigest().upper() == "A408487E05EBA5D3ACA1D9104DFEFEA7904F983F96B92394C99153A5D23AA408"
 
-assert "__PRODUCT_EXTERIOR__" in exterior and "__PRODUCT_CUTAWAY__" in cutaway
+assert "__PRODUCT_EXTERIOR__" in exterior and "__PRODUCT_CUTAWAY__" not in cutaway
 assert "__PCB_ORIGINAL__" not in cutaway
-assert exterior.count("<image ") == 1 and cutaway.count("<image ") == 1
-assert production.count("data:image/webp;base64,") == 2
+assert exterior.count("<image ") == 1 and cutaway.count("<image ") == 0
+assert production.count("data:image/webp;base64,") == 1
 assert 'viewBox="0 0 955 1100"' in exterior and 'viewBox="0 0 702 1100"' in cutaway
 assert '<svg class="product-illustration product-v3-illustration product-step-render" id="productIllustration"' in exterior
 assert 'id="product-v3"' in exterior
 assert "data-part=" not in exterior and "data-focus=" not in exterior and "data-callout-anchor=" not in exterior
 
-# The complete interior is one coherent raster. Measured SVG clips may reveal
-# regions of that same raster, but no second component bitmap can look pasted on.
+# The rebuilt interior is intentionally a compact, self-contained vector. Each
+# real component remains focusable once and modes reuse vector definitions.
 for component in ("temp1", "temp2", "peltier1", "peltier2", "fan", "oled", "buttons", "rgb", "light", "cup", "pico", "current1"):
     assert cutaway.count(f'data-part="{component}"') == 1
     assert cutaway.count(f'data-focus="{component}"') == 1
     assert cutaway.count(f'data-callout-anchor="{component}"') == 1
 assert "component-real" not in cutaway and "cup-detector-plunger" not in cutaway
-assert 'data-part="peltier1" data-focus="peltier1" x="158" y="245"' in cutaway
-assert 'data-part="peltier2" data-focus="peltier2" x="431" y="245"' in cutaway
-assert 'data-part="temp1" data-focus="temp1" x="166" y="150"' in cutaway
-assert 'data-part="temp2" data-focus="temp2" x="303" y="574"' in cutaway
-assert 'data-part="fan" data-focus="fan" x="206" y="615"' in cutaway
-assert 'data-part="cup" data-focus="cup" x="456" y="176"' in cutaway
-assert 'data-part="pico" data-focus="pico" cx="370" cy="856"' in cutaway
-assert 'data-part="oled" data-focus="oled" x="523" y="828"' in cutaway
-assert 'data-part="buttons" data-focus="buttons" x="514" y="961"' in cutaway
-for forbidden in ("sinkFins", "fan-blades", "KÜHLKÖRPER", "HEATSINK", "thermal-left", "thermal-right", "pcb-module"):
+for component in ("peltier1", "peltier2", "temp1", "temp2", "fan", "cup", "pico", "oled", "buttons"):
+    assert f'class="component-part" data-part="{component}" data-focus="{component}"' in cutaway
+for token in ("simple-cutaway", "simple-pcb", "simple-switch", "simple-fan", "PCB + PICO W", "DETECT"):
+    assert token in cutaway
+for forbidden in ("cutawayRaster", "sinkFins", "fan-blades", "KÜHLKÖRPER", "HEATSINK", "thermal-left", "thermal-right", "pcb-module"):
     assert forbidden not in cutaway
 assert "step-hotspot" in cutaway and ".product-step-render .step-hotspot" in css
-assert 'id="cutawayRaster"' in cutaway and cutaway.count('href="#cutawayRaster"') == 22
+assert "<image " not in cutaway and "__PRODUCT_CUTAWAY__" not in production
 for mode in ("thermal", "sensors", "electronics"):
     assert f'data-mode-slice="{mode}"' in cutaway
     assert f'data-mode-marker="{mode}"' in cutaway

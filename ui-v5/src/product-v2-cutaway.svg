@@ -1,93 +1,140 @@
-<svg class="product-illustration product-v2-illustration product-v2-cutaway product-step-render" id="productV2Cutaway" viewBox="0 0 702 1100" role="img" aria-labelledby="productCutTitle productCutDescription" xmlns="http://www.w3.org/2000/svg">
- <title id="productCutTitle">ThermoCup MK I Innenansicht</title>
- <desc id="productCutDescription">Heller fotorealistischer CAD-Schnitt derselben STEP-Gehäusegeometrie mit tief eingesetztem Becher, zwei Peltier-Kontakten, zwei klaren TMP36, seitlichem Hebel-Mikroschalter, horizontalem Lüfter, originalem 80-mm-PCB, Pico W, OLED, Tastern und unterem Lichtsensor.</desc>
+<svg class="product-illustration product-v2-illustration product-v2-cutaway product-step-render simple-cutaway" id="productV2Cutaway" viewBox="0 0 702 1100" role="img" aria-labelledby="productCutTitle productCutDescription" xmlns="http://www.w3.org/2000/svg">
+ <title id="productCutTitle">Vereinfachte Innenansicht des Becherhalters</title>
+ <desc id="productCutDescription">Klare Vektoransicht mit Becher, Heizmodulen, Temperatursensoren, Becherschalter, Lüfter, Leiterplatte, Pico W, OLED, Tastern und Lichtsensor.</desc>
+ <style>
+  .simple-cutaway .step-hotspot{fill:transparent;stroke:transparent;stroke-width:8}
+  .simple-cutaway .component-part.focused .part-solid{filter:drop-shadow(0 0 9px #ed8549);opacity:1}
+ </style>
  <defs>
-  <clipPath id="cut-temp1"><rect x="166" y="150" width="105" height="170" rx="20"/></clipPath>
-  <clipPath id="cut-temp2"><rect x="303" y="574" width="112" height="169" rx="24"/></clipPath>
-  <clipPath id="cut-peltier1"><rect x="158" y="245" width="145" height="360" rx="18"/></clipPath>
-  <clipPath id="cut-peltier2"><rect x="431" y="245" width="142" height="360" rx="18"/></clipPath>
-  <clipPath id="cut-fan"><rect x="206" y="615" width="316" height="226" rx="32"/></clipPath>
-  <clipPath id="cut-oled"><rect x="523" y="828" width="119" height="165" rx="18"/></clipPath>
-  <clipPath id="cut-buttons"><rect x="514" y="961" width="134" height="102" rx="20"/></clipPath>
-  <clipPath id="cut-rgb"><ellipse cx="351" cy="113" rx="244" ry="100"/></clipPath>
-  <clipPath id="cut-light"><rect x="301" y="925" width="112" height="118" rx="24"/></clipPath>
-  <clipPath id="cut-cup-switch"><rect x="456" y="176" width="158" height="215" rx="24"/></clipPath>
-  <clipPath id="cut-pcb"><ellipse cx="370" cy="856" rx="245" ry="126"/></clipPath>
-  <clipPath id="cut-current"><rect x="414" y="772" width="166" height="158" rx="26"/></clipPath>
+  <linearGradient id="simpleCup" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#dbe2dd" stop-opacity=".22"/><stop offset="1" stop-color="#829089" stop-opacity=".07"/></linearGradient>
+  <radialGradient id="simpleDrink"><stop stop-color="#ef9c58" stop-opacity=".82"/><stop offset="1" stop-color="#7d391b" stop-opacity=".72"/></radialGradient>
+
+  <g id="simple-rgb">
+   <ellipse cx="351" cy="146" rx="188" ry="58" fill="none" stroke="#76aec4" stroke-width="5" stroke-dasharray="3 24" stroke-linecap="round" opacity=".86"/>
+  </g>
+
+  <g id="simple-peltier-left">
+   <rect x="135" y="304" width="86" height="204" rx="11" fill="#e7ece8" stroke="#ed8549" stroke-width="3"/>
+   <rect x="203" y="321" width="20" height="170" rx="6" fill="#707a74"/>
+   <path d="M151 324h52v164h-52z" fill="#f6f7f4"/>
+   <path d="M158 338h38M158 351h38M158 364h38" fill="none" stroke="#c5ccc7" stroke-width="2"/>
+   <text x="178" y="416" text-anchor="middle" fill="#7d8781" font-family="Segoe UI, sans-serif" font-size="18" font-weight="800">P1</text>
+  </g>
+  <g id="simple-peltier-right">
+   <rect x="481" y="304" width="86" height="204" rx="11" fill="#e7ece8" stroke="#ed8549" stroke-width="3"/>
+   <rect x="479" y="321" width="20" height="170" rx="6" fill="#707a74"/>
+   <path d="M499 324h52v164h-52z" fill="#f6f7f4"/>
+   <path d="M506 338h38M506 351h38M506 364h38" fill="none" stroke="#c5ccc7" stroke-width="2"/>
+   <text x="525" y="416" text-anchor="middle" fill="#7d8781" font-family="Segoe UI, sans-serif" font-size="18" font-weight="800">P2</text>
+  </g>
+
+  <g id="simple-temp1">
+   <path d="M230 230v-22c0-17 36-17 36 0v22Z" fill="#151918" stroke="#80bdc9" stroke-width="3"/>
+   <path d="M237 230v34M248 230v34M259 230v34" stroke="#b8c0bb" stroke-width="3" stroke-linecap="round"/>
+   <path d="M142 216h78" fill="none" stroke="#76aec4" stroke-width="2"/>
+   <circle cx="142" cy="216" r="4" fill="#76aec4"/>
+   <text x="132" y="221" text-anchor="end" fill="#cbd2cd" font-family="Segoe UI, sans-serif" font-size="14" font-weight="700">TEMP 1</text>
+  </g>
+  <g id="simple-temp2">
+   <path d="M333 556v-22c0-17 36-17 36 0v22Z" fill="#151918" stroke="#80bdc9" stroke-width="3"/>
+   <path d="M340 556v34M351 556v34M362 556v34" stroke="#b8c0bb" stroke-width="3" stroke-linecap="round"/>
+   <path d="M316 576h-78" fill="none" stroke="#76aec4" stroke-width="2"/>
+   <circle cx="238" cy="576" r="4" fill="#76aec4"/>
+   <text x="228" y="581" text-anchor="end" fill="#cbd2cd" font-family="Segoe UI, sans-serif" font-size="14" font-weight="700">TEMP 2</text>
+  </g>
+
+  <g id="simple-switch">
+   <rect x="512" y="205" width="67" height="46" rx="6" fill="#171b19" stroke="#9ea7a1" stroke-width="3"/>
+   <circle cx="528" cy="249" r="4" fill="#bcc4bf"/><circle cx="562" cy="249" r="4" fill="#bcc4bf"/>
+   <path d="M523 205L463 181" fill="none" stroke="#c8cec9" stroke-width="7" stroke-linecap="round"/>
+   <circle cx="461" cy="180" r="7" fill="#dce1dd"/>
+   <path d="M588 228h34" fill="none" stroke="#76aec4" stroke-width="2"/>
+   <circle cx="622" cy="228" r="4" fill="#76aec4"/>
+   <text x="630" y="233" fill="#cbd2cd" font-family="Segoe UI, sans-serif" font-size="14" font-weight="700">DETECT</text>
+  </g>
+
+  <g id="simple-fan">
+   <rect x="255" y="628" width="192" height="157" rx="22" fill="#202522" stroke="#7f8982" stroke-width="4"/>
+   <circle cx="351" cy="706" r="61" fill="#111513" stroke="#4f5953" stroke-width="3"/>
+   <g class="fan-rotor" fill="#657069">
+    <path d="M351 698c28-50 64-29 46 3-11 19-28 20-46 17Z"/><path d="M359 706c50 28 29 64-3 46-19-11-20-28-17-46Z"/><path d="M351 714c-28 50-64 29-46-3 11-19 28-20 46-17Z"/><path d="M343 706c-50-28-29-64 3-46 19 11 20 28 17 46Z"/>
+   </g>
+   <circle cx="351" cy="706" r="15" fill="#a0a9a3"/>
+   <text x="351" y="812" text-anchor="middle" fill="#cbd2cd" font-family="Segoe UI, sans-serif" font-size="14" font-weight="700">LÜFTER</text>
+  </g>
+
+  <g id="simple-pcb">
+   <ellipse cx="351" cy="900" rx="202" ry="82" fill="#315b44" stroke="#75b58b" stroke-width="3"/>
+   <path d="M180 892c85-45 259-48 344 2M196 923c93-29 218-29 311 1M218 866l57 23m208-19-57 23" fill="none" stroke="#8fc6a0" stroke-width="2" opacity=".5"/>
+   <rect x="274" y="849" width="154" height="84" rx="8" fill="#286775" stroke="#9ad1d3" stroke-width="3"/>
+   <rect x="297" y="864" width="108" height="54" rx="5" fill="#1e3c43"/>
+   <path d="M284 858v66M418 858v66" stroke="#d0b45f" stroke-width="4" stroke-dasharray="3 7"/>
+   <rect x="315" y="879" width="72" height="19" rx="4" fill="#789397"/>
+   <text x="351" y="957" text-anchor="middle" fill="#d7ddd8" font-family="Segoe UI, sans-serif" font-size="14" font-weight="700">PCB + PICO W</text>
+  </g>
+  <g id="simple-current">
+   <rect x="445" y="861" width="56" height="40" rx="5" fill="#121715" stroke="#b7c0ba" stroke-width="2"/>
+   <path d="M451 857v-9m11 9v-9m11 9v-9m11 9v-9m11 9v-9M451 905v9m11-9v9m11-9v9m11-9v9m11-9v9" stroke="#b7c0ba" stroke-width="2"/>
+   <text x="473" y="886" text-anchor="middle" fill="#aeb8b1" font-family="Segoe UI, sans-serif" font-size="11" font-weight="700">ADC</text>
+  </g>
+
+  <g id="simple-oled">
+   <rect x="470" y="945" width="132" height="82" rx="7" fill="#071313" stroke="#76aec4" stroke-width="3"/>
+   <text x="536" y="980" text-anchor="middle" fill="#bff5ef" font-family="monospace" font-size="22">32.4°</text>
+   <text x="536" y="1007" text-anchor="middle" fill="#76aec4" font-family="monospace" font-size="14">45.0°</text>
+  </g>
+  <g id="simple-buttons">
+   <g fill="#414943" stroke="#9da69f" stroke-width="2"><circle cx="486" cy="1052" r="11"/><circle cx="519" cy="1052" r="11"/><circle cx="552" cy="1052" r="11"/><circle cx="585" cy="1052" r="11"/></g>
+  </g>
+  <g id="simple-light">
+   <path d="M136 956a17 17 0 0 1 34 0v23h-34Z" fill="#d4dfba" fill-opacity=".8" stroke="#c8d276" stroke-width="3"/>
+   <path d="M147 979v35M160 979v35" stroke="#b8c0bb" stroke-width="3" stroke-linecap="round"/>
+   <text x="181" y="978" fill="#cbd2cd" font-family="Segoe UI, sans-serif" font-size="14" font-weight="700">LIGHT</text>
+  </g>
  </defs>
 
- <image id="cutawayRaster" class="cutaway-raster cutaway-base" href="__PRODUCT_CUTAWAY__" x="0" y="0" width="702" height="1100" preserveAspectRatio="xMidYMid meet"/>
+ <g class="cutaway-base">
+  <path d="M92 145Q92 65 351 56Q610 65 610 145V960Q610 1025 351 1042Q92 1025 92 960Z" fill="#161a18" fill-opacity=".18" stroke="#626b65" stroke-width="3"/>
+  <ellipse cx="351" cy="145" rx="259" ry="90" fill="#161a18" fill-opacity=".18" stroke="#626b65" stroke-width="3"/>
+  <path d="M113 190v722M589 190v722" fill="none" stroke="#46504a" stroke-width="2" stroke-dasharray="7 11"/>
 
- <!-- The same raster is revealed through measured clips. This keeps focused
-      hardware bright without adding another bitmap to Pico flash. -->
+  <path d="M203 142Q351 94 499 142L467 477Q460 524 351 538Q242 524 235 477Z" fill="url(#simpleCup)" stroke="#b9c3bd" stroke-width="4"/>
+  <ellipse cx="351" cy="141" rx="149" ry="48" fill="#1b201d" stroke="#d3dad5" stroke-width="5"/>
+  <ellipse cx="351" cy="147" rx="132" ry="37" fill="url(#simpleDrink)" stroke="#d7854d" stroke-width="3"/>
+  <path d="M246 471Q351 500 456 471" fill="none" stroke="#aeb7b1" stroke-width="3"/>
+
+  <g class="component-part" data-part="rgb" data-focus="rgb" tabindex="0" role="button" aria-label="RGB-Statusring auswählen"><use class="part-solid" href="#simple-rgb"/><ellipse class="step-hotspot" cx="351" cy="146" rx="205" ry="72"/></g>
+  <g class="component-part" data-part="peltier1" data-focus="peltier1" tabindex="0" role="button" aria-label="Peltier-Heizung 1 auswählen"><use class="part-solid" href="#simple-peltier-left"/><rect class="step-hotspot" x="125" y="294" width="108" height="230" rx="16"/></g>
+  <g class="component-part" data-part="peltier2" data-focus="peltier2" tabindex="0" role="button" aria-label="Peltier-Heizung 2 auswählen"><use class="part-solid" href="#simple-peltier-right"/><rect class="step-hotspot" x="469" y="294" width="108" height="230" rx="16"/></g>
+  <g class="component-part" data-part="temp1" data-focus="temp1" tabindex="0" role="button" aria-label="TMP36 Sensor 1 auswählen"><use class="part-solid" href="#simple-temp1"/><rect class="step-hotspot" x="122" y="185" width="155" height="90" rx="15"/></g>
+  <g class="component-part" data-part="temp2" data-focus="temp2" tabindex="0" role="button" aria-label="TMP36 Sensor 2 auswählen"><use class="part-solid" href="#simple-temp2"/><rect class="step-hotspot" x="220" y="510" width="165" height="90" rx="15"/></g>
+  <g class="component-part" data-part="cup" data-focus="cup" tabindex="0" role="button" aria-label="Seitlichen Becherschalter auswählen"><use class="part-solid" href="#simple-switch"/><rect class="step-hotspot" x="448" y="155" width="200" height="110" rx="15"/></g>
+  <g class="component-part" data-part="fan" data-focus="fan" tabindex="0" role="button" aria-label="Lüfter auswählen"><use class="part-solid" href="#simple-fan"/><rect class="step-hotspot" x="245" y="618" width="212" height="205" rx="28"/></g>
+  <g class="component-part" data-part="pico" data-focus="pico" tabindex="0" role="button" aria-label="Hauptplatine mit Raspberry Pi Pico W auswählen"><use class="part-solid" href="#simple-pcb"/><ellipse class="step-hotspot" cx="351" cy="900" rx="218" ry="98"/></g>
+  <g class="component-part" data-part="current1" data-focus="current1" tabindex="0" role="button" aria-label="TLA2024 und Strommessung auswählen"><use class="part-solid" href="#simple-current"/><rect class="step-hotspot" x="432" y="835" width="82" height="95" rx="12"/></g>
+  <g class="component-part" data-part="oled" data-focus="oled" tabindex="0" role="button" aria-label="OLED auswählen"><use class="part-solid" href="#simple-oled"/><rect class="step-hotspot" x="457" y="934" width="158" height="105" rx="15"/></g>
+  <g class="component-part" data-part="buttons" data-focus="buttons" tabindex="0" role="button" aria-label="Vier Bedientaster auswählen"><use class="part-solid" href="#simple-buttons"/><rect class="step-hotspot" x="467" y="1033" width="137" height="40" rx="15"/></g>
+  <g class="component-part" data-part="light" data-focus="light" tabindex="0" role="button" aria-label="Lichtsensor auswählen"><use class="part-solid" href="#simple-light"/><rect class="step-hotspot" x="120" y="925" width="120" height="100" rx="15"/></g>
+ </g>
+
  <g class="mode-reveals" aria-hidden="true">
-  <use class="mode-slice" data-mode-slice="thermal" href="#cutawayRaster" clip-path="url(#cut-peltier1)"/>
-  <use class="mode-slice" data-mode-slice="thermal" href="#cutawayRaster" clip-path="url(#cut-peltier2)"/>
-  <use class="mode-slice" data-mode-slice="thermal" href="#cutawayRaster" clip-path="url(#cut-fan)"/>
-  <use class="mode-slice" data-mode-slice="sensors" href="#cutawayRaster" clip-path="url(#cut-temp1)"/>
-  <use class="mode-slice" data-mode-slice="sensors" href="#cutawayRaster" clip-path="url(#cut-temp2)"/>
-  <use class="mode-slice" data-mode-slice="sensors" href="#cutawayRaster" clip-path="url(#cut-cup-switch)"/>
-  <use class="mode-slice" data-mode-slice="sensors" href="#cutawayRaster" clip-path="url(#cut-light)"/>
-  <use class="mode-slice" data-mode-slice="electronics" href="#cutawayRaster" clip-path="url(#cut-pcb)"/>
-  <use class="mode-slice" data-mode-slice="electronics" href="#cutawayRaster" clip-path="url(#cut-oled)"/>
-  <use class="mode-slice" data-mode-slice="electronics" href="#cutawayRaster" clip-path="url(#cut-buttons)"/>
+  <use class="mode-slice" data-mode-slice="thermal" href="#simple-peltier-left"/><use class="mode-slice" data-mode-slice="thermal" href="#simple-peltier-right"/><use class="mode-slice" data-mode-slice="thermal" href="#simple-fan"/>
+  <use class="mode-slice" data-mode-slice="sensors" href="#simple-temp1"/><use class="mode-slice" data-mode-slice="sensors" href="#simple-temp2"/><use class="mode-slice" data-mode-slice="sensors" href="#simple-switch"/><use class="mode-slice" data-mode-slice="sensors" href="#simple-light"/>
+  <use class="mode-slice" data-mode-slice="electronics" href="#simple-pcb"/><use class="mode-slice" data-mode-slice="electronics" href="#simple-current"/><use class="mode-slice" data-mode-slice="electronics" href="#simple-oled"/><use class="mode-slice" data-mode-slice="electronics" href="#simple-buttons"/>
  </g>
-
  <g class="focus-reveals" aria-hidden="true">
-  <use class="focus-slice" data-focus-slice="temp1" href="#cutawayRaster" clip-path="url(#cut-temp1)"/>
-  <use class="focus-slice" data-focus-slice="temp2" href="#cutawayRaster" clip-path="url(#cut-temp2)"/>
-  <use class="focus-slice" data-focus-slice="peltier1" href="#cutawayRaster" clip-path="url(#cut-peltier1)"/>
-  <use class="focus-slice" data-focus-slice="peltier2" href="#cutawayRaster" clip-path="url(#cut-peltier2)"/>
-  <use class="focus-slice" data-focus-slice="fan" href="#cutawayRaster" clip-path="url(#cut-fan)"/>
-  <use class="focus-slice" data-focus-slice="oled" href="#cutawayRaster" clip-path="url(#cut-oled)"/>
-  <use class="focus-slice" data-focus-slice="buttons" href="#cutawayRaster" clip-path="url(#cut-buttons)"/>
-  <use class="focus-slice" data-focus-slice="rgb" href="#cutawayRaster" clip-path="url(#cut-rgb)"/>
-  <use class="focus-slice" data-focus-slice="light" href="#cutawayRaster" clip-path="url(#cut-light)"/>
-  <use class="focus-slice" data-focus-slice="cup" href="#cutawayRaster" clip-path="url(#cut-cup-switch)"/>
-  <use class="focus-slice" data-focus-slice="pico" href="#cutawayRaster" clip-path="url(#cut-pcb)"/>
-  <use class="focus-slice" data-focus-slice="current1" href="#cutawayRaster" clip-path="url(#cut-current)"/>
+  <use class="focus-slice" data-focus-slice="temp1" href="#simple-temp1"/><use class="focus-slice" data-focus-slice="temp2" href="#simple-temp2"/>
+  <use class="focus-slice" data-focus-slice="peltier1" href="#simple-peltier-left"/><use class="focus-slice" data-focus-slice="peltier2" href="#simple-peltier-right"/>
+  <use class="focus-slice" data-focus-slice="fan" href="#simple-fan"/><use class="focus-slice" data-focus-slice="oled" href="#simple-oled"/><use class="focus-slice" data-focus-slice="buttons" href="#simple-buttons"/>
+  <use class="focus-slice" data-focus-slice="rgb" href="#simple-rgb"/><use class="focus-slice" data-focus-slice="light" href="#simple-light"/><use class="focus-slice" data-focus-slice="cup" href="#simple-switch"/>
+  <use class="focus-slice" data-focus-slice="pico" href="#simple-pcb"/><use class="focus-slice" data-focus-slice="current1" href="#simple-current"/>
  </g>
-
  <g class="mode-markers" fill="none" vector-effect="non-scaling-stroke" aria-hidden="true">
-  <rect class="mode-marker marker-thermal" data-mode-marker="thermal" x="158" y="245" width="145" height="360" rx="20"/>
-  <rect class="mode-marker marker-thermal" data-mode-marker="thermal" x="431" y="245" width="142" height="360" rx="20"/>
-  <rect class="mode-marker marker-thermal" data-mode-marker="thermal" x="206" y="615" width="316" height="226" rx="34"/>
-  <rect class="mode-marker marker-sensors" data-mode-marker="sensors" x="166" y="150" width="105" height="170" rx="22"/>
-  <rect class="mode-marker marker-sensors" data-mode-marker="sensors" x="303" y="574" width="112" height="169" rx="26"/>
-  <rect class="mode-marker marker-sensors" data-mode-marker="sensors" x="456" y="176" width="158" height="215" rx="26"/>
-  <rect class="mode-marker marker-sensors" data-mode-marker="sensors" x="301" y="925" width="112" height="118" rx="26"/>
-  <ellipse class="mode-marker marker-electronics" data-mode-marker="electronics" cx="370" cy="856" rx="245" ry="126"/>
-  <rect class="mode-marker marker-electronics" data-mode-marker="electronics" x="514" y="828" width="134" height="235" rx="24"/>
+  <rect class="mode-marker marker-thermal" data-mode-marker="thermal" x="125" y="294" width="108" height="230" rx="16"/><rect class="mode-marker marker-thermal" data-mode-marker="thermal" x="469" y="294" width="108" height="230" rx="16"/><rect class="mode-marker marker-thermal" data-mode-marker="thermal" x="245" y="618" width="212" height="205" rx="28"/>
+  <rect class="mode-marker marker-sensors" data-mode-marker="sensors" x="122" y="185" width="155" height="90" rx="15"/><rect class="mode-marker marker-sensors" data-mode-marker="sensors" x="220" y="510" width="165" height="90" rx="15"/><rect class="mode-marker marker-sensors" data-mode-marker="sensors" x="448" y="155" width="200" height="110" rx="15"/><rect class="mode-marker marker-sensors" data-mode-marker="sensors" x="120" y="925" width="120" height="100" rx="15"/>
+  <ellipse class="mode-marker marker-electronics" data-mode-marker="electronics" cx="351" cy="900" rx="218" ry="98"/><rect class="mode-marker marker-electronics" data-mode-marker="electronics" x="450" y="930" width="165" height="145" rx="15"/>
  </g>
-
- <!-- Invisible, focusable interaction geometry. -->
- <g class="step-interaction-layer" fill="transparent" stroke="transparent">
-  <rect class="component-part step-hotspot" data-part="temp1" data-focus="temp1" x="166" y="150" width="105" height="170" rx="20" tabindex="0" role="button" aria-label="TMP36 Sensor 1 als dreipoliges schwarzes TO-92-Bauteil oben seitlich am Becher"/>
-  <rect class="component-part step-hotspot" data-part="temp2" data-focus="temp2" x="303" y="574" width="112" height="169" rx="24" tabindex="0" role="button" aria-label="TMP36 Sensor 2 mit drei Anschlüssen auf Federkontakt mittig unter dem Becher"/>
-  <rect class="component-part step-hotspot" data-part="peltier1" data-focus="peltier1" x="158" y="245" width="145" height="360" rx="18" tabindex="0" role="button" aria-label="Peltier links hinter gebürstetem Aluminiumkontakt"/>
-  <rect class="component-part step-hotspot" data-part="peltier2" data-focus="peltier2" x="431" y="245" width="142" height="360" rx="18" tabindex="0" role="button" aria-label="Peltier rechts hinter gebürstetem Aluminiumkontakt"/>
-  <rect class="component-part step-hotspot" data-part="fan" data-focus="fan" x="206" y="615" width="316" height="226" rx="32" tabindex="0" role="button" aria-label="Ein einzelner horizontaler 4-Pin PWM-Lüfter unter dem Federfühler"/>
-  <rect class="component-part step-hotspot" data-part="oled" data-focus="oled" x="523" y="828" width="119" height="165" rx="18" tabindex="0" role="button" aria-label="SSD1306 OLED in der unteren Frontaussparung"/>
-  <rect class="component-part step-hotspot" data-part="buttons" data-focus="buttons" x="514" y="961" width="134" height="102" rx="20" tabindex="0" role="button" aria-label="Vier eingelassene Taster MODE, DOWN, OK und UP direkt unter dem OLED"/>
-  <ellipse class="component-part step-hotspot" data-part="rgb" data-focus="rgb" cx="351" cy="113" rx="244" ry="100" tabindex="0" role="button" aria-label="RGB-Statusring im oberen Becherbereich"/>
-  <rect class="component-part step-hotspot" data-part="light" data-focus="light" x="301" y="925" width="112" height="118" rx="24" tabindex="0" role="button" aria-label="Klarer optischer Lichtsensor mit zwei Anschlüssen in der untersten Frontöffnung"/>
-  <rect class="component-part step-hotspot" data-part="cup" data-focus="cup" x="456" y="176" width="158" height="215" rx="24" tabindex="0" role="button" aria-label="Seitlich verschraubter dreipoliger Mikroschalter; der Becher drückt beim Einschieben seinen langen Metallhebel"/>
-  <ellipse class="component-part step-hotspot" data-part="pico" data-focus="pico" cx="370" cy="856" rx="245" ry="126" tabindex="0" role="button" aria-label="Originales 80-Millimeter-Haupt-PCB mit darauf montiertem Raspberry Pi Pico W"/>
-  <rect class="component-part step-hotspot" data-part="current1" data-focus="current1" x="414" y="772" width="166" height="158" rx="26" tabindex="0" role="button" aria-label="TLA2024 und Strommessung auf dem originalen Haupt-PCB"/>
- </g>
-
  <g class="callout-anchors" aria-hidden="true">
-  <circle data-callout-anchor="temp1" cx="218" cy="235" r="2"/>
-  <circle data-callout-anchor="temp2" cx="359" cy="659" r="2"/>
-  <circle data-callout-anchor="peltier1" cx="231" cy="425" r="2"/>
-  <circle data-callout-anchor="peltier2" cx="502" cy="425" r="2"/>
-  <circle data-callout-anchor="fan" cx="364" cy="728" r="2"/>
-  <circle data-callout-anchor="oled" cx="583" cy="910" r="2"/>
-  <circle data-callout-anchor="buttons" cx="581" cy="1012" r="2"/>
-  <circle data-callout-anchor="rgb" cx="351" cy="113" r="2"/>
-  <circle data-callout-anchor="light" cx="357" cy="984" r="2"/>
-  <circle data-callout-anchor="cup" cx="535" cy="284" r="2"/>
-  <circle data-callout-anchor="pico" cx="370" cy="856" r="2"/>
-  <circle data-callout-anchor="current1" cx="497" cy="851" r="2"/>
+  <circle data-callout-anchor="temp1" cx="248" cy="220" r="2"/><circle data-callout-anchor="temp2" cx="351" cy="550" r="2"/><circle data-callout-anchor="peltier1" cx="178" cy="406" r="2"/><circle data-callout-anchor="peltier2" cx="525" cy="406" r="2"/><circle data-callout-anchor="fan" cx="351" cy="706" r="2"/><circle data-callout-anchor="oled" cx="536" cy="985" r="2"/><circle data-callout-anchor="buttons" cx="536" cy="1052" r="2"/><circle data-callout-anchor="rgb" cx="351" cy="146" r="2"/><circle data-callout-anchor="light" cx="153" cy="970" r="2"/><circle data-callout-anchor="cup" cx="545" cy="225" r="2"/><circle data-callout-anchor="pico" cx="351" cy="890" r="2"/><circle data-callout-anchor="current1" cx="473" cy="881" r="2"/>
  </g>
 </svg>
