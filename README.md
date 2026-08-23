@@ -91,7 +91,7 @@ UP/DOWN ändern den Sollwert in 0,5-°C-Schritten. OK startet oder stoppt; im Fe
 
 Die aktuelle Oberfläche folgt dem Prinzip **Simple Digital Twin** und erklärt das System in dieser Reihenfolge:
 
-1. **Aufbau:** hochwertige, sofort sichtbare Produktvisualisierung auf Basis der gelieferten STEP-Geometrie. **AUSSEN** zeigt das glaubwürdig fertig montierte Gerät mit mattem Gehäuse, tief eingesetztem Becher, kleinem OLED und vier physischen Tastern. **INNEN** öffnet die Hülle kontrolliert und zeigt Peltiers, Sensorik, Haupt-PCB/Pico und genau einen integrierten Lüfter an ihren Einbauorten statt als schwebende Explosionsbauteile. Fünf kompakte Gruppen ordnen zwölf Montagebeziehungen; beim Fokussieren führt genau eine dezente Linie zum realen Einbauort. Auf Mobilgeräten stehen Produkt und Legende untereinander, ohne Callout-Linien. Die Visualisierung benötigt weder WebGL noch externe Assets.
+1. **Aufbau:** hochwertige, sofort sichtbare Produktvisualisierung auf Basis der gelieferten STEP-Geometrie. **AUSSEN** zeigt das glaubwürdig fertig montierte Gerät mit mattem Gehäuse, tief eingesetztem Becher, einem Peltierkontakt auf Becherhöhe sowie OLED und vier physischen Tastern in der unteren Frontaussparung. **INNEN** öffnet die Hülle kontrolliert: Peltier links/rechts, TMP36 #1 seitlich, TMP36 #2 gefedert mittig unter dem Becher, genau ein horizontaler Lüfter darunter und das originale 80-mm-PCB mit Pico W in der unteren Kammer. Nichts schwebt außerhalb des Gehäuses. Fünf kompakte Gruppen ordnen zwölf Montagebeziehungen; beim Fokussieren führt genau eine dezente Linie zum realen Einbauort. Auf Mobilgeräten stehen Produkt und Legende untereinander, ohne Callout-Linien. Die Visualisierung benötigt weder WebGL noch externe Assets.
 2. **Regelkreis:** dunkle, linienbasierte Darstellung der fünf Hauptpunkte SOLL → PI → HEIZEN → BECHER → IST. Vergleich und Sensor bleiben kleine Zwischenelemente; eine einzige blaue Linie zeigt die Rückführung.
 3. **Live:** eine dominante Isttemperatur, darunter Zustand sowie eine kompakte Zeile für Sollwert, Heizleistung und Lüfter. Es folgt unmittelbar der Verlauf von IST, SOLL und HEIZLEISTUNG; weitere Messreihen sind zunächst eingeklappt.
 4. **Technik:** optionale Details zu GPIO, Messwerten, PI-Parametern, WLAN, IP und Firmwarestatus.
@@ -116,12 +116,14 @@ Die bewährte Render-, API- und Chart-Basis liegt unter `ui-v3/src/`; die V4-Dig
 - `ui-v4/src/component-model.js` – vollständiger Hardwarekatalog und ehrliche Live-Discovery-Abbildung
 - `ui-v4/src/digital-twin.js` – Callout-Legende, SVG-Montageanker, ehrliche Live-Zustände und Preview-Konfigurator
 - `ui-v4/src/digital-twin.css` – orthogonale Zuordnungslinien, Statussemantik und Inline-Fokusdarstellung
-- `ui-v7/src/product-finished-exterior.webp` – aktive transparente Außenansicht mit realistischen Materialien und Licht
+- `ui-v7/src/product-finished-exterior-v2.webp` – aktive transparente Außenansicht mit Peltier auf Becherhöhe sowie OLED und Tastern in der unteren Aussparung
+- `ui-v7/src/product-finished-exterior.webp` – vorherige realistische Produktansicht als visueller Fallback
 - `ui-v7/src/product-step-exterior.webp` – unveränderte technische STEP-Referenz aus `ThermoCup_Codex_Ready.zip`
 - `ui-v7/src/product-v3-exterior.svg` – schlanker, responsiver Einbettungsrahmen für die Außenansicht
 - `ui-v6/src/product-v3-rejected-fallback.svg` – unveränderter Fallback der verworfenen großen Maschinenform
 - `ui-v5/src/product-v2-exterior.svg` – unveränderter visueller Legacy-Fallback
-- `ui-v5/src/product-finished-cutaway.webp` – aktive kontrollierte Schnittansicht mit intern montierten Komponenten
+- `ui-v5/src/product-finished-cutaway-v2.webp` – aktive Schnittansicht mit seitlichen Peltiers, gefedertem TMP36, horizontalem Lüfter und unterem 80-mm-PCB
+- `ui-v5/src/product-finished-cutaway.webp` – vorherige realistische Schnittansicht als visueller Fallback
 - `ui-v5/src/product-step-cutaway.webp` – unveränderte technische Cutaway-Referenz mit originalem 80-mm-PCB und genau einem Lüfter
 - `ui-v5/src/product-v2-cutaway.svg` – Einbettungsrahmen mit transparenten, am Placement Guide ausgerichteten Hotspots
 

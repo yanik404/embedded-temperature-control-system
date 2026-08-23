@@ -16,19 +16,21 @@ for token in ("AUFBAU", "REGELKREIS", "LIVE", "TECHNISCHE DETAILS", "PRODUCTILLU
 
 # The active transparent WebP files are finished-product renders derived from
 # the supplied STEP references and remain compact enough for Pico flash.
-assert hashlib.sha256(Path("ui-v7/src/product-finished-exterior.webp").read_bytes()).hexdigest().upper() == "443E385CACAD073A0EA656E49B6C93B2BD8AFB3F8476095DBF2979BB267AE926"
-assert hashlib.sha256(Path("ui-v5/src/product-finished-cutaway.webp").read_bytes()).hexdigest().upper() == "A408487E05EBA5D3ACA1D9104DFEFEA7904F983F96B92394C99153A5D23AA408"
-assert Path("ui-v7/src/product-finished-exterior.webp").stat().st_size == 74560
-assert Path("ui-v5/src/product-finished-cutaway.webp").stat().st_size == 107528
+assert hashlib.sha256(Path("ui-v7/src/product-finished-exterior-v2.webp").read_bytes()).hexdigest().upper() == "5685C47A2F0F453795E196A39B847B73E919B58C764D93793034C7806B60FE4A"
+assert hashlib.sha256(Path("ui-v5/src/product-finished-cutaway-v2.webp").read_bytes()).hexdigest().upper() == "5647D322B7237A4488236BD91CD8AB7BD6BB517C4466525EB55CE0454BA9B0CE"
+assert Path("ui-v7/src/product-finished-exterior-v2.webp").stat().st_size == 81046
+assert Path("ui-v5/src/product-finished-cutaway-v2.webp").stat().st_size == 109054
 
 # Exact delivered STEP artwork stays byte-for-byte available as fallback.
 assert hashlib.sha256(Path("ui-v7/src/product-step-exterior.webp").read_bytes()).hexdigest().upper() == "41036BD0F2D5ED0AD315EB8C17F1E5E5E4E5DFA20861DEEB4AA8DB8E813DAD66"
 assert hashlib.sha256(Path("ui-v5/src/product-step-cutaway.webp").read_bytes()).hexdigest().upper() == "3C15E2C3C1E2042746ACEA181CE4076A9C9F7247115B2E2CAAF1C5D83A9A3B5B"
+assert hashlib.sha256(Path("ui-v7/src/product-finished-exterior.webp").read_bytes()).hexdigest().upper() == "443E385CACAD073A0EA656E49B6C93B2BD8AFB3F8476095DBF2979BB267AE926"
+assert hashlib.sha256(Path("ui-v5/src/product-finished-cutaway.webp").read_bytes()).hexdigest().upper() == "A408487E05EBA5D3ACA1D9104DFEFEA7904F983F96B92394C99153A5D23AA408"
 
 assert "__PRODUCT_EXTERIOR__" in exterior and "__PRODUCT_CUTAWAY__" in cutaway
 assert exterior.count("<image ") == 1 and cutaway.count("<image ") == 1
 assert production.count("data:image/webp;base64,") == 2
-assert 'viewBox="0 0 1070 1100"' in exterior and 'viewBox="0 0 999 1100"' in cutaway
+assert 'viewBox="0 0 955 1100"' in exterior and 'viewBox="0 0 702 1100"' in cutaway
 assert '<svg class="product-illustration product-v3-illustration product-step-render" id="productIllustration"' in exterior
 assert 'id="product-v3"' in exterior
 assert "data-part=" not in exterior and "data-focus=" not in exterior and "data-callout-anchor=" not in exterior
@@ -38,6 +40,13 @@ for component in ("temp1", "temp2", "peltier1", "peltier2", "fan", "oled", "butt
     assert cutaway.count(f'data-part="{component}"') == 1
     assert cutaway.count(f'data-callout-anchor="{component}"') == 1
 assert cutaway.count('data-part="fan"') == 1
+assert 'data-part="peltier1" data-focus="peltier1" x="238" y="281"' in cutaway
+assert 'data-part="peltier2" data-focus="peltier2" x="478" y="291"' in cutaway
+assert 'data-part="temp2" data-focus="temp2" x="332" y="607"' in cutaway
+assert 'data-part="fan" data-focus="fan" cx="374" cy="710"' in cutaway
+assert 'data-part="pico" data-focus="pico" cx="383" cy="824"' in cutaway
+assert 'data-part="oled" data-focus="oled" x="535" y="835"' in cutaway
+assert 'data-part="buttons" data-focus="buttons" x="530" y="955"' in cutaway
 for forbidden in ("sinkFins", "fan-blades", "KÜHLKÖRPER", "HEATSINK", "thermal-left", "thermal-right", "pcb-module"):
     assert forbidden not in cutaway
 assert "step-hotspot" in cutaway and ".product-step-render .step-hotspot" in css

@@ -1,5 +1,5 @@
-<svg class="product-illustration product-v3-illustration product-step-render" id="productIllustration" viewBox="0 0 1070 1100" role="img" aria-labelledby="productExteriorTitle productExteriorDescription" xmlns="http://www.w3.org/2000/svg">
+<svg class="product-illustration product-v3-illustration product-step-render" id="productIllustration" viewBox="0 0 955 1100" role="img" aria-labelledby="productExteriorTitle productExteriorDescription" xmlns="http://www.w3.org/2000/svg">
  <title id="productExteriorTitle">ThermoCup MK I als fertiges Produkt</title>
- <desc id="productExteriorDescription">Fotorealistische Außenansicht der geschlossenen STEP-Gehäusegeometrie mit tief eingesetztem Becher, kleinem OLED und vier physischen Tastern.</desc>
- <g id="product-v3"><image href="__PRODUCT_EXTERIOR__" x="0" y="0" width="1070" height="1100" preserveAspectRatio="xMidYMid meet"/></g>
+ <desc id="productExteriorDescription">Fotorealistische Außenansicht der geschlossenen STEP-Gehäusegeometrie mit Peltierkontakt auf Becherhöhe sowie OLED und vier physischen Tastern in der unteren Frontaussparung.</desc>
+ <g id="product-v3"><image href="__PRODUCT_EXTERIOR__" x="0" y="0" width="955" height="1100" preserveAspectRatio="xMidYMid meet"/></g>
 </svg>
