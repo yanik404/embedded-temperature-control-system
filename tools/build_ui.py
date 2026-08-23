@@ -209,7 +209,7 @@ def build_stats(preview_html: str, production_html: str, css: str, javascript: s
         "external_library_bytes": 0,
         "runtime_http_requests_for_assets": 0,
         "webgl_draw_calls_per_frame": 0,
-        "product_rendering": "embedded_unified_photoreal_webp_with_svg_hotspots",
+        "product_rendering": "embedded_photoreal_cutaway_with_clipped_focus_modes",
         "history_max_seconds": 1800,
     }
 

@@ -51,9 +51,47 @@
 .component-form[data-component-form="current1"]:before{left:4px;top:2px;width:12px;height:12px;border:1px solid #76aec4;background:#181c1a;box-shadow:-3px 2px 0 -2px #c7cec9,3px 2px 0 -2px #c7cec9}
 .callout-entry:hover .component-form,.callout-entry:focus-within .component-form,.callout-entry.active .component-form{color:var(--heat)}
 
+/* Readable engineering cutaway: one raster, selectively revealed through SVG clips. */
+.build-mode-switch{position:absolute;z-index:9;top:62px;right:18px;display:none;align-items:center;gap:3px;padding:4px;border:1px solid #3a413c;border-radius:8px;background:#111511e8;box-shadow:0 8px 28px #0007;backdrop-filter:blur(8px)}
+body[data-product-view="build"] .build-mode-switch{display:flex}
+.build-mode-switch button{min-height:28px;padding:0 9px;border:0;border-radius:5px;background:transparent;color:#858c86;font-size:8px;font-weight:750;letter-spacing:.08em;cursor:pointer}
+.build-mode-switch button[aria-pressed="true"]{background:#303732;color:#f2f1ea}
+.build-mode-switch button[data-build-mode="thermal"][aria-pressed="true"]{color:#ffc099}
+.build-mode-switch button[data-build-mode="sensors"][aria-pressed="true"]{color:#b8e8f1}
+.build-mode-switch button[data-build-mode="electronics"][aria-pressed="true"]{color:#b7ddb7}
+.build-mode-switch button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.cutaway-raster,.mode-slice,.focus-slice{transition:filter .28s ease,opacity .28s ease}
+.mode-slice,.focus-slice,.mode-marker{pointer-events:none;opacity:0}
+body[data-product-view="build"][data-build-mode="thermal"] .cutaway-base,
+body[data-product-view="build"][data-build-mode="sensors"] .cutaway-base,
+body[data-product-view="build"][data-build-mode="electronics"] .cutaway-base{filter:brightness(.46) saturate(.55);opacity:.82}
+body[data-product-view="build"][data-build-mode="thermal"] .mode-slice[data-mode-slice="thermal"],
+body[data-product-view="build"][data-build-mode="sensors"] .mode-slice[data-mode-slice="sensors"],
+body[data-product-view="build"][data-build-mode="electronics"] .mode-slice[data-mode-slice="electronics"]{opacity:1;filter:brightness(1.13) saturate(1.08)}
+.mode-marker{stroke-width:1.5;stroke-dasharray:7 6;transition:opacity .25s}
+.marker-thermal{stroke:#ed8549}.marker-sensors{stroke:#76aec4}.marker-electronics{stroke:#7ebb8b}
+body[data-product-view="build"][data-build-mode="thermal"] .mode-marker[data-mode-marker="thermal"],
+body[data-product-view="build"][data-build-mode="sensors"] .mode-marker[data-mode-marker="sensors"],
+body[data-product-view="build"][data-build-mode="electronics"] .mode-marker[data-mode-marker="electronics"]{opacity:.7}
+body[data-product-view="build"].component-focused .cutaway-base{filter:brightness(.42) saturate(.52);opacity:.78}
+.focus-slice.focused{opacity:1;filter:brightness(1.2) saturate(1.08) drop-shadow(0 0 8px #ed854999)}
+.step-hotspot.focused{fill:#ed854912!important;stroke:#ed8549!important;stroke-width:2!important;vector-effect:non-scaling-stroke}
+
+.part-focus-card{display:grid;grid-template-columns:64px 1fr;align-items:center;gap:14px;margin:14px 0 3px;padding:12px;border:1px solid #414943;border-radius:9px;background:linear-gradient(135deg,#1b201c,#141714);box-shadow:0 10px 30px #0003}
+.part-focus-card[hidden]{display:none}
+body:not([data-product-view="build"]) .part-focus-card{display:none}
+.part-focus-visual{display:grid;width:62px;height:62px;place-items:center;border:1px solid #424b45;border-radius:8px;background:#0e110f;color:var(--heat);overflow:hidden}
+.part-focus-visual .component-form{width:19px;height:16px;flex:none;transform:scale(2.45);color:var(--heat)}
+.part-focus-copy{min-width:0}.part-focus-copy small,.part-focus-copy strong,.part-focus-copy em{display:block}
+.part-focus-copy small{color:var(--heat);font-size:8px;font-weight:750;letter-spacing:.13em}
+.part-focus-copy strong{margin-top:2px;font-size:15px;line-height:1.25}
+.part-focus-copy em{margin-top:2px;color:#bcc3bd;font-size:10px;font-style:normal}
+.part-focus-copy p{margin:3px 0 0;color:#858d87;font-size:10px;line-height:1.35}
+
 @media(max-width:900px){
  .callout-lines{display:none}.callout-anchors circle{opacity:.18}.product-panel{display:block!important}.product-summary{margin-top:4px}.component-legend{margin-top:8px}
  .component-list{display:grid;grid-template-columns:1fr 1fr;gap:0 24px}.legend-group{break-inside:avoid}.callout-row{min-height:36px}.callout-name{font-size:13px}
+ .build-mode-switch{top:48px;right:auto;left:50%;transform:translateX(-50%);white-space:nowrap}body[data-product-view="build"] .product-view[data-product-illustration="build"]{padding-top:76px}
 }
-@media(max-width:600px){.component-list{grid-template-columns:1fr}.callout-row{min-height:38px}.component-legend>header{padding-top:12px}}
+@media(max-width:600px){.component-list{grid-template-columns:1fr}.callout-row{min-height:38px}.component-legend>header{padding-top:12px}.build-mode-switch{top:45px;max-width:calc(100vw - 24px)}.build-mode-switch button{padding:0 6px;font-size:7px}.part-focus-card{grid-template-columns:54px 1fr}.part-focus-visual{width:52px;height:52px}}
 @media(prefers-reduced-motion:reduce){.callout-lines path,.mount-silhouette{transition:none}.component-part.assembling{animation:none}}

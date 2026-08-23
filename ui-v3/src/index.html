@@ -7,7 +7,7 @@
 <title>Becherhalter · Interaktiver Produktaufbau</title>
 <style>/*__CSS__*/</style>
 </head>
-<body data-state="AUS" data-live="false" data-product-view="exterior">
+<body data-state="AUS" data-live="false" data-product-view="exterior" data-build-mode="all">
 <a class="skip-link" href="#aufbau">Zum Becherhalter</a>
 <header class="site-header">
  <a class="brand" href="#aufbau"><svg viewBox="0 0 32 46" aria-hidden="true"><path d="M11 5a5 5 0 0 1 10 0v22a10 10 0 1 1-10 0V5Z"/><path d="M16 13v19"/><circle cx="16" cy="34" r="2.5"/></svg><strong>BECHERHALTER</strong></a>
@@ -21,12 +21,14 @@
   <div class="product-layout">
    <div class="product-stage" id="visualStage">
     <div class="product-view-switch" role="group" aria-label="Produktansicht"><button type="button" data-product-view="exterior" aria-pressed="true">AUSSEN</button><i></i><button type="button" data-product-view="build" aria-pressed="false">INNEN</button></div>
+    <div class="build-mode-switch" role="group" aria-label="Innenansicht hervorheben"><button type="button" data-build-mode="all" aria-pressed="true">GESAMT</button><button type="button" data-build-mode="thermal" aria-pressed="false">THERMIK</button><button type="button" data-build-mode="sensors" aria-pressed="false">SENSORIK</button><button type="button" data-build-mode="electronics" aria-pressed="false">ELEKTRONIK</button></div>
     <div class="product-view" data-product-illustration="exterior"><!--__PRODUCT_V3_EXTERIOR__--></div>
     <div class="product-view" data-product-illustration="build"><!--__PRODUCT_V2_CUTAWAY__--></div>
    </div>
    <svg class="callout-lines" id="calloutLines" aria-hidden="true"><g id="calloutPaths"></g></svg>
    <aside class="product-panel">
     <div class="product-summary"><div class="state-mark"><i></i><span><small>SYSTEM</small><strong id="systemState">Wird geladen</strong></span></div><span class="component-total"><b id="componentCount">— / 19</b><small>KOMPONENTEN</small></span></div>
+    <aside class="part-focus-card" id="partFocusCard" aria-live="polite" hidden><span class="part-focus-visual"><i class="component-form" id="partFocusIcon"></i></span><span class="part-focus-copy"><small>BAUTEIL-FOKUS</small><strong id="partFocusName">Bauteil</strong><em id="partFocusType">Typ</em><p id="partFocusPlace">Position</p></span></aside>
     <section class="component-legend" aria-labelledby="componentLegendTitle"><header><small>BAUGRUPPEN</small><strong id="componentLegendTitle">Technische Zuordnung</strong></header><div class="component-list" id="configurationList"></div><p id="configurationHint"></p></section>
    </aside>
   </div>

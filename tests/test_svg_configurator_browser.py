@@ -21,7 +21,7 @@ if browser is None:
     print("callout configurator browser test skipped: Chrome/Chromium not found")
     raise SystemExit(0)
 
-with tempfile.TemporaryDirectory(prefix="becherhalter-callout-test-") as profile:
+with tempfile.TemporaryDirectory(prefix="becherhalter-callout-test-", ignore_cleanup_errors=True) as profile:
     port = review.free_port()
     process = subprocess.Popen(
         [str(browser), "--headless=new", f"--remote-debugging-port={port}",
@@ -71,6 +71,13 @@ with tempfile.TemporaryDirectory(prefix="becherhalter-callout-test-") as profile
         views = evaluate("""(()=>{const build=document.querySelector('[data-product-view="build"]');build.click();return{view:document.body.dataset.productView,pressed:build.getAttribute('aria-pressed'),exterior:getComputedStyle(document.querySelector('[data-product-illustration="exterior"]')).display,cutaway:getComputedStyle(document.querySelector('[data-product-illustration="build"]')).display}})()""")
         assert views == {"view": "build", "pressed": "true", "exterior": "none", "cutaway": "block"}, views
 
+        evaluate("document.querySelector('[data-build-mode=\"sensors\"]').click()")
+        time.sleep(.35)
+        modes = evaluate("""(()=>{const sensors=document.querySelector('[data-build-mode="sensors"]'),base=document.querySelector('.cutaway-base'),focus=document.querySelector('[data-focus-slice="peltier1"]'),card=document.getElementById('partFocusCard');return{mode:document.body.dataset.buildMode,pressed:sensors.getAttribute('aria-pressed'),markers:document.querySelectorAll('[data-mode-marker="sensors"]').length,filter:getComputedStyle(base).filter,focus:focus.classList.contains('focused'),cardVisible:!card.hidden&&getComputedStyle(card).display!=='none',cardName:document.getElementById('partFocusName').textContent}})()""")
+        assert modes["mode"] == "sensors" and modes["pressed"] == "true", modes
+        assert modes["markers"] == 4 and modes["filter"] != "none", modes
+        assert modes["focus"] and modes["cardVisible"] and modes["cardName"] == "Peltier links", modes
+
         cdp.call("Emulation.setDeviceMetricsOverride", {"width": 390, "height": 844, "deviceScaleFactor": 1, "mobile": True, "screenWidth": 390, "screenHeight": 844})
         mobile_lines = evaluate("window.V4Twin.drawLines();document.querySelectorAll('[data-callout-path]').length")
         assert mobile_lines == 0, mobile_lines
@@ -81,4 +88,4 @@ with tempfile.TemporaryDirectory(prefix="becherhalter-callout-test-") as profile
         except subprocess.TimeoutExpired:
             process.terminate()
 
-print("callout configurator browser test passed: view switch, focus line, add, details, remove, keyboard, mobile")
+print("callout configurator browser test passed: view/build modes, clipped focus, focus card, add, details, remove, keyboard, mobile")

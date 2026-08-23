@@ -17,9 +17,9 @@ for token in ("AUFBAU", "REGELKREIS", "LIVE", "TECHNISCHE DETAILS", "PRODUCTILLU
 # The active transparent WebP files are finished-product renders derived from
 # the supplied STEP references and remain compact enough for Pico flash.
 assert hashlib.sha256(Path("ui-v7/src/product-finished-exterior-v2.webp").read_bytes()).hexdigest().upper() == "5685C47A2F0F453795E196A39B847B73E919B58C764D93793034C7806B60FE4A"
-assert hashlib.sha256(Path("ui-v5/src/product-finished-cutaway-v2.webp").read_bytes()).hexdigest().upper() == "E393B880301EF77F5318FFBF5E863358450752C7FD81CF6554D13A7D02B2ED4C"
+assert hashlib.sha256(Path("ui-v5/src/product-finished-cutaway-v2.webp").read_bytes()).hexdigest().upper() == "98F0CE756EF9D828815F70EEC1EA20FBCA295D288A7032580A85857D831A1EAA"
 assert Path("ui-v7/src/product-finished-exterior-v2.webp").stat().st_size == 81046
-assert Path("ui-v5/src/product-finished-cutaway-v2.webp").stat().st_size == 73278
+assert Path("ui-v5/src/product-finished-cutaway-v2.webp").stat().st_size == 90748
 
 # Exact delivered STEP artwork stays byte-for-byte available as fallback.
 assert hashlib.sha256(Path("ui-v7/src/product-step-exterior.webp").read_bytes()).hexdigest().upper() == "41036BD0F2D5ED0AD315EB8C17F1E5E5E4E5DFA20861DEEB4AA8DB8E813DAD66"
@@ -36,30 +36,37 @@ assert '<svg class="product-illustration product-v3-illustration product-step-re
 assert 'id="product-v3"' in exterior
 assert "data-part=" not in exterior and "data-focus=" not in exterior and "data-callout-anchor=" not in exterior
 
-# The complete interior is one coherent raster. Only transparent interaction
-# geometry may sit above it, so no component can look pasted on or float.
+# The complete interior is one coherent raster. Measured SVG clips may reveal
+# regions of that same raster, but no second component bitmap can look pasted on.
 for component in ("temp1", "temp2", "peltier1", "peltier2", "fan", "oled", "buttons", "rgb", "light", "cup", "pico", "current1"):
     assert cutaway.count(f'data-part="{component}"') == 1
     assert cutaway.count(f'data-focus="{component}"') == 1
     assert cutaway.count(f'data-callout-anchor="{component}"') == 1
 assert "component-real" not in cutaway and "cup-detector-plunger" not in cutaway
-assert 'data-part="peltier1" data-focus="peltier1" x="238" y="218"' in cutaway
-assert 'data-part="peltier2" data-focus="peltier2" x="450" y="218"' in cutaway
-assert 'data-part="temp1" data-focus="temp1" x="444" y="65"' in cutaway
-assert 'data-part="temp2" data-focus="temp2" x="335" y="578"' in cutaway
-assert 'data-part="fan" data-focus="fan" x="230" y="591"' in cutaway
-assert 'data-part="cup" data-focus="cup" x="488" y="158"' in cutaway
-assert 'data-part="pico" data-focus="pico" cx="400" cy="824"' in cutaway
-assert 'data-part="oled" data-focus="oled" x="529" y="827"' in cutaway
-assert 'data-part="buttons" data-focus="buttons" x="525" y="946"' in cutaway
+assert 'data-part="peltier1" data-focus="peltier1" x="158" y="245"' in cutaway
+assert 'data-part="peltier2" data-focus="peltier2" x="431" y="245"' in cutaway
+assert 'data-part="temp1" data-focus="temp1" x="166" y="150"' in cutaway
+assert 'data-part="temp2" data-focus="temp2" x="303" y="574"' in cutaway
+assert 'data-part="fan" data-focus="fan" x="206" y="615"' in cutaway
+assert 'data-part="cup" data-focus="cup" x="456" y="176"' in cutaway
+assert 'data-part="pico" data-focus="pico" cx="370" cy="856"' in cutaway
+assert 'data-part="oled" data-focus="oled" x="523" y="828"' in cutaway
+assert 'data-part="buttons" data-focus="buttons" x="514" y="961"' in cutaway
 for forbidden in ("sinkFins", "fan-blades", "KÜHLKÖRPER", "HEATSINK", "thermal-left", "thermal-right", "pcb-module"):
     assert forbidden not in cutaway
 assert "step-hotspot" in cutaway and ".product-step-render .step-hotspot" in css
+assert 'id="cutawayRaster"' in cutaway and cutaway.count('href="#cutawayRaster"') == 22
+for mode in ("thermal", "sensors", "electronics"):
+    assert f'data-mode-slice="{mode}"' in cutaway
+    assert f'data-mode-marker="{mode}"' in cutaway
 
 assert "product-view-switch" in source
 assert "<!--__PRODUCT_V3_EXTERIOR__-->" in source and "<!--__PRODUCT_V2_CUTAWAY__-->" in source
 assert 'data-product-view="exterior"' in source and 'data-product-view="build"' in source
 assert 'data-product-illustration="exterior"' in source and 'data-product-illustration="build"' in source
+for mode in ("all", "thermal", "sensors", "electronics"):
+    assert f'data-build-mode="{mode}"' in source
+assert "partFocusCard" in source
 
 # Legacy art remains available as an untouched fallback, but is not embedded.
 assert hashlib.sha256(Path("ui-v3/src/product.svg").read_bytes()).hexdigest().upper() == "16A61414E53C56D95675070C9203A597D02351C56D344B71A5F6AADFBF95BE15"

@@ -71,6 +71,12 @@ with tempfile.TemporaryDirectory(prefix="becherhalter-product-v3-", ignore_clean
                 assert metrics["view"] == view and metrics["duplicateIds"] == 0, (width, height, view, metrics)
                 assert metrics["width"] > 240 and metrics["height"] > 280, (width, height, view, metrics)
                 assert metrics["overflow"] <= 1, (width, height, view, metrics)
+                if view == "build":
+                    for mode in ("all", "thermal", "sensors", "electronics"):
+                        mode_expression = f"""(()=>{{window.V4Twin.setBuildMode('{mode}');const control=document.querySelector('.build-mode-switch').getBoundingClientRect(),button=document.querySelector('[data-build-mode="{mode}"]');return{{mode:document.body.dataset.buildMode,pressed:button.getAttribute('aria-pressed'),display:getComputedStyle(document.querySelector('.build-mode-switch')).display,left:control.left,right:control.right}}}})()"""
+                        mode_result = cdp.call("Runtime.evaluate", {"expression": mode_expression, "returnByValue": True})["result"]["value"]
+                        assert mode_result["mode"] == mode and mode_result["pressed"] == "true", (width, height, mode, mode_result)
+                        assert mode_result["display"] != "none" and mode_result["left"] >= 0 and mode_result["right"] <= width + 1, (width, height, mode, mode_result)
         cdp.call("Browser.close")
     finally:
         try:
@@ -78,4 +84,4 @@ with tempfile.TemporaryDirectory(prefix="becherhalter-product-v3-", ignore_clean
         except subprocess.TimeoutExpired:
             process.terminate()
 
-print("finished-product views responsive test passed: exterior/interior at 1920, 1440, 1366, 768 and 390 px")
+print("finished-product views responsive test passed: exterior and four interior modes at 1920, 1440, 1366, 768 and 390 px")

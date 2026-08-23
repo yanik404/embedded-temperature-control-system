@@ -101,15 +101,16 @@ def exact_pcb_layer(reference: Image.Image, target_size: tuple[int, int]) -> Ima
 def composite_original_pcb(product: Image.Image, reference: Image.Image) -> Image.Image:
     """Place the exact board beneath the already-rendered Pico, fan and mounts."""
 
-    board_box = (326, 1033, 820, 1290)
+    # Placement in the approved clear engineering cutaway source.
+    board_box = (422, 873, 912, 1138)
     board = exact_pcb_layer(reference, (board_box[2] - board_box[0], board_box[3] - board_box[1]))
 
     # The generated Pico W and physical occluders remain above the exact PCB texture.
     mask = board.getchannel("A")
     draw = ImageDraw.Draw(mask)
-    draw.polygon(((42, 54), (347, 78), (331, 210), (48, 196)), fill=0)
-    draw.rounded_rectangle((15, 0, 434, 72), radius=26, fill=0)  # fan frame
-    for center in ((12, 14), (466, 12), (13, 211), (427, 226)):
+    draw.polygon(((34, 55), (290, 64), (286, 226), (28, 220)), fill=0)
+    draw.rounded_rectangle((20, 0, 407, 88), radius=28, fill=0)  # fan frame
+    for center in ((14, 20), (467, 20), (13, 216), (440, 231)):
         x, y = center
         draw.ellipse((x - 18, y - 18, x + 18, y + 18), fill=0)
     board.putalpha(mask.filter(ImageFilter.GaussianBlur(0.65)))
@@ -120,6 +121,16 @@ def composite_original_pcb(product: Image.Image, reference: Image.Image) -> Imag
 
 
 def fit_canvas(image: Image.Image) -> Image.Image:
+    bounds = image.getchannel("A").getbbox()
+    if bounds:
+        padding = 8
+        bounds = (
+            max(0, bounds[0] - padding),
+            max(0, bounds[1] - padding),
+            min(image.width, bounds[2] + padding),
+            min(image.height, bounds[3] + padding),
+        )
+        image = image.crop(bounds)
     ratio = min(CANVAS_SIZE[0] / image.width, CANVAS_SIZE[1] / image.height)
     resized = image.resize((round(image.width * ratio), round(image.height * ratio)), Image.Resampling.LANCZOS)
     canvas = Image.new("RGBA", CANVAS_SIZE, (0, 0, 0, 0))

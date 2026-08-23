@@ -15,7 +15,7 @@ for label in ("Temperatursensor 1","Temperatursensor 2","Peltier links","Peltier
     assert label in twin
 assert "3-pol. Hebel-Mikroschalter" in twin
 assert "3-poliger Hebel-Mikroschalter" in model
-for behavior in ("toggleConnection","setConnected","setPartState","drawLines","visibleLineIds","renderDetail","setProductView"):
+for behavior in ("toggleConnection","setConnected","setPartState","drawLines","visibleLineIds","renderDetail","renderFocusCard","setProductView","setBuildMode"):
     assert behavior in twin
 assert 'live.tone==="configured"' in twin and 'tone:"unmonitored"' in twin
 assert 'return id?[id]:[]' in twin
@@ -24,6 +24,8 @@ assert 'class="component-control"' not in preview and 'class="component-hotspots
 assert 'class="callout-lines"' in preview and "data-callout-entry" in twin
 assert "callout-detail" in preview and "callout-remove" in preview
 assert "component-form" in preview
+assert "part-focus-card" in preview and "build-mode-switch" in preview
+assert 'data-build-mode="sensors"' in preview and 'data-focus-slice="temp1"' in preview
 assert "configuration-drawer" not in preview and "projectHotspots" not in twin and "ProductScene" not in twin
 assert "/api/" not in twin
 assert "useProfile(profiles" in preview and "useProfile(profiles" not in production
