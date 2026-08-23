@@ -47,6 +47,18 @@ for component in ("peltier1", "peltier2", "temp1", "temp2", "fan", "cup", "pico"
     assert f'class="component-part" data-part="{component}" data-focus="{component}"' in cutaway
 for token in ("simple-cutaway", "simple-pcb", "simple-switch", "simple-fan", "PCB + PICO W", "DETECT"):
     assert token in cutaway
+# The simplified stack keeps the physical order readable: compact side heaters,
+# horizontal fan below the cup, PCB plane, then centred front controls.
+for placement in (
+    'x="143" y="326" width="76" height="166"',
+    'transform="translate(351 620) scale(1 .38)"',
+    "LÜFTER · HORIZONTAL",
+    'cx="351" cy="832" rx="205" ry="70"',
+    "M172 817a17 17",
+    'x="273" y="932" width="156" height="78"',
+    '<circle cx="302" cy="1052" r="11"',
+):
+    assert placement in cutaway
 for forbidden in ("cutawayRaster", "sinkFins", "fan-blades", "KÜHLKÖRPER", "HEATSINK", "thermal-left", "thermal-right", "pcb-module"):
     assert forbidden not in cutaway
 assert "step-hotspot" in cutaway and ".product-step-render .step-hotspot" in css
