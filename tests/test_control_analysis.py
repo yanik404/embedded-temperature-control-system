@@ -17,6 +17,14 @@ required_ids = (
     "analysisLimitState",
     "analysisAntiWindup",
     "analysisCycle",
+    "controllerTrendCanvas",
+    "stepResponseCard",
+    "stepRiseTime",
+    "stepT63",
+    "stepOvershoot",
+    "stepSettlingTime",
+    "stepSteadyError",
+    "stepModelHint",
 )
 for element_id in required_ids:
     assert index.count(f'id="{element_id}"') == 1
@@ -31,17 +39,29 @@ for token in (
     "LERNMODELL · NICHT LIVE",
     "PID · NUR VERGLEICH",
     "1 Integrator",
+    "Reglersignale über der Zeit",
+    "Sprungantwort des Aufheizlaufs",
+    "Anstiegszeit t10–90",
+    "T63 Orientierung",
+    "für eine eindeutige Bestimmung",
 ):
     assert token in index
 
 for element_id in required_ids[1:]:
-    assert f'text("{element_id}"' in script or element_id == "analysisLimitState"
+    assert (
+        f'text("{element_id}"' in script
+        or element_id in ("analysisLimitState", "controllerTrendCanvas", "stepResponseCard")
+    )
 for meter_id in ("analysisPMeter", "analysisIMeter", "analysisOutputMeter"):
     assert f'meter("{meter_id}"' in script
 
 assert ".control-analysis-grid" in css
+assert ".controller-trend-card" in css and ".step-response-card" in css
+assert "drawControllerTrend" in script
+assert "stepResponseMetrics" in script
+assert "validController" in script
 assert "body.presentation-mode .control-analysis{display:none!important}" in css
 assert 'analysis:"controllerAnalysis"' in script
 assert "/api/pid" not in production and "/api/controller" not in production
 
-print("control analysis checks passed: live PI, anti-windup, PT1/PT2 model and simulated P/PI/PID comparison")
+print("control analysis checks passed: live PI trend, step-response metrics, PT1/PT2 model and P/PI/PID comparison")

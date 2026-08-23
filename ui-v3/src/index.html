@@ -101,6 +101,20 @@
      <div class="structure-order"><section><small>REGLER</small><strong>PI</strong><b>1 Integrator</b><p>P reagiert sofort. I summiert die Regelabweichung und entfernt den bleibenden Fehler.</p></section><section><small>REGELSTRECKE</small><strong>PT1 / PT2</strong><b>noch zu identifizieren</b><p>Die Ordnung beschreibt die Anzahl wirksamer dynamischer Speicher im thermischen Modell.</p></section></div>
      <ul><li><i></i><span><b>Kein D-Anteil in der Firmware</b><small>PID wird ausschließlich didaktisch verglichen.</small></span></li><li><i></i><span><b>Ausgang 0 … 100 %</b><small>Keine negative Leistung und kein Kühlen.</small></span></li><li><i></i><span><b>Anti-Windup</b><small>Schützt den Integrator bei Begrenzung.</small></span></li></ul>
     </article>
+
+    <article class="analysis-card controller-trend-card" id="controllerDynamics">
+     <header><span>05</span><div><small>ECHTE LIVE-HISTORIE</small><h4>Reglersignale über der Zeit</h4></div><b id="controllerTrendState">WARTE AUF DATEN</b></header>
+     <div class="controller-trend-legend" aria-hidden="true"><span class="error"><i></i><b>e(t)</b><em id="trendErrorValue">—</em></span><span class="p"><i></i><b>P</b><em id="trendPValue">—</em></span><span class="i"><i></i><b>I</b><em id="trendIValue">—</em></span><span class="output"><i></i><b>u(t)</b><em id="trendOutputValue">—</em></span></div>
+     <canvas id="controllerTrendCanvas" role="img" aria-label="Live-Zeitdiagramm von Regelabweichung, P-Anteil, I-Anteil und begrenzter Stellgröße"></canvas>
+     <footer class="controller-trend-footer"><span>LINKS <b>0 … 100 %</b></span><span>RECHTS <b>Regelabweichung in K</b></span><span>FENSTER <b id="controllerTrendWindow">5 min</b></span><span>MESSPUNKTE <b id="controllerTrendSamples">0</b></span></footer>
+    </article>
+
+    <article class="analysis-card step-response-card" id="stepResponseCard">
+     <header><span>06</span><div><small>BROWSERLOKALE AUSWERTUNG</small><h4>Sprungantwort des Aufheizlaufs</h4></div><b id="stepResponseState">WARTE AUF START</b></header>
+     <div class="step-progress" aria-label="Fortschritt der Sprungantwort"><i id="stepResponseProgress"></i><ol><li id="stepMilestoneStart"><b>START</b><small>0 %</small></li><li id="stepMilestone10"><b>10 %</b><small>Anlauf</small></li><li id="stepMilestone63"><b>63 %</b><small>T63</small></li><li id="stepMilestone90"><b>90 %</b><small>Anstieg</small></li><li id="stepMilestoneSettled"><b>±2 %</b><small>eingeregelt</small></li></ol></div>
+     <dl class="step-response-metrics"><div><dt>Anstiegszeit t10–90</dt><dd id="stepRiseTime">—</dd></div><div><dt>T63 Orientierung</dt><dd id="stepT63">—</dd></div><div><dt>Überschwingen</dt><dd id="stepOvershoot">—</dd></div><div><dt>Ausregelzeit</dt><dd id="stepSettlingTime">—</dd></div><div><dt>Letzte Abweichung</dt><dd id="stepSteadyError">—</dd></div><div class="model-result"><dt>Modellhinweis</dt><dd id="stepModelHint">NOCH KEINE AUSSAGE</dd></div></dl>
+     <p class="step-response-note">Die Kennwerte stammen aus der im Browser aufgezeichneten geschlossenen Heizsession. Der Modellhinweis ist eine Orientierung – für eine eindeutige Bestimmung von K, T, L und Streckenordnung ist ein definierter Identifikationsversuch erforderlich.</p>
+    </article>
    </div>
    <footer class="analysis-note"><b>ECHT</b> PI-Werte und Zustände stammen aus der Pico-API. <b>MODELL</b> PT1/PT2 und P/PI/PID-Kurven dienen der regelungstechnischen Erklärung.</footer>
   </section>

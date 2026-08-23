@@ -16,6 +16,7 @@ MODES = {
     "product": "review=product",
     "control": "review=loop",
     "analysis": "review=analysis",
+    "dynamics": "review=dynamics&scenario=demo30",
     "live": "review=live",
 }
 
