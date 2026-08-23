@@ -21,32 +21,44 @@ assert hashlib.sha256(Path("ui-v5/src/product-finished-cutaway-v2.webp").read_by
 assert Path("ui-v7/src/product-finished-exterior-v2.webp").stat().st_size == 81046
 assert Path("ui-v5/src/product-finished-cutaway-v2.webp").stat().st_size == 109054
 
+# The visible board layer is a compact transparent derivative of the supplied
+# PCB_TOP_original_3D.png and is embedded without a runtime asset request.
+assert hashlib.sha256(Path("ui-v5/src/pcb-top-original.webp").read_bytes()).hexdigest().upper() == "1AF54E0FE67B447A33DDE20D923A5D5171B0E5399B9A5F42A41B1F703B34A24E"
+assert Path("ui-v5/src/pcb-top-original.webp").stat().st_size == 36914
+
 # Exact delivered STEP artwork stays byte-for-byte available as fallback.
 assert hashlib.sha256(Path("ui-v7/src/product-step-exterior.webp").read_bytes()).hexdigest().upper() == "41036BD0F2D5ED0AD315EB8C17F1E5E5E4E5DFA20861DEEB4AA8DB8E813DAD66"
 assert hashlib.sha256(Path("ui-v5/src/product-step-cutaway.webp").read_bytes()).hexdigest().upper() == "3C15E2C3C1E2042746ACEA181CE4076A9C9F7247115B2E2CAAF1C5D83A9A3B5B"
 assert hashlib.sha256(Path("ui-v7/src/product-finished-exterior.webp").read_bytes()).hexdigest().upper() == "443E385CACAD073A0EA656E49B6C93B2BD8AFB3F8476095DBF2979BB267AE926"
 assert hashlib.sha256(Path("ui-v5/src/product-finished-cutaway.webp").read_bytes()).hexdigest().upper() == "A408487E05EBA5D3ACA1D9104DFEFEA7904F983F96B92394C99153A5D23AA408"
 
-assert "__PRODUCT_EXTERIOR__" in exterior and "__PRODUCT_CUTAWAY__" in cutaway
-assert exterior.count("<image ") == 1 and cutaway.count("<image ") == 1
-assert production.count("data:image/webp;base64,") == 2
+assert "__PRODUCT_EXTERIOR__" in exterior and "__PRODUCT_CUTAWAY__" in cutaway and "__PCB_ORIGINAL__" in cutaway
+assert exterior.count("<image ") == 1 and cutaway.count("<image ") == 2
+assert production.count("data:image/webp;base64,") == 3
+assert "__PCB_ORIGINAL__" not in production
 assert 'viewBox="0 0 955 1100"' in exterior and 'viewBox="0 0 702 1100"' in cutaway
 assert '<svg class="product-illustration product-v3-illustration product-step-render" id="productIllustration"' in exterior
 assert 'id="product-v3"' in exterior
 assert "data-part=" not in exterior and "data-focus=" not in exterior and "data-callout-anchor=" not in exterior
 
-# Only transparent interaction geometry may sit above the supplied cutaway.
+# The raster base remains unchanged. Each physical component now has its own
+# focusable real-form layer plus a transparent interaction surface.
 for component in ("temp1", "temp2", "peltier1", "peltier2", "fan", "oled", "buttons", "rgb", "light", "cup", "pico", "current1"):
-    assert cutaway.count(f'data-part="{component}"') == 1
+    assert cutaway.count(f'data-part="{component}"') >= 2
+    assert cutaway.count(f'data-focus="{component}"') == 1
     assert cutaway.count(f'data-callout-anchor="{component}"') == 1
-assert cutaway.count('data-part="fan"') == 1
-assert 'data-part="peltier1" data-focus="peltier1" x="238" y="281"' in cutaway
-assert 'data-part="peltier2" data-focus="peltier2" x="478" y="291"' in cutaway
-assert 'data-part="temp2" data-focus="temp2" x="332" y="607"' in cutaway
-assert 'data-part="fan" data-focus="fan" cx="374" cy="710"' in cutaway
-assert 'data-part="pico" data-focus="pico" cx="383" cy="824"' in cutaway
-assert 'data-part="oled" data-focus="oled" x="535" y="835"' in cutaway
-assert 'data-part="buttons" data-focus="buttons" x="530" y="955"' in cutaway
+assert 'class="component-part component-real real-peltier" data-part="peltier1"' in cutaway
+assert 'class="component-part component-real real-peltier" data-part="peltier2"' in cutaway
+assert cutaway.count('class="component-part component-real real-tmp36') == 2
+assert 'class="cup-detector-plunger"' in cutaway and 'Mechanischer seitlicher Becherschalter' in cutaway
+assert 'class="component-part component-real real-original-pcb" data-part="pico" href="__PCB_ORIGINAL__"' in cutaway
+assert 'data-part="peltier1" data-focus="peltier1" x="238" y="293"' in cutaway
+assert 'data-part="peltier2" data-focus="peltier2" x="464" y="292"' in cutaway
+assert 'data-part="temp2" data-focus="temp2" x="330" y="589"' in cutaway
+assert 'data-part="fan" data-focus="fan" x="270" y="658"' in cutaway
+assert 'data-part="pico" data-focus="pico" cx="359" cy="848"' in cutaway
+assert 'data-part="oled" data-focus="oled" x="520" y="828"' in cutaway
+assert 'data-part="buttons" data-focus="buttons" x="526" y="962"' in cutaway
 for forbidden in ("sinkFins", "fan-blades", "KÜHLKÖRPER", "HEATSINK", "thermal-left", "thermal-right", "pcb-module"):
     assert forbidden not in cutaway
 assert "step-hotspot" in cutaway and ".product-step-render .step-hotspot" in css

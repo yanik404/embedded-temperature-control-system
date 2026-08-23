@@ -34,9 +34,38 @@
 .component-part.disconnected .part-solid{opacity:0}
 .component-part.assembling{animation:partIn .48s cubic-bezier(.2,.9,.2,1)}
 
+/* Real component layers in the STEP-based interior view. */
+.component-real{transform-box:fill-box;transform-origin:center;transition:opacity .3s,filter .25s,transform .35s}
+.component-real.part-focused{filter:drop-shadow(0 0 10px #ed8549cc) brightness(1.18)}
+.real-peltier{opacity:.64}.real-peltier.part-focused{opacity:1}
+.real-original-pcb{isolation:isolate}
+.real-current-zones{opacity:.24}.real-current-zones.part-focused{opacity:1}
+.peltier-contact-face{transition:filter .45s}
+body[data-state="AUFHEIZEN"] .peltier-contact-face,body[data-state="HALTEN"] .peltier-contact-face{filter:brightness(1.09) sepia(.12)}
+.cup-detector-plunger{transform-box:fill-box;transform-origin:right center;transition:transform .32s ease}
+body[data-cup="present"] .cup-detector-plunger{transform:translateX(8px)}
+body[data-cup="absent"] .cup-detector-plunger{transform:translateX(-2px)}
+
+/* Each hardware-list entry gets a small physical-form key matching its exact layer. */
+.callout-label{display:flex;min-width:0;align-items:center;gap:9px}
+.component-form{position:relative;display:inline-block;width:19px;height:16px;flex:0 0 19px;color:#7c857f}
+.component-form:before,.component-form:after{content:"";position:absolute;box-sizing:border-box}
+.component-form[data-component-form^="temp"]:before{left:5px;top:0;width:10px;height:10px;border:1px solid currentColor;border-radius:6px 6px 2px 2px;background:#171b19}
+.component-form[data-component-form^="temp"]:after{left:7px;top:10px;width:7px;height:6px;border-left:1px solid currentColor;border-right:1px solid currentColor;box-shadow:3px 0 0 -2px currentColor}
+.component-form[data-component-form^="peltier"]:before{left:4px;top:1px;width:12px;height:14px;border:2px solid #c7ceca;border-radius:2px;background:linear-gradient(90deg,#87908b,#eef1ee,#747c78)}
+.component-form[data-component-form="fan"]:before{left:2px;top:0;width:16px;height:16px;border:2px solid currentColor;border-radius:4px;background:conic-gradient(#747d78 0 12%,transparent 12% 25%,#747d78 25% 37%,transparent 37% 50%,#747d78 50% 62%,transparent 62% 75%,#747d78 75% 87%,transparent 87%)}
+.component-form[data-component-form="oled"]:before{left:1px;top:2px;width:18px;height:13px;border:1px solid #5e9da4;border-radius:2px;background:#061519;box-shadow:inset 0 0 0 2px #193b3e}
+.component-form[data-component-form="buttons"]:before{left:1px;top:6px;width:4px;height:4px;border-radius:50%;background:currentColor;box-shadow:5px 0 currentColor,10px 0 currentColor,15px 0 currentColor}
+.component-form[data-component-form="rgb"]:before{left:1px;top:3px;width:18px;height:10px;border:1px dashed #5eaaa3;border-radius:50%}
+.component-form[data-component-form="light"]:before{left:4px;top:1px;width:13px;height:13px;border:2px solid #7c9361;border-radius:50%;background:radial-gradient(circle at 35% 30%,#dceaae,#53663f 55%,#151b11 70%)}
+.component-form[data-component-form="cup"]:before{right:0;top:2px;width:11px;height:13px;border:1px solid currentColor;border-radius:2px;background:#171b19}.component-form[data-component-form="cup"]:after{left:0;top:7px;width:10px;height:3px;background:#bdc5c0}
+.component-form[data-component-form="pico"]:before{left:3px;top:0;width:15px;height:15px;border:1px solid #5e8b74;border-radius:50%;background:#204c2e}.component-form[data-component-form="pico"]:after{left:7px;top:5px;width:8px;height:5px;border:1px solid #c5ad55;background:#1e6d59}
+.component-form[data-component-form="current1"]:before{left:4px;top:2px;width:12px;height:12px;border:1px solid #76aec4;background:#181c1a;box-shadow:-3px 2px 0 -2px #c7cec9,3px 2px 0 -2px #c7cec9}
+.callout-entry:hover .component-form,.callout-entry:focus-within .component-form,.callout-entry.active .component-form{color:var(--heat)}
+
 @media(max-width:900px){
  .callout-lines{display:none}.callout-anchors circle{opacity:.18}.product-panel{display:block!important}.product-summary{margin-top:4px}.component-legend{margin-top:8px}
  .component-list{display:grid;grid-template-columns:1fr 1fr;gap:0 24px}.legend-group{break-inside:avoid}.callout-row{min-height:36px}.callout-name{font-size:13px}
 }
-@media(max-width:600px){.component-list{grid-template-columns:1fr}.callout-row{min-height:38px}.component-legend>header{padding-top:12px}}
+@media(max-width:600px){.component-list{grid-template-columns:1fr}.callout-row{min-height:38px}.component-legend>header{padding-top:12px}.real-current-zones{display:none}.real-tmp36,.real-light-sensor,.real-cup-switch{filter:none}}
 @media(prefers-reduced-motion:reduce){.callout-lines path,.mount-silhouette{transition:none}.component-part.assembling{animation:none}}

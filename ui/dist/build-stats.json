@@ -1,12 +1,12 @@
 {
   "external_library_bytes": 0,
   "history_max_seconds": 1800,
-  "preview_bytes": 344069,
-  "product_rendering": "embedded_photoreal_webp_with_svg_hotspots",
-  "production_bytes": 329819,
-  "production_css_bytes": 29100,
-  "production_gzip_bytes_theoretical": 215043,
-  "production_javascript_bytes": 34828,
+  "preview_bytes": 406465,
+  "product_rendering": "embedded_photoreal_webp_with_individual_hardware_layers",
+  "production_bytes": 391367,
+  "production_css_bytes": 32714,
+  "production_gzip_bytes_theoretical": 256544,
+  "production_javascript_bytes": 35477,
   "runtime_http_requests_for_assets": 0,
   "webgl_draw_calls_per_frame": 0
 }

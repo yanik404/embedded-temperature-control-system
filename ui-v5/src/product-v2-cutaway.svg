@@ -1,35 +1,121 @@
 <svg class="product-illustration product-v2-illustration product-v2-cutaway product-step-render" id="productV2Cutaway" viewBox="0 0 702 1100" role="img" aria-labelledby="productCutTitle productCutDescription" xmlns="http://www.w3.org/2000/svg">
  <title id="productCutTitle">ThermoCup MK I Innenansicht</title>
- <desc id="productCutDescription">Fotorealistische Schnittansicht derselben STEP-Gehäusegeometrie: zwei Peltierkontakte auf Becherhöhe, gefederter TMP36 darunter, ein horizontaler Lüfter, das 80-mm-PCB und die unteren Bedienelemente.</desc>
+ <desc id="productCutDescription">Schnittansicht der STEP-Gehäusegeometrie mit einzeln auswählbaren realen Bauformen: zwei Peltiermodule, zwei TMP36, mechanische Bechererkennung, ein Lüfter, originales 80-mm-PCB, Pico W, OLED, Taster und Lichtsensor.</desc>
+ <defs>
+  <linearGradient id="realMetal" x1="0" x2="1"><stop offset="0" stop-color="#f3f5f1"/><stop offset=".16" stop-color="#aab1ad"/><stop offset=".34" stop-color="#f7f8f5"/><stop offset=".58" stop-color="#8b9490"/><stop offset=".82" stop-color="#e7ebe7"/><stop offset="1" stop-color="#747c78"/></linearGradient>
+  <linearGradient id="realCeramic" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".58" stop-color="#dce4e3"/><stop offset="1" stop-color="#abb7b5"/></linearGradient>
+  <linearGradient id="realBlack" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3c4340"/><stop offset=".38" stop-color="#151918"/><stop offset="1" stop-color="#050706"/></linearGradient>
+  <radialGradient id="photoCell" cx="35%" cy="30%"><stop offset="0" stop-color="#e8f3b9"/><stop offset=".34" stop-color="#95ad5e"/><stop offset=".72" stop-color="#354525"/><stop offset="1" stop-color="#11170d"/></radialGradient>
+  <filter id="realPartShadow" x="-40%" y="-40%" width="180%" height="180%"><feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#000" flood-opacity=".72"/></filter>
+  <clipPath id="originalPcbClip"><ellipse cx="359" cy="848" rx="153" ry="90"/></clipPath>
+ </defs>
+
  <image href="__PRODUCT_CUTAWAY__" x="0" y="0" width="702" height="1100" preserveAspectRatio="xMidYMid meet"/>
 
+ <!-- Neutral mounting covers hide the illustrative placeholders in the base render. -->
+ <g class="real-component-mounts" aria-hidden="true">
+  <rect x="245" y="205" width="58" height="84" rx="13" fill="#101412" opacity=".94"/>
+  <rect x="501" y="533" width="61" height="76" rx="12" fill="#111513" opacity=".94"/>
+  <ellipse cx="359" cy="848" rx="160" ry="95" fill="#0b0e0c" opacity=".96"/>
+  <rect x="340" y="954" width="58" height="48" rx="12" fill="#111512" opacity=".94"/>
+ </g>
+
+ <!-- Ceramic Peltier heaters with brushed aluminium contact faces; never red-striped. -->
+ <g class="component-part component-real real-peltier" data-part="peltier1" filter="url(#realPartShadow)" aria-hidden="true">
+  <path d="M250 304l63 10v246l-63-15z" fill="url(#realCeramic)" stroke="#eef2ef" stroke-width="4"/>
+  <path class="peltier-contact-face" d="M258 313l47 8v228l-47-11z" fill="url(#realMetal)"/>
+  <path d="M267 321v215M280 323v216M293 326v216" stroke="#fff" stroke-opacity=".17"/>
+  <circle cx="256" cy="315" r="3" fill="#555d59"/><circle cx="256" cy="540" r="3" fill="#555d59"/>
+ </g>
+ <g class="component-part component-real real-peltier" data-part="peltier2" filter="url(#realPartShadow)" aria-hidden="true">
+  <path d="M475 319l59-13v239l-59 17z" fill="url(#realCeramic)" stroke="#eef2ef" stroke-width="4"/>
+  <path class="peltier-contact-face" d="M483 326l43-10v222l-43 13z" fill="url(#realMetal)"/>
+  <path d="M493 324v224M505 321v224M517 319v222" stroke="#fff" stroke-opacity=".16"/>
+  <circle cx="528" cy="318" r="3" fill="#555d59"/><circle cx="528" cy="538" r="3" fill="#555d59"/>
+ </g>
+
+ <!-- TMP36 #1: recognisable black TO-92 body with exactly three silver leads. -->
+ <g class="component-part component-real real-tmp36" data-part="temp1" filter="url(#realPartShadow)" aria-hidden="true">
+  <path d="M257 220q0-15 17-18q17 3 17 18v30h-34z" fill="url(#realBlack)" stroke="#6f7974" stroke-width="1.5"/>
+  <path d="M263 250v25M274 250v30M285 250v25" fill="none" stroke="#c9d0cc" stroke-width="3"/>
+  <path d="M260 211q14-8 28 1" fill="none" stroke="#7f8984" stroke-width="2" opacity=".65"/>
+ </g>
+
+ <!-- TMP36 #2 sits directly below the cup on a visible spring contact. -->
+ <g class="component-part component-real real-tmp36 spring-sensor" data-part="temp2" filter="url(#realPartShadow)" aria-hidden="true">
+  <path d="M350 610q0-13 16-15q16 2 16 15v25h-32z" fill="url(#realBlack)" stroke="#77817c" stroke-width="1.5"/>
+  <path d="M357 635v10M366 635v10M375 635v10" stroke="#d1d6d2" stroke-width="2.5"/>
+  <path d="M366 643c-25 6 25 12 0 18s25 12 0 18s25 12 0 18" fill="none" stroke="#cbd0cc" stroke-width="4" stroke-linecap="round"/>
+  <ellipse cx="366" cy="700" rx="27" ry="6" fill="#1b211e" stroke="#737d77" stroke-width="2"/>
+ </g>
+
+ <!-- One horizontal 4-pin fan under the cup. -->
+ <g class="component-part component-real real-fan" data-part="fan" filter="url(#realPartShadow)" aria-hidden="true">
+  <path d="M284 676l180-5l11 94l-185 7z" fill="#101412" stroke="#515a55" stroke-width="5"/>
+  <ellipse cx="375" cy="721" rx="77" ry="43" fill="#080a09" stroke="#343b37" stroke-width="4"/>
+  <g class="fan-rotor" transform="translate(375 721) scale(.68 .58)">
+   <path d="M0-8C-17-48-50-53-56-41c-6 12 20 29 45 38zM8 0c40-17 53-1 48 13c-5 13-38 11-59-3zM0 8c17 39 2 60-13 55c-15-5-14-37 3-58zM-8 0c-39 17-58 1-49-13c8-13 38-10 60 3z" fill="#363d39" stroke="#656e69" stroke-width="1.5"/>
+   <circle r="16" fill="#858d88"/><circle r="7" fill="#252a27"/>
+  </g>
+ </g>
+
+ <!-- Mechanical side switch: the long flat plunger is pressed by the inserted cup. -->
+ <g class="component-part component-real real-cup-switch" data-part="cup" filter="url(#realPartShadow)" aria-hidden="true">
+  <rect x="525" y="548" width="39" height="58" rx="6" fill="#171b19" stroke="#737c77" stroke-width="2"/>
+  <circle cx="536" cy="560" r="3.5" fill="#c4cbc7"/><circle cx="552" cy="594" r="3.5" fill="#c4cbc7"/>
+  <path class="cup-detector-plunger" d="M530 566h-47l-12 6l12 6h47z" fill="url(#realMetal)" stroke="#d9dedb" stroke-width="1.5"/>
+  <rect x="531" y="571" width="12" height="5" rx="2" fill="#bb6d35"/>
+ </g>
+
+ <!-- Exact project PCB reference, clipped and foreshortened into the 80-mm mounting plane. -->
+ <image class="component-part component-real real-original-pcb" data-part="pico" href="__PCB_ORIGINAL__" x="207" y="760" width="304" height="176" preserveAspectRatio="none" clip-path="url(#originalPcbClip)" aria-hidden="true"/>
+ <g class="component-part component-real real-pico" data-part="pico" transform="translate(271 798) rotate(6 88 31)" filter="url(#realPartShadow)" aria-hidden="true">
+  <rect width="176" height="62" rx="6" fill="#1d735e" stroke="#76b4a2" stroke-width="2"/>
+  <rect x="73" y="13" width="39" height="35" rx="4" fill="#202725"/><rect x="2" y="18" width="24" height="27" rx="3" fill="#c5c8c6"/>
+  <path d="M29 4v54M39 4v54M49 4v54M59 4v54M119 4v54M129 4v54M139 4v54M149 4v54M159 4v54M169 4v54" stroke="#d7b957" stroke-width="5" stroke-dasharray="3 3"/>
+  <path d="M122 15h33M122 23h33M122 31h33M122 39h33M122 47h33" stroke="#d9dedb" stroke-width="2" opacity=".7"/>
+ </g>
+ <g class="component-part component-real real-current-zones" data-part="current1" aria-hidden="true"><rect x="402" y="787" width="58" height="35" rx="6" fill="none" stroke="#d2a66d" stroke-width="2" stroke-dasharray="5 4"/></g>
+ <g class="component-part component-real real-current-zones" data-part="current2" aria-hidden="true"><rect x="454" y="829" width="54" height="35" rx="6" fill="none" stroke="#b58cc2" stroke-width="2" stroke-dasharray="5 4"/></g>
+ <g class="component-part component-real real-current-zones" data-part="adc" aria-hidden="true"><rect x="385" y="849" width="43" height="30" rx="6" fill="none" stroke="#76aec4" stroke-width="2" stroke-dasharray="5 4"/></g>
+
+ <!-- Physical lower light sensor with a visible optical window. -->
+ <g class="component-part component-real real-light-sensor" data-part="light" filter="url(#realPartShadow)" aria-hidden="true">
+  <rect x="347" y="961" width="43" height="29" rx="6" fill="#174d3d" stroke="#548577" stroke-width="2"/>
+  <circle cx="368" cy="972" r="9" fill="url(#photoCell)" stroke="#b8c7a0" stroke-width="2"/>
+  <path d="M354 988v7M383 988v7" stroke="#cbd1cd" stroke-width="2"/>
+ </g>
+
+ <!-- OLED and four physical buttons remain in the lower STEP recess. -->
+ <g class="component-part component-real real-oled" data-part="oled" filter="url(#realPartShadow)" aria-hidden="true">
+  <path d="M531 841l111 9v106l-111-5z" fill="#0a1010" stroke="#51605b" stroke-width="4"/>
+  <path d="M541 856l90 7v74l-90-4z" fill="#031317" stroke="#4d777c" stroke-width="2"/>
+  <text x="552" y="889" fill="#85edf0" font-size="22" font-weight="600">32.4°</text><text x="552" y="916" fill="#7fb7c9" font-size="15">45.0°</text>
+ </g>
+ <g class="component-part component-real real-buttons" data-part="buttons" filter="url(#realPartShadow)" aria-hidden="true"><g fill="#151918" stroke="#8d9691" stroke-width="2"><circle cx="545" cy="979" r="10"/><circle cx="573" cy="982" r="10"/><circle cx="602" cy="983" r="10"/><circle cx="630" cy="982" r="10"/></g></g>
+ <g class="component-part component-real real-rgb" data-part="rgb" aria-hidden="true"><ellipse cx="351" cy="112" rx="224" ry="66" fill="none" stroke="#58b7b4" stroke-width="3" stroke-dasharray="2 13" opacity=".62"/></g>
+
  <g class="step-interaction-layer" fill="transparent" stroke="transparent">
-  <rect class="component-part step-hotspot" data-part="temp1" data-focus="temp1" x="215" y="202" width="76" height="95" rx="16" tabindex="0" role="button" aria-label="TMP36 Sensor 1 oben seitlich am Becher"/>
-  <rect class="component-part step-hotspot" data-part="temp2" data-focus="temp2" x="332" y="607" width="78" height="74" rx="20" tabindex="0" role="button" aria-label="TMP36 Sensor 2 mit Federkontakt mittig unter dem Becher"/>
-  <rect class="component-part step-hotspot" data-part="peltier1" data-focus="peltier1" x="238" y="281" width="85" height="284" rx="12" tabindex="0" role="button" aria-label="Peltier links auf Becherhöhe"/>
-  <rect class="component-part step-hotspot" data-part="peltier2" data-focus="peltier2" x="478" y="291" width="76" height="278" rx="12" tabindex="0" role="button" aria-label="Peltier rechts gegenüber auf Becherhöhe"/>
-  <circle class="component-part step-hotspot" data-part="fan" data-focus="fan" cx="374" cy="710" r="105" tabindex="0" role="button" aria-label="Einzelner horizontaler Lüfter direkt unter dem Becher"/>
-  <rect class="component-part step-hotspot" data-part="oled" data-focus="oled" x="535" y="835" width="122" height="143" rx="16" tabindex="0" role="button" aria-label="SSD1306 OLED in der unteren Frontaussparung"/>
-  <rect class="component-part step-hotspot" data-part="buttons" data-focus="buttons" x="530" y="955" width="132" height="80" rx="18" tabindex="0" role="button" aria-label="Vier Taster direkt unter dem OLED"/>
-  <ellipse class="component-part step-hotspot" data-part="rgb" data-focus="rgb" cx="351" cy="108" rx="245" ry="88" tabindex="0" role="button" aria-label="RGB-Statusring"/>
-  <circle class="component-part step-hotspot" data-part="light" data-focus="light" cx="374" cy="987" r="43" tabindex="0" role="button" aria-label="Lichtsensor ganz unten im Gehäuse"/>
-  <rect class="component-part step-hotspot" data-part="cup" data-focus="cup" x="493" y="467" width="70" height="99" rx="22" tabindex="0" role="button" aria-label="Seitliche Bechererkennung unter Peltier rechts"/>
-  <ellipse class="component-part step-hotspot" data-part="pico" data-focus="pico" cx="383" cy="824" rx="205" ry="116" tabindex="0" role="button" aria-label="Originales 80-Millimeter-Haupt-PCB mit Raspberry Pi Pico W"/>
-  <rect class="component-part step-hotspot" data-part="current1" data-focus="current1" x="286" y="779" width="176" height="112" rx="24" tabindex="0" role="button" aria-label="TLA2024 und Strommessung auf dem Haupt-PCB"/>
+  <rect class="component-part step-hotspot" data-part="temp1" data-focus="temp1" x="244" y="194" width="61" height="98" rx="14" tabindex="0" role="button" aria-label="TMP36 Sensor 1 als TO-92 oben seitlich am Becher"/>
+  <rect class="component-part step-hotspot" data-part="temp2" data-focus="temp2" x="330" y="589" width="74" height="119" rx="18" tabindex="0" role="button" aria-label="TMP36 Sensor 2 mit Federkontakt mittig unter dem Becher"/>
+  <rect class="component-part step-hotspot" data-part="peltier1" data-focus="peltier1" x="238" y="293" width="86" height="280" rx="12" tabindex="0" role="button" aria-label="Peltier links mit keramischem Modul und Aluminiumkontakt"/>
+  <rect class="component-part step-hotspot" data-part="peltier2" data-focus="peltier2" x="464" y="292" width="83" height="282" rx="12" tabindex="0" role="button" aria-label="Peltier rechts mit keramischem Modul und Aluminiumkontakt"/>
+  <rect class="component-part step-hotspot" data-part="fan" data-focus="fan" x="270" y="658" width="215" height="129" rx="24" tabindex="0" role="button" aria-label="Ein einzelner horizontaler 4-Pin PWM-Lüfter unter dem Becher"/>
+  <rect class="component-part step-hotspot" data-part="oled" data-focus="oled" x="520" y="828" width="137" height="138" rx="16" tabindex="0" role="button" aria-label="SSD1306 OLED in der unteren Frontaussparung"/>
+  <rect class="component-part step-hotspot" data-part="buttons" data-focus="buttons" x="526" y="962" width="122" height="45" rx="15" tabindex="0" role="button" aria-label="Vier Taster MODE, DOWN, OK und UP direkt unter dem OLED"/>
+  <ellipse class="component-part step-hotspot" data-part="rgb" data-focus="rgb" cx="351" cy="112" rx="245" ry="88" tabindex="0" role="button" aria-label="RGB-Statusring"/>
+  <rect class="component-part step-hotspot" data-part="light" data-focus="light" x="337" y="950" width="65" height="55" rx="15" tabindex="0" role="button" aria-label="Physischer Lichtsensor im unteren Gehäusebereich"/>
+  <rect class="component-part step-hotspot" data-part="cup" data-focus="cup" x="463" y="538" width="110" height="81" rx="18" tabindex="0" role="button" aria-label="Mechanischer seitlicher Becherschalter mit langem flachem Taststößel"/>
+  <ellipse class="component-part step-hotspot" data-part="pico" data-focus="pico" cx="359" cy="848" rx="165" ry="100" tabindex="0" role="button" aria-label="Originales 80-Millimeter-Haupt-PCB mit Raspberry Pi Pico W"/>
+  <rect class="component-part step-hotspot" data-part="current1" data-focus="current1" x="378" y="774" width="142" height="116" rx="20" tabindex="0" role="button" aria-label="TLA2024 und Strommessung auf dem originalen Haupt-PCB"/>
  </g>
 
  <g class="callout-anchors" aria-hidden="true">
-  <circle data-callout-anchor="temp1" cx="253" cy="250" r="2"/>
-  <circle data-callout-anchor="temp2" cx="371" cy="644" r="2"/>
-  <circle data-callout-anchor="peltier1" cx="281" cy="423" r="2"/>
-  <circle data-callout-anchor="peltier2" cx="516" cy="430" r="2"/>
-  <circle data-callout-anchor="fan" cx="374" cy="710" r="2"/>
-  <circle data-callout-anchor="oled" cx="596" cy="907" r="2"/>
-  <circle data-callout-anchor="buttons" cx="596" cy="995" r="2"/>
-  <circle data-callout-anchor="rgb" cx="351" cy="108" r="2"/>
-  <circle data-callout-anchor="light" cx="374" cy="987" r="2"/>
-  <circle data-callout-anchor="cup" cx="528" cy="517" r="2"/>
-  <circle data-callout-anchor="pico" cx="383" cy="824" r="2"/>
-  <circle data-callout-anchor="current1" cx="374" cy="835" r="2"/>
+  <circle data-callout-anchor="temp1" cx="274" cy="242" r="2"/><circle data-callout-anchor="temp2" cx="366" cy="644" r="2"/>
+  <circle data-callout-anchor="peltier1" cx="281" cy="430" r="2"/><circle data-callout-anchor="peltier2" cx="505" cy="430" r="2"/>
+  <circle data-callout-anchor="fan" cx="375" cy="721" r="2"/><circle data-callout-anchor="oled" cx="590" cy="902" r="2"/>
+  <circle data-callout-anchor="buttons" cx="588" cy="982" r="2"/><circle data-callout-anchor="rgb" cx="351" cy="112" r="2"/>
+  <circle data-callout-anchor="light" cx="368" cy="972" r="2"/><circle data-callout-anchor="cup" cx="520" cy="574" r="2"/>
+  <circle data-callout-anchor="pico" cx="359" cy="848" r="2"/><circle data-callout-anchor="current1" cx="431" cy="822" r="2"/>
  </g>
 </svg>
