@@ -27,7 +27,7 @@ static volatile bool start_requested;
 static volatile bool stop_requested;
 static volatile bool setpoint_requested;
 static volatile float requested_setpoint;
-static uint32_t heating_started_ms;
+static uint32_t thermal_run_started_ms;
 static uint32_t fan_run_on_until_ms;
 static bool manual_off;
 
@@ -40,6 +40,7 @@ const char *system_state_name(system_state_t state) {
         case SYSTEM_OFF: return "AUS";
         case SYSTEM_READY: return "BEREIT";
         case SYSTEM_HEATING: return "AUFHEIZEN";
+        case SYSTEM_COOLING: return "KUEHLEN";
         case SYSTEM_HOLDING: return "HALTEN";
         case SYSTEM_ERROR: return "FEHLER";
         default: return "UNBEKANNT";
@@ -51,6 +52,7 @@ const char *error_name(error_code_t error) {
         case ERROR_NONE: return "KEIN FEHLER";
         case ERROR_TEMP_SENSOR: return "TEMPERATURSENSOR";
         case ERROR_OVERTEMPERATURE: return "UEBERTEMPERATUR";
+        case ERROR_UNDERTEMPERATURE: return "UNTERTEMPERATUR";
         case ERROR_FAN: return "LUEFTER";
         case ERROR_OVERCURRENT: return "UEBERSTROM";
         case ERROR_CURRENT_SENSOR: return "STROMSENSOR";
@@ -73,9 +75,14 @@ static float clamp_setpoint(float value) {
     return value;
 }
 
-static void all_heating_off(void) {
+static bool thermal_run_active(system_state_t state) {
+    return state == SYSTEM_HEATING || state == SYSTEM_COOLING || state == SYSTEM_HOLDING;
+}
+
+static void all_thermal_output_off(void) {
     peltier_off();
     status.peltier_power_percent = 0.0f;
+    status.thermal_output_mode = THERMAL_OUTPUT_OFF;
     status.controller_proportional_percent = 0.0f;
     status.controller_integral_percent = 0.0f;
     status.controller_output_limited = false;
@@ -84,7 +91,7 @@ static void all_heating_off(void) {
 }
 
 static void enter_error(error_code_t error) {
-    all_heating_off();
+    all_thermal_output_off();
     status.error = error;
     status.state = SYSTEM_ERROR;
 }
@@ -92,11 +99,25 @@ static void enter_error(error_code_t error) {
 static void process_commands(void) {
     if (setpoint_requested) {
         status.setpoint_c = clamp_setpoint(requested_setpoint);
+        const float new_error = status.setpoint_c - status.temperature_c;
+        const bool output_opposes_new_target =
+            (status.thermal_output_mode == THERMAL_OUTPUT_HEATING && new_error < 0.0f) ||
+            (status.thermal_output_mode == THERMAL_OUTPUT_COOLING && new_error > 0.0f);
+        if (thermal_run_active(status.state) && output_opposes_new_target) {
+            /* A setpoint crossing must never keep driving in the old direction
+               while the integrator unwinds. The next control cycle starts at 0. */
+            peltier_set_power(PELTIER_CHANNEL_1, 0u);
+            peltier_set_power(PELTIER_CHANNEL_2, 0u);
+            controller_reset(&controller);
+            status.peltier_power_percent = 0.0f;
+            status.thermal_output_mode = THERMAL_OUTPUT_OFF;
+            printf("[PELTIER] Sollwert kreuzt Istwert -> Ausgang sicher auf 0 %%\n");
+        }
         setpoint_requested = false;
     }
     if (stop_requested) {
         stop_requested = false;
-        all_heating_off();
+        all_thermal_output_off();
         status.error = ERROR_NONE;
         status.state = safety_can_start(&status) ? SYSTEM_READY : SYSTEM_OFF;
         fan_run_on_until_ms = milliseconds() + FAN_RUN_ON_MS;
@@ -106,9 +127,16 @@ static void process_commands(void) {
         if ((status.state == SYSTEM_READY || status.state == SYSTEM_OFF) && safety_can_start(&status)) {
             manual_off = false;
             controller_reset(&controller);
-            heating_started_ms = milliseconds();
+            thermal_run_started_ms = milliseconds();
+            status.control_error_c = status.setpoint_c - status.temperature_c;
+            const bool cooling = status.control_error_c < 0.0f;
+            (void)peltier_set_direction(cooling ? PELTIER_DIRECTION_COOL : PELTIER_DIRECTION_HEAT);
             peltier_set_enabled(true);
-            status.state = SYSTEM_HEATING;
+            status.state = fabsf(status.control_error_c) <= HOLDING_ENTER_BAND_C
+                               ? SYSTEM_HOLDING
+                               : (cooling ? SYSTEM_COOLING : SYSTEM_HEATING);
+            printf("[PELTIER] Regelbetrieb gestartet: %s, Kuehlgrenze %.0f %%\n",
+                   cooling ? "KUEHLEN" : "HEIZEN", PELTIER_MAX_COOLING_PERCENT);
         }
     }
 }
@@ -118,7 +146,7 @@ static void process_buttons(void) {
     if (button_was_pressed(BUTTON_UP)) request_setpoint(status.setpoint_c + 0.5f);
     if (button_was_pressed(BUTTON_DOWN)) request_setpoint(status.setpoint_c - 0.5f);
     if (button_was_pressed(BUTTON_OK)) {
-        if (status.state == SYSTEM_HEATING || status.state == SYSTEM_HOLDING) request_stop();
+        if (thermal_run_active(status.state)) request_stop();
         else if (status.state == SYSTEM_ERROR) request_stop();
         else request_start();
     }
@@ -126,7 +154,7 @@ static void process_buttons(void) {
         (status.state == SYSTEM_OFF || status.state == SYSTEM_READY)) {
         if (status.state == SYSTEM_READY) {
             manual_off = true;
-            all_heating_off();
+            all_thermal_output_off();
             status.state = SYSTEM_OFF;
         } else if (safety_can_start(&status)) {
             manual_off = false;
@@ -160,8 +188,8 @@ static void sample_sensors(void) {
 
 static void update_control(uint32_t now) {
     status.control_error_c = status.setpoint_c - status.temperature_c;
-    const uint32_t elapsed = (status.state == SYSTEM_HEATING || status.state == SYSTEM_HOLDING)
-                                 ? now - heating_started_ms : 0u;
+    const uint32_t elapsed = thermal_run_active(status.state)
+                                 ? now - thermal_run_started_ms : 0u;
     const error_code_t fault = safety_check(&status, elapsed);
     if (fault != ERROR_NONE) {
         /* Every safety fault is latched, including faults detected before START. */
@@ -173,7 +201,7 @@ static void update_control(uint32_t now) {
     if (status.state == SYSTEM_OFF && !manual_off && status.temperature_valid && status.current_valid) {
         status.state = SYSTEM_READY;
     }
-    if (status.state != SYSTEM_HEATING && status.state != SYSTEM_HOLDING) return;
+    if (!thermal_run_active(status.state)) return;
 
     const float output = controller_update(&controller, status.setpoint_c, status.temperature_c,
                                            CONTROL_PERIOD_MS / 1000.0f);
@@ -186,23 +214,47 @@ static void update_control(uint32_t now) {
     status.controller_anti_windup_active =
         (unlimited_output >= controller.output_max && status.control_error_c > 0.0f) ||
         (unlimited_output <= controller.output_min && status.control_error_c < 0.0f);
-    status.peltier_power_percent = output;
-    const uint8_t percent = (uint8_t)(output + 0.5f);
+    float applied_output = fabsf(output) < PELTIER_OUTPUT_DEADBAND_PERCENT ? 0.0f : output;
+    thermal_output_mode_t mode = THERMAL_OUTPUT_OFF;
+    if (applied_output > 0.0f) mode = THERMAL_OUTPUT_HEATING;
+    if (applied_output < 0.0f) mode = THERMAL_OUTPUT_COOLING;
+
+    if (mode != THERMAL_OUTPUT_OFF) {
+        const peltier_direction_t direction = mode == THERMAL_OUTPUT_COOLING
+                                                  ? PELTIER_DIRECTION_COOL
+                                                  : PELTIER_DIRECTION_HEAT;
+        if (peltier_get_direction() != direction) {
+            /* peltier_set_direction performs PWM-off, break-before-make and
+               leaves the bridge disabled until the explicit enable below. */
+            (void)peltier_set_direction(direction);
+            peltier_set_enabled(true);
+            printf("[PELTIER] Sichere Richtungsumschaltung -> %s\n",
+                   direction == PELTIER_DIRECTION_COOL ? "KUEHLEN" : "HEIZEN");
+        }
+    }
+
+    status.peltier_power_percent = applied_output;
+    status.thermal_output_mode = mode;
+    const uint8_t percent = (uint8_t)(fabsf(applied_output) + 0.5f);
     peltier_set_power(PELTIER_CHANNEL_1, percent);
     peltier_set_power(PELTIER_CHANNEL_2, percent);
 
-    if (status.state == SYSTEM_HEATING && fabsf(status.control_error_c) <= HOLDING_ENTER_BAND_C) {
+    if ((status.state == SYSTEM_HEATING || status.state == SYSTEM_COOLING) &&
+        fabsf(status.control_error_c) <= HOLDING_ENTER_BAND_C) {
         status.state = SYSTEM_HOLDING;
-    } else if (status.state == SYSTEM_HOLDING && status.control_error_c > HOLDING_EXIT_BAND_C) {
+    } else if (status.control_error_c > HOLDING_EXIT_BAND_C) {
         status.state = SYSTEM_HEATING;
+    } else if (status.control_error_c < -HOLDING_EXIT_BAND_C) {
+        status.state = SYSTEM_COOLING;
     }
 }
 
 static void update_fan(uint32_t now) {
     fan_update();
-    if (status.state == SYSTEM_HEATING || status.state == SYSTEM_HOLDING) {
+    if (thermal_run_active(status.state)) {
+        const float output_magnitude = fabsf(status.peltier_power_percent);
         uint8_t desired = FAN_MIN_ACTIVE_PERCENT +
-                          (uint8_t)((100u - FAN_MIN_ACTIVE_PERCENT) * status.peltier_power_percent / 100.0f);
+                          (uint8_t)((100u - FAN_MIN_ACTIVE_PERCENT) * output_magnitude / 100.0f);
         fan_set_speed(desired);
         fan_run_on_until_ms = now + FAN_RUN_ON_MS;
     } else if ((int32_t)(fan_run_on_until_ms - now) > 0) {
@@ -226,6 +278,8 @@ void app_init(void) {
     status.setpoint_c = SETPOINT_DEFAULT_C;
     manual_off = false;
     controller_init(&controller, PI_KP, PI_KI);
+    controller_set_output_limits(&controller, -PELTIER_MAX_COOLING_PERCENT,
+                                 PELTIER_MAX_HEATING_PERCENT);
     safety_init();
 
     gpio_init(PIN_PG_5V0);

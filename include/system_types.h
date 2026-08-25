@@ -7,6 +7,7 @@ typedef enum {
     SYSTEM_OFF = 0,
     SYSTEM_READY,
     SYSTEM_HEATING,
+    SYSTEM_COOLING,
     SYSTEM_HOLDING,
     SYSTEM_ERROR
 } system_state_t;
@@ -15,12 +16,19 @@ typedef enum {
     ERROR_NONE = 0,
     ERROR_TEMP_SENSOR,
     ERROR_OVERTEMPERATURE,
+    ERROR_UNDERTEMPERATURE,
     ERROR_FAN,
     ERROR_OVERCURRENT,
     ERROR_CURRENT_SENSOR,
     ERROR_CUP_REMOVED,
     ERROR_POWER_SUPPLY
 } error_code_t;
+
+typedef enum {
+    THERMAL_OUTPUT_OFF = 0,
+    THERMAL_OUTPUT_HEATING,
+    THERMAL_OUTPUT_COOLING
+} thermal_output_mode_t;
 
 typedef struct {
     system_state_t state;
@@ -30,7 +38,9 @@ typedef struct {
     float temperature_2_c;
     float setpoint_c;
     float control_error_c;
+    /* Signed actuator command: positive heats, negative cools. */
     float peltier_power_percent;
+    thermal_output_mode_t thermal_output_mode;
     float controller_proportional_percent;
     float controller_integral_percent;
     float peltier_1_current_a;

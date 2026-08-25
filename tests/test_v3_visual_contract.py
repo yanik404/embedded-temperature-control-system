@@ -39,9 +39,9 @@ assert 'class="product-v3-liquid-tint"' in exterior
 assert 'class="product-v3-empty-holder"' in exterior
 assert 'class="cutaway-cup-state-tint"' in cutaway
 assert 'class="cutaway-live-cup"' in cutaway
-for state in ('data-state="AUFHEIZEN"', 'data-state="HALTEN"', 'data-state="FEHLER"'):
+for state in ('data-state="AUFHEIZEN"', 'data-state="KUEHLEN"', 'data-state="HALTEN"', 'data-state="FEHLER"'):
     assert state in css
-assert "--cup-state-color" in css and "blue means cold/ready" in css
+assert "--cup-state-color" in css and "blue cooling/ready" in css
 assert 'data-cup="present"' in css and "S_DETECT value controls cup presence" in css
 assert "document.body.dataset.cup" in script
 assert "data-part=" not in exterior and "data-focus=" not in exterior and "data-callout-anchor=" not in exterior
@@ -92,6 +92,7 @@ assert hashlib.sha256(Path("ui-v6/src/product-v3-rejected-fallback.svg").read_by
 
 assert "loop-product" in source and "loop-heater" in source and "loop-sensor" in source
 assert 'draw("target","validTarget","#d8ddd6",0,60,[7,6])' in script
+assert 'draw("power","validPower",powerColor,-20,100)' in script
 assert ".loop-section{min-height:780px" in css and "loop-connector" in source
 assert "callout-lines" in css
 assert "position:fixed" not in css[css.index(".product-section"):css.index(".loop-section")]

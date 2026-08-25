@@ -37,6 +37,7 @@ PREVIEW_CONTROLS = """
  <button type="button" data-scenario="no-sensors">NO SENSORS</button>
  <button type="button" data-scenario="ready">READY</button>
  <button type="button" data-scenario="heating" class="active">HEATING</button>
+ <button type="button" data-scenario="cooling">COOLING</button>
  <button type="button" data-scenario="holding">HOLDING</button>
  <button type="button" data-scenario="error">ERROR</button>
  <button type="button" data-scenario="disconnect">DISCONNECT</button>

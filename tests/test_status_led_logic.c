@@ -32,6 +32,11 @@ int main(void) {
     assert(!output.heartbeat_on && !output.fault_on);
     assert(output.ring_red == 24u && output.ring_green == 8u && output.ring_blue == 0u);
 
+    output = evaluate(SYSTEM_COOLING, ERROR_NONE, false, false, true);
+    assert(!output.ready_on && !output.heating_on && !output.holding_on);
+    assert(!output.heartbeat_on && !output.fault_on);
+    assert(output.ring_red == 0u && output.ring_green == 6u && output.ring_blue == 24u);
+
     output = evaluate(SYSTEM_HOLDING, ERROR_NONE, false, false, true);
     assert(!output.ready_on && !output.heating_on && output.holding_on);
     assert(output.ring_red == 0u && output.ring_green == 24u && output.ring_blue == 0u);

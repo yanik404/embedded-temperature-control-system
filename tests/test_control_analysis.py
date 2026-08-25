@@ -40,7 +40,7 @@ for token in (
     "PID · NUR VERGLEICH",
     "1 Integrator",
     "Reglersignale über der Zeit",
-    "Sprungantwort des Aufheizlaufs",
+    "Sprungantwort des Temperierlaufs",
     "Anstiegszeit t10–90",
     "T63 Orientierung",
     "für eine eindeutige Bestimmung",
@@ -59,6 +59,7 @@ assert ".control-analysis-grid" in css
 assert ".controller-trend-card" in css and ".step-response-card" in css
 assert "drawControllerTrend" in script
 assert "stepResponseMetrics" in script
+assert 'Math.abs(amplitude)<=.5' in script
 assert "validController" in script
 assert "body.presentation-mode .control-analysis{display:none!important}" in css
 assert 'analysis:"controllerAnalysis"' in script

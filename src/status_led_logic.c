@@ -28,6 +28,10 @@ void status_led_logic_evaluate(const system_status_t *status, bool blink_on,
             output->ring_red = brightness;
             output->ring_green = brightness / 3u;
             break;
+        case SYSTEM_COOLING:
+            output->ring_blue = brightness;
+            output->ring_green = brightness / 4u;
+            break;
         case SYSTEM_HOLDING:
             output->ring_green = brightness;
             break;

@@ -1,8 +1,8 @@
 # Embedded Temperature Control System
 
-Firmware für die Praxisarbeit **Digitaltechnik & Regelungstechnik**. Ein Raspberry Pi Pico W heizt einen Becherhalter mit zwei vorhandenen Peltier-Kanälen kontrolliert auf eine einstellbare Solltemperatur auf und hält sie mit einem geschlossenen PI-Regelkreis. Eine responsive Weboberfläche stellt Regelkreis und Aufwärmverlauf live dar.
+Firmware für die Praxisarbeit **Digitaltechnik & Regelungstechnik**. Ein Raspberry Pi Pico W temperiert einen Becherhalter mit zwei vorhandenen Peltier-Kanälen auf eine einstellbare Solltemperatur und hält sie mit einem geschlossenen PI-Regelkreis. Eine responsive Weboberfläche stellt Regelkreis, Heiz- und Kühlrichtung sowie den Temperaturverlauf live dar.
 
-> Das System heizt ausschließlich. Es gibt keinen Kühlmodus und keine Richtungsumkehr der H-Brücken.
+> Der Kühlbetrieb ist ein konservativ begrenzter experimenteller Präsentationsmodus. Seine reale Wirkung hängt stark von Peltier-Polung, thermischer Kopplung, Abwärmeführung, Lüfter und Umgebung ab und muss vor dem Normalbetrieb mit strombegrenzter Versorgung validiert werden.
 
 ## Präsentationsmodus mit Handy-Hotspot
 
@@ -20,11 +20,11 @@ Der Pico W arbeitet als normaler WLAN-Client. Der Handy-Hotspot vergibt ihm auto
 10. **http://&lt;PICO-IP&gt;** eingeben, beispielsweise `http://192.168.43.117`.
 11. Das Dashboard öffnet sich direkt vom Flash des Pico.
 
-SSID und Passwort sind zentral in `include/secrets.h` hinterlegt. Ist der Hotspot vorübergehend nicht erreichbar, läuft die Firmware sicher weiter und versucht die Verbindung zeitgesteuert erneut. WLAN-Verbindung oder USB-Versorgung starten niemals die Heizung; ohne gültige Leistungsfreigabe bleibt START gesperrt.
+SSID und Passwort sind zentral in `include/secrets.h` hinterlegt. Ist der Hotspot vorübergehend nicht erreichbar, läuft die Firmware sicher weiter und versucht die Verbindung zeitgesteuert erneut. WLAN-Verbindung oder USB-Versorgung starten niemals die Peltier-Leistung; ohne gültige Leistungsfreigabe bleibt START gesperrt.
 
 ## Sicherer Erststart
 
-Nach jedem Reset werden beide Peltier-PWM-Ausgänge zuerst auf 0 % gesetzt, beide H-Brücken deaktiviert und der Lüfter in den AUS-Zustand gebracht. Die Initialisierung oder eine USB-Versorgung allein startet niemals die 12-V-Last. Heizen beginnt nur nach einem bewussten `START` über OK-Taster oder Weboberfläche und nur bei gültigen Sensoren, Strommessung, 5-V-Power-Good und erkannter Tasse.
+Nach jedem Reset werden beide Peltier-PWM-Ausgänge zuerst auf 0 % gesetzt, beide H-Brücken deaktiviert und der Lüfter in den AUS-Zustand gebracht. Die Initialisierung oder eine USB-Versorgung allein startet niemals die 12-V-Last. Temperieren beginnt nur nach einem bewussten `START` über OK-Taster oder Weboberfläche und nur bei gültigen Sensoren, Strommessung, 5-V-Power-Good und erkanntem Becher.
 
 Für den ersten Test ohne 12 V:
 
@@ -32,7 +32,7 @@ Für den ersten Test ohne 12 V:
 2. Den Handy-Hotspot einschalten, die IP auf dem OLED ablesen und `http://<PICO-IP>` öffnen.
 3. OLED, Taster, beide Temperaturen, Lichtwert und Weboberfläche prüfen.
 4. Nicht `START` drücken. Peltier-PWM und beide Richtungsleitungen müssen 0 sein.
-5. Vor dem ersten 12-V-Test Heizrichtung und Stromskalierung gemäß Abschnitt „Kalibrierung“ prüfen.
+5. Vor dem ersten 12-V-Test beide Peltier-Richtungen und die Stromskalierung gemäß Abschnitt „Kalibrierung“ prüfen.
 
 ## Hardware und feste Pinbelegung
 
@@ -57,20 +57,21 @@ TLA2024 an I2C0: AIN0 `PEL1_CS`, AIN1 `PEL2_CS`, AIN2 `LIGHT_ADC`, AIN3 `TEMP_2_
 ## Regelkreis
 
 ```text
-Solltemperatur ──> PI-Regler ──> 0…100 % Heizleistung ──> Peltier / Becher
+Solltemperatur ──> PI-Regler ──> −20…+100 % Stellgröße ──> Peltier / Becher
       ^                                                       │
       └──────── TMP36 <──── gefilterte Isttemperatur <────────┘
 ```
 
-Der Regler berechnet `e = Sollwert - Istwert` alle 250 ms. Der PI-Ausgang wird auf 0…100 % begrenzt; negative Leistung ist unmöglich. Bedingte Integration verhindert Windup an beiden Ausgangsgrenzen. Der wärmere der beiden gültigen TMP36-Werte wird als konservative Regelgröße verwendet. `Kp`, `Ki`, Zykluszeit, Halteband und alle Temperaturgrenzen liegen zentral in `include/config.h`.
+Der Regler berechnet `e = Sollwert - Istwert` alle 250 ms. Positive Stellgrößen heizen, negative Stellgrößen kühlen. Der PI-Ausgang ist asymmetrisch auf −20…+100 % begrenzt; bedingte Integration verhindert Windup an beiden Ausgangsgrenzen. Vor jeder Richtungsumkehr erzwingt der Treiber PWM 0 %, deaktiviert beide Brücken, wartet 10 ms Totzeit und aktiviert die neue Richtung erst danach. Der wärmere der beiden gültigen TMP36-Werte wird als konservative Regelgröße verwendet. `Kp`, `Ki`, Zykluszeit, Halteband, Leistungs- und Temperaturgrenzen liegen zentral in `include/config.h`.
 
 ## Zustandsautomat
 
 | Zustand | Verhalten |
 |---|---|
-| `OFF` / AUS | Heizleistung 0 %, Lasten sicher aus; per MODE dauerhaft wählbar |
-| `READY` / BEREIT | Initialisiert und startbereit, noch keine Heizfreigabe |
+| `OFF` / AUS | Peltierleistung 0 %, Lasten sicher aus; per MODE dauerhaft wählbar |
+| `READY` / BEREIT | Initialisiert und startbereit, noch keine Leistungsfreigabe |
 | `HEATING` / AUFHEIZEN | PI-Regelung aktiv, Sollwert noch nicht erreicht |
+| `COOLING` / KUEHLEN | PI-Regelung aktiv, Istwert liegt über dem Sollwert |
 | `HOLDING` / HALTEN | Sollwert im Halteband; PI liefert nur erforderliche Leistung |
 | `ERROR` / FEHLER | Fehler verriegelt, beide Peltier-Kanäle sofort aus |
 
@@ -79,11 +80,12 @@ UP/DOWN ändern den Sollwert in 0,5-°C-Schritten. OK startet oder stoppt; im Fe
 ## Sicherheitsfunktionen
 
 - Peltier-Ausgänge werden als erste Hardwarefunktion sicher ausgeschaltet.
-- Keine automatische Heizfreigabe und keine Kühlrichtung.
-- Sollwertbereich 20…60 °C; unabhängige Maximaltemperatur 65 °C.
+- Keine automatische Leistungsfreigabe; jede Heiz- oder Kühlfahrt benötigt einen bewussten START.
+- Sollwertbereich 20…60 °C; unabhängige Sicherheitsgrenzen 18…65 °C.
+- Kühlleistung auf 20 % begrenzt, sichere Richtungsumschaltung mit PWM-Aus, 10-ms-Totzeit und 20-µs-Aufwachzeit.
 - ADC-, Temperatur- und Zwei-Sensor-Plausibilitätsprüfung mit Low-Pass-Filter.
-- Verriegeltes `ERROR` bei Sensorfehler, Übertemperatur, Überstrom, unplausibler Strommessung, fehlendem Becher, Ausfall von 5-V-Power-Good während des Heizens oder Lüfterstillstand unter hoher Last. Bei USB-only darf Power-Good fehlen; START bleibt dann gesperrt.
-- Lüfter-Mindestleistung bei aktiver Heizung, lastabhängige Drehzahl und 15 s Nachlauf.
+- Verriegeltes `ERROR` bei Sensorfehler, Über- oder Untertemperatur, Überstrom, unplausibler Strommessung, fehlendem Becher, Ausfall von 5-V-Power-Good während des Temperierens oder Lüfterstillstand unter hoher Last. Bei USB-only darf Power-Good fehlen; START bleibt dann gesperrt.
+- Lüfter-Mindestleistung bei aktivem Peltier, lastabhängige Drehzahl, gesonderte Kühl-Tachoschwelle und 15 s Nachlauf.
 - Hardware-Watchdog mit 3 s Timeout.
 - Keine langen Delays im Hauptprogramm; alle Aufgaben werden per Zeitstempel geplant.
 
@@ -92,8 +94,8 @@ UP/DOWN ändern den Sollwert in 0,5-°C-Schritten. OK startet oder stoppt; im Fe
 Die aktuelle Oberfläche folgt dem Prinzip **Simple Digital Twin** und erklärt das System in dieser Reihenfolge:
 
 1. **Aufbau:** hochwertige, sofort sichtbare Produktvisualisierung auf Basis der gelieferten STEP-Geometrie. **AUSSEN** zeigt das glaubwürdig fertig montierte Gerät mit mattem Gehäuse, tief eingesetztem Becher sowie OLED und vier physischen Tastern in der unteren Frontaussparung. Der echte `S_DETECT`-Wert steuert die Becherdarstellung live: Ohne erkannten Becher bleibt die Aufnahme leer, beim Drücken des Schalters erscheint der Becher in Außenansicht, Innenansicht und Regelkreis. **INNEN** ist bewusst als einfache interaktive Vektorgrafik aufgebaut: zwei kompakte Peltier-Kontakte, zwei TMP36, seitlicher Hebel-Mikroschalter, horizontaler Lüfter, PCB mit Pico W und ADC, befestigter Lichtsensor sowie das mittige Front-OLED bilden klar getrennte Ebenen. Über **GESAMT**, **THERMIK**, **SENSORIK** und **ELEKTRONIK** wird der gewünschte Funktionsbereich hervorgehoben. Bauteile bleiben anklickbar; auf Mobilgeräten stehen Produkt und Legende ohne Callout-Linien untereinander. Die Visualisierung benötigt weder WebGL noch externe Assets.
-2. **Regelkreis und Regleranalyse:** Die linienbasierte Hauptgrafik zeigt SOLL → PI → HEIZEN → BECHER → IST mit sichtbarer Rückführung. Direkt darunter zerlegt eine Live-Grafik den echten PI-Ausgang in P- und I-Anteil, Rohwert, 0–100-%-Begrenzung, Stellgröße und Anti-Windup. Ein zusätzliches browserlokales Zeitdiagramm zeichnet Regelabweichung, P-Anteil, I-Anteil und Stellgröße gemeinsam auf. Aus einer erfassten Heizsession werden t10–90, T63, Überschwingen, Ausregelzeit und letzte Abweichung automatisch berechnet. Der daraus angezeigte PT1-/PT2-Hinweis ist ausdrücklich nur eine Orientierung und ersetzt keinen definierten Identifikationsversuch. Der nicht-live dargestellte P/PI/PID-Vergleich dient ausschließlich der regelungstechnischen Präsentation; die Firmware bleibt ein PI-Regler ohne D-Anteil.
-3. **Live:** eine dominante Isttemperatur, darunter Zustand sowie eine kompakte Zeile für Sollwert, Heizleistung und Lüfter. Es folgt unmittelbar der Verlauf von IST, SOLL und HEIZLEISTUNG; weitere Messreihen sind zunächst eingeklappt.
+2. **Regelkreis und Regleranalyse:** Die linienbasierte Hauptgrafik zeigt SOLL → PI → PELTIER → BECHER → IST mit sichtbarer Rückführung. Direkt darunter zerlegt eine Live-Grafik den echten PI-Ausgang in P- und I-Anteil, Rohwert, asymmetrische −20…+100-%-Begrenzung, Stellgröße und Anti-Windup. Ein zusätzliches browserlokales Zeitdiagramm zeichnet Regelabweichung, P-Anteil, I-Anteil und Stellgröße gemeinsam auf. Aus einer erfassten Temperiersession werden t10–90, T63, Überschwingen, Ausregelzeit und letzte Abweichung automatisch berechnet. Der daraus angezeigte PT1-/PT2-Hinweis ist ausdrücklich nur eine Orientierung und ersetzt keinen definierten Identifikationsversuch. Der nicht-live dargestellte P/PI/PID-Vergleich dient ausschließlich der regelungstechnischen Präsentation; die Firmware bleibt ein PI-Regler ohne D-Anteil.
+3. **Live:** eine dominante Isttemperatur, darunter Zustand sowie eine kompakte Zeile für Sollwert, Peltierleistung mit Richtung und Lüfter. Es folgt unmittelbar der Verlauf von IST, SOLL und signierter PELTIERLEISTUNG; weitere Messreihen sind zunächst eingeklappt.
 4. **Technik:** optionale Details zu GPIO, Messwerten, PI-Parametern, WLAN, IP und Firmwarestatus.
 
 Live-Daten sind ohne Anmeldung lesbar. START und Sollwertänderungen sind zunächst gesperrt. Über **Mit PIN freigeben** wird die Präsentations-PIN `1234` an `POST /api/unlock` gesendet und ausschließlich auf dem Pico geprüft. Bei Erfolg erzeugt der Pico ein zufälliges, flüchtiges Token mit fünf Minuten Gültigkeit. START und Sollwert müssen dieses Token mitsenden; danach gelten unverändert sämtliche Sensor-, Becher-, Versorgungs-, Lüfter-, Strom- und Temperaturfreigaben der Firmware. **STOPP ist aus Sicherheitsgründen jederzeit ohne Token erlaubt**, damit eine abgelaufene Sitzung niemals eine sichere Abschaltung verhindert. Die PIN ist eine lokale Bedienfreigabe im vertrauenswürdigen Präsentationsnetz, keine verschlüsselte Benutzerverwaltung.
@@ -104,7 +106,7 @@ Statusfarben bleiben bewusst sparsam: Orange zeigt Heizenergie, Grün einen best
 
 ### Lokale Designvorschau
 
-`preview.html` direkt im Browser öffnen, um dieselbe Oberfläche ohne Pico und WLAN mit animierten Demo-Daten anzusehen. Die Komponentenliste, die vier Innenmodi und die transparenten Hotspots bleiben interaktiv; Hinzufügen und **Aus Vorschau entfernen** ändern ausschließlich den lokalen Demo-Status. Die Außenansicht verwendet das freigestellte Produkt-Rendering, während die Innenansicht als bewusst reduzierte Vektorgrafik Becher, Heizmodule, Sensoren, Schalter, Lüfter, PCB/Pico, OLED und Lichtsensor klar trennt. Die Szenarien sind standardmäßig verborgen und öffnen sich über **DEMO TOOLS** oder `Alt+D`. Dort öffnen **PC · 1440 × 900** und **HANDY · 390 × 844** außerdem exakte lokale Responsive-Vorschauen in einem eigenen Rahmen. Diese Vorschauwerkzeuge werden in der Produktionsdatei nicht erzeugt; auf Pico, PC und Smartphone reagiert dasselbe Dashboard automatisch auf die reale Bildschirmbreite. Die lokale Vorschau ist sofort bedienbar; START, STOPP und Sollwert verändern ausschließlich den Demo-Zustand und senden niemals Hardware- oder API-Befehle. Der Becher zeigt den thermischen Zustand zusätzlich farblich: Blau bedeutet kalt/bereit (kein aktives Kühlen), Orange Aufheizen, Grün Halten und Rot Fehler. Die echte Pico-Oberfläche behält ihre PIN- und Token-Freigabe vollständig bei.
+`preview.html` direkt im Browser öffnen, um dieselbe Oberfläche ohne Pico und WLAN mit animierten Demo-Daten anzusehen. Die Komponentenliste, die vier Innenmodi und die transparenten Hotspots bleiben interaktiv; Hinzufügen und **Aus Vorschau entfernen** ändern ausschließlich den lokalen Demo-Status. Die Außenansicht verwendet das freigestellte Produkt-Rendering, während die Innenansicht als bewusst reduzierte Vektorgrafik Becher, Peltiermodule, Sensoren, Schalter, Lüfter, PCB/Pico, OLED und Lichtsensor klar trennt. Die Szenarien sind standardmäßig verborgen und öffnen sich über **DEMO TOOLS** oder `Alt+D`; `COOLING` zeigt den begrenzten Kühlbetrieb direkt. Dort öffnen **PC · 1440 × 900** und **HANDY · 390 × 844** außerdem exakte lokale Responsive-Vorschauen in einem eigenen Rahmen. Diese Vorschauwerkzeuge werden in der Produktionsdatei nicht erzeugt; auf Pico, PC und Smartphone reagiert dasselbe Dashboard automatisch auf die reale Bildschirmbreite. Die lokale Vorschau ist sofort bedienbar; START, STOPP und Sollwert verändern ausschließlich den Demo-Zustand und senden niemals Hardware- oder API-Befehle. Der Becher zeigt den thermischen Zustand zusätzlich farblich: Blau bedeutet Kühlen/bereit, Orange Aufheizen, Grün Halten und Rot Fehler. Die echte Pico-Oberfläche behält ihre PIN- und Token-Freigabe vollständig bei.
 
 Die bewährte Render-, API- und Chart-Basis liegt unter `ui-v3/src/`; die V4-Digital-Twin-Schicht liegt getrennt unter `ui-v4/src/`. Die Außenansicht bleibt fertigungsnah, die interaktive Innenansicht ist für bessere Lesbarkeit als einfache technische Vektorgrafik aufgebaut. Die gelieferten technischen STEP-Bilder bleiben als Legacy-Fallback erhalten. `ui/src/` bleibt als jederzeit wiederherstellbare Observatory-V2-Basis im Repository:
 
@@ -145,7 +147,7 @@ python tools/build_ui.py --check
 | `app` | nichtblockierender Scheduler, Integration, State Machine |
 | `controller` | PI-Regler und Anti-Windup |
 | `temperature` | TMP36-Wandlung, Filter, Plausibilität |
-| `peltier` | einzige GPIO/PWM-Abstraktion der Heizkanäle |
+| `peltier` | einzige GPIO/PWM-Abstraktion, Richtungsumschaltung und Leistungsbegrenzung der Thermokanäle |
 | `fan` | PWM, Tacho/RPM |
 | `tla2024`, `current_measurement`, `light_sensor` | externer ADC und Messgrößen |
 | `display` | SSD1306-Statusanzeige |
@@ -174,21 +176,23 @@ Zum Flashen BOOTSEL gedrückt halten, Pico per USB verbinden und `build/temperat
 
 Das ursprüngliche Repository enthielt keine Hardwaredokumente. Deshalb müssen folgende Werte am aufgebauten Board verifiziert werden:
 
-1. Mit strombegrenztem Netzteil und kleiner Leistung bestätigen, dass `PELTIER_HEAT_INA_LEVEL=1` / `INB=0` tatsächlich die Becherplatte erwärmt. Bei falscher Richtung ausschließlich diese beiden Konstanten anpassen – niemals dynamisch umkehren.
-2. `CURRENT_AMPS_PER_VOLT`, `CURRENT_ZERO_V` und `CURRENT_MAX_A` anhand VNH7070-Multisense-Beschaltung und Referenzmessgerät kalibrieren.
-3. Logikpegel von `S_DETECT`, `PG_5V0`, `FAN_CTRL` und `PELx_SEL` gegen Schaltplan/PCB prüfen.
-4. PI-Parameter zunächst mit Wasserlast und konservativem Sollwert (z. B. 35 °C) auf wenig Überschwingen abstimmen.
-5. Lüfter-Tachofaktor und sichere Temperaturgrenze praktisch validieren.
+1. Mit strombegrenztem Netzteil und zunächst höchstens 10 % Leistung bestätigen, dass `INA=1/INB=0` tatsächlich erwärmt und `INA=0/INB=1` tatsächlich abkühlt. Falls die physische Polung vertauscht ist, ausschließlich die zentralen HEAT-/COOL-Konstanten gemeinsam korrigieren.
+2. Den ersten Kühlversuch mit eingesetztem Becher und Wasserlast nur kurz durchführen und prüfen, welche Kontaktseite kalt wird. Dabei auf Kondensation und ausreichende Abwärmeabfuhr achten; die Bechererkennung niemals für diesen Test umgehen.
+3. `CURRENT_AMPS_PER_VOLT`, `CURRENT_ZERO_V` und `CURRENT_MAX_A` anhand VNH7070-Multisense-Beschaltung und Referenzmessgerät für beide Richtungen kalibrieren. SEL0 ist in Heizrichtung auf HSA und in Kühlrichtung auf HSB gelegt.
+4. Logikpegel von `S_DETECT`, `PG_5V0`, `FAN_CTRL` und `PELx_SEL` gegen Schaltplan/PCB prüfen.
+5. PI-Parameter zunächst mit Wasserlast und konservativem Heizsollwert (z. B. 35 °C) abstimmen; Kühlverhalten anschließend separat vermessen.
+6. Lüfter-Tachofaktor und beide sicheren Temperaturgrenzen praktisch validieren.
 
 ## Testablauf
 
 1. USB-only Boot: alle Leistungsausgänge bleiben aus.
 2. Offene/kurzgeschlossene Temperatursensoren: `ERROR`, Peltier aus.
 3. START ohne Becher: keine Freigabe.
-4. STOP aus AUFHEIZEN/HALTEN: PWM sofort 0 %, Lüfternachlauf aktiv.
+4. STOP aus AUFHEIZEN/KUEHLEN/HALTEN: PWM sofort 0 %, beide Richtungsleitungen aus, Lüfternachlauf aktiv.
 5. Mit strombegrenzten 12 V langsam auf 35 °C aufheizen; Ist, Soll, Abweichung und Leistung im Dashboard beobachten.
 6. Lüfter-Tacho unter hoher Leistung trennen: nach Gnadenzeit `ERROR`.
 7. Strom- und Übertemperaturabschaltung mit sicheren, simulierten Messwerten prüfen.
-8. Langzeittest im HALTEN durchführen und PI-Parameter dokumentiert feinabstimmen.
+8. Kühltest bei Sollwert 20 °C mit strombegrenzter Versorgung beginnen; Richtung, Strom, Lüfter, kalte Kontaktseite und Temperaturtrend kontrollieren. Die Firmware begrenzt diesen Betrieb auf 20 %.
+9. Langzeittest im HALTEN durchführen und PI-Parameter dokumentiert feinabstimmen.
 
-Die hostseitigen Tests prüfen Begrenzung, reinen Heizbetrieb und Anti-Windup. GitHub Actions kompiliert zusätzlich die vollständige Pico-W-Firmware mit Warnungsprüfung des Hosttests.
+Die hostseitigen Tests prüfen asymmetrische Heiz-/Kühlbegrenzung, Anti-Windup, LED-Zustände, sichere Richtungsumschaltung sowie die Dashboard-Simulation. GitHub Actions kompiliert zusätzlich die vollständige Pico-W-Firmware mit Warnungsprüfung der Hosttests.

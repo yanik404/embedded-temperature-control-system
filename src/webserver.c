@@ -100,12 +100,22 @@ static const char *error_description(error_code_t error) {
         case ERROR_NONE: return "Keine Fehler erkannt";
         case ERROR_TEMP_SENSOR: return "Temperatursensor fehlerhaft";
         case ERROR_OVERTEMPERATURE: return "Maximale sichere Temperatur ueberschritten";
+        case ERROR_UNDERTEMPERATURE: return "Minimale sichere Temperatur unterschritten";
         case ERROR_FAN: return "Luefterdrehzahl nicht plausibel";
         case ERROR_OVERCURRENT: return "Ueberstrom an einem Peltierkanal";
         case ERROR_CURRENT_SENSOR: return "Strommessung nicht verfuegbar";
         case ERROR_CUP_REMOVED: return "Becher wurde entfernt";
         case ERROR_POWER_SUPPLY: return "5V-Leistungsversorgung fehlt";
         default: return "Unbekannter Systemfehler";
+    }
+}
+
+static const char *thermal_output_name(thermal_output_mode_t mode) {
+    switch (mode) {
+        case THERMAL_OUTPUT_HEATING: return "HEIZEN";
+        case THERMAL_OUTPUT_COOLING: return "KUEHLEN";
+        case THERMAL_OUTPUT_OFF:
+        default: return "AUS";
     }
 }
 
@@ -116,7 +126,8 @@ static bool start_allowed(void) {
 
 static const char *start_block_reason(void) {
     const system_status_t *s = server_config.status;
-    if (s->state == SYSTEM_HEATING || s->state == SYSTEM_HOLDING) return "Heizvorgang ist bereits aktiv";
+    if (s->state == SYSTEM_HEATING || s->state == SYSTEM_COOLING ||
+        s->state == SYSTEM_HOLDING) return "Temperaturregelung ist bereits aktiv";
     if (s->error != ERROR_NONE) return error_description(s->error);
     if (!s->temperature_valid) return "Temperatursensor fehlerhaft";
     if (!s->current_valid) return "Strommessung nicht verfuegbar";
@@ -334,10 +345,12 @@ static void status_json(char *buffer, size_t buffer_size) {
     snprintf(buffer, buffer_size,
         "{\"state\":\"%s\",\"fault\":\"%s\",\"fault_description\":\"%s\","
         "\"temperature\":%.2f,\"temperature1\":%.2f,\"temperature2\":%.2f,"
-        "\"setpoint\":%.2f,\"error\":%.2f,\"power\":%.1f,\"fan_rpm\":%u,\"fan_percent\":%u,"
+        "\"setpoint\":%.2f,\"error\":%.2f,\"power\":%.1f,\"thermal_mode\":\"%s\","
+        "\"fan_rpm\":%u,\"fan_percent\":%u,"
         "\"kp\":%.3f,\"ki\":%.3f,\"p_term\":%.2f,\"i_term\":%.2f,"
         "\"output_limited\":%s,\"anti_windup\":%s,\"control_period_ms\":%u,"
-        "\"max_safe_temperature\":%.1f,\"uptime_ms\":%llu,"
+        "\"min_safe_temperature\":%.1f,\"max_safe_temperature\":%.1f,"
+        "\"max_cooling_power\":%.1f,\"uptime_ms\":%llu,"
         "\"current1\":%.3f,\"current2\":%.3f,\"light_level\":%.3f,"
         "\"sensor_ok\":%s,\"temp1_ok\":%s,\"temp2_ok\":%s,"
         "\"current_ok\":%s,\"current1_ok\":%s,\"current2_ok\":%s,"
@@ -348,12 +361,14 @@ static void status_json(char *buffer, size_t buffer_size) {
         "\"control_unlock_available\":true}",
         system_state_name(s->state), error_name(s->error), error_description(s->error),
         s->temperature_c, s->temperature_1_c, s->temperature_2_c,
-        s->setpoint_c, s->control_error_c, s->peltier_power_percent, s->fan_rpm,
+        s->setpoint_c, s->control_error_c, s->peltier_power_percent,
+        thermal_output_name(s->thermal_output_mode), s->fan_rpm,
         s->fan_percent, PI_KP, PI_KI, s->controller_proportional_percent,
         s->controller_integral_percent,
         s->controller_output_limited ? "true" : "false",
         s->controller_anti_windup_active ? "true" : "false", CONTROL_PERIOD_MS,
-        MAX_SAFE_TEMPERATURE_C, (unsigned long long)to_ms_since_boot(get_absolute_time()),
+        MIN_SAFE_TEMPERATURE_C, MAX_SAFE_TEMPERATURE_C, PELTIER_MAX_COOLING_PERCENT,
+        (unsigned long long)to_ms_since_boot(get_absolute_time()),
         s->peltier_1_current_a, s->peltier_2_current_a, s->light_level,
         s->temperature_valid ? "true" : "false",
         s->temperature_1_valid ? "true" : "false", s->temperature_2_valid ? "true" : "false",

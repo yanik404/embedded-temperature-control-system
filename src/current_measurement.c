@@ -23,6 +23,7 @@ current_reading_t current_measurement_read(void) {
                               reading.channel_2_a >= CURRENT_PLAUSIBLE_MIN_A &&
                               reading.channel_2_a <= CURRENT_PLAUSIBLE_MAX_A;
     reading.valid = reading.channel_1_valid && reading.channel_2_valid;
-    reading.overcurrent = reading.channel_1_a > CURRENT_MAX_A || reading.channel_2_a > CURRENT_MAX_A;
+    reading.overcurrent = fabsf(reading.channel_1_a) > CURRENT_MAX_A ||
+                          fabsf(reading.channel_2_a) > CURRENT_MAX_A;
     return reading;
 }

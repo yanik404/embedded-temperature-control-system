@@ -14,6 +14,13 @@ void controller_init(pi_controller_t *controller, float kp, float ki) {
     controller->output_max = 100.0f;
 }
 
+void controller_set_output_limits(pi_controller_t *controller, float output_min, float output_max) {
+    if (controller == 0 || output_min >= output_max) return;
+    controller->output_min = output_min;
+    controller->output_max = output_max;
+    controller->integral = clampf(controller->integral, output_min, output_max);
+}
+
 void controller_reset(pi_controller_t *controller) {
     controller->integral = 0.0f;
 }
@@ -33,4 +40,3 @@ float controller_update(pi_controller_t *controller, float setpoint, float measu
     return clampf(proportional + controller->integral,
                   controller->output_min, controller->output_max);
 }
-

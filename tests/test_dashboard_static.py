@@ -32,7 +32,7 @@ for element_id in ("aufbau","regelkreis","live","technik","productIllustration",
     assert element_id in production_ids,f"missing interface element: {element_id}"
 for token in ("/api/status","/api/unlock",'command("start",true)','command("stop",false)',"setpoint?value=",'body:token?"token="+encodeURIComponent(token):""',"Steuerung gesperrt","Technische Details","Mehr Messwerte"):
     assert token in production,f"missing dashboard behavior: {token}"
-for scenario in ("full-system","minimal-system","partial-hardware","no-sensors","ready","heating","holding","error","disconnect","recovery","sensor-error","fan-error","power-error","demo30"):
+for scenario in ("full-system","minimal-system","partial-hardware","no-sensors","ready","heating","cooling","holding","error","disconnect","recovery","sensor-error","fan-error","power-error","demo30"):
     assert f'data-scenario="{scenario}"' in preview
 assert "data-scenario=" not in production
 assert '<div class="preview-tools">' in preview and '<div class="preview-tools">' not in production

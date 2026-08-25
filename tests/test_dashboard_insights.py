@@ -132,7 +132,7 @@ with tempfile.TemporaryDirectory(prefix="becherhalter-insights-", ignore_cleanup
 
         colour_expression = """(()=>{
           const colours={};
-          for(const scenario of ['ready','heating','holding','error']){
+          for(const scenario of ['ready','heating','cooling','holding','error']){
             PreviewDriver.apply(scenario);
             colours[scenario]=getComputedStyle(document.body).getPropertyValue('--cup-state-color').trim();
           }
@@ -142,7 +142,28 @@ with tempfile.TemporaryDirectory(prefix="becherhalter-insights-", ignore_cleanup
         colours = cdp.call("Runtime.evaluate", {"expression": colour_expression,
                                                   "returnByValue": True})["result"]["value"]
         assert colours == {"ready": "#76aec4", "heating": "#ed8549",
-                           "holding": "#71c393", "error": "#eb6868"}, colours
+                           "cooling": "#67bde0", "holding": "#71c393",
+                           "error": "#eb6868"}, colours
+
+        cooling_expression = """new Promise(resolve=>{
+          PreviewDriver.apply('ready');
+          const input=document.getElementById('targetInput');input.value='20,0';input.dispatchEvent(new Event('input'));
+          document.getElementById('setpointButton').click();setTimeout(()=>{
+            document.getElementById('startButton').click();setTimeout(()=>resolve({
+              state:document.body.dataset.state,label:document.getElementById('systemState').textContent,
+              target:V3UI.runtime.current.setpoint,power:V3UI.runtime.current.power,
+              peltier:document.getElementById('loopPeltierState').textContent,
+              cup:getComputedStyle(document.body).getPropertyValue('--cup-state-color').trim()
+            }),250);
+          },100);
+        })"""
+        cooling = cdp.call("Runtime.evaluate", {"expression": cooling_expression, "awaitPromise": True,
+                                                  "returnByValue": True})["result"]["value"]
+        assert cooling["state"] == "KUEHLEN" and cooling["label"] == "KÜHLEN", cooling
+        assert cooling["target"] == 20 and -20 <= cooling["power"] < 0, cooling
+        assert cooling["peltier"] == "AKTIV · KÜHLEN" and cooling["cup"] == "#67bde0", cooling
+
+        cdp.call("Runtime.evaluate", {"expression": "PreviewDriver.apply('ready')"})
 
         cup_expression = """new Promise(resolve=>{
           PreviewDriver.setCup(false);

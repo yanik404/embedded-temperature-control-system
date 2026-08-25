@@ -112,7 +112,15 @@ void display_update(const system_status_t *status) {
         if (status->state == SYSTEM_ERROR) {
             text_at(8, 4, error_name(status->error));
         } else {
-            snprintf(line, sizeof(line), "LEISTUNG: %3.0F %%", status->peltier_power_percent);
+            const char *direction = status->thermal_output_mode == THERMAL_OUTPUT_COOLING
+                                        ? "KUEHL"
+                                        : (status->thermal_output_mode == THERMAL_OUTPUT_HEATING
+                                               ? "HEIZ" : "AUS");
+            snprintf(line, sizeof(line), "%s: %3.0F %%", direction,
+                     status->thermal_output_mode == THERMAL_OUTPUT_OFF
+                         ? 0.0f : (status->peltier_power_percent < 0.0f
+                                       ? -status->peltier_power_percent
+                                       : status->peltier_power_percent));
             text_at(8, 4, line);
             snprintf(line, sizeof(line), "FAN: %4u RPM", (unsigned)status->fan_rpm);
             text_at(8, 5, line);

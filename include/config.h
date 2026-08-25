@@ -55,6 +55,7 @@
 #define SETPOINT_MAX_C              60.0f
 #define SETPOINT_DEFAULT_C          45.0f
 #define MAX_SAFE_TEMPERATURE_C      65.0f
+#define MIN_SAFE_TEMPERATURE_C      18.0f
 #define SENSOR_MIN_C                -10.0f
 #define SENSOR_MAX_C                90.0f
 #define TMP36_OFFSET_V              0.500f
@@ -62,12 +63,15 @@
 #define ADC_REFERENCE_V             3.300f
 #define TEMPERATURE_FILTER_ALPHA    0.18f
 
-/* Controller parameters. Output is percent. */
+/* Controller parameters. Positive output heats, negative output cools. */
 #define CONTROL_PERIOD_MS           250u
 #define PI_KP                       8.0f
 #define PI_KI                       0.12f
 #define HOLDING_ENTER_BAND_C        0.4f
 #define HOLDING_EXIT_BAND_C         1.0f
+#define PELTIER_MAX_HEATING_PERCENT 100.0f
+#define PELTIER_MAX_COOLING_PERCENT 20.0f
+#define PELTIER_OUTPUT_DEADBAND_PERCENT 1.0f
 
 #define PELTIER_PWM_HZ              20000u
 #define FAN_PWM_HZ                  25000u
@@ -75,6 +79,7 @@
 #define FAN_RUN_ON_MS               15000u
 #define FAN_TACH_PULSES_PER_REV     2u
 #define FAN_FAULT_POWER_PERCENT     40u
+#define FAN_FAULT_COOLING_POWER_PERCENT 15u
 #define FAN_FAULT_GRACE_MS          8000u
 #define FAN_MIN_VALID_RPM           250u
 
@@ -92,6 +97,16 @@
 #define SENSOR_PERIOD_MS            200u
 #define WEB_STATUS_PERIOD_MS        500u
 
-/* VNH7070 direction used exclusively for heating. Verify once on first 12 V test. */
+/*
+ * VNH7070 full-bridge directions. The physical heat/cool assignment must be
+ * confirmed once on the assembled PCB with a current-limited 12 V supply.
+ * SEL0 selects the conducting high-side current-sense channel (HSA or HSB).
+ */
 #define PELTIER_HEAT_INA_LEVEL      1
 #define PELTIER_HEAT_INB_LEVEL      0
+#define PELTIER_HEAT_SEL_LEVEL      1
+#define PELTIER_COOL_INA_LEVEL      0
+#define PELTIER_COOL_INB_LEVEL      1
+#define PELTIER_COOL_SEL_LEVEL      0
+#define PELTIER_DIRECTION_DEADTIME_MS 10u
+#define PELTIER_WAKE_DELAY_US       20u
