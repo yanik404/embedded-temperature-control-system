@@ -144,6 +144,34 @@ with tempfile.TemporaryDirectory(prefix="becherhalter-insights-", ignore_cleanup
         assert colours == {"ready": "#76aec4", "heating": "#ed8549",
                            "holding": "#71c393", "error": "#eb6868"}, colours
 
+        cup_expression = """new Promise(resolve=>{
+          PreviewDriver.setCup(false);
+          setTimeout(()=>{
+            const absent={dataset:document.body.dataset.cup,
+              empty:getComputedStyle(document.querySelector('.product-v3-empty-holder')).opacity,
+              exterior:getComputedStyle(document.querySelector('.product-v3-cup-state')).opacity,
+              cutaway:getComputedStyle(document.querySelector('.cutaway-live-cup')).opacity,
+              loop:getComputedStyle(document.querySelector('.loop-product')).opacity,
+              label:document.getElementById('plantState').textContent,
+              start:document.getElementById('startButton').disabled,
+              reason:document.getElementById('startBlockReason').textContent};
+            PreviewDriver.setCup(true);
+            setTimeout(()=>resolve({absent,present:{dataset:document.body.dataset.cup,
+              empty:getComputedStyle(document.querySelector('.product-v3-empty-holder')).opacity,
+              exterior:getComputedStyle(document.querySelector('.product-v3-cup-state')).opacity,
+              cutaway:getComputedStyle(document.querySelector('.cutaway-live-cup')).opacity,
+              loop:getComputedStyle(document.querySelector('.loop-product')).opacity,
+              start:document.getElementById('startButton').disabled}}),550);
+          },550);
+        })"""
+        cup = cdp.call("Runtime.evaluate", {"expression": cup_expression, "awaitPromise": True,
+                                             "returnByValue": True})["result"]["value"]
+        assert cup["absent"] == {"dataset": "absent", "empty": "1", "exterior": "0",
+                                  "cutaway": "0", "loop": "0.22", "label": "Kein Becher erkannt",
+                                  "start": True, "reason": "Kein Becher erkannt"}, cup
+        assert cup["present"] == {"dataset": "present", "empty": "0", "exterior": "1",
+                                   "cutaway": "1", "loop": "1", "start": False}, cup
+
         viewport_expression = """new Promise(resolve=>{
           PreviewDriver.openViewport('mobile');setTimeout(()=>{
             const dialog=document.querySelector('.preview-viewport-dialog');
@@ -164,4 +192,4 @@ with tempfile.TemporaryDirectory(prefix="becherhalter-insights-", ignore_cleanup
         except subprocess.TimeoutExpired:
             process.terminate()
 
-print("dashboard insight checks passed: persistent setpoint controls, state colours, metrics and recovery")
+print("dashboard insight checks passed: controls, live cup presence, state colours, metrics and recovery")

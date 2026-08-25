@@ -36,10 +36,14 @@ assert '<svg class="product-illustration product-v3-illustration product-step-re
 assert 'id="product-v3"' in exterior
 assert 'class="product-v3-cup-state"' in exterior
 assert 'class="product-v3-liquid-tint"' in exterior
+assert 'class="product-v3-empty-holder"' in exterior
 assert 'class="cutaway-cup-state-tint"' in cutaway
+assert 'class="cutaway-live-cup"' in cutaway
 for state in ('data-state="AUFHEIZEN"', 'data-state="HALTEN"', 'data-state="FEHLER"'):
     assert state in css
 assert "--cup-state-color" in css and "blue means cold/ready" in css
+assert 'data-cup="present"' in css and "S_DETECT value controls cup presence" in css
+assert "document.body.dataset.cup" in script
 assert "data-part=" not in exterior and "data-focus=" not in exterior and "data-callout-anchor=" not in exterior
 
 # The rebuilt interior is intentionally a compact, self-contained vector. Each

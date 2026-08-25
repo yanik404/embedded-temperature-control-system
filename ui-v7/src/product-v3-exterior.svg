@@ -1,7 +1,19 @@
 <svg class="product-illustration product-v3-illustration product-step-render" id="productIllustration" viewBox="0 0 955 1100" role="img" aria-labelledby="productExteriorTitle productExteriorDescription" xmlns="http://www.w3.org/2000/svg">
  <title id="productExteriorTitle">ThermoCup MK I als fertiges Produkt</title>
  <desc id="productExteriorDescription">Fotorealistische Außenansicht der geschlossenen STEP-Gehäusegeometrie mit Peltierkontakt auf Becherhöhe sowie OLED und vier physischen Tastern in der unteren Frontaussparung.</desc>
+ <defs>
+  <radialGradient id="product-v3-empty-socket" cx="50%" cy="42%" r="68%">
+   <stop offset="0" stop-color="#090c0a"/>
+   <stop offset=".72" stop-color="#171c19"/>
+   <stop offset="1" stop-color="#3b423e"/>
+  </radialGradient>
+ </defs>
  <g id="product-v3"><image href="__PRODUCT_EXTERIOR__" x="0" y="0" width="955" height="1100" preserveAspectRatio="xMidYMid meet"/></g>
+ <g class="product-v3-empty-holder" aria-hidden="true" pointer-events="none">
+  <ellipse cx="523" cy="164" rx="171" ry="49" fill="url(#product-v3-empty-socket)"/>
+  <ellipse cx="523" cy="164" rx="169" ry="47" fill="none" stroke="#6f7872" stroke-width="3" opacity=".72"/>
+  <ellipse cx="523" cy="169" rx="137" ry="34" fill="#070908" opacity=".72"/>
+ </g>
  <g class="product-v3-cup-state" aria-hidden="true" pointer-events="none">
   <ellipse class="product-v3-liquid-tint" cx="523" cy="164" rx="169" ry="47"/>
   <ellipse class="product-v3-liquid-rim" cx="523" cy="164" rx="169" ry="47" fill="none" stroke-width="3"/>
