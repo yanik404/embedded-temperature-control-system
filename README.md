@@ -75,7 +75,7 @@ Der Regler berechnet `e = Sollwert - Istwert` alle 250 ms. Positive Stellgröße
 | `HOLDING` / HALTEN | Sollwert im Halteband; PI liefert nur erforderliche Leistung |
 | `ERROR` / FEHLER | Fehler verriegelt, beide Peltier-Kanäle sofort aus |
 
-UP/DOWN ändern den Sollwert in 0,5-°C-Schritten. OK startet oder stoppt; im Fehlerzustand quittiert OK wie STOP, ein weiterhin vorhandener Fehler wird sofort erneut erkannt. MODE schaltet im inaktiven Betrieb zwischen AUS und BEREIT. `S_DETECT` wird als sicherheitsrelevante Bechererkennung asymmetrisch entprellt: Einsetzen muss 100 ms stabil sein, Entfernen 50 ms. Die elektrische Aktivität ist zentral mit `CUP_DETECT_ACTIVE_LEVEL` konfiguriert (aktuell active-low). USB-Serial meldet den rohen GP13-Pegel und jeden stabilen Zustandswechsel, sodass NO-/NC-Verdrahtung am realen Mikroschalter eindeutig geprüft werden kann.
+UP/DOWN ändern den Sollwert in 0,5-°C-Schritten. OK startet oder stoppt; im Fehlerzustand quittiert OK wie STOP, ein weiterhin vorhandener Fehler wird sofort erneut erkannt. MODE schaltet im inaktiven Betrieb zwischen AUS und BEREIT. `S_DETECT` wird als sicherheitsrelevante Bechererkennung asymmetrisch entprellt: Einsetzen muss 100 ms stabil sein, Entfernen 50 ms. Die elektrische Aktivität ist zentral mit `CUP_DETECT_ACTIVE_LEVEL` konfiguriert und entspricht der real gemessenen active-high-Verdrahtung: ungedrückt `GP13 = 0`, gedrückt `GP13 = 1`; der Eingang verwendet deshalb einen Pull-down. USB-Serial meldet den rohen GP13-Pegel und jeden stabilen Zustandswechsel.
 
 ## Sicherheitsfunktionen
 

@@ -35,7 +35,11 @@ void buttons_init(void) {
     }
     gpio_init(PIN_S_DETECT);
     gpio_set_dir(PIN_S_DETECT, GPIO_IN);
+#if CUP_DETECT_ACTIVE_LEVEL
+    gpio_pull_down(PIN_S_DETECT);
+#else
     gpio_pull_up(PIN_S_DETECT);
+#endif
     cup_raw_level = gpio_get(PIN_S_DETECT);
     cup_detector_init(&cup_detector, cup_raw_level, CUP_DETECT_ACTIVE_LEVEL != 0u, now_ms());
     printf("[DETECT] Initialisierung: GP13 raw=%u, aktiv=%u, Becherpruefung laeuft\n",

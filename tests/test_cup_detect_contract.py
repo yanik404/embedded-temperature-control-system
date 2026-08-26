@@ -19,12 +19,13 @@ display = (ROOT / "src" / "display.c").read_text(encoding="utf-8")
 dashboard = (ROOT / "ui-v3" / "src" / "experience.js").read_text(encoding="utf-8")
 
 for token in (
-    "CUP_DETECT_ACTIVE_LEVEL     0u",
+    "CUP_DETECT_ACTIVE_LEVEL     1u",
     "CUP_DETECT_INSERT_MS        100u",
     "CUP_DETECT_REMOVE_MS        50u",
 ):
     assert token in config
 assert "cup_detector_update" in buttons and "buttons_cup_raw_level" in buttons
+assert "gpio_pull_down(PIN_S_DETECT)" in buttons
 assert "[DETECT] GP13 raw=" in buttons and "[DETECT] Stabil:" in buttons
 assert "status.cup_detected = buttons_cup_detected();" in app
 assert "status.cup_switch_raw = buttons_cup_raw_level();" in app

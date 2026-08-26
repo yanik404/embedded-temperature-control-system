@@ -231,11 +231,11 @@ with tempfile.TemporaryDirectory(prefix="becherhalter-insights-", ignore_cleanup
         cup = cdp.call("Runtime.evaluate", {"expression": cup_expression, "awaitPromise": True,
                                              "returnByValue": True})["result"]["value"]
         assert cup["absent"] == {"dataset": "absent", "state": "AUS", "badge": "BECHER FEHLT", "badgeStatus": "absent",
-                                  "signal": "S_DETECT · GP13 RAW 1", "empty": "1", "exterior": "0",
+                                  "signal": "S_DETECT · GP13 RAW 0", "empty": "1", "exterior": "0",
                                   "cutaway": "0", "loop": "0.22", "label": "Kein Becher erkannt",
                                   "start": True, "reason": "Kein Becher erkannt"}, cup
         assert cup["present"] == {"dataset": "present", "state": "BEREIT", "badge": "BECHER ERKANNT", "badgeStatus": "present",
-                                   "signal": "S_DETECT · GP13 RAW 0", "empty": "0", "exterior": "1",
+                                   "signal": "S_DETECT · GP13 RAW 1", "empty": "0", "exterior": "1",
                                    "cutaway": "1", "loop": "1", "start": False}, cup
 
         removal_expression = """new Promise(resolve=>{
