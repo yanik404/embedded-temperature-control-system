@@ -43,7 +43,7 @@
  </section>
 
  <section class="page-section loop-section" id="regelkreis" aria-labelledby="loopTitle">
-  <header class="section-heading"><span>02</span><div><p>GESCHLOSSENER REGELKREIS</p><h2 id="loopTitle">Vom Sollwert zurück zum Istwert.</h2><small>Jede Station zeigt den zugehörigen Live-Wert. Die Rückführung schließt den Kreis.</small></div></header>
+  <header class="section-heading"><span>02</span><div><p>GESCHLOSSENER REGELKREIS</p><h2 id="loopTitle">Vom Sollwert zum Istwert – und zurück.</h2><small>Jede Station zeigt den zugehörigen Live-Wert. Die Rückführung schließt den Kreis.</small></div></header>
   <div class="simple-loop" id="simpleLoop">
    <div class="loop-step setpoint-step"><em id="loopSetpoint">—</em><strong>SOLLWERT</strong><small>w(t)</small></div>
    <div class="loop-connector compare-connector"><i class="flow-arrow"></i><span><b aria-hidden="true">Σ</b><em id="loopDeviation">—</em><small>Regelabweichung e(t)</small></span></div>
@@ -54,7 +54,7 @@
    <div class="loop-step plant-step"><svg class="loop-product" viewBox="0 0 92 55" aria-hidden="true"><path class="loop-cup" d="M28 5h36l-4 37c-1 8-7 11-14 11s-13-3-14-11Z"/><path class="loop-rim" d="M27 5c0-5 38-5 38 0s-38 5-38 0"/></svg><strong>BECHER</strong><small>Regelstrecke · G(s)</small><i id="plantState">Regelstrecke</i></div>
    <div class="loop-connector sensor-connector"><i class="flow-arrow"></i><svg class="loop-sensor" viewBox="0 0 34 45" aria-hidden="true"><path d="M6 18V8a11 11 0 0 1 22 0v10Z"/><path d="M10 18v26m7-26v26m7-26v26"/></svg></div>
    <div class="loop-step sensor-step"><em id="loopSensor">—</em><strong>SENSOR / IST</strong><small>y(t)</small></div>
-   <div class="feedback-route"><span>RÜCKFÜHRUNG · y(t)</span></div>
+    <div class="feedback-route"><span>RÜCKFÜHRUNG · − y(t)</span></div>
   </div>
   <section class="control-analysis" id="controllerAnalysis" aria-labelledby="analysisTitle">
    <header class="analysis-heading"><div><small>REGLERANALYSE</small><h3 id="analysisTitle">Was der PI-Regler intern macht.</h3><p>Echte Live-Werte werden von erklärenden Modell- und Vergleichsgrafiken klar getrennt.</p></div><span class="analysis-truth"><i></i>LIVE + ERKLÄRMODELL</span></header>

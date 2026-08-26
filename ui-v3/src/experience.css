@@ -90,3 +90,11 @@ body[data-state] .analysis-limiter.limited{border-color:var(--state);box-shadow:
 body[data-state] .step-progress>i{background:linear-gradient(90deg,var(--blue),var(--state))}
 body[data-state] .step-progress li.done:before{border-color:var(--state);background:var(--state);box-shadow:0 0 10px var(--cup-state-glow)}
 body[data-state="AUFHEIZEN"] .flow-arrow,body[data-state="KUEHLEN"] .flow-arrow,body[data-state="HALTEN"] .flow-arrow{background:linear-gradient(90deg,#646a65 15%,var(--state) 50%,#646a65 85%);background-size:250% 100%;animation:flow 5s linear infinite}
+
+/* The measured value returns to the summing junction, not to the setpoint.
+   Its neutral signal colour remains independent from the cooling accent. */
+:root{--feedback:#8a9590}
+.feedback-route{left:18.5%;right:5.6%;bottom:44px;height:145px;border-color:var(--feedback);opacity:.82}
+.feedback-route:before{border-color:var(--feedback)}
+.feedback-route span{color:var(--feedback)}
+@media(max-width:900px){.simple-loop{grid-template-columns:1fr;max-width:470px;margin-top:54px;padding:0 45px 34px}.loop-step{min-height:112px}.loop-connector{width:1px;height:38px;justify-self:center}.loop-connector>.flow-arrow{width:1px;height:100%}.feedback-route{left:50%;right:9px;top:109px;bottom:48px;width:auto;height:auto}.feedback-route span{right:-28px;font-size:8px}}

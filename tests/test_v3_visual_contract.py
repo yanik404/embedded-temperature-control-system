@@ -94,6 +94,13 @@ assert "loop-product" in source and "loop-heater" in source and "loop-sensor" in
 assert 'draw("target","validTarget","#d8ddd6",0,60,[7,6])' in script
 assert 'draw("power","validPower",powerColor,-20,100)' in script
 assert ".loop-section{min-height:780px" in css and "loop-connector" in source
+assert "--feedback:#8a9590" in css
+assert "RÜCKFÜHRUNG · − y(t)" in source
+assert "Vom Sollwert zum Istwert – und zurück." in source
+assert ".feedback-route{left:18.5%;right:5.6%;bottom:44px;height:145px" in css
+assert ".feedback-route:before{border-color:var(--feedback)}" in css
+assert "grid-template-columns:1fr;max-width:470px" in css
+assert "left:50%;right:9px;top:109px;bottom:48px" in css
 assert "callout-lines" in css
 assert "position:fixed" not in css[css.index(".product-section"):css.index(".loop-section")]
 assert 'fetchWithTimeout("/api/unlock"' in production and 'method:"POST"' in production
