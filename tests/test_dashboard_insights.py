@@ -134,16 +134,31 @@ with tempfile.TemporaryDirectory(prefix="becherhalter-insights-", ignore_cleanup
           const colours={};
           for(const scenario of ['ready','heating','cooling','holding','error']){
             PreviewDriver.apply(scenario);
-            colours[scenario]=getComputedStyle(document.body).getPropertyValue('--cup-state-color').trim();
+            colours[scenario]={
+              cup:getComputedStyle(document.body).getPropertyValue('--cup-state-color').trim(),
+              loop:getComputedStyle(document.querySelector('.heat-step strong')).color,
+              analysis:getComputedStyle(document.querySelector('.analysis-heading small')).color,
+              metric:getComputedStyle(document.querySelector('.hero-metrics dl div:nth-child(3) dd')).color,
+              livePower:getComputedStyle(document.getElementById('powerOutput')).color,
+              activeBorder:getComputedStyle(document.querySelector('.timeline-layer button.active')).borderTopColor
+            };
           }
           PreviewDriver.apply('ready');
           return colours;
         })()"""
         colours = cdp.call("Runtime.evaluate", {"expression": colour_expression,
                                                   "returnByValue": True})["result"]["value"]
-        assert colours == {"ready": "#76aec4", "heating": "#ed8549",
-                           "cooling": "#67bde0", "holding": "#71c393",
-                           "error": "#eb6868"}, colours
+        expected_accents = {
+            "ready": ("#76aec4", "rgb(118, 174, 196)"),
+            "heating": ("#ed8549", "rgb(237, 133, 73)"),
+            "cooling": ("#67bde0", "rgb(118, 174, 196)"),
+            "holding": ("#71c393", "rgb(113, 195, 147)"),
+            "error": ("#eb6868", "rgb(235, 104, 104)"),
+        }
+        for state, (cup, accent) in expected_accents.items():
+            assert colours[state]["cup"] == cup, colours
+            assert all(colours[state][key] == accent for key in
+                       ("loop", "analysis", "metric", "livePower", "activeBorder")), colours
 
         cooling_expression = """new Promise(resolve=>{
           PreviewDriver.apply('ready');

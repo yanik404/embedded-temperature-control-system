@@ -80,3 +80,13 @@ body{--cup-state-color:#76aec4;--cup-state-glow:#76aec488}body[data-state="AUFHE
 
 /* Bidirectional thermal state overrides. */
 body[data-state="KUEHLEN"]{--state:var(--blue);--cup-state-color:#67bde0;--cup-state-glow:#67bde099}body[data-state="KUEHLEN"] .flow-arrow{background:linear-gradient(90deg,#646a65 15%,var(--blue) 50%,#646a65 85%);background-size:250% 100%;animation:flow 5s linear infinite}body[data-state="KUEHLEN"] .heat-step strong,body[data-state="KUEHLEN"] .output-signal strong{color:var(--blue)}.controller-meters u[data-sign="negative"]{background:var(--blue)}
+
+/* Live thermal accents follow the operating state. Fixed chart-series,
+   warning and safety colours deliberately keep their semantic identity. */
+body[data-state] .site-header nav a:hover,body[data-state] .site-header nav a:focus-visible{border-color:var(--state)}
+body[data-state] .loop-section .section-heading p,body[data-state] .heat-step em,body[data-state] .heat-step strong,body[data-state] .hero-metrics dl div:nth-child(3) dd,body[data-state] #powerOutput,body[data-state] .output-connector em,body[data-state] .analysis-heading small,body[data-state] .pi-formula,body[data-state] .p-signal strong,body[data-state] .output-signal strong,body[data-state] .analysis-limiter strong,body[data-state] .analysis-limiter.limited span,body[data-state] .model-block strong,body[data-state] .order-options .selected b,body[data-state] .order-options .selected em,body[data-state] .structure-order strong,body[data-state] .step-response-metrics .model-result dd,body[data-state] .step-response-card[data-stage="running"]>header>b{color:var(--state)}
+body[data-state] .timeline-layer button.active,body[data-state].presentation-mode .header-actions>button{border-color:var(--state);color:var(--state)}
+body[data-state] .analysis-limiter.limited{border-color:var(--state);box-shadow:inset 0 0 22px var(--cup-state-glow)}
+body[data-state] .step-progress>i{background:linear-gradient(90deg,var(--blue),var(--state))}
+body[data-state] .step-progress li.done:before{border-color:var(--state);background:var(--state);box-shadow:0 0 10px var(--cup-state-glow)}
+body[data-state="AUFHEIZEN"] .flow-arrow,body[data-state="KUEHLEN"] .flow-arrow,body[data-state="HALTEN"] .flow-arrow{background:linear-gradient(90deg,#646a65 15%,var(--state) 50%,#646a65 85%);background-size:250% 100%;animation:flow 5s linear infinite}

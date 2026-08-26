@@ -1,11 +1,11 @@
 {
   "external_library_bytes": 0,
   "history_max_seconds": 1800,
-  "preview_bytes": 310938,
+  "preview_bytes": 312746,
   "product_rendering": "photoreal_exterior_with_simple_vector_cutaway",
-  "production_bytes": 285422,
-  "production_css_bytes": 70695,
-  "production_gzip_bytes_theoretical": 127547,
+  "production_bytes": 287049,
+  "production_css_bytes": 72322,
+  "production_gzip_bytes_theoretical": 127754,
   "production_javascript_bytes": 69050,
   "runtime_http_requests_for_assets": 0,
   "webgl_draw_calls_per_frame": 0
