@@ -91,6 +91,9 @@
 #define CURRENT_PLAUSIBLE_MAX_A     12.0f
 
 #define BUTTON_DEBOUNCE_MS          30u
+#define CUP_DETECT_ACTIVE_LEVEL     0u
+#define CUP_DETECT_INSERT_MS        100u
+#define CUP_DETECT_REMOVE_MS        50u
 #define LIGHT_DARK_THRESHOLD        0.18f
 #define DISPLAY_PERIOD_MS           350u
 #define STATUS_LED_PERIOD_MS         50u

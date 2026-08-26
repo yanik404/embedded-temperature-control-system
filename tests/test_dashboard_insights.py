@@ -204,6 +204,10 @@ with tempfile.TemporaryDirectory(prefix="becherhalter-insights-", ignore_cleanup
           PreviewDriver.setCup(false);
           setTimeout(()=>{
             const absent={dataset:document.body.dataset.cup,
+              state:document.body.dataset.state,
+              badge:document.getElementById('cupPresenceTitle').textContent,
+              badgeStatus:document.getElementById('cupPresence').dataset.status,
+              signal:document.getElementById('cupPresenceSignal').textContent,
               empty:getComputedStyle(document.querySelector('.product-v3-empty-holder')).opacity,
               exterior:getComputedStyle(document.querySelector('.product-v3-cup-state')).opacity,
               cutaway:getComputedStyle(document.querySelector('.cutaway-live-cup')).opacity,
@@ -213,6 +217,10 @@ with tempfile.TemporaryDirectory(prefix="becherhalter-insights-", ignore_cleanup
               reason:document.getElementById('startBlockReason').textContent};
             PreviewDriver.setCup(true);
             setTimeout(()=>resolve({absent,present:{dataset:document.body.dataset.cup,
+              state:document.body.dataset.state,
+              badge:document.getElementById('cupPresenceTitle').textContent,
+              badgeStatus:document.getElementById('cupPresence').dataset.status,
+              signal:document.getElementById('cupPresenceSignal').textContent,
               empty:getComputedStyle(document.querySelector('.product-v3-empty-holder')).opacity,
               exterior:getComputedStyle(document.querySelector('.product-v3-cup-state')).opacity,
               cutaway:getComputedStyle(document.querySelector('.cutaway-live-cup')).opacity,
@@ -222,11 +230,38 @@ with tempfile.TemporaryDirectory(prefix="becherhalter-insights-", ignore_cleanup
         })"""
         cup = cdp.call("Runtime.evaluate", {"expression": cup_expression, "awaitPromise": True,
                                              "returnByValue": True})["result"]["value"]
-        assert cup["absent"] == {"dataset": "absent", "empty": "1", "exterior": "0",
+        assert cup["absent"] == {"dataset": "absent", "state": "AUS", "badge": "BECHER FEHLT", "badgeStatus": "absent",
+                                  "signal": "S_DETECT · GP13 RAW 1", "empty": "1", "exterior": "0",
                                   "cutaway": "0", "loop": "0.22", "label": "Kein Becher erkannt",
                                   "start": True, "reason": "Kein Becher erkannt"}, cup
-        assert cup["present"] == {"dataset": "present", "empty": "0", "exterior": "1",
+        assert cup["present"] == {"dataset": "present", "state": "BEREIT", "badge": "BECHER ERKANNT", "badgeStatus": "present",
+                                   "signal": "S_DETECT · GP13 RAW 0", "empty": "0", "exterior": "1",
                                    "cutaway": "1", "loop": "1", "start": False}, cup
+
+        removal_expression = """new Promise(resolve=>{
+          PreviewDriver.apply('heating');PreviewDriver.setCup(false);setTimeout(()=>resolve({
+            state:document.body.dataset.state,fault:document.getElementById('cupPresenceTitle').textContent,
+            power:V3UI.runtime.current.power,start:document.getElementById('startButton').disabled,
+            reason:document.getElementById('safetyReason').textContent
+          }),250);
+        })"""
+        removal = cdp.call("Runtime.evaluate", {"expression": removal_expression, "awaitPromise": True,
+                                                  "returnByValue": True})["result"]["value"]
+        assert removal["state"] == "FEHLER" and removal["fault"] == "BECHER ENTFERNT", removal
+        assert removal["power"] == 0 and removal["start"] and "Becher" in removal["reason"], removal
+
+        cup_guard_expression = """new Promise(resolve=>{
+          PreviewDriver.command('stop',false);const stopped={state:document.body.dataset.state,
+            allowed:V3UI.runtime.current.start_allowed,power:V3UI.runtime.current.power};
+          const accepted=PreviewDriver.command('start','preview-session');setTimeout(()=>resolve({stopped,accepted,
+            state:document.body.dataset.state,power:V3UI.runtime.current.power,
+            reason:document.getElementById('startBlockReason').textContent}),80);
+        })"""
+        cup_guard = cdp.call("Runtime.evaluate", {"expression": cup_guard_expression, "awaitPromise": True,
+                                                   "returnByValue": True})["result"]["value"]
+        assert cup_guard["stopped"] == {"state": "AUS", "allowed": False, "power": 0}, cup_guard
+        assert not cup_guard["accepted"] and cup_guard["state"] == "AUS" and cup_guard["power"] == 0, cup_guard
+        assert "Becher" in cup_guard["reason"], cup_guard
 
         viewport_expression = """new Promise(resolve=>{
           PreviewDriver.openViewport('mobile');setTimeout(()=>{

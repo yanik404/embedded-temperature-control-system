@@ -18,6 +18,8 @@ assert "3-poliger Hebel-Mikroschalter" in model
 for behavior in ("toggleConnection","setConnected","setPartState","drawLines","visibleLineIds","renderDetail","renderFocusCard","setProductView","setBuildMode"):
     assert behavior in twin
 assert 'live.tone==="configured"' in twin and 'tone:"unmonitored"' in twin
+assert 'live.state==="FREI"' in twin
+assert 'state:"FREI",tone:"neutral"' in model
 assert 'return id?[id]:[]' in twin
 assert 'productView=view==="build"?"build":"exterior"' in twin
 assert 'class="component-control"' not in preview and 'class="component-hotspots"' not in preview

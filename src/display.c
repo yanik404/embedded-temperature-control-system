@@ -102,7 +102,7 @@ void display_update(const system_status_t *status) {
         text_at(8, 2, WIFI_SSID);
         text_at(8, 4, "IP:");
         text_at(8, 5, status->wifi_connected ? status->wifi_ip : "WARTE AUF DHCP");
-        text_at(8, 7, status->wifi_connected ? "HTTP:// + IP" : "HOTSPOT PRUEFEN");
+        text_at(8, 7, status->cup_detected ? "BECHER: OK" : "BECHER: FEHLT");
     } else {
         snprintf(line, sizeof(line), "IST:  %5.1F C", status->temperature_c);
         text_at(8, 1, line);
@@ -125,8 +125,9 @@ void display_update(const system_status_t *status) {
             snprintf(line, sizeof(line), "FAN: %4u RPM", (unsigned)status->fan_rpm);
             text_at(8, 5, line);
         }
-        text_at(8, 6, "IP:");
-        text_at(8, 7, status->wifi_ip);
+        text_at(8, 6, status->cup_detected ? "BECHER: OK" : "BECHER: FEHLT");
+        snprintf(line, sizeof(line), "IP:%s", status->wifi_ip);
+        text_at(8, 7, line);
     }
     flush();
 }

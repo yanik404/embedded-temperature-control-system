@@ -28,7 +28,7 @@ assert preview_ids==production_ids
 assert embedded==production
 referenced_ids=set(re.findall(r'byId\("([^"]+)"\)',preview))
 assert not referenced_ids-preview_ids,f"JavaScript references missing IDs: {sorted(referenced_ids-preview_ids)}"
-for element_id in ("aufbau","regelkreis","live","technik","productIllustration","calloutLines","calloutPaths","configurationList","componentCount","ambientMode","ambientSource","simpleLoop","actualTemperature","timelineCanvas","controlActions","unlockDialog","unlockForm","safetySummary","stopButton"):
+for element_id in ("aufbau","regelkreis","live","technik","productIllustration","calloutLines","calloutPaths","configurationList","componentCount","ambientMode","ambientSource","cupPresence","cupPresenceTitle","cupPresenceSignal","simpleLoop","actualTemperature","timelineCanvas","controlActions","unlockDialog","unlockForm","safetySummary","stopButton"):
     assert element_id in production_ids,f"missing interface element: {element_id}"
 for token in ("/api/status","/api/unlock",'command("start",true)','command("stop",false)',"setpoint?value=",'body:token?"token="+encodeURIComponent(token):""',"Steuerung gesperrt","Technische Details","Mehr Messwerte"):
     assert token in production,f"missing dashboard behavior: {token}"

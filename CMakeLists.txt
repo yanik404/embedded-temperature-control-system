@@ -55,6 +55,7 @@ add_executable(temperature_control
     src/current_measurement.c
     src/fan.c
     src/buttons.c
+    src/cup_detector.c
     src/light_sensor.c
     src/display.c
     src/status_led_logic.c

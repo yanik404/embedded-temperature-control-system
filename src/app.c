@@ -177,7 +177,6 @@ static void sample_sensors(void) {
     status.current_1_valid = currents.channel_1_valid;
     status.current_2_valid = currents.channel_2_valid;
     status.current_valid = currents.valid;
-    status.cup_detected = buttons_cup_detected();
     status.power_5v_ok = gpio_get(PIN_PG_5V0);
     float light;
     status.light_sensor_available = light_sensor_read(&light);
@@ -198,7 +197,10 @@ static void update_control(uint32_t now) {
     }
     if (status.state == SYSTEM_ERROR) return; /* Latched until OK/STOP. */
     status.error = ERROR_NONE;
-    if (status.state == SYSTEM_OFF && !manual_off && status.temperature_valid && status.current_valid) {
+    if (status.state == SYSTEM_READY && !safety_can_start(&status)) {
+        status.state = SYSTEM_OFF;
+    }
+    if (status.state == SYSTEM_OFF && !manual_off && safety_can_start(&status)) {
         status.state = SYSTEM_READY;
     }
     if (!thermal_run_active(status.state)) return;
@@ -314,6 +316,8 @@ void app_run(void) {
     while (true) {
         const uint32_t now = milliseconds();
         process_buttons();
+        status.cup_detected = buttons_cup_detected();
+        status.cup_switch_raw = buttons_cup_raw_level();
         process_commands();
         if ((int32_t)(now - sensor_due) >= 0) {
             sensor_due = now + SENSOR_PERIOD_MS;

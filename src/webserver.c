@@ -355,7 +355,8 @@ static void status_json(char *buffer, size_t buffer_size) {
         "\"sensor_ok\":%s,\"temp1_ok\":%s,\"temp2_ok\":%s,"
         "\"current_ok\":%s,\"current1_ok\":%s,\"current2_ok\":%s,"
         "\"tla2024_ok\":%s,\"light_ok\":%s,\"display_initialized\":%s,\"leds_initialized\":%s,"
-        "\"cup\":%s,\"power_good\":%s,\"wifi\":%s,\"webserver_ready\":%s,"
+        "\"cup\":%s,\"cup_switch_raw\":%s,\"cup_active_level\":%u,"
+        "\"power_good\":%s,\"wifi\":%s,\"webserver_ready\":%s,"
         "\"wifi_ssid\":\"%s\",\"wifi_ip\":\"%s\",\"night\":%s,"
         "\"start_allowed\":%s,\"start_block_reason\":\"%s\","
         "\"control_unlock_available\":true}",
@@ -376,7 +377,8 @@ static void status_json(char *buffer, size_t buffer_size) {
         s->current_1_valid ? "true" : "false", s->current_2_valid ? "true" : "false",
         s->tla2024_available ? "true" : "false", s->light_sensor_available ? "true" : "false",
         s->display_initialized ? "true" : "false", s->status_leds_initialized ? "true" : "false",
-        s->cup_detected ? "true" : "false", s->power_5v_ok ? "true" : "false",
+        s->cup_detected ? "true" : "false", s->cup_switch_raw ? "true" : "false",
+        CUP_DETECT_ACTIVE_LEVEL, s->power_5v_ok ? "true" : "false",
         s->wifi_connected ? "true" : "false", s->webserver_ready ? "true" : "false",
         WIFI_SSID, ip,
         s->night_mode ? "true" : "false", start_allowed() ? "true" : "false",

@@ -59,6 +59,7 @@ typedef struct {
     bool display_initialized;
     bool status_leds_initialized;
     bool cup_detected;
+    bool cup_switch_raw;
     bool power_5v_ok;
     bool controller_output_limited;
     bool controller_anti_windup_active;
