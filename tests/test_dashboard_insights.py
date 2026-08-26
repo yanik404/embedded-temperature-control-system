@@ -160,6 +160,26 @@ with tempfile.TemporaryDirectory(prefix="becherhalter-insights-", ignore_cleanup
             assert all(colours[state][key] == accent for key in
                        ("loop", "analysis", "metric", "livePower", "activeBorder")), colours
 
+        theme_expression = """(()=>{
+          V3UI.setThemeMode('auto');PreviewDriver.apply('day-mode');
+          const autoDay={theme:document.body.dataset.theme,label:document.getElementById('ambientMode').textContent,
+            source:document.getElementById('ambientSource').textContent,icon:getComputedStyle(document.querySelector('.sun-icon')).display};
+          PreviewDriver.apply('night-mode');
+          const autoNight={theme:document.body.dataset.theme,label:document.getElementById('ambientMode').textContent,
+            source:document.getElementById('ambientSource').textContent,icon:getComputedStyle(document.querySelector('.moon-icon')).display};
+          document.querySelector('[data-theme-choice="day"]').click();PreviewDriver.apply('night-mode');
+          const manualDay={theme:document.body.dataset.theme,mode:document.body.dataset.themeMode,
+            source:document.getElementById('ambientSource').textContent,pressed:document.querySelector('[data-theme-choice="day"]').getAttribute('aria-pressed')};
+          document.querySelector('[data-theme-choice="auto"]').click();PreviewDriver.apply('day-mode');
+          return {autoDay,autoNight,manualDay,restored:{theme:document.body.dataset.theme,mode:document.body.dataset.themeMode}};
+        })()"""
+        themes = cdp.call("Runtime.evaluate", {"expression": theme_expression,
+                                                 "returnByValue": True})["result"]["value"]
+        assert themes["autoDay"] == {"theme": "day", "label": "TAGMODUS", "source": "AUTO · 86 %", "icon": "block"}, themes
+        assert themes["autoNight"] == {"theme": "night", "label": "NACHTMODUS", "source": "AUTO · 8 %", "icon": "block"}, themes
+        assert themes["manualDay"] == {"theme": "day", "mode": "day", "source": "MANUELL", "pressed": "true"}, themes
+        assert themes["restored"] == {"theme": "day", "mode": "auto"}, themes
+
         cooling_expression = """new Promise(resolve=>{
           PreviewDriver.apply('ready');
           const input=document.getElementById('targetInput');input.value='20,0';input.dispatchEvent(new Event('input'));

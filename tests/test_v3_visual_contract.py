@@ -44,6 +44,9 @@ for state in ('data-state="AUFHEIZEN"', 'data-state="KUEHLEN"', 'data-state="HAL
 assert "--cup-state-color" in css and "blue cooling/ready" in css
 assert 'data-cup="present"' in css and "S_DETECT value controls cup presence" in css
 assert "document.body.dataset.cup" in script
+assert "document.body.dataset.theme" in script and "setThemeMode" in script
+assert 'data-theme-choice="auto"' in index and 'id="ambientMode"' in index
+assert 'body[data-theme="day"]' in css and "--chart-grid" in css
 assert "data-part=" not in exterior and "data-focus=" not in exterior and "data-callout-anchor=" not in exterior
 
 # The rebuilt interior is intentionally a compact, self-contained vector. Each
@@ -91,7 +94,7 @@ assert hashlib.sha256(Path("ui-v5/src/product-v2-exterior.svg").read_bytes()).he
 assert hashlib.sha256(Path("ui-v6/src/product-v3-rejected-fallback.svg").read_bytes()).hexdigest().upper() == "D70D8F393111E983FDA4C466D962EA73C0DF1C72701509F6AB0102CA21087619"
 
 assert "loop-product" in source and "loop-heater" in source and "loop-sensor" in source
-assert 'draw("target","validTarget","#d8ddd6",0,60,[7,6])' in script
+assert 'draw("target","validTarget",targetColor,0,60,[7,6])' in script
 assert 'draw("power","validPower",powerColor,-20,100)' in script
 assert ".loop-section{min-height:780px" in css and "loop-connector" in source
 assert "--feedback:#8a9590" in css

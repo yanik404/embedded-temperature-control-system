@@ -36,6 +36,8 @@ PREVIEW_CONTROLS = """
  <button type="button" data-scenario="partial-hardware">PARTIAL HARDWARE</button>
  <button type="button" data-scenario="no-sensors">NO SENSORS</button>
  <button type="button" data-scenario="ready">READY</button>
+ <button type="button" data-scenario="day-mode">DAY MODE</button>
+ <button type="button" data-scenario="night-mode">NIGHT MODE</button>
  <button type="button" data-scenario="heating" class="active">HEATING</button>
  <button type="button" data-scenario="cooling">COOLING</button>
  <button type="button" data-scenario="holding">HOLDING</button>

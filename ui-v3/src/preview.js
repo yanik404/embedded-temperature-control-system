@@ -16,6 +16,8 @@ function apply(name){scenario=name;automatic=false;nominal();useProfile(profiles
  else if(name==="partial-hardware"){useProfile(profiles.partial);Object.assign(demo,{state:"BEREIT",temperature:25.6,power:0,fan_rpm:0,fan_percent:0,temp2_ok:null,current2_ok:null,light_ok:null,start_allowed:true,start_block_reason:"Optionale Hardware nicht angeschlossen"});}
  else if(name==="no-sensors"){useProfile(profiles.noSensors);Object.assign(demo,{state:"AUS",temperature:NaN,temperature1:NaN,temperature2:NaN,power:0,fan_rpm:0,fan_percent:0,sensor_ok:null,temp1_ok:null,temp2_ok:null,current_ok:null,current1_ok:null,current2_ok:null,tla2024_ok:null,light_ok:null,cup:null,start_allowed:false,start_block_reason:"Keine Sensorik angeschlossen"});}
  else if(name==="ready")Object.assign(demo,{state:"BEREIT",temperature:23.8,power:0,fan_rpm:0,fan_percent:0,start_allowed:true,start_block_reason:"Alle Freigaben bestätigt"});
+ else if(name==="day-mode")Object.assign(demo,{night:false,light_level:.86});
+ else if(name==="night-mode")Object.assign(demo,{night:true,light_level:.08});
  else if(name==="heating")Object.assign(demo,{state:"AUFHEIZEN",temperature:32.4,power:68,start_allowed:false,start_block_reason:"Heizvorgang bereits aktiv"});
  else if(name==="cooling"){Object.assign(demo,{state:"KUEHLEN",temperature:32.4,setpoint:20,power:-20,start_allowed:false,start_block_reason:"Kühlvorgang bereits aktiv"});window.V3UI.history.splice(0);prefillCooling();}
  else if(name==="holding")Object.assign(demo,{state:"HALTEN",temperature:44.9,power:23,start_allowed:false,start_block_reason:"Halteregelung aktiv"});
