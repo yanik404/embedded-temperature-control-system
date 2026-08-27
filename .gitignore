@@ -1,5 +1,9 @@
 build/
-.vscode/
+.tools/
+.vscode/*
+!.vscode/tasks.json
+!.vscode/settings.json
+!.vscode/extensions.json
 *.uf2
 *.elf
 *.map

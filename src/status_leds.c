@@ -12,6 +12,9 @@
 #include <stdio.h>
 
 #define RGB_LED_COUNT 12u
+#define RGB_SELF_TEST_BRIGHTNESS 24u
+#define RGB_SELF_TEST_STEP_MS 180u
+#define RGB_REMOTE_TEST_STEP_MS 650u
 
 static PIO rgb_pio = pio0;
 static uint rgb_sm;
@@ -20,6 +23,8 @@ static bool previous_error_active;
 static uint8_t previous_ring_red;
 static uint8_t previous_ring_green;
 static uint8_t previous_ring_blue;
+static bool rgb_test_active;
+static uint32_t rgb_test_started_ms;
 
 static void active_low_led_set(uint pin, bool on) {
     gpio_put(pin, on ? 0 : 1);
@@ -40,19 +45,52 @@ void status_leds_init(void) {
     const uint offset = pio_add_program(rgb_pio, &ws2812_program);
     rgb_sm = pio_claim_unused_sm(rgb_pio, true);
     ws2812_program_init(rgb_pio, rgb_sm, offset, PIN_RGB_DIN, 800000.0f);
+
+    /* Make the RGB data path testable even while the system is safely OFF. */
+    ring_color(RGB_SELF_TEST_BRIGHTNESS, 0u, 0u);
+    sleep_ms(RGB_SELF_TEST_STEP_MS);
+    ring_color(0u, RGB_SELF_TEST_BRIGHTNESS, 0u);
+    sleep_ms(RGB_SELF_TEST_STEP_MS);
+    ring_color(0u, 0u, RGB_SELF_TEST_BRIGHTNESS);
+    sleep_ms(RGB_SELF_TEST_STEP_MS);
     ring_color(0, 0, 0);
     previous_heartbeat_on = false;
     previous_error_active = false;
     previous_ring_red = 0u;
     previous_ring_green = 0u;
     previous_ring_blue = 0u;
+    rgb_test_active = false;
+    rgb_test_started_ms = 0u;
+}
+
+void status_leds_start_test(void) {
+    rgb_test_started_ms = to_ms_since_boot(get_absolute_time());
+    rgb_test_active = true;
 }
 
 void status_leds_update(const system_status_t *status) {
     if (status == NULL) return;
-    const bool blink_on = (to_ms_since_boot(get_absolute_time()) / 450u) % 2u == 0u;
+    const uint32_t now = to_ms_since_boot(get_absolute_time());
+    const bool blink_on = (now / 450u) % 2u == 0u;
     status_led_output_t output;
     status_led_logic_evaluate(status, blink_on, &output);
+
+    if (rgb_test_active) {
+        const uint32_t elapsed = now - rgb_test_started_ms;
+        output.ring_red = 0u;
+        output.ring_green = 0u;
+        output.ring_blue = 0u;
+        if (elapsed < RGB_REMOTE_TEST_STEP_MS) {
+            output.ring_red = RGB_SELF_TEST_BRIGHTNESS;
+        } else if (elapsed < RGB_REMOTE_TEST_STEP_MS * 2u) {
+            output.ring_green = RGB_SELF_TEST_BRIGHTNESS;
+        } else if (elapsed < RGB_REMOTE_TEST_STEP_MS * 3u) {
+            output.ring_blue = RGB_SELF_TEST_BRIGHTNESS;
+        } else {
+            rgb_test_active = false;
+            status_led_logic_evaluate(status, blink_on, &output);
+        }
+    }
 
     active_low_led_set(PIN_OUT_LED1_N, output.ready_on);
     active_low_led_set(PIN_OUT_LED2_N, output.heating_on);

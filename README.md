@@ -160,7 +160,27 @@ Der Pico nutzt den DHCP-Client von lwIP. Sobald die Station vollständig verbund
 
 ## Build und Flash
 
-Voraussetzungen: Pico SDK 2.1.1 oder kompatibel, ARM GNU Toolchain, CMake ab 3.13 und ein Pico W.
+Voraussetzungen: Pico SDK 2.1.1 oder kompatibel, ARM GNU Toolchain, CMake ab 3.24 und ein Pico W.
+
+### Auf einem zweiten Windows-PC oder Laptop
+
+Die eingecheckten VS-Code-Tasks verwenden keine benutzerspezifischen Pfade. Die Ersteinrichtung installiert fehlende Build-Werkzeuge per `winget`, lädt Pico SDK 2.1.1 projektlokal nach `.tools/` und prüft anschließend die CMake-Konfiguration.
+
+```powershell
+git clone --branch feature https://github.com/yanik404/embedded-temperature-control-system.git
+cd embedded-temperature-control-system
+code .
+```
+
+Danach in VS Code **Terminal → Run Task → Laptop einrichten** ausführen. Dieser Schritt benötigt Internet und muss pro Rechner nur einmal durchgeführt werden. Anschließend stehen dieselben Tasks auf jedem Windows-Rechner bereit:
+
+- **Build** erzeugt `build/vscode/temperature_control.uf2`.
+- **Flash** lädt die vorhandene UF2 mit Picotool. Falls Picotool nicht verfügbar ist, wird ein angeschlossenes `RPI-RP2`-BOOTSEL-Laufwerk verwendet.
+- **Build & Flash** konfiguriert, baut, lädt und startet den Pico neu.
+
+Wenn kein Pico gefunden wird, BOOTSEL gedrückt halten, den Pico per USB anschließen und **Flash** erneut ausführen. Der lokale `.tools/`- und `build/`-Inhalt wird nicht mit Git synchronisiert und wird auf jedem Rechner automatisch neu erzeugt. Vor dem Rechnerwechsel Änderungen immer committen und pushen; auf dem anderen Rechner anschließend `git pull` ausführen.
+
+Alternativ bleibt der manuelle Build möglich:
 
 ```powershell
 $env:PICO_SDK_PATH = 'C:\path\to\pico-sdk'

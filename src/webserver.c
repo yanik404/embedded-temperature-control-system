@@ -435,6 +435,15 @@ static err_t process_http_request(http_client_t *context, struct tcp_pcb *client
         server_config.stop();
         return send_response(context, client, "200 OK", "application/json", "{\"ok\":true}");
     }
+    if (strncmp(text, "POST /api/rgb-test ", 19u) == 0) {
+        if (!request_authorized(text)) return send_unauthorized(context, client);
+        if (server_config.rgb_test == NULL) {
+            return send_response(context, client, "503 Service Unavailable", "application/json",
+                                 "{\"ok\":false,\"reason\":\"RGB-Test nicht verfuegbar\"}");
+        }
+        server_config.rgb_test();
+        return send_response(context, client, "200 OK", "application/json", "{\"ok\":true}");
+    }
     static const char setpoint_prefix[] = "POST /api/setpoint?value=";
     if (strncmp(text, setpoint_prefix, sizeof(setpoint_prefix) - 1u) == 0) {
         if (!request_authorized(text)) return send_unauthorized(context, client);

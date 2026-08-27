@@ -1,0 +1,6 @@
+{
+    "recommendations": [
+        "ms-vscode.cmake-tools",
+        "raspberry-pi.raspberry-pi-pico"
+    ]
+}

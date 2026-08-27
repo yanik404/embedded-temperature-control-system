@@ -12,6 +12,7 @@ typedef struct {
     const system_status_t *status;
     web_action_callback_t start;
     web_action_callback_t stop;
+    web_action_callback_t rgb_test;
     web_setpoint_callback_t set_setpoint;
 } webserver_config_t;
 

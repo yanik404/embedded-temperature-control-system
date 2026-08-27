@@ -25,6 +25,7 @@ static system_status_t status;
 static pi_controller_t controller;
 static volatile bool start_requested;
 static volatile bool stop_requested;
+static volatile bool rgb_test_requested;
 static volatile bool setpoint_requested;
 static volatile float requested_setpoint;
 static uint32_t thermal_run_started_ms;
@@ -64,6 +65,7 @@ const char *error_name(error_code_t error) {
 
 static void request_start(void) { start_requested = true; }
 static void request_stop(void) { stop_requested = true; }
+static void request_rgb_test(void) { rgb_test_requested = true; }
 static void request_setpoint(float value) {
     requested_setpoint = value;
     setpoint_requested = true;
@@ -97,6 +99,11 @@ static void enter_error(error_code_t error) {
 }
 
 static void process_commands(void) {
+    if (rgb_test_requested) {
+        rgb_test_requested = false;
+        status_leds_start_test();
+        printf("[LED] RGB-Ring-Test gestartet\n");
+    }
     if (setpoint_requested) {
         status.setpoint_c = clamp_setpoint(requested_setpoint);
         const float new_error = status.setpoint_c - status.temperature_c;
@@ -304,6 +311,7 @@ void app_init(void) {
         .status = &status,
         .start = request_start,
         .stop = request_stop,
+        .rgb_test = request_rgb_test,
         .set_setpoint = request_setpoint
     };
     (void)webserver_init(&web_config);

@@ -38,6 +38,8 @@ jobs:
         run: python tests/test_bidirectional_contract.py
       - name: Test web authorization contract
         run: python tests/test_web_auth_contract.py
+      - name: Test portable Windows tooling
+        run: python tests/test_portable_windows_tooling.py
       - name: Check embedded dashboard asset
         run: python tests/test_dashboard_static.py && python tests/test_dashboard_insights.py && python tests/test_v3_visual_contract.py && python tests/test_v4_digital_twin.py && python tests/test_product_v2_responsive.py
       - name: Upload UF2
