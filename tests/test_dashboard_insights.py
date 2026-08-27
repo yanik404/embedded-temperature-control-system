@@ -162,14 +162,18 @@ with tempfile.TemporaryDirectory(prefix="becherhalter-insights-", ignore_cleanup
             assert all(colours[state][key] == accent for key in
                        ("loop", "analysis", "sensor", "sensorIcon", "metric", "livePower", "activeBorder")), colours
 
+        cdp.call("Emulation.setDeviceMetricsOverride", {
+            "width": 1468, "height": 800, "deviceScaleFactor": 1, "mobile": False,
+            "screenWidth": 1468, "screenHeight": 800,
+        })
         feedback_geometry = cdp.call("Runtime.evaluate", {"expression": """(()=>{
           const route=document.querySelector('.feedback-route').getBoundingClientRect();
           const sum=document.querySelector('.compare-connector>span').getBoundingClientRect();
-          const sensor=document.querySelector('.sensor-step strong').getBoundingClientRect();
-          return {routeLeft:route.left,routeRight:route.right,sumLeft:sum.left,sensorRight:sensor.right};
+          const sensor=document.querySelector('.sensor-step small').getBoundingClientRect();
+          return {routeTop:route.top,sumBottom:sum.bottom,sensorBottom:sensor.bottom};
         })()""", "returnByValue": True})["result"]["value"]
-        assert feedback_geometry["routeLeft"] < feedback_geometry["sumLeft"], feedback_geometry
-        assert feedback_geometry["routeRight"] > feedback_geometry["sensorRight"], feedback_geometry
+        assert feedback_geometry["routeTop"] >= feedback_geometry["sumBottom"] + 6, feedback_geometry
+        assert feedback_geometry["routeTop"] >= feedback_geometry["sensorBottom"] + 6, feedback_geometry
 
         theme_expression = """(()=>{
           V3UI.setThemeMode('auto');PreviewDriver.apply('day-mode');

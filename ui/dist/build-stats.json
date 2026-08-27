@@ -5,7 +5,7 @@
   "product_rendering": "photoreal_exterior_with_simple_vector_cutaway",
   "production_bytes": 301618,
   "production_css_bytes": 81977,
-  "production_gzip_bytes_theoretical": 130931,
+  "production_gzip_bytes_theoretical": 130928,
   "production_javascript_bytes": 72205,
   "runtime_http_requests_for_assets": 0,
   "webgl_draw_calls_per_frame": 0
