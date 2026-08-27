@@ -10,7 +10,7 @@
   <radialGradient id="simpleDrink"><stop stop-color="#ef9c58" stop-opacity=".82"/><stop offset="1" stop-color="#7d391b" stop-opacity=".72"/></radialGradient>
 
   <g id="simple-rgb">
-   <ellipse cx="351" cy="146" rx="188" ry="58" fill="none" stroke="#76aec4" stroke-width="5" stroke-dasharray="3 24" stroke-linecap="round" opacity=".86"/>
+   <ellipse class="rgb-light" cx="351" cy="146" rx="188" ry="58" fill="none" stroke="var(--state)" stroke-width="5" stroke-dasharray="3 24" stroke-linecap="round" opacity=".86"/>
   </g>
 
   <g id="simple-peltier-left">

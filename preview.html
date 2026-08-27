@@ -79,7 +79,7 @@ body.presentation-mode{overflow:hidden}body.presentation-mode .site-header{heigh
 @media(max-width:600px){.product-section{padding-top:calc(var(--header) + 30px)}.product-section .section-heading h1{font-size:32px}.product-section .section-heading small{max-width:300px;font-size:13px}.product-layout{display:flex;flex-direction:column;gap:0;margin-top:18px}.product-panel{order:1;margin:0;padding:0}.product-stage{order:2;min-height:0;max-height:520px;margin:24px -8px 0;overflow:hidden}.callout-lines{order:3}.product-summary{margin:0;padding:0 0 12px}.hero-metrics{display:grid;grid-template-columns:minmax(112px,.78fr) minmax(0,1.22fr);gap:14px;padding:15px 0}.hero-temperature strong{font-size:54px}.hero-temperature p span{font-size:18px}.hero-temperature>em{font-size:10px}.hero-metrics dl{grid-template-columns:1fr 1fr;align-content:start;margin:0}.hero-metrics dl div{padding:7px 4px 3px 0}.hero-metrics dt{font-size:8px}.hero-metrics dd{font-size:13px}.hero-controls{margin-top:12px}.hero-controls .control-lock{padding:11px 0}.hero-controls .control-lock p{display:none}.hero-controls .control-lock button{min-height:44px}.hero-controls .control-actions{padding:11px 0}.hero-controls .setpoint-control button,.hero-controls .heat-actions button{min-height:46px}.start-reason{margin-top:5px}.product-view-switch{top:0}.product-view{padding-top:34px}.product-v3-illustration,.product-v2-cutaway{display:block;width:86%;max-width:none;max-height:475px;margin:0 auto;transform:none}.product-components{margin-top:12px}.product-components summary{min-height:44px}.part-focus-card{margin-top:10px}}
 @media(max-width:380px){.hero-metrics{grid-template-columns:1fr}.hero-metrics dl{grid-template-columns:repeat(3,1fr)}.hero-temperature strong{font-size:50px}.product-v3-illustration,.product-v2-cutaway{width:92%}}
 
-/* Thermal state colour: blue cooling/ready, orange heating, green holding, red fault. */
+/* Thermal state colour: neutral ready, blue cooling, orange heating, green holding, red fault. */
 body{--cup-state-color:#76aec4;--cup-state-glow:#76aec488}body[data-state="AUFHEIZEN"]{--cup-state-color:#ed8549;--cup-state-glow:#ed854999}body[data-state="HALTEN"]{--cup-state-color:#71c393;--cup-state-glow:#71c39388}body[data-state="FEHLER"]{--cup-state-color:#eb6868;--cup-state-glow:#eb6868aa}.product-v3-liquid-tint,.cutaway-cup-state-tint{fill:var(--cup-state-color);opacity:.68;mix-blend-mode:color;transition:fill .45s,opacity .45s}.product-v3-liquid-rim{stroke:var(--cup-state-color);opacity:.68;filter:drop-shadow(0 0 8px var(--cup-state-glow));transition:stroke .45s}.loop-product .loop-cup{fill:var(--cup-state-color)!important;fill-opacity:.7!important;transition:fill .45s}body[data-state="FEHLER"] .product-v3-cup-state,body[data-state="FEHLER"] .cutaway-cup-state-tint{animation:cupFaultPulse 1s ease-in-out infinite alternate}@keyframes cupFaultPulse{to{opacity:.42;filter:drop-shadow(0 0 13px var(--red))}}@media(prefers-reduced-motion:reduce){body[data-state="FEHLER"] .product-v3-cup-state,body[data-state="FEHLER"] .cutaway-cup-state-tint{animation:none}}
 .plant-formula{display:flex;align-items:center;justify-content:center;gap:12px}.plant-formula>span:first-child{white-space:nowrap}.plant-fraction{display:grid;min-width:124px;text-align:center}.plant-fraction b{font-weight:500;white-space:nowrap}.plant-fraction i{width:auto;height:1px;margin:4px 0;background:#737c75;transform:none}
 
@@ -144,6 +144,14 @@ body[data-theme="day"] .recovery-toast{background:#e7f4e9;color:#275d38}
 
 @media(max-width:600px){.product-summary{align-items:flex-start}.product-status-stack{gap:7px}.ambient-mode{gap:5px}.ambient-reading small{font-size:6px}.ambient-reading strong{font-size:9px}.ambient-icon{width:25px;height:25px}.theme-choice button{min-width:23px;height:22px;padding:0 5px}.cup-presence{min-width:205px;padding:6px 8px}.cup-presence-icon{width:26px;height:26px}.cup-presence strong{font-size:10px}.state-mark>i{height:29px}.state-mark strong{font-size:17px}}
 @media(prefers-reduced-motion:reduce){body{transition:none}}
+
+/* BEREIT is deliberately neutral. Blue is reserved exclusively for cooling. */
+:root{--ready:#c8cec9}
+body[data-state="BEREIT"]{--state:var(--ready);--cup-state-color:#c8cec9;--cup-state-glow:#c8cec966}
+body[data-state="AUS"]{--cup-state-color:#858c86;--cup-state-glow:#858c8666}
+body[data-state] .rgb-light{stroke:var(--state)}
+body[data-theme="day"]{--ready:#66706a}
+body[data-theme="day"][data-state="BEREIT"]{--cup-state-color:#66706a;--cup-state-glow:#66706a55}
 
 
 .product-layout{position:relative}
@@ -297,7 +305,7 @@ body:not([data-product-view="build"]) .part-focus-card{display:none}
   <radialGradient id="simpleDrink"><stop stop-color="#ef9c58" stop-opacity=".82"/><stop offset="1" stop-color="#7d391b" stop-opacity=".72"/></radialGradient>
 
   <g id="simple-rgb">
-   <ellipse cx="351" cy="146" rx="188" ry="58" fill="none" stroke="#76aec4" stroke-width="5" stroke-dasharray="3 24" stroke-linecap="round" opacity=".86"/>
+   <ellipse class="rgb-light" cx="351" cy="146" rx="188" ry="58" fill="none" stroke="var(--state)" stroke-width="5" stroke-dasharray="3 24" stroke-linecap="round" opacity=".86"/>
   </g>
 
   <g id="simple-peltier-left">

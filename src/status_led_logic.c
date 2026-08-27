@@ -22,6 +22,8 @@ void status_led_logic_evaluate(const system_status_t *status, bool blink_on,
     const uint8_t brightness = status->night_mode ? RGB_NIGHT_BRIGHTNESS : RGB_DAY_BRIGHTNESS;
     switch (status->state) {
         case SYSTEM_READY:
+            output->ring_red = brightness;
+            output->ring_green = brightness;
             output->ring_blue = brightness;
             break;
         case SYSTEM_HEATING:

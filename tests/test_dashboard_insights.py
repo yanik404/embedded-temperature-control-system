@@ -151,7 +151,7 @@ with tempfile.TemporaryDirectory(prefix="becherhalter-insights-", ignore_cleanup
         colours = cdp.call("Runtime.evaluate", {"expression": colour_expression,
                                                   "returnByValue": True})["result"]["value"]
         expected_accents = {
-            "ready": ("#76aec4", "rgb(118, 174, 196)"),
+            "ready": ("#66706a", "rgb(102, 112, 106)"),
             "heating": ("#ed8549", "rgb(237, 133, 73)"),
             "cooling": ("#67bde0", "rgb(118, 174, 196)"),
             "holding": ("#71c393", "rgb(113, 195, 147)"),
