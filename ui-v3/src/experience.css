@@ -86,6 +86,8 @@ body[data-state="KUEHLEN"]{--state:var(--blue);--cup-state-color:#67bde0;--cup-s
    warning and safety colours deliberately keep their semantic identity. */
 body[data-state] .site-header nav a:hover,body[data-state] .site-header nav a:focus-visible{border-color:var(--state)}
 body[data-state] .loop-section .section-heading p,body[data-state] .heat-step em,body[data-state] .heat-step strong,body[data-state] .hero-metrics dl div:nth-child(3) dd,body[data-state] #powerOutput,body[data-state] .output-connector em,body[data-state] .analysis-heading small,body[data-state] .pi-formula,body[data-state] .p-signal strong,body[data-state] .output-signal strong,body[data-state] .analysis-limiter strong,body[data-state] .analysis-limiter.limited span,body[data-state] .model-block strong,body[data-state] .order-options .selected b,body[data-state] .order-options .selected em,body[data-state] .structure-order strong,body[data-state] .step-response-metrics .model-result dd,body[data-state] .step-response-card[data-stage="running"]>header>b{color:var(--state)}
+body[data-state] .sensor-step em,body[data-state] .sensor-step strong{color:var(--state)}
+body[data-state] .loop-sensor path{stroke:var(--state)}
 body[data-state] .timeline-layer button.active,body[data-state].presentation-mode .header-actions>button{border-color:var(--state);color:var(--state)}
 body[data-state] .analysis-limiter.limited{border-color:var(--state);box-shadow:inset 0 0 22px var(--cup-state-glow)}
 body[data-state] .step-progress>i{background:linear-gradient(90deg,var(--blue),var(--state))}
@@ -95,7 +97,7 @@ body[data-state="AUFHEIZEN"] .flow-arrow,body[data-state="KUEHLEN"] .flow-arrow,
 /* The measured value returns to the summing junction, not to the setpoint.
    Its neutral signal colour remains independent from the cooling accent. */
 :root{--feedback:#8a9590}
-.feedback-route{left:18.5%;right:5.6%;bottom:44px;height:145px;border-color:var(--feedback);opacity:.82}
+.feedback-route{left:15.5%;right:.8%;bottom:44px;height:145px;border-color:var(--feedback);opacity:.82}
 .feedback-route:before{border-color:var(--feedback)}
 .feedback-route span{color:var(--feedback)}
 @media(max-width:900px){.simple-loop{grid-template-columns:1fr;max-width:470px;margin-top:54px;padding:0 45px 34px}.loop-step{min-height:112px}.loop-connector{width:1px;height:38px;justify-self:center}.loop-connector>.flow-arrow{width:1px;height:100%}.feedback-route{left:50%;right:9px;top:109px;bottom:48px;width:auto;height:auto}.feedback-route span{right:-28px;font-size:8px}}

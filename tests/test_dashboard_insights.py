@@ -138,6 +138,8 @@ with tempfile.TemporaryDirectory(prefix="becherhalter-insights-", ignore_cleanup
               cup:getComputedStyle(document.body).getPropertyValue('--cup-state-color').trim(),
               loop:getComputedStyle(document.querySelector('.heat-step strong')).color,
               analysis:getComputedStyle(document.querySelector('.analysis-heading small')).color,
+              sensor:getComputedStyle(document.querySelector('.sensor-step strong')).color,
+              sensorIcon:getComputedStyle(document.querySelector('.loop-sensor path')).stroke,
               metric:getComputedStyle(document.querySelector('.hero-metrics dl div:nth-child(3) dd')).color,
               livePower:getComputedStyle(document.getElementById('powerOutput')).color,
               activeBorder:getComputedStyle(document.querySelector('.timeline-layer button.active')).borderTopColor
@@ -158,7 +160,16 @@ with tempfile.TemporaryDirectory(prefix="becherhalter-insights-", ignore_cleanup
         for state, (cup, accent) in expected_accents.items():
             assert colours[state]["cup"] == cup, colours
             assert all(colours[state][key] == accent for key in
-                       ("loop", "analysis", "metric", "livePower", "activeBorder")), colours
+                       ("loop", "analysis", "sensor", "sensorIcon", "metric", "livePower", "activeBorder")), colours
+
+        feedback_geometry = cdp.call("Runtime.evaluate", {"expression": """(()=>{
+          const route=document.querySelector('.feedback-route').getBoundingClientRect();
+          const sum=document.querySelector('.compare-connector>span').getBoundingClientRect();
+          const sensor=document.querySelector('.sensor-step strong').getBoundingClientRect();
+          return {routeLeft:route.left,routeRight:route.right,sumLeft:sum.left,sensorRight:sensor.right};
+        })()""", "returnByValue": True})["result"]["value"]
+        assert feedback_geometry["routeLeft"] < feedback_geometry["sumLeft"], feedback_geometry
+        assert feedback_geometry["routeRight"] > feedback_geometry["sensorRight"], feedback_geometry
 
         theme_expression = """(()=>{
           V3UI.setThemeMode('auto');PreviewDriver.apply('day-mode');
