@@ -8,6 +8,10 @@ function Refresh-Path {
     $env:Path = "$machinePath;$userPath"
 }
 
+# A newly opened VS Code window can still inherit an older PATH. Load the
+# persisted machine/user PATH before checking tools that winget already added.
+Refresh-Path
+
 function Install-WingetPackage {
     param([string]$Command, [string]$PackageId, [string]$Title)
     $installedCommand = Get-Command $Command -ErrorAction SilentlyContinue

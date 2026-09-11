@@ -40,6 +40,8 @@
 /* WLAN client timing. Network availability never grants heating permission. */
 #define WIFI_CONNECT_TIMEOUT_MS 15000u
 #define WIFI_RETRY_DELAY_MS      5000u
+#define WIFI_SETUP_AP_SSID       "Becherhalter-Setup"
+#define WIFI_SETUP_AP_PASSWORD   "becher2026"
 
 /* Local dashboard control authorization. Safety checks remain independent. */
 #define WEB_CONTROL_SESSION_MS   300000u
@@ -70,6 +72,7 @@
 #define HOLDING_ENTER_BAND_C        0.4f
 #define HOLDING_EXIT_BAND_C         1.0f
 #define PELTIER_MAX_HEATING_PERCENT 100.0f
+#define PELTIER_DEFAULT_HEATING_PERCENT 40.0f
 #define PELTIER_MAX_COOLING_PERCENT 20.0f
 #define PELTIER_OUTPUT_DEADBAND_PERCENT 1.0f
 

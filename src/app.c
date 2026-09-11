@@ -25,12 +25,30 @@ static system_status_t status;
 static pi_controller_t controller;
 static volatile bool start_requested;
 static volatile bool stop_requested;
+static volatile int cup_manual_requested = -1;
 static volatile bool rgb_test_requested;
+static volatile bool peltier_test_requested;
+static volatile bool workshop_override_requested;
+static volatile uint8_t requested_test_channel;
+static volatile bool requested_test_cooling;
+static volatile uint8_t requested_test_profile;
+static volatile bool presentation_demo_requested;
+static volatile bool requested_demo_cooling;
 static volatile bool setpoint_requested;
 static volatile float requested_setpoint;
+static volatile bool limits_requested;
+static volatile float requested_max_heating;
+static volatile float requested_max_cooling;
+static volatile float requested_max_temperature;
+static volatile float requested_min_temperature;
 static uint32_t thermal_run_started_ms;
 static uint32_t fan_run_on_until_ms;
 static bool manual_off;
+static bool peltier_test_active;
+static uint32_t peltier_test_due_ms;
+static uint32_t workshop_override_due_ms;
+static bool presentation_demo_output_active;
+static uint32_t presentation_demo_output_due_ms;
 
 static uint32_t milliseconds(void) {
     return to_ms_since_boot(get_absolute_time());
@@ -65,7 +83,19 @@ const char *error_name(error_code_t error) {
 
 static void request_start(void) { start_requested = true; }
 static void request_stop(void) { stop_requested = true; }
+static void request_cup_manual(float enabled) { cup_manual_requested = enabled > 0.0f ? 1 : 0; }
 static void request_rgb_test(void) { rgb_test_requested = true; }
+static void request_workshop_override(void) { workshop_override_requested = true; }
+static void request_peltier_test(uint8_t channel, bool cooling, uint8_t profile) {
+    requested_test_channel = channel;
+    requested_test_cooling = cooling;
+    requested_test_profile = profile;
+    peltier_test_requested = true;
+}
+static void request_presentation_demo(bool cooling) {
+    requested_demo_cooling = cooling;
+    presentation_demo_requested = true;
+}
 static void request_setpoint(float value) {
     requested_setpoint = value;
     setpoint_requested = true;
@@ -80,8 +110,36 @@ static float clamp_setpoint(float value) {
 static bool thermal_run_active(system_state_t state) {
     return state == SYSTEM_HEATING || state == SYSTEM_COOLING || state == SYSTEM_HOLDING;
 }
+static void request_limits(float heating_percent, float cooling_percent, float max_temperature_c, float min_temperature_c) {
+    requested_max_heating = heating_percent;
+    requested_max_cooling = cooling_percent;
+    requested_max_temperature = max_temperature_c;
+    requested_min_temperature = min_temperature_c;
+    limits_requested = true;
+}
+
+static bool workshop_override_active(uint32_t now) {
+    return status.workshop_override_active && (int32_t)(workshop_override_due_ms - now) > 0;
+}
+
+static bool peltier_test_can_start(uint32_t now) {
+    return status.temperature_valid && status.current_valid && status.error == ERROR_NONE &&
+           status.cup_detected && (status.power_5v_ok || workshop_override_active(now));
+}
+
+static bool control_can_start(uint32_t now) {
+    system_status_t effective = status;
+    if (workshop_override_active(now)) {
+        effective.power_5v_ok = true;
+    }
+    return safety_can_start(&effective);
+}
 
 static void all_thermal_output_off(void) {
+    peltier_test_active = false;
+    presentation_demo_output_active = false;
+    status.peltier_test_active = false;
+    status.peltier_test_remaining_ms = 0u;
     peltier_off();
     status.peltier_power_percent = 0.0f;
     status.thermal_output_mode = THERMAL_OUTPUT_OFF;
@@ -95,14 +153,106 @@ static void all_thermal_output_off(void) {
 static void enter_error(error_code_t error) {
     all_thermal_output_off();
     status.error = error;
+    status.cup_manual = false;
+    status.cup_detected = buttons_cup_detected();
     status.state = SYSTEM_ERROR;
 }
 
 static void process_commands(void) {
+    if (cup_manual_requested >= 0) {
+        status.cup_manual = cup_manual_requested == 1;
+        cup_manual_requested = -1;
+        status.cup_detected = buttons_cup_detected() || status.cup_manual;
+        if (!status.cup_manual) stop_requested = true;
+    }
+    if (limits_requested) {
+        limits_requested = false;
+        if (requested_max_heating >= 10.0f && requested_max_heating <= PELTIER_MAX_HEATING_PERCENT &&
+            requested_max_cooling >= 5.0f && requested_max_cooling <= PELTIER_MAX_COOLING_PERCENT &&
+            requested_max_temperature >= 40.0f && requested_max_temperature <= MAX_SAFE_TEMPERATURE_C &&
+            requested_min_temperature >= MIN_SAFE_TEMPERATURE_C && requested_min_temperature <= 30.0f &&
+            requested_min_temperature < requested_max_temperature) {
+            status.max_heating_percent = requested_max_heating;
+            status.max_cooling_percent = requested_max_cooling;
+            status.max_temperature_c = requested_max_temperature;
+            status.min_temperature_c = requested_min_temperature;
+            controller_set_output_limits(&controller, -status.max_cooling_percent,
+                                         status.max_heating_percent);
+        }
+    }
     if (rgb_test_requested) {
         rgb_test_requested = false;
         status_leds_start_test();
         printf("[LED] RGB-Ring-Test gestartet\n");
+    }
+    if (workshop_override_requested) {
+        workshop_override_requested = false;
+        if (!thermal_run_active(status.state)) {
+            workshop_override_due_ms = milliseconds() + 300000u;
+            status.workshop_override_active = true;
+            status.workshop_override_remaining_ms = 300000u;
+            if (control_can_start(milliseconds())) status.state = SYSTEM_READY;
+            printf("[PELTIER] Power-Good-Override fuer 5 min aktiviert; Leistung max. 10 %%\n");
+        }
+    }
+    if (peltier_test_requested) {
+        peltier_test_requested = false;
+        if (!thermal_run_active(status.state) && peltier_test_can_start(milliseconds())) {
+            static const uint8_t powers[] = {10u, 15u, 20u};
+            static const uint32_t durations[] = {5000u, 15000u, 30000u};
+            const bool overridden = workshop_override_active(milliseconds()) &&
+                                    !status.power_5v_ok;
+            const uint8_t profile = overridden || requested_test_profile > 2u
+                                        ? 0u : requested_test_profile;
+            const peltier_channel_t channel = requested_test_channel == 2u
+                                                  ? PELTIER_CHANNEL_2 : PELTIER_CHANNEL_1;
+            const peltier_direction_t direction = requested_test_cooling
+                                                       ? PELTIER_DIRECTION_COOL
+                                                       : PELTIER_DIRECTION_HEAT;
+            all_thermal_output_off();
+            (void)peltier_set_direction(direction);
+            peltier_set_power(channel, powers[profile]);
+            peltier_set_enabled(true);
+            peltier_test_active = true;
+            peltier_test_due_ms = milliseconds() + durations[profile];
+            thermal_run_started_ms = milliseconds();
+            status.peltier_test_active = true;
+            status.peltier_test_channel = (uint8_t)channel + 1u;
+            status.peltier_test_remaining_ms = durations[profile];
+            status.peltier_power_percent = requested_test_cooling
+                                               ? -(float)powers[profile] : (float)powers[profile];
+            status.thermal_output_mode = requested_test_cooling
+                                             ? THERMAL_OUTPUT_COOLING : THERMAL_OUTPUT_HEATING;
+            status.state = requested_test_cooling ? SYSTEM_COOLING : SYSTEM_HEATING;
+            printf("[PELTIER] Test Kanal %u: %s, %u %%, %u s\n",
+                   (unsigned)status.peltier_test_channel,
+                   requested_test_cooling ? "KUEHLEN" : "HEIZEN",
+                   (unsigned)powers[profile], (unsigned)(durations[profile] / 1000u));
+        }
+    }
+    if (presentation_demo_requested) {
+        presentation_demo_requested = false;
+        all_thermal_output_off();
+        if (safety_can_start(&status)) {
+            const peltier_direction_t direction = requested_demo_cooling
+                                                       ? PELTIER_DIRECTION_COOL
+                                                       : PELTIER_DIRECTION_HEAT;
+            (void)peltier_set_direction(direction);
+            peltier_set_power(PELTIER_CHANNEL_1, 5u);
+            peltier_set_power(PELTIER_CHANNEL_2, 5u);
+            peltier_set_enabled(true);
+            presentation_demo_output_active = true;
+            presentation_demo_output_due_ms = milliseconds() + 20000u;
+            thermal_run_started_ms = milliseconds();
+            status.peltier_power_percent = requested_demo_cooling ? -5.0f : 5.0f;
+            status.thermal_output_mode = requested_demo_cooling
+                                             ? THERMAL_OUTPUT_COOLING : THERMAL_OUTPUT_HEATING;
+            status.state = requested_demo_cooling ? SYSTEM_COOLING : SYSTEM_HEATING;
+            printf("[PELTIER] Praesentationsdemo: %s mit 5 %% fuer max. 20 s\n",
+                   requested_demo_cooling ? "KUEHLEN" : "HEIZEN");
+        } else {
+            printf("[PELTIER] Praesentationsdemo ohne reale Leistung: Sicherheitsfreigabe fehlt\n");
+        }
     }
     if (setpoint_requested) {
         status.setpoint_c = clamp_setpoint(requested_setpoint);
@@ -124,14 +274,16 @@ static void process_commands(void) {
     }
     if (stop_requested) {
         stop_requested = false;
+        status.cup_manual = false;
+        status.cup_detected = buttons_cup_detected();
         all_thermal_output_off();
         status.error = ERROR_NONE;
-        status.state = safety_can_start(&status) ? SYSTEM_READY : SYSTEM_OFF;
+        status.state = control_can_start(milliseconds()) ? SYSTEM_READY : SYSTEM_OFF;
         fan_run_on_until_ms = milliseconds() + FAN_RUN_ON_MS;
     }
     if (start_requested) {
         start_requested = false;
-        if ((status.state == SYSTEM_READY || status.state == SYSTEM_OFF) && safety_can_start(&status)) {
+        if ((status.state == SYSTEM_READY || status.state == SYSTEM_OFF) && control_can_start(milliseconds())) {
             manual_off = false;
             controller_reset(&controller);
             thermal_run_started_ms = milliseconds();
@@ -184,7 +336,8 @@ static void sample_sensors(void) {
     status.current_1_valid = currents.channel_1_valid;
     status.current_2_valid = currents.channel_2_valid;
     status.current_valid = currents.valid;
-    status.power_5v_ok = gpio_get(PIN_PG_5V0);
+    /* GP7 is tied to 3.3 V on the assembled board and is not a usable PG signal. */
+    status.power_5v_ok = true;
     float light;
     status.light_sensor_available = light_sensor_read(&light);
     if (status.light_sensor_available) status.light_level = light;
@@ -196,18 +349,54 @@ static void update_control(uint32_t now) {
     status.control_error_c = status.setpoint_c - status.temperature_c;
     const uint32_t elapsed = thermal_run_active(status.state)
                                  ? now - thermal_run_started_ms : 0u;
-    const error_code_t fault = safety_check(&status, elapsed);
+    if (status.workshop_override_active) {
+        if (!workshop_override_active(now)) {
+            status.workshop_override_active = false;
+            status.workshop_override_remaining_ms = 0u;
+            if (thermal_run_active(status.state) && !status.power_5v_ok) {
+                all_thermal_output_off();
+                status.state = SYSTEM_OFF;
+                fan_run_on_until_ms = now + FAN_RUN_ON_MS;
+                return;
+            }
+        } else {
+            status.workshop_override_remaining_ms = workshop_override_due_ms - now;
+        }
+    }
+    system_status_t safety_status = status;
+    if (thermal_run_active(status.state) && workshop_override_active(now)) {
+        safety_status.power_5v_ok = true;
+    }
+    const error_code_t fault = safety_check(&safety_status, elapsed);
     if (fault != ERROR_NONE) {
         /* Every safety fault is latched, including faults detected before START. */
         if (status.state != SYSTEM_ERROR) enter_error(fault);
         return;
     }
     if (status.state == SYSTEM_ERROR) return; /* Latched until OK/STOP. */
+    if (presentation_demo_output_active) {
+        if ((int32_t)(now - presentation_demo_output_due_ms) >= 0) {
+            all_thermal_output_off();
+            status.state = control_can_start(now) ? SYSTEM_READY : SYSTEM_OFF;
+            fan_run_on_until_ms = now + FAN_RUN_ON_MS;
+        }
+        return;
+    }
+    if (peltier_test_active) {
+        if ((int32_t)(now - peltier_test_due_ms) >= 0) {
+            all_thermal_output_off();
+            status.state = safety_can_start(&status) ? SYSTEM_READY : SYSTEM_OFF;
+            fan_run_on_until_ms = now + FAN_RUN_ON_MS;
+        } else {
+            status.peltier_test_remaining_ms = peltier_test_due_ms - now;
+        }
+        return;
+    }
     status.error = ERROR_NONE;
-    if (status.state == SYSTEM_READY && !safety_can_start(&status)) {
+    if (status.state == SYSTEM_READY && !control_can_start(now)) {
         status.state = SYSTEM_OFF;
     }
-    if (status.state == SYSTEM_OFF && !manual_off && safety_can_start(&status)) {
+    if (status.state == SYSTEM_OFF && !manual_off && control_can_start(now)) {
         status.state = SYSTEM_READY;
     }
     if (!thermal_run_active(status.state)) return;
@@ -224,6 +413,10 @@ static void update_control(uint32_t now) {
         (unlimited_output >= controller.output_max && status.control_error_c > 0.0f) ||
         (unlimited_output <= controller.output_min && status.control_error_c < 0.0f);
     float applied_output = fabsf(output) < PELTIER_OUTPUT_DEADBAND_PERCENT ? 0.0f : output;
+    if (workshop_override_active(now)) {
+        if (applied_output > 10.0f) applied_output = 10.0f;
+        if (applied_output < -10.0f) applied_output = -10.0f;
+    }
     thermal_output_mode_t mode = THERMAL_OUTPUT_OFF;
     if (applied_output > 0.0f) mode = THERMAL_OUTPUT_HEATING;
     if (applied_output < 0.0f) mode = THERMAL_OUTPUT_COOLING;
@@ -285,10 +478,17 @@ void app_init(void) {
     status.state = SYSTEM_OFF;
     status.error = ERROR_NONE;
     status.setpoint_c = SETPOINT_DEFAULT_C;
+    status.max_temperature_c = MAX_SAFE_TEMPERATURE_C;
+    status.min_temperature_c = MIN_SAFE_TEMPERATURE_C;
+    /* Daily-use default after every reboot; the web UI may raise it up to 100 %. */
+    status.max_heating_percent = PELTIER_DEFAULT_HEATING_PERCENT;
+    status.max_cooling_percent = PELTIER_MAX_COOLING_PERCENT;
     manual_off = false;
+    peltier_test_active = false;
+    presentation_demo_output_active = false;
     controller_init(&controller, PI_KP, PI_KI);
-    controller_set_output_limits(&controller, -PELTIER_MAX_COOLING_PERCENT,
-                                 PELTIER_MAX_HEATING_PERCENT);
+    controller_set_output_limits(&controller, -status.max_cooling_percent,
+                                 status.max_heating_percent);
     safety_init();
 
     gpio_init(PIN_PG_5V0);
@@ -311,8 +511,13 @@ void app_init(void) {
         .status = &status,
         .start = request_start,
         .stop = request_stop,
+        .set_cup_manual = request_cup_manual,
         .rgb_test = request_rgb_test,
-        .set_setpoint = request_setpoint
+        .workshop_override = request_workshop_override,
+        .peltier_test = request_peltier_test,
+        .presentation_demo = request_presentation_demo,
+        .set_setpoint = request_setpoint,
+        .set_limits = request_limits
     };
     (void)webserver_init(&web_config);
     watchdog_enable(3000u, true);
@@ -325,6 +530,7 @@ void app_run(void) {
         const uint32_t now = milliseconds();
         process_buttons();
         status.cup_detected = buttons_cup_detected();
+        status.cup_detected = status.cup_detected || status.cup_manual;
         status.cup_switch_raw = buttons_cup_raw_level();
         process_commands();
         if ((int32_t)(now - sensor_due) >= 0) {

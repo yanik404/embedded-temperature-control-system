@@ -101,6 +101,39 @@ function Invoke-Build {
     Write-Host "Fertig: $Uf2Path"
 }
 
+function Get-PicoBootVolume {
+    return Get-Volume -ErrorAction SilentlyContinue |
+        Where-Object FileSystemLabel -eq "RPI-RP2" |
+        Select-Object -First 1
+}
+
+function Request-PicoBootsel {
+    $port = Get-CimInstance Win32_SerialPort -ErrorAction SilentlyContinue |
+        Where-Object PNPDeviceID -match "VID_2E8A" |
+        Select-Object -First 1
+    if (-not $port) { return $false }
+
+    Write-Host "Versetze Pico auf $($port.DeviceID) automatisch in den BOOTSEL-Modus..."
+    try {
+        $serial = [System.IO.Ports.SerialPort]::new($port.DeviceID, 1200, "None", 8, "One")
+        $serial.DtrEnable = $false
+        $serial.RtsEnable = $false
+        $serial.Open()
+        Start-Sleep -Milliseconds 300
+        $serial.Close()
+    } catch {
+        # Windows can report that the device vanished while Open() is still
+        # returning; that is also the expected result of a successful reset.
+        Write-Host "USB-Umschaltung: $($_.Exception.Message)"
+    }
+
+    for ($attempt = 0; $attempt -lt 20; $attempt++) {
+        Start-Sleep -Milliseconds 500
+        if (Get-PicoBootVolume) { return $true }
+    }
+    return $false
+}
+
 function Invoke-Flash {
     if (-not (Test-Path $Uf2Path)) { throw "UF2 fehlt. Fuehre zuerst den Task 'Build' aus." }
     $picotool = Find-Executable "picotool.exe" @((Join-Path $env:LOCALAPPDATA "Raspberry Pi\picotool"), (Join-Path $env:USERPROFILE ".pico-sdk\picotool"))
@@ -113,13 +146,17 @@ function Invoke-Flash {
         Write-Host "Firmware erfolgreich geladen und Pico neu gestartet."
         return
     }
-    $bootVolume = Get-Volume -ErrorAction SilentlyContinue | Where-Object FileSystemLabel -eq "RPI-RP2" | Select-Object -First 1
+    $bootVolume = Get-PicoBootVolume
+    if (-not $bootVolume) {
+        [void](Request-PicoBootsel)
+        $bootVolume = Get-PicoBootVolume
+    }
     if ($bootVolume -and $bootVolume.DriveLetter) {
         Copy-Item -LiteralPath $Uf2Path -Destination "$($bootVolume.DriveLetter):\temperature_control.uf2" -Force
         Write-Host "Firmware erfolgreich auf das BOOTSEL-Laufwerk kopiert."
         return
     }
-    throw "Picotool und BOOTSEL-Laufwerk wurden nicht gefunden. Pico mit gedrueckter BOOTSEL-Taste anschliessen und 'Flash' erneut starten."
+    throw "Pico konnte nicht automatisch in BOOTSEL wechseln. Seriellen Monitor schliessen oder Pico mit gedrueckter BOOTSEL-Taste anschliessen und 'Flash' erneut starten."
 }
 
 switch ($Action) {

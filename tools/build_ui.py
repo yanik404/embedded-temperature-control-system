@@ -178,7 +178,7 @@ def compose(*, preview: bool, minified: bool) -> tuple[str, str, str]:
     cutaway = read_v5("product-v2-cutaway.svg")
     template = template.replace("<!--__PRODUCT_V3_EXTERIOR__-->", exterior)
     template = template.replace("<!--__PRODUCT_V2_CUTAWAY__-->", cutaway)
-    css = "\n\n".join([read("experience.css"), read_v4("digital-twin.css")])
+    css = "\n\n".join([read("experience.css"), read_v4("digital-twin.css"), read("daily.css")])
     scripts = [read_v4("component-model.js"), read_v4("digital-twin.js")]
     if preview:
         scripts.append(read("preview.js"))

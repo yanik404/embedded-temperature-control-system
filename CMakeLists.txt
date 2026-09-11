@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.13)
 
 set(PICO_BOARD pico_w CACHE STRING "Target board")
+# Pico W has 2 MiB flash. The credential record uses its final sector; the
+# current firmware image is far below that address and the size is checked in CI.
+set(PICO_FLASH_SIZE_BYTES 2097152 CACHE STRING "Pico W flash size" FORCE)
 include(pico_sdk_import.cmake)
 
 project(embedded_temperature_control C CXX ASM)
@@ -12,6 +15,7 @@ find_package(Python3 REQUIRED COMPONENTS Interpreter)
 set(DASHBOARD_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/ui-v3/src/index.html
     ${CMAKE_CURRENT_LIST_DIR}/ui-v3/src/experience.css
+    ${CMAKE_CURRENT_LIST_DIR}/ui-v3/src/daily.css
     ${CMAKE_CURRENT_LIST_DIR}/ui-v3/src/experience.js
     ${CMAKE_CURRENT_LIST_DIR}/ui-v3/src/preview.js
     ${CMAKE_CURRENT_LIST_DIR}/ui-v4/src/component-model.js
@@ -63,6 +67,7 @@ add_executable(temperature_control
     src/safety.c
     src/webserver.c
     src/web_auth.c
+    src/wifi_settings.c
 )
 
 add_dependencies(temperature_control dashboard_assets)
@@ -83,6 +88,7 @@ target_link_libraries(temperature_control
     hardware_pwm
     hardware_watchdog
     hardware_pio
+    hardware_flash
 )
 
 pico_generate_pio_header(temperature_control

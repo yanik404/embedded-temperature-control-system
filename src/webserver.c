@@ -11,9 +11,11 @@
 #include "pico/cyw43_arch.h"
 #include "pico/rand.h"
 #include "pico/stdlib.h"
+#include "hardware/watchdog.h"
 #include "safety.h"
 #include "web_assets.h"
 #include "web_auth.h"
+#include "wifi_settings.h"
 
 #define HTTP_REQUEST_BUFFER_SIZE 1536u
 #define HTTP_CLIENT_COUNT 4u
@@ -38,11 +40,16 @@ static struct tcp_pcb *listener;
 static http_client_t http_clients[HTTP_CLIENT_COUNT];
 static bool wifi_initialized;
 static bool connect_in_progress;
+static bool setup_mode;
 static bool first_connection_attempt = true;
 static int previous_link_status = CYW43_LINK_DOWN;
 static uint32_t connection_started_ms;
 static uint32_t retry_due_ms;
 static web_auth_t control_auth;
+static char configured_wifi_ssid[WIFI_SETTINGS_SSID_MAX + 1u];
+static char configured_wifi_password[WIFI_SETTINGS_PASSWORD_MAX + 1u];
+static bool reboot_pending;
+static uint32_t reboot_due_ms;
 
 static uint32_t milliseconds(void) {
     return to_ms_since_boot(get_absolute_time());
@@ -68,9 +75,9 @@ static const char *wifi_status_name(int status) {
 static void start_wifi_connection(uint32_t now) {
     if (!first_connection_attempt) printf("[WLAN] Erneuter Verbindungsversuch\n");
     printf("[WLAN] WLAN verbindet...\n");
-    printf("[WLAN] SSID: %s\n", WIFI_SSID);
+    printf("[WLAN] SSID: %s\n", configured_wifi_ssid);
     const int result = cyw43_arch_wifi_connect_async(
-        WIFI_SSID, WIFI_PASSWORD, CYW43_AUTH_WPA2_MIXED_PSK);
+        configured_wifi_ssid, configured_wifi_password, CYW43_AUTH_WPA2_MIXED_PSK);
     first_connection_attempt = false;
     connect_in_progress = result == 0;
     connection_started_ms = now;
@@ -121,7 +128,11 @@ static const char *thermal_output_name(thermal_output_mode_t mode) {
 
 static bool start_allowed(void) {
     const system_status_t *s = server_config.status;
-    return (s->state == SYSTEM_READY || s->state == SYSTEM_OFF) && safety_can_start(s);
+    system_status_t effective = *s;
+    if (s->workshop_override_active) {
+        effective.power_5v_ok = true;
+    }
+    return (s->state == SYSTEM_READY || s->state == SYSTEM_OFF) && safety_can_start(&effective);
 }
 
 static const char *start_block_reason(void) {
@@ -132,7 +143,6 @@ static const char *start_block_reason(void) {
     if (!s->temperature_valid) return "Temperatursensor fehlerhaft";
     if (!s->current_valid) return "Strommessung nicht verfuegbar";
     if (!s->cup_detected) return "Kein Becher erkannt";
-    if (!s->power_5v_ok) return "5V-Leistungsversorgung fehlt";
     return "Start ist freigegeben";
 }
 
@@ -179,6 +189,13 @@ static bool form_value(const char *body, const char *name, char *value, size_t v
             cursor += name_length + 1u;
             size_t written = 0u;
             while (*cursor != '\0' && *cursor != '&' && written + 1u < value_size) {
+                if (*cursor == '+') { value[written++] = ' '; ++cursor; continue; }
+                if (*cursor == '%' && cursor[1] != '\0' && cursor[2] != '\0') {
+                    char hex[3] = {cursor[1], cursor[2], '\0'};
+                    char *end = NULL;
+                    const long decoded = strtol(hex, &end, 16);
+                    if (end != NULL && *end == '\0') { value[written++] = (char)decoded; cursor += 3; continue; }
+                }
                 value[written++] = *cursor++;
             }
             value[written] = '\0';
@@ -197,9 +214,8 @@ static bool request_token(const char *request, char *token, size_t token_size) {
 }
 
 static bool request_authorized(const char *request) {
-    char token[WEB_AUTH_TOKEN_LENGTH + 1u];
-    return request_token(request, token, sizeof(token)) &&
-           web_auth_validate(&control_auth, token, milliseconds());
+    (void)request;
+    return true; /* Daily operation on the local WLAN no longer uses a presentation PIN. */
 }
 
 static err_t send_response(http_client_t *context, struct tcp_pcb *client,
@@ -208,6 +224,62 @@ static err_t send_response(http_client_t *context, struct tcp_pcb *client,
 static err_t send_unauthorized(http_client_t *context, struct tcp_pcb *client) {
     return send_response(context, client, "401 Unauthorized", "application/json",
                          "{\"ok\":false,\"reason\":\"Steuerung gesperrt\"}");
+}
+
+static void start_setup_access_point(void) {
+    if (setup_mode) return;
+    cyw43_wifi_leave(&cyw43_state, CYW43_ITF_STA);
+    cyw43_arch_disable_sta_mode();
+    cyw43_arch_enable_ap_mode(WIFI_SETUP_AP_SSID, WIFI_SETUP_AP_PASSWORD,
+                              CYW43_AUTH_WPA2_AES_PSK);
+    snprintf(configured_wifi_ssid, sizeof(configured_wifi_ssid), "%s", WIFI_SETUP_AP_SSID);
+    setup_mode = true;
+    connect_in_progress = false;
+    printf("[WLAN] Einrichtungs-WLAN aktiv: %s\n", WIFI_SETUP_AP_SSID);
+    printf("[WLAN] Passwort: %s · Dashboard: http://192.168.4.1\n", WIFI_SETUP_AP_PASSWORD);
+}
+
+static bool json_append_string(char **cursor, size_t *remaining, const char *value) {
+    if (cursor == NULL || remaining == NULL || *cursor == NULL || value == NULL || *remaining < 3u) return false;
+    *(*cursor)++ = '"'; --*remaining;
+    while (*value != '\0') {
+        const unsigned char character = (unsigned char)*value++;
+        if (character == '"' || character == '\\') {
+            if (*remaining < 3u) return false;
+            *(*cursor)++ = '\\'; *(*cursor)++ = (char)character; *remaining -= 2u;
+        } else {
+            if (*remaining < 2u) return false;
+            *(*cursor)++ = character < 0x20u ? '?' : (char)character; --*remaining;
+        }
+    }
+    *(*cursor)++ = '"'; --*remaining;
+    **cursor = '\0';
+    return true;
+}
+
+static bool wifi_profiles_json(char *data, size_t data_size) {
+    wifi_settings_profile_t profiles[WIFI_SETTINGS_PROFILE_COUNT];
+    size_t count = 0u, active = 0u;
+    if (data == NULL || data_size < 20u) return false;
+    (void)wifi_settings_profiles(profiles, WIFI_SETTINGS_PROFILE_COUNT, &count, &active);
+    char *cursor = data;
+    size_t remaining = data_size;
+    const char *prefix = "{\"active\":";
+    const size_t prefix_length = strlen(prefix);
+    if (prefix_length >= remaining) return false;
+    memcpy(cursor, prefix, prefix_length); cursor += prefix_length; remaining -= prefix_length;
+    if (!json_append_string(&cursor, &remaining, count > 0u ? profiles[active].ssid : configured_wifi_ssid)) return false;
+    const char *middle = ",\"profiles\":[";
+    const size_t middle_length = strlen(middle);
+    if (middle_length >= remaining) return false;
+    memcpy(cursor, middle, middle_length); cursor += middle_length; remaining -= middle_length;
+    for (size_t index = 0u; index < count; ++index) {
+        if (index > 0u) { if (remaining < 2u) return false; *cursor++ = ','; --remaining; }
+        if (!json_append_string(&cursor, &remaining, profiles[index].ssid)) return false;
+    }
+    if (remaining < 3u) return false;
+    *cursor++ = ']'; *cursor++ = '}'; *cursor = '\0';
+    return true;
 }
 
 static err_t send_response_data(http_client_t *context, struct tcp_pcb *client);
@@ -350,12 +422,15 @@ static void status_json(char *buffer, size_t buffer_size) {
         "\"kp\":%.3f,\"ki\":%.3f,\"p_term\":%.2f,\"i_term\":%.2f,"
         "\"output_limited\":%s,\"anti_windup\":%s,\"control_period_ms\":%u,"
         "\"min_safe_temperature\":%.1f,\"max_safe_temperature\":%.1f,"
-        "\"max_cooling_power\":%.1f,\"uptime_ms\":%llu,"
+        "\"max_heating_power\":%.1f,\"max_cooling_power\":%.1f,\"uptime_ms\":%llu,"
+        "\"peltier_test_active\":%s,\"peltier_test_channel\":%u,"
+        "\"peltier_test_remaining_ms\":%u,"
+        "\"workshop_override_active\":%s,\"workshop_override_remaining_ms\":%u,"
         "\"current1\":%.3f,\"current2\":%.3f,\"light_level\":%.3f,"
         "\"sensor_ok\":%s,\"temp1_ok\":%s,\"temp2_ok\":%s,"
         "\"current_ok\":%s,\"current1_ok\":%s,\"current2_ok\":%s,"
         "\"tla2024_ok\":%s,\"light_ok\":%s,\"display_initialized\":%s,\"leds_initialized\":%s,"
-        "\"cup\":%s,\"cup_switch_raw\":%s,\"cup_active_level\":%u,"
+        "\"cup\":%s,\"cup_manual\":%s,\"cup_switch_raw\":%s,\"cup_active_level\":%u,"
         "\"power_good\":%s,\"wifi\":%s,\"webserver_ready\":%s,"
         "\"wifi_ssid\":\"%s\",\"wifi_ip\":\"%s\",\"night\":%s,"
         "\"start_allowed\":%s,\"start_block_reason\":\"%s\","
@@ -368,8 +443,13 @@ static void status_json(char *buffer, size_t buffer_size) {
         s->controller_integral_percent,
         s->controller_output_limited ? "true" : "false",
         s->controller_anti_windup_active ? "true" : "false", CONTROL_PERIOD_MS,
-        MIN_SAFE_TEMPERATURE_C, MAX_SAFE_TEMPERATURE_C, PELTIER_MAX_COOLING_PERCENT,
+        s->min_temperature_c, s->max_temperature_c, s->max_heating_percent,
+        s->max_cooling_percent,
         (unsigned long long)to_ms_since_boot(get_absolute_time()),
+        s->peltier_test_active ? "true" : "false", (unsigned)s->peltier_test_channel,
+        (unsigned)s->peltier_test_remaining_ms,
+        s->workshop_override_active ? "true" : "false",
+        (unsigned)s->workshop_override_remaining_ms,
         s->peltier_1_current_a, s->peltier_2_current_a, s->light_level,
         s->temperature_valid ? "true" : "false",
         s->temperature_1_valid ? "true" : "false", s->temperature_2_valid ? "true" : "false",
@@ -377,10 +457,10 @@ static void status_json(char *buffer, size_t buffer_size) {
         s->current_1_valid ? "true" : "false", s->current_2_valid ? "true" : "false",
         s->tla2024_available ? "true" : "false", s->light_sensor_available ? "true" : "false",
         s->display_initialized ? "true" : "false", s->status_leds_initialized ? "true" : "false",
-        s->cup_detected ? "true" : "false", s->cup_switch_raw ? "true" : "false",
+        s->cup_detected ? "true" : "false", s->cup_manual ? "true" : "false", s->cup_switch_raw ? "true" : "false",
         CUP_DETECT_ACTIVE_LEVEL, s->power_5v_ok ? "true" : "false",
         s->wifi_connected ? "true" : "false", s->webserver_ready ? "true" : "false",
-        WIFI_SSID, ip,
+        configured_wifi_ssid, ip,
         s->night_mode ? "true" : "false", start_allowed() ? "true" : "false",
         start_block_reason());
 }
@@ -419,6 +499,68 @@ static err_t process_http_request(http_client_t *context, struct tcp_pcb *client
                (unsigned)(WEB_CONTROL_SESSION_MS / 1000u));
         return send_response(context, client, "200 OK", "application/json", context->data);
     }
+    if (strncmp(text, "GET /api/wifi-profiles ", 23u) == 0) {
+        if (!wifi_profiles_json(context->data, sizeof(context->data))) {
+            return send_response(context, client, "500 Internal Server Error", "application/json", "{\"ok\":false}");
+        }
+        return send_response(context, client, "200 OK", "application/json", context->data);
+    }
+    if (strncmp(text, "POST /api/wifi ", 15u) == 0) {
+        char ssid[WIFI_SETTINGS_SSID_MAX + 1u];
+        char password[WIFI_SETTINGS_PASSWORD_MAX + 1u];
+        if (!request_authorized(text)) return send_unauthorized(context, client);
+        if (!form_value(request_body(text), "ssid", ssid, sizeof(ssid)) ||
+            !form_value(request_body(text), "password", password, sizeof(password)) ||
+            !wifi_settings_add(ssid, password)) {
+            return send_response(context, client, "400 Bad Request", "application/json",
+                                 "{\"ok\":false,\"reason\":\"WLAN-Name oder Passwort ungueltig\"}");
+        }
+        reboot_pending = true;
+        reboot_due_ms = milliseconds() + 1200u;
+        return send_response(context, client, "200 OK", "application/json", "{\"ok\":true}");
+    }
+    if (strncmp(text, "POST /api/wifi-select ", 22u) == 0) {
+        char ssid[WIFI_SETTINGS_SSID_MAX + 1u];
+        if (!request_authorized(text)) return send_unauthorized(context, client);
+        if (!form_value(request_body(text), "ssid", ssid, sizeof(ssid)) || !wifi_settings_select(ssid)) {
+            return send_response(context, client, "400 Bad Request", "application/json",
+                                 "{\"ok\":false,\"reason\":\"WLAN nicht gespeichert\"}");
+        }
+        reboot_pending = true;
+        reboot_due_ms = milliseconds() + 1200u;
+        return send_response(context, client, "200 OK", "application/json", "{\"ok\":true}");
+    }
+    if (strncmp(text, "POST /api/wifi-remove ", 22u) == 0) {
+        char ssid[WIFI_SETTINGS_SSID_MAX + 1u];
+        if (!request_authorized(text)) return send_unauthorized(context, client);
+        if (!form_value(request_body(text), "ssid", ssid, sizeof(ssid)) || !wifi_settings_remove(ssid)) {
+            return send_response(context, client, "400 Bad Request", "application/json",
+                                 "{\"ok\":false,\"reason\":\"Letztes oder unbekanntes WLAN kann nicht entfernt werden\"}");
+        }
+        reboot_pending = true;
+        reboot_due_ms = milliseconds() + 1200u;
+        return send_response(context, client, "200 OK", "application/json", "{\"ok\":true}");
+    }
+    if (strncmp(text, "POST /api/limits?", 17u) == 0) {
+        float heating = 0.0f, cooling = 0.0f, maximum = 0.0f, minimum = 0.0f;
+        if (server_config.set_limits == NULL ||
+            sscanf(text + 17u, "heat=%f&cool=%f&max_temp=%f&min_temp=%f", &heating, &cooling, &maximum, &minimum) != 4 ||
+            heating < 10.0f || heating > PELTIER_MAX_HEATING_PERCENT ||
+            cooling < 5.0f || cooling > PELTIER_MAX_COOLING_PERCENT ||
+            !(maximum >= 40.0f && maximum <= MAX_SAFE_TEMPERATURE_C) ||
+            !(minimum >= MIN_SAFE_TEMPERATURE_C && minimum <= 30.0f && minimum < maximum)) {
+            return send_response(context, client, "400 Bad Request", "application/json", "{\"ok\":false}");
+        }
+        server_config.set_limits(heating, cooling, maximum, minimum);
+        return send_response(context, client, "200 OK", "application/json", "{\"ok\":true}");
+    }
+    if (strncmp(text, "POST /api/cup-manual?enabled=", 29u) == 0) {
+        const char value = text[29];
+        if (server_config.set_cup_manual == NULL || (value != '0' && value != '1') || text[30] != ' ')
+            return send_response(context, client, "400 Bad Request", "application/json", "{\"ok\":false}");
+        server_config.set_cup_manual(value == '1' ? 1.0f : 0.0f);
+        return send_response(context, client, "200 OK", "application/json", "{\"ok\":true}");
+    }
     if (strncmp(text, "POST /api/start ", 16u) == 0) {
         if (!request_authorized(text)) return send_unauthorized(context, client);
         if (start_allowed()) {
@@ -442,6 +584,64 @@ static err_t process_http_request(http_client_t *context, struct tcp_pcb *client
                                  "{\"ok\":false,\"reason\":\"RGB-Test nicht verfuegbar\"}");
         }
         server_config.rgb_test();
+        return send_response(context, client, "200 OK", "application/json", "{\"ok\":true}");
+    }
+    if (strncmp(text, "POST /api/workshop-override ", 28u) == 0) {
+        if (!request_authorized(text)) return send_unauthorized(context, client);
+        if (server_config.workshop_override == NULL) {
+            return send_response(context, client, "503 Service Unavailable", "application/json",
+                                 "{\"ok\":false,\"reason\":\"Werkstattmodus nicht verfuegbar\"}");
+        }
+        server_config.workshop_override();
+        return send_response(context, client, "200 OK", "application/json", "{\"ok\":true}");
+    }
+    static const char presentation_prefix[] = "POST /api/presentation-demo?direction=";
+    if (strncmp(text, presentation_prefix, sizeof(presentation_prefix) - 1u) == 0) {
+        if (!request_authorized(text)) return send_unauthorized(context, client);
+        const char *direction = text + sizeof(presentation_prefix) - 1u;
+        const bool cooling = strncmp(direction, "cool ", 5u) == 0;
+        const bool heating = strncmp(direction, "heat ", 5u) == 0;
+        if (!cooling && !heating) {
+            return send_response(context, client, "400 Bad Request", "application/json",
+                                 "{\"ok\":false,\"reason\":\"Ungueltige Demo-Richtung\"}");
+        }
+        if (server_config.presentation_demo == NULL) {
+            return send_response(context, client, "503 Service Unavailable", "application/json",
+                                 "{\"ok\":false,\"reason\":\"Praesentationsdemo nicht verfuegbar\"}");
+        }
+        server_config.presentation_demo(cooling);
+        return send_response(context, client, "200 OK", "application/json", "{\"ok\":true}");
+    }
+    static const char peltier_test_prefix[] = "POST /api/peltier-test?channel=";
+    if (strncmp(text, peltier_test_prefix, sizeof(peltier_test_prefix) - 1u) == 0) {
+        if (!request_authorized(text)) return send_unauthorized(context, client);
+        unsigned channel = 0u;
+        char direction[8] = {0};
+        char profile[8] = {0};
+        const int parsed = sscanf(text + sizeof(peltier_test_prefix) - 1u,
+                                  "%u&direction=%7[^&]&profile=%7s",
+                                  &channel, direction, profile);
+        uint8_t profile_id = 255u;
+        if (strcmp(profile, "short") == 0) profile_id = 0u;
+        if (strcmp(profile, "medium") == 0) profile_id = 1u;
+        if (strcmp(profile, "long") == 0) profile_id = 2u;
+        const bool direction_valid = strcmp(direction, "heat") == 0 ||
+                                     strcmp(direction, "cool") == 0;
+        if (parsed != 3 || channel < 1u || channel > 2u || !direction_valid ||
+            profile_id > 2u) {
+            return send_response(context, client, "400 Bad Request", "application/json",
+                                 "{\"ok\":false,\"reason\":\"Ungueltiger Peltier-Test\"}");
+        }
+        if (!start_allowed()) {
+            snprintf(context->data, sizeof(context->data), "{\"ok\":false,\"reason\":\"%s\"}",
+                     start_block_reason());
+            return send_response(context, client, "409 Conflict", "application/json", context->data);
+        }
+        if (server_config.peltier_test == NULL) {
+            return send_response(context, client, "503 Service Unavailable", "application/json",
+                                 "{\"ok\":false,\"reason\":\"Peltier-Test nicht verfuegbar\"}");
+        }
+        server_config.peltier_test((uint8_t)channel, strcmp(direction, "cool") == 0, profile_id);
         return send_response(context, client, "200 OK", "application/json", "{\"ok\":true}");
     }
     static const char setpoint_prefix[] = "POST /api/setpoint?value=";
@@ -541,6 +741,8 @@ bool webserver_init(const webserver_config_t *config) {
     server_config = *config;
     memset(http_clients, 0, sizeof(http_clients));
     web_auth_init(&control_auth);
+    (void)wifi_settings_load(configured_wifi_ssid, sizeof(configured_wifi_ssid),
+                             configured_wifi_password, sizeof(configured_wifi_password));
     const int init_result = cyw43_arch_init();
     if (init_result != 0) {
         printf("[WLAN] Verbindungsfehler bei Initialisierung (Fehlercode %d)\n", init_result);
@@ -578,6 +780,8 @@ bool webserver_init(const webserver_config_t *config) {
 void webserver_update(void) {
     if (!wifi_initialized) return;
     const uint32_t now = milliseconds();
+    if (reboot_pending && deadline_reached(now, reboot_due_ms)) watchdog_reboot(0u, 0u, 0u);
+    if (setup_mode) return;
     const int link_status = cyw43_tcpip_link_status(&cyw43_state, CYW43_ITF_STA);
 
     if (link_status != previous_link_status) {
@@ -585,7 +789,7 @@ void webserver_update(void) {
             char ip[16];
             (void)webserver_get_ip(ip, sizeof(ip));
             printf("[WLAN] WLAN verbunden\n");
-            printf("[WLAN] SSID: %s\n", WIFI_SSID);
+            printf("[WLAN] SSID: %s\n", configured_wifi_ssid);
             printf("[WLAN] IPv4-Adresse: %s\n", ip);
         } else {
             if (previous_link_status == CYW43_LINK_UP) {
@@ -619,17 +823,15 @@ void webserver_update(void) {
             printf("[WLAN] Verbindungsfehler: Zeitueberschreitung (Statuscode %d)\n",
                    link_status);
         }
-        cyw43_wifi_leave(&cyw43_state, CYW43_ITF_STA);
-        connect_in_progress = false;
-        retry_due_ms = now + WIFI_RETRY_DELAY_MS;
+        start_setup_access_point();
         return;
     }
     if (deadline_reached(now, retry_due_ms)) start_wifi_connection(now);
 }
 
 bool webserver_is_connected(void) {
-    return wifi_initialized &&
-           cyw43_tcpip_link_status(&cyw43_state, CYW43_ITF_STA) == CYW43_LINK_UP;
+    return wifi_initialized && (setup_mode ||
+           cyw43_tcpip_link_status(&cyw43_state, CYW43_ITF_STA) == CYW43_LINK_UP);
 }
 
 bool webserver_is_ready(void) {
@@ -644,7 +846,7 @@ bool webserver_get_ip(char *buffer, size_t buffer_size) {
 
     ip4_addr_t address;
     cyw43_arch_lwip_begin();
-    ip4_addr_copy(address, *netif_ip4_addr(&cyw43_state.netif[CYW43_ITF_STA]));
+    ip4_addr_copy(address, *netif_ip4_addr(&cyw43_state.netif[setup_mode ? CYW43_ITF_AP : CYW43_ITF_STA]));
     cyw43_arch_lwip_end();
     if (ip4_addr_isany_val(address)) return false;
     return ip4addr_ntoa_r(&address, buffer, (int)buffer_size) != NULL;
@@ -659,8 +861,10 @@ void webserver_deinit(void) {
     listener = NULL;
     if (wifi_initialized) {
         cyw43_wifi_leave(&cyw43_state, CYW43_ITF_STA);
+        if (setup_mode) cyw43_arch_disable_ap_mode();
         cyw43_arch_deinit();
     }
     wifi_initialized = false;
     connect_in_progress = false;
+    setup_mode = false;
 }

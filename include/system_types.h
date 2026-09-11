@@ -37,6 +37,10 @@ typedef struct {
     float temperature_c;
     float temperature_2_c;
     float setpoint_c;
+    float max_temperature_c;
+    float min_temperature_c;
+    float max_heating_percent;
+    float max_cooling_percent;
     float control_error_c;
     /* Signed actuator command: positive heats, negative cools. */
     float peltier_power_percent;
@@ -59,10 +63,16 @@ typedef struct {
     bool display_initialized;
     bool status_leds_initialized;
     bool cup_detected;
+    bool cup_manual;
     bool cup_switch_raw;
     bool power_5v_ok;
     bool controller_output_limited;
     bool controller_anti_windup_active;
+    bool peltier_test_active;
+    uint8_t peltier_test_channel;
+    uint32_t peltier_test_remaining_ms;
+    bool workshop_override_active;
+    uint32_t workshop_override_remaining_ms;
     bool wifi_connected;
     bool webserver_ready;
     char wifi_ip[16];

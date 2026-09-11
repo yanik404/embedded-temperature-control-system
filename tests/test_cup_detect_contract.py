@@ -29,8 +29,8 @@ assert "gpio_pull_down(PIN_S_DETECT)" in buttons
 assert "[DETECT] GP13 raw=" in buttons and "[DETECT] Stabil:" in buttons
 assert "status.cup_detected = buttons_cup_detected();" in app
 assert "status.cup_switch_raw = buttons_cup_raw_level();" in app
-assert "status.state == SYSTEM_READY && !safety_can_start(&status)" in app
-assert "status.state == SYSTEM_OFF && !manual_off && safety_can_start(&status)" in app
+assert "status.state == SYSTEM_READY && !control_can_start(now)" in app
+assert "status.state == SYSTEM_OFF && !manual_off && control_can_start(now)" in app
 assert "ERROR_CUP_REMOVED" in safety and "!status->cup_detected" in safety
 assert "cup_switch_raw" in webserver and "cup_active_level" in webserver
 assert display.count("BECHER: OK") == 2 and display.count("BECHER: FEHLT") == 2

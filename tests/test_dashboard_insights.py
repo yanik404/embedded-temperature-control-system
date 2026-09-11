@@ -130,6 +130,8 @@ with tempfile.TemporaryDirectory(prefix="becherhalter-insights-", ignore_cleanup
         assert states["live"] == "true" and states["recovery"] is False, states
         assert states["hardware"] >= 17, states
 
+        # The full diagnostic canvas is deliberately opt-in in the daily UI.
+        cdp.call("Runtime.evaluate", {"expression": "document.body.classList.add('advanced-view')"})
         colour_expression = """(()=>{
           const colours={};
           for(const scenario of ['ready','heating','cooling','holding','error']){

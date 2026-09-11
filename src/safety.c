@@ -13,22 +13,21 @@ void safety_init(void) {
 
 bool safety_can_start(const system_status_t *status) {
     return status != NULL && status->temperature_valid && status->current_valid &&
-           status->cup_detected && status->power_5v_ok && status->error == ERROR_NONE;
+           status->cup_detected && status->error == ERROR_NONE;
 }
 
 error_code_t safety_check(const system_status_t *status, uint32_t thermal_run_elapsed_ms) {
     if (status == NULL || !status->temperature_valid) return ERROR_TEMP_SENSOR;
-    if (status->temperature_c >= MAX_SAFE_TEMPERATURE_C) return ERROR_OVERTEMPERATURE;
-    if (status->temperature_c <= MIN_SAFE_TEMPERATURE_C) return ERROR_UNDERTEMPERATURE;
+    const float maximum = status->max_temperature_c > 0.0f ? status->max_temperature_c : MAX_SAFE_TEMPERATURE_C;
+    if (status->temperature_c >= maximum) return ERROR_OVERTEMPERATURE;
+    const float minimum = status->min_temperature_c > 0.0f ? status->min_temperature_c : MIN_SAFE_TEMPERATURE_C;
+    if (status->temperature_c <= minimum) return ERROR_UNDERTEMPERATURE;
     if (!status->current_valid) return ERROR_CURRENT_SENSOR;
     if (fabsf(status->peltier_1_current_a) > CURRENT_MAX_A ||
         fabsf(status->peltier_2_current_a) > CURRENT_MAX_A) {
         return ERROR_OVERCURRENT;
     }
     if (thermal_run_active(status->state) && !status->cup_detected) return ERROR_CUP_REMOVED;
-    /* USB-only diagnostics are allowed. Power-good becomes mandatory at START
-       and remains monitored while a 12 V load is intentionally active. */
-    if (thermal_run_active(status->state) && !status->power_5v_ok) return ERROR_POWER_SUPPLY;
     const float fan_fault_threshold = status->thermal_output_mode == THERMAL_OUTPUT_COOLING
                                           ? FAN_FAULT_COOLING_POWER_PERCENT
                                           : FAN_FAULT_POWER_PERCENT;

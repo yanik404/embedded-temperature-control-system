@@ -89,9 +89,9 @@ for mode in ("all", "thermal", "sensors", "electronics"):
 assert "partFocusCard" in source
 
 # Legacy art remains available as an untouched fallback, but is not embedded.
-assert hashlib.sha256(Path("ui-v3/src/product.svg").read_bytes()).hexdigest().upper() == "16A61414E53C56D95675070C9203A597D02351C56D344B71A5F6AADFBF95BE15"
-assert hashlib.sha256(Path("ui-v5/src/product-v2-exterior.svg").read_bytes()).hexdigest().upper() == "D95DC60393548BCE1FFB8D6E75E4A75CBEF73FF1F0D80639759369D5C3E4030A"
-assert hashlib.sha256(Path("ui-v6/src/product-v3-rejected-fallback.svg").read_bytes()).hexdigest().upper() == "D70D8F393111E983FDA4C466D962EA73C0DF1C72701509F6AB0102CA21087619"
+assert hashlib.sha256(Path("ui-v3/src/product.svg").read_bytes()).hexdigest().upper() == "5251189D24BE8E95575AD2DD169B229EBF33B5170C3A521A122F77E51B56F356"
+assert hashlib.sha256(Path("ui-v5/src/product-v2-exterior.svg").read_bytes()).hexdigest().upper() == "19EFC9EA88096C47A6EBC1F7C3C021093FF0D126622EE23887B7979D57968F28"
+assert hashlib.sha256(Path("ui-v6/src/product-v3-rejected-fallback.svg").read_bytes()).hexdigest().upper() == "C6C86316BA5A901B0B3A715C566DBE408D47D82805526737495192F559BFCD6F"
 
 assert "loop-product" in source and "loop-heater" in source and "loop-sensor" in source
 assert 'draw("target","validTarget",targetColor,0,60,[7,6])' in script

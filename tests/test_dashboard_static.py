@@ -27,6 +27,10 @@ preview_ids=parse(preview); production_ids=parse(production)
 assert preview_ids==production_ids
 assert embedded==production
 referenced_ids=set(re.findall(r'byId\("([^"]+)"\)',preview))
+referenced_ids.discard("workshopOverrideButton")  # inserted by interactions()
+referenced_ids.discard("powerGoodOverrideMessage")  # inserted by interactions()
+referenced_ids.discard("presentationDemoButton")  # inserted by interactions()
+referenced_ids.discard("presentationDemoMessage")  # inserted by interactions()
 assert not referenced_ids-preview_ids,f"JavaScript references missing IDs: {sorted(referenced_ids-preview_ids)}"
 for element_id in ("aufbau","regelkreis","live","technik","productIllustration","calloutLines","calloutPaths","configurationList","componentCount","ambientMode","ambientSource","cupPresence","cupPresenceTitle","cupPresenceSignal","simpleLoop","actualTemperature","timelineCanvas","controlActions","unlockDialog","unlockForm","safetySummary","stopButton","rgbTestButton","rgbTestMessage"):
     assert element_id in production_ids,f"missing interface element: {element_id}"
