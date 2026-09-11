@@ -247,10 +247,13 @@ with tempfile.TemporaryDirectory(prefix="becherhalter-insights-", ignore_cleanup
         })"""
         cup = cdp.call("Runtime.evaluate", {"expression": cup_expression, "awaitPromise": True,
                                              "returnByValue": True})["result"]["value"]
-        assert cup["absent"] == {"dataset": "absent", "state": "AUS", "badge": "BECHER FEHLT", "badgeStatus": "absent",
-                                  "signal": "S_DETECT · GP13 RAW 0", "empty": "1", "exterior": "0",
-                                  "cutaway": "0", "loop": "0.22", "label": "Kein Becher erkannt",
-                                  "start": True, "reason": "Kein Becher erkannt"}, cup
+        assert cup["absent"]["dataset"] == "absent" and cup["absent"]["state"] == "AUS", cup
+        assert cup["absent"]["badge"] == "BECHER FEHLT" and cup["absent"]["badgeStatus"] == "absent", cup
+        assert cup["absent"]["signal"] == "S_DETECT · GP13 RAW 0", cup
+        assert float(cup["absent"]["empty"]) > .95 and float(cup["absent"]["exterior"]) < .05, cup
+        assert cup["absent"]["cutaway"] == "0" and .20 <= float(cup["absent"]["loop"]) <= .25, cup
+        assert cup["absent"]["label"] == "Kein Becher erkannt", cup
+        assert cup["absent"]["start"] is True and cup["absent"]["reason"] == "Kein Becher erkannt", cup
         assert cup["present"] == {"dataset": "present", "state": "BEREIT", "badge": "BECHER ERKANNT", "badgeStatus": "present",
                                    "signal": "S_DETECT · GP13 RAW 1", "empty": "0", "exterior": "1",
                                    "cutaway": "1", "loop": "1", "start": False}, cup

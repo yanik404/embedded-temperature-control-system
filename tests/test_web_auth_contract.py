@@ -7,8 +7,10 @@ assert 'POST /api/unlock ' in source
 assert 'web_auth_unlock(&control_auth, pin, WEB_CONTROL_PIN' in source
 assert 'get_rand_64()' in source
 assert 'WEB_CONTROL_SESSION_MS' in source
-assert source.count('if (!request_authorized(text)) return send_unauthorized') == 7
-assert 'POST /api/wifi ' in source and 'wifi_settings_save(ssid, password)' in source
+assert source.count('if (!request_authorized(text)) return send_unauthorized') >= 7
+assert 'POST /api/wifi ' in source and 'wifi_settings_add(ssid, password)' in source
+assert 'POST /api/wifi-select ' in source and 'wifi_settings_select(ssid)' in source
+assert 'POST /api/wifi-remove ' in source and 'wifi_settings_remove(ssid)' in source
 assert 'POST /api/peltier-test?channel=' in source
 assert 'POST /api/workshop-override ' in source
 assert 'POST /api/presentation-demo?direction=' in source

@@ -52,6 +52,9 @@ with tempfile.TemporaryDirectory(prefix="becherhalter-product-v3-", ignore_clean
             })
             cdp.call("Page.navigate", {"url": (ROOT / "preview.html").as_uri() + "?scenario=heating"})
             time.sleep(.35)
+            # The daily dashboard is the default. This test verifies the separately
+            # selectable detailed product view.
+            cdp.call("Runtime.evaluate", {"expression": "document.body.classList.add('advanced-view')"})
             for view in ("exterior", "build"):
                 expression = f"""(()=>{{
                     window.V4Twin.setProductView('{view}');

@@ -310,6 +310,115 @@ body:not(.advanced-view) .site-header nav{display:none}
 body.advanced-view .daily-layout{display:none}
 @media(max-width:760px){.daily-dashboard{padding:calc(var(--header) + 22px) 18px 28px}.daily-layout{grid-template-columns:1fr;gap:18px;max-width:480px}.daily-product-visual{height:235px;margin:8px auto}.daily-product h2{font-size:25px}.daily-product p{font-size:12px}.daily-product-caption{display:none}.daily-card{padding:24px}.daily-card h1 strong{font-size:86px}.daily-settings{max-width:480px;padding:0 18px;margin-top:18px}.daily-limits-grid{grid-template-columns:1fr}.daily-limits-grid>label{padding:14px}.limits-footer{align-items:stretch;flex-direction:column;gap:12px}.daily-settings .limits-footer button{width:100%}.daily-settings summary{font-size:13px}.header-actions{gap:3px}.header-actions>.header-icon{width:30px}}
 #dailyCup:not(:disabled){cursor:pointer}#dailyCup[aria-pressed="true"]{border-color:#ed854999;color:#c66d3c}.daily-card #dailyCupHint{font-size:11px;margin:-12px 0 20px;color:var(--muted)}
+
+/* Quiet surfaces and state-coloured accents for the everyday dashboard. */
+body:not(.advanced-view) .site-header{background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+body:not(.advanced-view) .header-actions{gap:8px}
+body:not(.advanced-view) .header-icon{width:36px;height:36px;border-radius:12px;color:var(--muted);transition:background .2s,color .2s}
+body:not(.advanced-view) .header-icon:hover{background:var(--surface-2);color:var(--ink)}
+body[data-theme="day"] #dailyLight,body[data-theme="night"] #dailyDark{background:var(--surface-2);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
+.daily-dashboard{background:radial-gradient(ellipse at 18% 38%,color-mix(in srgb,var(--state) 8%,transparent),transparent 52%),var(--bg);padding-top:calc(var(--header) + 42px)}
+.daily-layout{gap:56px;max-width:1080px}
+.daily-product-heading>span{display:inline-flex;align-items:center;gap:8px;letter-spacing:.2em;font-size:9px}
+.daily-product-heading>span:before{content:"";width:18px;height:1px;background:var(--state)}
+.daily-product h2{font-size:clamp(26px,3vw,38px);line-height:1.15;letter-spacing:-.045em;margin:16px 0 12px}
+.daily-product p{max-width:290px;margin:auto;line-height:1.7}
+.daily-product-visual{isolation:isolate;margin-top:24px}
+.daily-product-visual:before{content:"";position:absolute;z-index:-1;inset:10% 7% 3%;border-radius:50%;background:radial-gradient(ellipse,color-mix(in srgb,var(--state) 12%,transparent),transparent 68%)}
+.daily-product img{filter:drop-shadow(0 26px 24px #0003)}
+.daily-product-caption{letter-spacing:.24em;font-size:9px;opacity:.7}
+.daily-card{position:relative;overflow:hidden;border-radius:28px;padding:32px 34px 24px;background:linear-gradient(145deg,color-mix(in srgb,var(--surface) 94%,var(--ink)),var(--surface) 55%);box-shadow:0 24px 65px #00000012,inset 0 1px 0 #ffffff08}
+.daily-card:before{content:"";position:absolute;top:0;left:22%;right:22%;height:2px;background:linear-gradient(90deg,transparent,var(--state),transparent);opacity:.75}
+.daily-card>p:first-child{font-size:9px;letter-spacing:.22em}
+.daily-card h1{margin-top:22px;font-variant-numeric:tabular-nums}
+.daily-card h1 strong{font-size:96px;font-weight:350;letter-spacing:-.065em}
+.daily-card h1 span{font-size:22px;margin-left:12px;color:var(--muted)}
+.daily-card output{display:table;margin:14px auto 20px;padding:7px 12px;border-radius:99px;background:color-mix(in srgb,var(--state) 9%,transparent);font-size:10px;font-weight:650;letter-spacing:.09em}
+.daily-card output:before{content:"";display:inline-block;width:5px;height:5px;margin:0 7px 1px 0;border-radius:50%;background:currentColor}
+#dailyCup{font-family:inherit;font-size:11px;font-weight:550;letter-spacing:0;padding:8px 13px}
+#dailyCup[data-status="present"]:before,#dailyCup[data-status="manual"]:before{content:"\2713"}
+.daily-card #dailyCupHint{max-width:310px;margin:-11px auto 22px;line-height:1.6;font-size:10px}
+.daily-target{border:1px solid var(--line);border-radius:18px;padding:16px;background:color-mix(in srgb,var(--bg) 40%,transparent)}
+.daily-target label{text-align:center;font-size:11px;margin-bottom:12px}
+.daily-target input{font-variant-numeric:tabular-nums;font-size:30px;font-weight:450}
+.daily-target>div>span{color:var(--muted);font-size:13px}
+.daily-target>div>button{min-height:44px;border-radius:50%;font-weight:400;font-size:23px;transition:background .2s,transform .2s}
+.daily-target>button{min-height:36px;margin-top:12px;border:0;background:var(--surface-2);letter-spacing:.08em;font-size:9px;color:var(--ink)}
+.daily-actions{gap:12px;margin-top:20px}
+.daily-actions button{display:flex;align-items:center;justify-content:center;gap:10px;min-height:48px;border-radius:14px;font-size:11px;letter-spacing:.1em;transition:transform .2s,box-shadow .2s,background .2s}
+.daily-actions button:first-child{color:#101713;background:var(--state);box-shadow:0 5px 18px color-mix(in srgb,var(--state) 15%,transparent)}
+.daily-actions button:first-child:before{content:"";width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:8px solid currentColor}
+.daily-actions button:last-child:before{content:"";width:9px;height:9px;border-radius:2px;background:currentColor}
+.daily-actions button:last-child:not(:disabled){color:var(--red);border-color:color-mix(in srgb,var(--red) 30%,var(--line));background:color-mix(in srgb,var(--red) 7%,var(--surface))}
+.daily-target button:not(:disabled):hover,.daily-actions button:not(:disabled):hover{transform:translateY(-1px);box-shadow:0 5px 16px #0001}
+.daily-target button:not(:disabled):active,.daily-actions button:not(:disabled):active{transform:translateY(0)}
+.daily-card #dailyMessage{font-size:11px;line-height:1.6;margin-top:17px}
+.daily-settings{max-width:1080px;margin-top:30px;border-radius:20px;transition:border-color .2s}
+.daily-settings:hover{border-color:color-mix(in srgb,var(--ink) 25%,var(--line))}
+.daily-settings summary{padding:21px 0;font-size:13px}
+.daily-settings summary>svg{box-sizing:content-box;padding:10px;background:var(--surface-2);border-radius:12px;width:19px;height:19px;color:var(--muted)}
+.daily-settings summary small{font-size:11px;margin-top:5px}
+.settings-chevron{transition:transform .2s}
+.daily-limits-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding-top:20px}
+.daily-limits-grid>label{padding:16px;border-radius:15px;background:color-mix(in srgb,var(--bg) 35%,var(--surface))}
+.daily-limits-grid>label{display:flex;flex-direction:column;min-width:0}
+.limit-label{font-size:11px;gap:7px;min-height:38px}
+.limit-label svg{width:18px;height:18px}
+.limit-label .thermal-icon{box-sizing:content-box;width:22px;height:22px;padding:7px;border-radius:11px;stroke-width:1.45;background:color-mix(in srgb,currentColor 9%,transparent)}
+.thermal-icon-heat>path:first-child{fill:color-mix(in srgb,currentColor 10%,transparent)}
+.thermal-icon-heat>path:last-child{stroke-width:1.2}
+.daily-limits-grid>label:nth-child(3) svg{color:var(--heat)}
+.daily-limits-grid>label:nth-child(4) svg{color:var(--blue)}
+.limit-field{box-sizing:border-box;min-height:56px;margin:16px 0 10px;border-radius:10px}
+.daily-settings .limit-field input{font-size:27px;font-variant-numeric:tabular-nums;line-height:1;padding:12px 0}
+.limit-field>span{font-size:12px;color:var(--muted)}
+.daily-settings .limits-footer button{border-radius:10px;min-height:42px;color:var(--ink)}
+.advanced-toggle{letter-spacing:.1em;font-size:9px;opacity:.8}
+.advanced-toggle:hover{opacity:1;color:var(--ink)}
+@media(max-width:1000px){.daily-layout{gap:28px}.daily-card{padding:28px 24px 22px}.daily-limits-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){.daily-dashboard{padding-top:calc(var(--header) + 24px)}.daily-layout{gap:22px}.daily-product h2{font-size:28px;margin:12px 0 8px}.daily-product p{font-size:12px}.daily-product-visual{height:245px;margin-top:14px}.daily-card{padding:27px 24px 22px;border-radius:24px}.daily-card h1 strong{font-size:86px}.daily-settings{margin-top:20px}.daily-settings summary{gap:10px}.daily-settings summary small{font-size:10px}.daily-limits-grid>label{padding:12px}.limit-label{font-size:10px;gap:5px}.daily-settings summary>svg{padding:8px;width:17px;height:17px}.header-actions .header-network{max-width:100px}body:not(.advanced-view) .header-actions{gap:4px}body:not(.advanced-view) .header-icon{width:32px;height:32px}}
+@media(max-width:360px){.daily-limits-grid{grid-template-columns:1fr}.daily-card{padding-inline:18px}}
+.daily-dial{position:relative;width:260px;max-width:100%;height:210px;margin:12px auto 0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.daily-dial>svg{position:absolute;inset:0;width:100%;height:100%;fill:none;stroke-width:2.5;stroke-linecap:round;pointer-events:none}
+.dial-track{stroke:var(--line);opacity:.65}.dial-progress{stroke:var(--state);stroke-dasharray:0 100;transition:stroke-dasharray .6s ease,stroke .5s,opacity .3s}
+.daily-card .daily-dial h1{margin:0}.daily-card .daily-dial h1 strong{font-size:76px}
+.daily-delta{font-size:10px;color:var(--muted);margin:14px 0 0;text-align:center}
+.daily-target-scale{display:block;margin:18px 5px 3px}
+.target-spectrum{height:4px;position:relative;border-radius:99px;background:linear-gradient(90deg,var(--blue),#9baea7 48%,var(--heat));opacity:.85}
+.target-spectrum i{position:absolute;left:var(--target-position,57%);top:50%;width:9px;height:9px;border:2px solid var(--surface);border-radius:50%;background:var(--ink);box-shadow:0 0 0 1px var(--line);transform:translate(-50%,-50%);transition:left .25s ease}
+.daily-target-scale.invalid .target-spectrum i{display:none}
+.target-scale-labels{display:flex;justify-content:space-between;margin-top:9px;font-size:9px;color:var(--muted);letter-spacing:.02em}
+.daily-power-bar{height:4px;margin-top:auto;padding-top:15px;background:linear-gradient(var(--line),var(--line)) bottom/100% 4px no-repeat;border-radius:99px;overflow:hidden}
+.daily-power-bar i{display:block;height:100%;width:var(--power-fill,0%);border-radius:inherit;background:var(--heat);transition:width .25s ease}
+#limitCoolBar i{background:var(--blue)}
+.daily-product-visual:after{content:"";position:absolute;z-index:-1;left:24%;right:24%;bottom:0;height:30px;border-radius:50%;background:var(--state);filter:blur(18px);opacity:0;transition:opacity .6s,background-color .6s;pointer-events:none}
+body[data-live="true"][data-state="AUFHEIZEN"] .daily-product-visual:after,body[data-live="true"][data-state="KUEHLEN"] .daily-product-visual:after,body[data-live="true"][data-state="HALTEN"] .daily-product-visual:after{opacity:.22}
+.daily-card output{margin-top:0}
+.daily-product-visual{transform:translateY(var(--scroll-offset,0px));will-change:transform}
+body[data-live="true"][data-state="AUFHEIZEN"] .daily-liquid-overlay ellipse:last-child,body[data-live="true"][data-state="KUEHLEN"] .daily-liquid-overlay ellipse:last-child,body[data-live="true"][data-state="HALTEN"] .daily-liquid-overlay ellipse:last-child{animation:liquid-breathe 5s ease-in-out infinite}
+@keyframes liquid-breathe{0%,100%{opacity:1}50%{opacity:.76}}
+@keyframes cup-confirm{0%{box-shadow:0 0 0 0 #71c39355}70%{box-shadow:0 0 0 9px #71c39300}100%{box-shadow:0 0 0 0 #71c39300}}
+#dailyCup.cup-confirmed{animation:cup-confirm .7s ease-out}
+.daily-actions #dailyStart.is-running{opacity:1;background:color-mix(in srgb,var(--state) 12%,var(--surface));border-color:color-mix(in srgb,var(--state) 30%,var(--line));color:var(--state);box-shadow:none}
+.daily-actions #dailyStart.is-running:before{width:6px;height:6px;border:0;border-radius:50%;background:currentColor;animation:liquid-breathe 2.4s ease-in-out infinite}
+.daily-limits-grid>label:nth-child(odd){border-left:2px solid color-mix(in srgb,var(--heat) 65%,var(--line))}
+.daily-limits-grid>label:nth-child(even){border-left:2px solid color-mix(in srgb,var(--blue) 65%,var(--line))}
+body:not(.advanced-view) #wifiToggle[data-connection="connected"]{color:#4ca97b}
+body:not(.advanced-view) #wifiToggle[data-connection="connecting"]{color:var(--heat)}
+body:not(.advanced-view) #wifiToggle[data-connection="offline"]{color:var(--muted)}
+.daily-card,.daily-settings,.daily-target,.daily-target button,.daily-limits-grid>label,.limit-field,.site-header,.header-icon,.wifi-dialog{transition:background-color .4s,color .4s,border-color .4s,box-shadow .4s}
+body{transition:background-color .4s,color .4s}
+@media(prefers-reduced-motion:reduce){.daily-dashboard *,.header-icon,body,.site-header,.wifi-dialog{transition:none!important;animation:none!important}.daily-product-visual{transform:none;will-change:auto}}
+
+/* Cup status stays readable without a surrounding badge. */
+#dailyCup{margin:0 auto 18px;padding:3px 0;border:0!important;border-radius:0;background:transparent!important;box-shadow:none!important;font-size:11px;font-weight:650;color:var(--muted);transform:none!important;transition:none!important}
+#dailyCup:before{display:inline;width:auto;height:auto;border:0;border-radius:0;font-size:15px;line-height:1;content:"✓"}
+#dailyCup[data-status="present"]{color:#4ca97b}
+#dailyCup[data-status="manual"]{color:#c66d3c}
+#dailyCup[data-status="missing"]{color:var(--red)}
+#dailyCup[data-status="waiting"]{color:var(--muted)}
+#dailyCup:not(:disabled):hover{color:var(--ink);text-decoration:underline;text-decoration-color:currentColor;text-underline-offset:4px}
+#dailyCup.cup-confirmed{animation:none}
 </style>
 </head>
 <body data-state="AUS" data-live="false" data-product-view="exterior" data-build-mode="all" data-theme="night" data-theme-mode="auto">
@@ -334,7 +443,7 @@ body.advanced-view .daily-layout{display:none}
   <div class="daily-actions"><button id="dailyStart" type="button">START</button><button id="dailyStop" type="button">STOPP</button></div><p id="dailyMessage">Startfreigabe wird geprüft.</p>
  </section>
  </div>
- <details class="daily-wifi daily-settings"><summary><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3"/><circle cx="15" cy="17" r="3"/></svg><span>Leistung &amp; Temperatur<small>Grenzen nach deinen Wünschen einstellen</small></span><span class="settings-chevron">⌄</span></summary><div class="daily-limits-grid"><label><span class="limit-label"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 3c1 5-4 5-2 9 2-1 3-3 3-3s5 4 4 8a6 6 0 0 1-12-1c0-4 5-6 7-13Z"/></svg>Heizleistung</span><span class="limit-field"><input id="limitHeat" aria-label="Maximale Heizleistung in Prozent" type="number" min="10" max="100" step="1" value="100"><span>%</span></span><small>Maximal · 10–100 %</small></label><label><span class="limit-label"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M4 7l16 10M4 17 20 7M9 4l3 3 3-3M9 20l3-3 3 3"/></svg>Kühlleistung</span><span class="limit-field"><input id="limitCool" aria-label="Maximale Kühlleistung in Prozent" type="number" min="5" max="20" step="1" value="20"><span>%</span></span><small>Maximal · 5–20 %</small></label><label><span class="limit-label"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14V5a3 3 0 0 1 6 0v9a5 5 0 1 1-6 0ZM12 8v9"/></svg>Obergrenze · Heizen</span><span class="limit-field"><input id="limitTemperature" aria-label="Maximale Temperatur in Grad Celsius" type="number" min="40" max="65" step="1" value="65"><span>°C</span></span><small>Maximal · 40–65 °C</small></label><label><span class="limit-label"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14V5a3 3 0 0 1 6 0v9a5 5 0 1 1-6 0ZM12 8v9M19 7v6m-2-2 2 2 2-2"/></svg>Untergrenze · Kühlen</span><span class="limit-field"><input id="limitMinimum" aria-label="Untere Temperaturgrenze fürs Kühlen in Grad Celsius" type="number" min="18" max="30" step="1" value="18"><span>°C</span></span><small>Minimal · 18–30 °C</small></label></div><div class="limits-footer"><p>Gilt bis zum nächsten Neustart. Sicherheitsbereich: 18–65 °C.</p><button id="limitSave" type="button">Grenzen übernehmen</button></div><small id="limitMessage" role="status"></small></details>
+ <details class="daily-wifi daily-settings"><summary><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3"/><circle cx="15" cy="17" r="3"/></svg><span>Leistung &amp; Temperatur<small>Grenzen nach deinen Wünschen einstellen</small></span><span class="settings-chevron">⌄</span></summary><div class="daily-limits-grid"><label><span class="limit-label"><svg class="thermal-icon thermal-icon-heat" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.5 2.5c.8 4.2-3.8 5.4-3.8 9.1-1.3-.7-1.9-1.8-1.9-3.1C4.9 10.6 4 12.5 4 14.5a8 8 0 0 0 16 0c0-3.3-2-6.4-4.2-8.2.2 2-1 3.7-2.2 4.4.7-3.4.2-6-1.1-8.2Z"/><path d="M12.1 13c.3 2-2.6 2.8-2.6 5a2.5 2.5 0 0 0 5 0c0-1.7-1.2-3.6-2.4-5Z"/></svg>Heizleistung</span><span class="limit-field"><input id="limitHeat" aria-label="Maximale Heizleistung in Prozent" type="number" min="10" max="100" step="1" value="40"><span>%</span></span><small>Maximal · 10–100 %</small></label><label><span class="limit-label"><svg class="thermal-icon thermal-icon-cool" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5v19M3.8 7.25l16.4 9.5M3.8 16.75l16.4-9.5M9.5 4.5 12 7l2.5-2.5M9.5 19.5 12 17l2.5 2.5M4.3 10.5l3.4-.9-.9-3.4M17.2 17.8l-.9-3.4 3.4-.9M6.8 17.8l.9-3.4-3.4-.9M19.7 10.5l-3.4-.9.9-3.4"/></svg>Kühlleistung</span><span class="limit-field"><input id="limitCool" aria-label="Maximale Kühlleistung in Prozent" type="number" min="5" max="20" step="1" value="20"><span>%</span></span><small>Maximal · 5–20 %</small></label><label><span class="limit-label"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14V5a3 3 0 0 1 6 0v9a5 5 0 1 1-6 0ZM12 8v9"/></svg>Obergrenze · Heizen</span><span class="limit-field"><input id="limitTemperature" aria-label="Maximale Temperatur in Grad Celsius" type="number" min="40" max="65" step="1" value="65"><span>°C</span></span><small>Maximal · 40–65 °C</small></label><label><span class="limit-label"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14V5a3 3 0 0 1 6 0v9a5 5 0 1 1-6 0ZM12 8v9M19 7v6m-2-2 2 2 2-2"/></svg>Untergrenze · Kühlen</span><span class="limit-field"><input id="limitMinimum" aria-label="Untere Temperaturgrenze fürs Kühlen in Grad Celsius" type="number" min="18" max="30" step="1" value="18"><span>°C</span></span><small>Minimal · 18–30 °C</small></label></div><div class="limits-footer"><p>Gilt bis zum nächsten Neustart. Sicherheitsbereich: 18–65 °C.</p><button id="limitSave" type="button">Grenzen übernehmen</button></div><small id="limitMessage" role="status"></small></details>
  <button id="advancedToggle" class="advanced-toggle" type="button" aria-expanded="false">ERWEITERTE ANSICHT ÖFFNEN</button>
 </main>
 <main>
@@ -924,6 +1033,37 @@ function renderDaily(status,temperatureOk,active){
  text("dailyConnection",runtime.online?"● VERBUNDEN":"○ OFFLINE");text("dailyTemperature",temperatureOk?fixed(status.temperature):"—");text("dailyState",stateLabel(status.state));text("dailyMessage",status.start_allowed===true&&!active?"Bereit zum Starten.":active?"Regelung läuft.":status.start_block_reason);text("wifiMessage","Aktuelles Netzwerk: "+status.wifi_ssid+(status.wifi_ip&&status.wifi_ip!=="—"?" · "+status.wifi_ip:""));var cup=byId("dailyCup"),cupStatus=status.cup_manual?"manual":status.cup===true?"present":status.cup===false?"missing":"waiting";cup.disabled=!runtime.online;cup.dataset.status=cupStatus;cup.setAttribute("aria-pressed",String(status.cup_manual));cup.title=status.cup_manual?"Manuelle Bestätigung aufheben und stoppen":"Eingesetzten Becher manuell bestätigen";cup.textContent=status.cup_manual?"Becher manuell bestätigt":status.cup===true?"Becher erkannt":status.cup===false?"Becher manuell bestätigen":"Becher wird geprüft";text("dailyCupHint",status.cup_manual?"Manuell bestätigt: Vor dem Herausnehmen STOPP drücken.":status.cup===true?"Der Erkennungsschalter ist aktiv.":"Kleiner Becher? Einsetzen und hier manuell bestätigen.");
  var input=byId("dailyTarget"),controls=runtime.online&&hasUnlock();if(!runtime.targetDraft&&document.activeElement!==input)input.value=fixed(status.setpoint);["dailyDown","dailyUp","dailyTarget","dailySetpoint","wifiSave"].forEach(function(id){byId(id).disabled=!controls;});byId("dailyStart").disabled=!controls||status.start_allowed!==true||active;byId("dailyStop").disabled=!runtime.online||!active;text("dailyUnlock",controls?"PIN-FREIGABE AKTIV":"MIT PIN FREIGEBEN");
 }
+var dailyVisual={value:null,target:null,frame:0,cup:null,span:0,setpoint:null,active:false};
+function renderDailyAccents(status){
+ var target=byId('dailyTarget'),scale=byId('dailyTargetScale');
+ if(!scale){scale=document.createElement('aside');scale.id='dailyTargetScale';scale.className='daily-target-scale';scale.setAttribute('aria-hidden','true');scale.innerHTML='<div class="target-spectrum"><i></i></div><div class="target-scale-labels"><span>Kühl · 18 °C</span><span>Warm · 65 °C</span></div>';byId('dailySetpoint').before(scale);target.addEventListener('input',function(){renderDailyAccents(runtime.current);});['dailyDown','dailyUp'].forEach(function(id){byId(id).addEventListener('click',function(){renderDailyAccents(runtime.current);});});}
+ var degrees=Number(target.value.replace(',','.'));scale.classList.toggle('invalid',target.value.trim()===''||!Number.isFinite(degrees));scale.style.setProperty('--target-position',clamp((degrees-18)/47*100,0,100)+'%');
+ ['limitHeat','limitCool'].forEach(function(id){var input=byId(id),bar=byId(id+'Bar');if(!bar){bar=document.createElement('div');bar.id=id+'Bar';bar.className='daily-power-bar';bar.setAttribute('aria-hidden','true');bar.innerHTML='<i></i>';input.closest('label').appendChild(bar);input.addEventListener('input',function(){renderDailyAccents(runtime.current);});}var percent=Number(input.value);bar.style.setProperty('--power-fill',clamp(Number.isFinite(percent)?percent:0,0,100)+'%');});
+}
+function renderDailyPolish(status,temperatureOk,active){
+ renderDailyAccents(status);
+ renderDailyPowerScale();
+ var reduced=matchMedia('(prefers-reduced-motion: reduce)').matches,title=byId('dailyTitle'),ring=byId('dailyProgress');
+ if(!ring){var dial=document.createElement('div');dial.className='daily-dial';title.before(dial);dial.innerHTML='<svg viewBox="0 0 260 210" aria-hidden="true"><path class="dial-track" d="M 43 177 A 106 106 0 1 1 217 177"/><path id="dailyProgress" class="dial-progress" pathLength="100" d="M 43 177 A 106 106 0 1 1 217 177"/></svg>';dial.appendChild(title);var note=document.createElement('p');note.id='dailyDelta';note.className='daily-delta';dial.appendChild(note);ring=byId('dailyProgress');}
+ var valid=runtime.online&&temperatureOk&&Number.isFinite(status.temperature),delta=valid?Math.abs(status.setpoint-status.temperature):NaN;
+ if(active&&(!dailyVisual.active||dailyVisual.setpoint!==status.setpoint))dailyVisual.span=Math.max(delta||0,.4);
+ dailyVisual.active=active;dailyVisual.setpoint=status.setpoint;
+ var progress=valid&&active?clamp(1-delta/Math.max(dailyVisual.span,.4),0,1):0;
+ if(valid&&active&&delta<=.4)progress=1;
+ ring.style.strokeDasharray=(progress*100)+' 100';ring.style.opacity=valid&&active?'1':'0';ring.parentElement.parentElement.title='Annäherung an die Solltemperatur seit Beginn dieses Laufs in dieser Ansicht';
+ text('dailyDelta',!runtime.online?'Keine Live-Verbindung':!valid?'Warte auf Messwert':delta<=.4?'Solltemperatur erreicht':'Noch '+fixed(delta)+' °C bis zum Sollwert');
+ var value=byId('dailyTemperature');cancelAnimationFrame(dailyVisual.frame);
+ if(!valid){text('dailyTemperature',runtime.online?'—':temperatureOk?fixed(status.temperature):'—');dailyVisual.value=null;dailyVisual.target=null;}
+ else if(reduced||dailyVisual.value===null){dailyVisual.value=status.temperature;dailyVisual.target=status.temperature;text('dailyTemperature',fixed(status.temperature));}
+ else{var from=dailyVisual.value,to=status.temperature,start=performance.now();dailyVisual.target=to;var tick=function(now){var t=clamp((now-start)/280,0,1);dailyVisual.value=from+(to-from)*(1-Math.pow(1-t,3));value.textContent=fixed(dailyVisual.value);if(t<1)dailyVisual.frame=requestAnimationFrame(tick);};tick(start);}
+ var cup=byId('dailyCup'),cupState=cup.dataset.status;
+ if(dailyVisual.cup!==null&&dailyVisual.cup!==cupState&&(cupState==='present'||cupState==='manual')&&!reduced){cup.classList.remove('cup-confirmed');void cup.offsetWidth;cup.classList.add('cup-confirmed');}
+ dailyVisual.cup=cupState;
+ var running=active&&runtime.online,startButton=byId('dailyStart');startButton.classList.toggle('is-running',running);text('dailyStart',running?'LÄUFT':'START');
+ var wifi=byId('wifiToggle'),connection=runtime.online?(status.wifi===true?'connected':'connecting'):(runtime.everOnline?'offline':'connecting');wifi.dataset.connection=connection;var label=connection==='connected'?'Verbunden mit '+status.wifi_ssid:connection==='connecting'?'WLAN wird verbunden':'Gerät offline';wifi.title=label+' · WLAN verwalten';wifi.setAttribute('aria-label',label+' · WLAN verwalten');
+}
+function renderDailyPowerScale(){var cool=byId('limitCoolBar'),value=number(byId('limitCool').value,0);if(cool)cool.style.setProperty('--power-fill',clamp((value-5)/15*100,0,100)+'%');}
+addEventListener('scroll',function(){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;var visual=document.querySelector('.daily-product-visual');if(visual)visual.style.setProperty('--scroll-offset',Math.min(scrollY*.035,10)+'px');},{passive:true});
 function safetyValue(name,value){return{name:name,value:value,label:value===true?"OK":value===false?"NICHT BEREIT":"NICHT VERFÜGBAR"};}
 function safety(status){
  var active=status.state==="AUFHEIZEN"||status.state==="KUEHLEN"||status.state==="HALTEN",fault=status.state==="FEHLER"||status.fault!=="KEIN FEHLER",fanCheck=status.fault==="LUEFTER"?false:(Math.abs(status.power)>0&&status.fan_supplied?status.fan_rpm>0:null);
@@ -1035,6 +1175,7 @@ function render(input,options){
  byId("visualStage").classList.toggle("fan-active",status.fan_supplied&&status.fan_percent>0);document.documentElement.style.setProperty("--fan-period",status.fan_percent>0?Math.max(2.6,8-status.fan_percent*.05)+"s":"8s");
  if(record){addHistory(status);updateSession(status,now);trackTransitions(status);}else renderSession(runtime.session||runtime.lastSession,now);derivedMetrics(status,now);safety(status);renderHardware(status);if(window.V4Twin)window.V4Twin.update(status,runtime.online);
  renderDaily(status,temperatureOk,active);
+ renderDailyPolish(status,temperatureOk,active);
 }
 async function fetchWithTimeout(url,options){var controller=new AbortController(),timer=setTimeout(function(){controller.abort();},1800);try{return await fetch(url,Object.assign({cache:"no-store",signal:controller.signal},options||{}));}finally{clearTimeout(timer);}}
 function presentationStatus(data){if(!runtime.presentationDemo)return data;var demo=Object.assign({},data),elapsed=runtime.demoRunning?(Date.now()-runtime.demoStarted)/1000:0,start=runtime.demoStartTemperature,target=number(data.setpoint,45),progress=runtime.demoRunning?clamp(elapsed/20,0,1):(runtime.demoReached?1:0),eased=1-Math.pow(1-progress,2.2);if(runtime.demoRunning&&progress>=1){runtime.demoRunning=false;runtime.demoReached=true;}demo.cup=true;demo.cup_switch_raw=true;demo.power_good=true;demo.sensor_ok=true;demo.temp1_ok=true;demo.temp2_ok=true;demo.current_ok=true;demo.current1_ok=true;demo.current2_ok=true;demo.tla2024_ok=true;demo.light_ok=true;demo.temperature=start+(target-start)*eased;demo.temperature1=demo.temperature;demo.temperature2=demo.temperature-.3;demo.error=target-demo.temperature;demo.fan_rpm=runtime.demoRunning?920:0;demo.fan_percent=runtime.demoRunning?35:0;demo.current1=runtime.demoRunning?.18:0;demo.current2=runtime.demoRunning?.17:0;demo.power=runtime.demoRunning?runtime.demoDirection*5:0;demo.thermal_mode=demo.power<0?"KUEHLEN":demo.power>0?"HEIZEN":"AUS";demo.state=runtime.demoRunning?(runtime.demoDirection<0?"KUEHLEN":"AUFHEIZEN"):(runtime.demoReached?"HALTEN":"BEREIT");demo.start_allowed=!runtime.demoRunning&&!runtime.demoReached;demo.start_block_reason=runtime.demoRunning?"Präsentationsdemo läuft":runtime.demoReached?"Solltemperatur in der Demo erreicht":"Präsentationsdemo bereit";return demo;}

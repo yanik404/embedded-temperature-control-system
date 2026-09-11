@@ -26,7 +26,7 @@ assert "pwm_set_gpio_level(pwm_pin, 0u);" in peltier
 
 for token in (
     "SYSTEM_COOLING",
-    "-PELTIER_MAX_COOLING_PERCENT",
+    "-status.max_cooling_percent",
     "fabsf(applied_output)",
     "PELTIER_DIRECTION_COOL",
     "THERMAL_OUTPUT_COOLING",
